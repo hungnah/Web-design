@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+
+{% block title %}Quản lý ứng viên - {{ post.title }}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">
+                    <i class="fas fa-users"></i> Quản lý ứng viên - {{ post.title }}
+                </h4>
+            </div>
+            <div class="card-body">
+                {% if applications %}
+                    {% for application in applications %}
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <h6 class="card-title">{{ application.applicant.profile.full_name }}</h6>
+                                        <p class="text-muted mb-2">
+                                            <i class="fas fa-clock"></i> Ứng tuyển lúc {{ application.applied_at|date:"d/m/Y H:i" }}
+                                        </p>
+                                        {% if application.message %}
+                                            <p class="mb-2"><strong>Lời nhắn:</strong> {{ application.message }}</p>
+                                        {% endif %}
+                                        <p class="mb-0">
+                                            <small class="text-muted">
+                                                <i class="fas fa-map-marker-alt"></i> {{ application.applicant.profile.get_city_display }}
+                                            </small>
+                                        </p>
+                                    </div>
+                                    <div class="col-md-4 text-end">
+                                        {% if application.status == 'pending' %}
+                                            <span class="badge bg-warning mb-2">Chờ duyệt</span>
+                                            <div class="btn-group-vertical w-100">
+                                                <form method="post" class="d-inline">
+                                                    {% csrf_token %}
+                                                    <input type="hidden" name="application_id" value="{{ application.id }}">
+                                                    <input type="hidden" name="action" value="approve">
+                                                    <button type="submit" class="btn btn-success btn-sm w-100 mb-1">
+                                                        <i class="fas fa-check"></i> Chấp nhận
+                                                    </button>
+                                                </form>
+                                                <form method="post" class="d-inline">
+                                                    {% csrf_token %}
+                                                    <input type="hidden" name="application_id" value="{{ application.id }}">
+                                                    <input type="hidden" name="action" value="reject">
+                                                    <button type="submit" class="btn btn-danger btn-sm w-100">
+                                                        <i class="fas fa-times"></i> Từ chối
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        {% elif application.status == 'approved' %}
+                                            <span class="badge bg-success mb-2">Đã chấp nhận</span>
+                                            <p class="text-success mb-0">
+                                                <i class="fas fa-check-circle"></i> Đã tham gia nhóm
+                                            </p>
+                                        {% elif application.status == 'rejected' %}
+                                            <span class="badge bg-danger mb-2">Đã từ chối</span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="text-center py-5">
+                        <i class="fas fa-users fa-3x text-muted mb-3"></i>
+                        <h5 class="text-muted">Chưa có ứng viên nào</h5>
+                        <p class="text-muted">Hãy chờ người khác ứng tuyển vào bài đăng của bạn!</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <!-- Thông tin bài đăng -->
+        <div class="card mb-3">
+            <div class="card-header">
+                <h6 class="mb-0"><i class="fas fa-info-circle"></i> Thông tin bài đăng</h6>
+            </div>
+            <div class="card-body">
+                <p><strong>Tiêu đề:</strong> {{ post.title }}</p>
+                <p><strong>Địa điểm:</strong> {{ post.location }}</p>
+                <p><strong>Thời gian:</strong> {{ post.date|date:"d/m/Y" }} lúc {{ post.time|time:"H:i" }}</p>
+                <p><strong>Số người:</strong> {{ post.current_participants }}/{{ post.max_participants }}</p>
+                <p><strong>Ứng viên:</strong> {{ applications.count }}</p>
+            </div>
+        </div>
+        
+        <!-- Nút hành động -->
+        <div class="card mb-3">
+            <div class="card-body">
+                <a href="{% url 'post_detail' post.id %}" class="btn btn-outline-primary w-100 mb-2">
+                    <i class="fas fa-eye"></i> Xem chi tiết bài đăng
+                </a>
+                <a href="{% url 'chat_room' post.id %}" class="btn btn-outline-success w-100 mb-2">
+                    <i class="fas fa-comments"></i> Vào chat
+                </a>
+                <a href="{% url 'home' %}" class="btn btn-outline-secondary w-100">
+                    <i class="fas fa-arrow-left"></i> Quay lại trang chủ
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

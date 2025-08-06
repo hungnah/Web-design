@@ -1,0 +1,201 @@
+{% extends 'base.html' %}
+
+{% block title %}Chat - {{ post.title }}{% endblock %}
+
+{% block extra_css %}
+<style>
+    .chat-container {
+        height: 70vh;
+        overflow-y: auto;
+    }
+    .message {
+        margin-bottom: 15px;
+        padding: 10px 15px;
+        border-radius: 15px;
+        max-width: 70%;
+    }
+    .message.sent {
+        background-color: #007bff;
+        color: white;
+        margin-left: auto;
+    }
+    .message.received {
+        background-color: #f8f9fa;
+        border: 1px solid #dee2e6;
+    }
+    .message-time {
+        font-size: 0.75rem;
+        opacity: 0.7;
+        margin-top: 5px;
+    }
+    .chat-input {
+        border-radius: 20px;
+    }
+    .send-btn {
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-9">
+        <div class="card shadow">
+            <div class="card-header bg-success text-white">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h4 class="mb-0">
+                        <i class="fas fa-comments"></i> Chat - {{ post.title }}
+                    </h4>
+                    <span class="badge bg-light text-dark">{{ post.current_participants }} người tham gia</span>
+                </div>
+            </div>
+            <div class="card-body p-0">
+                <!-- Chat messages -->
+                <div class="chat-container p-3" id="chatMessages">
+                    {% for message in messages %}
+                        <div class="message {% if message.sender == user %}sent{% else %}received{% endif %}">
+                            <div class="message-content">{{ message.content }}</div>
+                            <div class="message-time">
+                                {{ message.sender.profile.full_name }} - {{ message.timestamp|date:"H:i" }}
+                            </div>
+                        </div>
+                    {% empty %}
+                        <div class="text-center text-muted py-5">
+                            <i class="fas fa-comments fa-3x mb-3"></i>
+                            <p>Chưa có tin nhắn nào. Hãy bắt đầu cuộc trò chuyện!</p>
+                        </div>
+                    {% endfor %}
+                </div>
+                
+                <!-- Chat input -->
+                <div class="border-top p-3">
+                    <form id="messageForm" class="d-flex">
+                        {% csrf_token %}
+                        <input type="text" id="messageInput" class="form-control chat-input me-2" 
+                               placeholder="Nhập tin nhắn..." autocomplete="off">
+                        <button type="submit" class="btn btn-primary send-btn">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3">
+        <!-- Thông tin bài đăng -->
+        <div class="card mb-3">
+            <div class="card-header">
+                <h6 class="mb-0"><i class="fas fa-info-circle"></i> Thông tin sự kiện</h6>
+            </div>
+            <div class="card-body">
+                <h6>{{ post.title }}</h6>
+                <p class="text-muted mb-2">
+                    <i class="fas fa-map-marker-alt"></i> {{ post.location }}
+                </p>
+                <p class="text-muted mb-2">
+                    <i class="fas fa-calendar"></i> {{ post.date|date:"d/m/Y" }}
+                </p>
+                <p class="text-muted mb-2">
+                    <i class="fas fa-clock"></i> {{ post.time|time:"H:i" }}
+                </p>
+                <p class="text-muted mb-0">
+                    <i class="fas fa-users"></i> {{ post.current_participants }}/{{ post.max_participants }}
+                </p>
+            </div>
+        </div>
+        
+        <!-- Nút hành động -->
+        <div class="card">
+            <div class="card-body">
+                <a href="{% url 'post_detail' post.id %}" class="btn btn-outline-primary w-100 mb-2">
+                    <i class="fas fa-eye"></i> Xem chi tiết bài đăng
+                </a>
+                <a href="{% url 'home' %}" class="btn btn-outline-secondary w-100">
+                    <i class="fas fa-arrow-left"></i> Quay lại trang chủ
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const messageForm = document.getElementById('messageForm');
+    const messageInput = document.getElementById('messageInput');
+    const chatMessages = document.getElementById('chatMessages');
+    
+    // Auto scroll to bottom
+    function scrollToBottom() {
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+    
+    scrollToBottom();
+    
+    // Send message
+    messageForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const content = messageInput.value.trim();
+        if (!content) return;
+        
+        // Send message via AJAX
+        fetch('{% url "send_message" post.id %}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+            },
+            body: JSON.stringify({
+                content: content
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                alert('Lỗi: ' + data.error);
+            } else {
+                // Add message to chat
+                const messageDiv = document.createElement('div');
+                messageDiv.className = 'message sent';
+                messageDiv.innerHTML = `
+                    <div class="message-content">${data.content}</div>
+                    <div class="message-time">Bạn - ${data.timestamp}</div>
+                `;
+                chatMessages.appendChild(messageDiv);
+                scrollToBottom();
+                
+                // Clear input
+                messageInput.value = '';
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Có lỗi xảy ra khi gửi tin nhắn');
+        });
+    });
+    
+    // Auto refresh messages every 5 seconds
+    setInterval(function() {
+        fetch(window.location.href)
+        .then(response => response.text())
+        .then(html => {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+            const newMessages = doc.querySelectorAll('.message');
+            const currentMessages = chatMessages.querySelectorAll('.message');
+            
+            if (newMessages.length > currentMessages.length) {
+                // Reload page to show new messages
+                location.reload();
+            }
+        })
+        .catch(error => {
+            console.error('Error refreshing messages:', error);
+        });
+    }, 5000);
+});
+</script>
+{% endblock %} 

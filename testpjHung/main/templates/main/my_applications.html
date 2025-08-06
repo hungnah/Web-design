@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+
+{% block title %}Đơn ứng tuyển của tôi - PlayTogether{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2><i class="fas fa-paper-plane"></i> Đơn ứng tuyển của tôi</h2>
+            <a href="{% url 'home' %}" class="btn btn-primary">
+                <i class="fas fa-search"></i> Tìm bài đăng
+            </a>
+        </div>
+        
+        {% if applications %}
+            <div class="row">
+                {% for application in applications %}
+                    <div class="col-md-6 mb-4">
+                        <div class="card h-100">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">{{ application.post.title }}</h5>
+                                <div>
+                                    {% if application.status == 'pending' %}
+                                        <span class="badge bg-warning">Chờ duyệt</span>
+                                    {% elif application.status == 'approved' %}
+                                        <span class="badge bg-success">Đã duyệt</span>
+                                    {% elif application.status == 'rejected' %}
+                                        <span class="badge bg-danger">Từ chối</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="row mb-3">
+                                    <div class="col-6">
+                                        <small class="text-muted">Địa điểm</small><br>
+                                        <strong>{{ application.post.get_city_display }}</strong>
+                                    </div>
+                                    <div class="col-6">
+                                        <small class="text-muted">Thời gian</small><br>
+                                        <strong>{{ application.post.date|date:"d/m/Y" }} {{ application.post.time|time:"H:i" }}</strong>
+                                    </div>
+                                </div>
+                                
+                                <div class="row mb-3">
+                                    <div class="col-6">
+                                        <small class="text-muted">Người đăng</small><br>
+                                        <strong>{{ application.post.author.profile.full_name }}</strong>
+                                    </div>
+                                    <div class="col-6">
+                                        <small class="text-muted">Ứng tuyển lúc</small><br>
+                                        <strong>{{ application.applied_at|date:"d/m/Y H:i" }}</strong>
+                                    </div>
+                                </div>
+                                
+                                {% if application.message %}
+                                    <div class="mb-3">
+                                        <small class="text-muted">Lời nhắn của bạn:</small><br>
+                                        <em>"{{ application.message }}"</em>
+                                    </div>
+                                {% endif %}
+                                
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <small class="text-muted">
+                                        <i class="fas fa-users"></i> {{ application.post.current_participants }}/{{ application.post.max_participants }}
+                                    </small>
+                                    <div class="btn-group">
+                                        <a href="{% url 'post_detail' application.post.id %}" class="btn btn-outline-primary btn-sm">
+                                            <i class="fas fa-eye"></i> Xem bài đăng
+                                        </a>
+                                        {% if application.status == 'approved' %}
+                                            <a href="{% url 'chat_room' application.post.id %}" class="btn btn-outline-success btn-sm">
+                                                <i class="fas fa-comments"></i> Vào chat
+                                            </a>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="text-center py-5">
+                <i class="fas fa-paper-plane fa-3x text-muted mb-3"></i>
+                <h4 class="text-muted">Bạn chưa ứng tuyển bài đăng nào</h4>
+                <p class="text-muted">Hãy tìm và ứng tuyển vào các bài đăng thú vị!</p>
+                <a href="{% url 'home' %}" class="btn btn-primary btn-lg">
+                    <i class="fas fa-search"></i> Tìm bài đăng
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %} 

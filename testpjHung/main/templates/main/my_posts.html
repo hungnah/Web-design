@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+
+{% block title %}Bài đăng của tôi - PlayTogether{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2><i class="fas fa-list"></i> Bài đăng của tôi</h2>
+            <a href="{% url 'create_post' %}" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Đăng bài mới
+            </a>
+        </div>
+        
+        {% if posts %}
+            <div class="row">
+                {% for post in posts %}
+                    <div class="col-md-6 mb-4">
+                        <div class="card h-100">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">{{ post.title }}</h5>
+                                <div>
+                                    {% if post.is_active %}
+                                        <span class="badge bg-success">Đang hoạt động</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary">Đã kết thúc</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="row mb-3">
+                                    <div class="col-6">
+                                        <small class="text-muted">Địa điểm</small><br>
+                                        <strong>{{ post.get_city_display }}</strong>
+                                    </div>
+                                    <div class="col-6">
+                                        <small class="text-muted">Thời gian</small><br>
+                                        <strong>{{ post.date|date:"d/m/Y" }} {{ post.time|time:"H:i" }}</strong>
+                                    </div>
+                                </div>
+                                
+                                <div class="row mb-3">
+                                    <div class="col-6">
+                                        <small class="text-muted">Số người</small><br>
+                                        <strong>{{ post.current_participants }}/{{ post.max_participants }}</strong>
+                                    </div>
+                                    <div class="col-6">
+                                        <small class="text-muted">Ứng viên</small><br>
+                                        <strong>{{ post.applications.count }}</strong>
+                                    </div>
+                                </div>
+                                
+                                <p class="card-text text-muted">{{ post.description|truncatewords:15 }}</p>
+                                
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <small class="text-muted">Đăng lúc {{ post.created_at|date:"d/m/Y H:i" }}</small>
+                                    <div class="btn-group">
+                                        <a href="{% url 'post_detail' post.id %}" class="btn btn-outline-primary btn-sm">
+                                            <i class="fas fa-eye"></i> Xem
+                                        </a>
+                                        {% if post.applications.exists %}
+                                            <a href="{% url 'manage_applications' post.id %}" class="btn btn-outline-success btn-sm">
+                                                <i class="fas fa-users"></i> Quản lý
+                                            </a>
+                                        {% endif %}
+                                        <a href="{% url 'chat_room' post.id %}" class="btn btn-outline-info btn-sm">
+                                            <i class="fas fa-comments"></i> Chat
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="text-center py-5">
+                <i class="fas fa-edit fa-3x text-muted mb-3"></i>
+                <h4 class="text-muted">Bạn chưa có bài đăng nào</h4>
+                <p class="text-muted">Hãy tạo bài đăng đầu tiên để tuyển người đi chơi cùng!</p>
+                <a href="{% url 'create_post' %}" class="btn btn-primary btn-lg">
+                    <i class="fas fa-plus"></i> Đăng bài đầu tiên
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %} 
