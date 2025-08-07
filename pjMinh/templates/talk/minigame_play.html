@@ -1,0 +1,365 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ game.title }} - Vietnam Talk & Taste{% endblock %}
+
+{% block extra_css %}
+<style>
+    .minigame-container {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 80vh;
+        padding: 2rem 0;
+    }
+    .game-card {
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        padding: 2rem;
+        margin-bottom: 2rem;
+    }
+    .game-title {
+        color: #2c3e50;
+        font-size: 2rem;
+        font-weight: bold;
+        margin-bottom: 1rem;
+        text-align: center;
+    }
+    .game-instructions {
+        background: #f8f9fa;
+        border-left: 4px solid #007bff;
+        padding: 1rem;
+        margin-bottom: 2rem;
+        border-radius: 0 8px 8px 0;
+    }
+    .matching-game {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+    .matching-item {
+        background: #e9ecef;
+        border: 2px solid #dee2e6;
+        border-radius: 8px;
+        padding: 1rem;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        user-select: none;
+    }
+    .matching-item:hover {
+        background: #007bff;
+        color: white;
+        transform: translateY(-2px);
+    }
+    .matching-item.selected {
+        background: #28a745;
+        color: white;
+        border-color: #28a745;
+    }
+    .matching-item.matched {
+        background: #28a745;
+        color: white;
+        border-color: #28a745;
+        cursor: default;
+    }
+    .fill-blank-game {
+        margin-bottom: 2rem;
+    }
+    .sentence-with-blank {
+        font-size: 1.2rem;
+        margin-bottom: 1rem;
+        padding: 1rem;
+        background: #f8f9fa;
+        border-radius: 8px;
+    }
+    .blank-input {
+        border: 2px solid #007bff;
+        border-radius: 5px;
+        padding: 0.5rem;
+        font-size: 1rem;
+        width: 150px;
+        text-align: center;
+    }
+    .game-controls {
+        text-align: center;
+        margin-top: 2rem;
+    }
+    .btn-game {
+        background: linear-gradient(45deg, #007bff, #0056b3);
+        color: white;
+        border: none;
+        padding: 0.75rem 2rem;
+        border-radius: 25px;
+        font-size: 1.1rem;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin: 0 0.5rem;
+    }
+    .btn-game:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0,123,255,0.4);
+    }
+    .btn-game:disabled {
+        background: #6c757d;
+        cursor: not-allowed;
+        transform: none;
+    }
+    .score-display {
+        background: #28a745;
+        color: white;
+        padding: 1rem;
+        border-radius: 8px;
+        text-align: center;
+        font-size: 1.2rem;
+        font-weight: bold;
+        margin-bottom: 1rem;
+    }
+    .feedback {
+        padding: 1rem;
+        border-radius: 8px;
+        margin-bottom: 1rem;
+        text-align: center;
+        font-weight: bold;
+    }
+    .feedback.correct {
+        background: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+    }
+    .feedback.incorrect {
+        background: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="minigame-container">
+    <div class="container">
+        <div class="game-card">
+            <h1 class="game-title">{{ game.title }}</h1>
+            
+            <div class="game-instructions">
+                <h5><i class="fas fa-info-circle"></i> Hướng dẫn:</h5>
+                <p>{{ game.instructions }}</p>
+            </div>
+
+            {% if game.game_type == 'matching' %}
+                <div class="matching-game" id="matchingGame">
+                    <div class="col-md-6">
+                        <h5 class="text-center mb-3">Tiếng Anh</h5>
+                        <div id="englishItems"></div>
+                    </div>
+                    <div class="col-md-6">
+                        <h5 class="text-center mb-3">Tiếng Việt</h5>
+                        <div id="vietnameseItems"></div>
+                    </div>
+                </div>
+            {% elif game.game_type == 'fill_blank' %}
+                <div class="fill-blank-game" id="fillBlankGame">
+                    <div class="sentence-with-blank">
+                        <span id="sentenceText"></span>
+                        <input type="text" class="blank-input" id="blankInput" placeholder="Nhập từ...">
+                    </div>
+                </div>
+            {% endif %}
+
+            <div class="score-display" id="scoreDisplay" style="display: none;">
+                Điểm: <span id="score">0</span> / <span id="totalScore">0</span>
+            </div>
+
+            <div class="feedback" id="feedback" style="display: none;"></div>
+
+            <div class="game-controls">
+                <button class="btn btn-game" id="startBtn" onclick="startGame()">
+                    <i class="fas fa-play"></i> Bắt đầu
+                </button>
+                <button class="btn btn-game" id="checkBtn" onclick="checkAnswer()" style="display: none;">
+                    <i class="fas fa-check"></i> Kiểm tra
+                </button>
+                <button class="btn btn-game" id="nextBtn" onclick="nextQuestion()" style="display: none;">
+                    <i class="fas fa-arrow-right"></i> Tiếp theo
+                </button>
+                <button class="btn btn-game" id="restartBtn" onclick="restartGame()" style="display: none;">
+                    <i class="fas fa-redo"></i> Chơi lại
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+let gameData = {{ game.content|safe }};
+let currentQuestion = 0;
+let score = 0;
+let selectedItems = [];
+let matchedPairs = [];
+
+function startGame() {
+    document.getElementById('startBtn').style.display = 'none';
+    document.getElementById('scoreDisplay').style.display = 'block';
+    
+    if (gameData.game_type === 'matching') {
+        setupMatchingGame();
+    } else if (gameData.game_type === 'fill_blank') {
+        setupFillBlankGame();
+    }
+}
+
+function setupMatchingGame() {
+    const englishContainer = document.getElementById('englishItems');
+    const vietnameseContainer = document.getElementById('vietnameseItems');
+    
+    // Clear containers
+    englishContainer.innerHTML = '';
+    vietnameseContainer.innerHTML = '';
+    
+    // Shuffle pairs
+    const shuffledPairs = [...gameData.pairs].sort(() => Math.random() - 0.5);
+    
+    // Create English items
+    shuffledPairs.forEach((pair, index) => {
+        const item = document.createElement('div');
+        item.className = 'matching-item';
+        item.textContent = pair[0];
+        item.dataset.index = index;
+        item.onclick = () => selectItem(item, 'english');
+        englishContainer.appendChild(item);
+    });
+    
+    // Create Vietnamese items
+    shuffledPairs.sort(() => Math.random() - 0.5).forEach((pair, index) => {
+        const item = document.createElement('div');
+        item.className = 'matching-item';
+        item.textContent = pair[1];
+        item.dataset.index = index;
+        item.onclick = () => selectItem(item, 'vietnamese');
+        vietnameseContainer.appendChild(item);
+    });
+    
+    document.getElementById('totalScore').textContent = gameData.pairs.length;
+}
+
+function selectItem(item, type) {
+    if (item.classList.contains('matched')) return;
+    
+    if (selectedItems.length === 0) {
+        selectedItems = [{item: item, type: type}];
+        item.classList.add('selected');
+    } else if (selectedItems.length === 1) {
+        if (selectedItems[0].type !== type) {
+            selectedItems.push({item: item, type: type});
+            item.classList.add('selected');
+            checkMatch();
+        } else {
+            // Deselect if same type
+            selectedItems[0].item.classList.remove('selected');
+            selectedItems = [{item: item, type: type}];
+            item.classList.add('selected');
+        }
+    }
+}
+
+function checkMatch() {
+    const englishItem = selectedItems.find(s => s.type === 'english').item;
+    const vietnameseItem = selectedItems.find(s => s.type === 'vietnamese').item;
+    
+    const englishIndex = parseInt(englishItem.dataset.index);
+    const vietnameseIndex = parseInt(vietnameseItem.dataset.index);
+    
+    // Check if they match (same original index)
+    if (englishIndex === vietnameseIndex) {
+        englishItem.classList.remove('selected');
+        englishItem.classList.add('matched');
+        vietnameseItem.classList.remove('selected');
+        vietnameseItem.classList.add('matched');
+        matchedPairs.push(englishIndex);
+        score++;
+        document.getElementById('score').textContent = score;
+        showFeedback('Chính xác!', 'correct');
+    } else {
+        setTimeout(() => {
+            englishItem.classList.remove('selected');
+            vietnameseItem.classList.remove('selected');
+            showFeedback('Sai rồi, thử lại nhé!', 'incorrect');
+        }, 1000);
+    }
+    
+    selectedItems = [];
+    
+    // Check if game is complete
+    if (matchedPairs.length === gameData.pairs.length) {
+        setTimeout(() => {
+            showFeedback(`Chúc mừng! Bạn đã hoàn thành với ${score}/${gameData.pairs.length} điểm!`, 'correct');
+            document.getElementById('restartBtn').style.display = 'inline-block';
+        }, 1000);
+    }
+}
+
+function setupFillBlankGame() {
+    const sentenceText = document.getElementById('sentenceText');
+    const sentence = gameData.sentence;
+    const answer = gameData.answer;
+    
+    sentenceText.innerHTML = sentence.replace('___', '<span class="text-primary fw-bold">___</span>');
+    document.getElementById('checkBtn').style.display = 'inline-block';
+    document.getElementById('totalScore').textContent = '1';
+}
+
+function checkAnswer() {
+    const userAnswer = document.getElementById('blankInput').value.trim().toLowerCase();
+    const correctAnswer = gameData.answer.toLowerCase();
+    
+    if (userAnswer === correctAnswer) {
+        score = 1;
+        document.getElementById('score').textContent = score;
+        showFeedback('Chính xác!', 'correct');
+        document.getElementById('checkBtn').style.display = 'none';
+        document.getElementById('restartBtn').style.display = 'inline-block';
+    } else {
+        showFeedback(`Sai rồi! Đáp án đúng là: "${gameData.answer}"`, 'incorrect');
+    }
+}
+
+function showFeedback(message, type) {
+    const feedback = document.getElementById('feedback');
+    feedback.textContent = message;
+    feedback.className = `feedback ${type}`;
+    feedback.style.display = 'block';
+    
+    setTimeout(() => {
+        feedback.style.display = 'none';
+    }, 3000);
+}
+
+function restartGame() {
+    score = 0;
+    selectedItems = [];
+    matchedPairs = [];
+    document.getElementById('score').textContent = '0';
+    document.getElementById('feedback').style.display = 'none';
+    document.getElementById('restartBtn').style.display = 'none';
+    document.getElementById('checkBtn').style.display = 'none';
+    document.getElementById('startBtn').style.display = 'inline-block';
+    
+    if (gameData.game_type === 'matching') {
+        document.getElementById('matchingGame').innerHTML = `
+            <div class="col-md-6">
+                <h5 class="text-center mb-3">Tiếng Anh</h5>
+                <div id="englishItems"></div>
+            </div>
+            <div class="col-md-6">
+                <h5 class="text-center mb-3">Tiếng Việt</h5>
+                <div id="vietnameseItems"></div>
+            </div>
+        `;
+    } else if (gameData.game_type === 'fill_blank') {
+        document.getElementById('blankInput').value = '';
+    }
+}
+</script>
+{% endblock %}

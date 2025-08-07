@@ -1,0 +1,252 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ food.name }} - Ẩm thực truyền thống{% endblock %}
+
+{% block content %}
+<!-- Breadcrumb -->
+<nav aria-label="breadcrumb" class="py-3 bg-light">
+    <div class="container">
+        <ol class="breadcrumb mb-0">
+            <li class="breadcrumb-item"><a href="{% url 'talk:home' %}">Trang chủ</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'food_culture:food_list' %}">Ẩm thực</a></li>
+            <li class="breadcrumb-item active">{{ food.name }}</li>
+        </ol>
+    </div>
+</nav>
+
+<!-- Food Header -->
+<section class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6">
+                {% if food.image %}
+                    <img src="{{ food.image.url }}" class="img-fluid rounded" alt="{{ food.name }}">
+                {% else %}
+                    <div class="bg-light rounded d-flex align-items-center justify-content-center" style="height: 400px;">
+                        <i class="fas fa-utensils text-muted" style="font-size: 6rem;"></i>
+                    </div>
+                {% endif %}
+            </div>
+            <div class="col-lg-6">
+                <div class="ps-lg-4">
+                    <h1 class="display-4 fw-bold mb-3">{{ food.name }}</h1>
+                    <p class="lead text-muted mb-3">{{ food.english_name }}</p>
+                    
+                    <div class="mb-4">
+                        <span class="badge bg-primary fs-6 me-2">{{ food.region }}</span>
+                        <span class="badge bg-secondary fs-6">
+                            Độ khó: 
+                            {% for i in ""|center:food.difficulty_level %}
+                                <i class="fas fa-star"></i>
+                            {% endfor %}
+                        </span>
+                    </div>
+                    
+                    <p class="fs-5">{{ food.description }}</p>
+                    
+                    <div class="mt-4">
+                        <a href="#ingredients" class="btn btn-primary me-2">
+                            <i class="fas fa-list"></i> Nguyên liệu
+                        </a>
+                        <a href="#ordering" class="btn btn-secondary me-2">
+                            <i class="fas fa-comments"></i> Cách gọi món
+                        </a>
+                        <a href="#culture" class="btn btn-success">
+                            <i class="fas fa-lightbulb"></i> Mẹo văn hóa
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- History Story -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h3 class="card-title mb-0">
+                            <i class="fas fa-book"></i> Câu chuyện lịch sử
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <p class="fs-5">{{ food.history_story }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Ingredients -->
+<section id="ingredients" class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <div class="card">
+                    <div class="card-header bg-success text-white">
+                        <h3 class="card-title mb-0">
+                            <i class="fas fa-list"></i> Nguyên liệu
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-3">
+                            {% for ingredient in ingredients %}
+                            <div class="col-md-6">
+                                <div class="card h-100 {% if ingredient.is_allergen %}border-warning{% endif %}">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-start">
+                                            <div>
+                                                <h6 class="card-title">{{ ingredient.name }}</h6>
+                                                <p class="text-muted mb-1">{{ ingredient.english_name }}</p>
+                                                {% if ingredient.description %}
+                                                    <p class="card-text small">{{ ingredient.description }}</p>
+                                                {% endif %}
+                                            </div>
+                                            {% if ingredient.is_allergen %}
+                                                <span class="badge bg-warning text-dark">
+                                                    <i class="fas fa-exclamation-triangle"></i> Dị ứng
+                                                </span>
+                                            {% endif %}
+                                        </div>
+                                        
+                                        {% if ingredient.image %}
+                                            <div class="my-2 text-center">
+                                                <img src="{{ ingredient.image.url }}" alt="{{ ingredient.name }}" class="img-fluid rounded" style="max-height: 120px;">
+                                            </div>
+                                        {% endif %}
+                                        {% if ingredient.is_allergen and ingredient.allergen_warning %}
+                                            <div class="allergen-warning mt-2">
+                                                <i class="fas fa-exclamation-triangle"></i>
+                                                {{ ingredient.allergen_warning }}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            {% empty %}
+                            <div class="col-12 text-center">
+                                <p class="text-muted">Chưa có thông tin nguyên liệu.</p>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Ordering Phrases -->
+<section id="ordering" class="py-5 bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <div class="card">
+                    <div class="card-header bg-secondary text-white">
+                        <h3 class="card-title mb-0">
+                            <i class="fas fa-comments"></i> Cách gọi món bằng tiếng Việt
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        {% for phrase in ordering_phrases %}
+                        <div class="ordering-phrase mb-4 p-3 border rounded">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h5 class="text-primary">Tiếng Việt</h5>
+                                    <p class="fs-5 mb-2">{{ phrase.vietnamese }}</p>
+                                    <p class="pronunciation">[{{ phrase.pronunciation }}]</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <h5 class="text-secondary">English</h5>
+                                    <p class="fs-5">{{ phrase.english }}</p>
+                                </div>
+                            </div>
+                            
+                            <div class="usage-context mt-3">
+                                <h6><i class="fas fa-info-circle"></i> Tình huống sử dụng:</h6>
+                                <p class="mb-0">{{ phrase.context }}</p>
+                            </div>
+                        </div>
+                        {% empty %}
+                        <div class="text-center py-4">
+                            <i class="fas fa-comments text-muted" style="font-size: 3rem;"></i>
+                            <p class="text-muted mt-2">Chưa có thông tin cách gọi món.</p>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Cultural Tips -->
+<section id="culture" class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <div class="card">
+                    <div class="card-header bg-info text-white">
+                        <h3 class="card-title mb-0">
+                            <i class="fas fa-lightbulb"></i> Mẹo văn hóa
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        {% for category, tips in tips_by_category.items %}
+                        <div class="cultural-category mb-4">
+                            <h4 class="text-info">
+                                {% if category == 'table_manners' %}
+                                    <i class="fas fa-utensils"></i> Phép tắc bàn ăn
+                                {% elif category == 'chopsticks' %}
+                                    <i class="fas fa-hand-paper"></i> Cách dùng đũa
+                                {% elif category == 'festival' %}
+                                    <i class="fas fa-calendar-alt"></i> Phong tục lễ Tết
+                                {% else %}
+                                    <i class="fas fa-globe"></i> Văn hóa chung
+                                {% endif %}
+                            </h4>
+                            
+                            {% for tip in tips %}
+                            <div class="cultural-tip">
+                                <h5>{{ tip.title }}</h5>
+                                <p class="mb-0">{{ tip.content }}</p>
+                                {% if tip.image %}
+                                    <img src="{{ tip.image.url }}" class="img-fluid mt-2 rounded" alt="{{ tip.title }}">
+                                {% endif %}
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% empty %}
+                        <div class="text-center py-4">
+                            <i class="fas fa-lightbulb text-muted" style="font-size: 3rem;"></i>
+                            <p class="text-muted mt-2">Chưa có mẹo văn hóa nào.</p>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Related Learning -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto text-center">
+                <h2 class="fw-bold mb-3">Học tiếng Việt qua món ăn</h2>
+                <p class="lead text-muted mb-4">
+                    Tìm hiểu cách gọi món và giao tiếp tại nhà hàng Việt Nam
+                </p>
+                <a href="{% url 'talk:topic_list' %}" class="btn btn-primary btn-lg">
+                    <i class="fas fa-graduation-cap"></i> Bắt đầu học
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

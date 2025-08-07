@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+
+{% block title %}Chủ đề học tập - Vietnam Talk & Taste{% endblock %}
+
+{% block content %}
+<!-- Header Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto text-center">
+                <h1 class="display-5 fw-bold mb-3">Chủ đề học tiếng Việt</h1>
+                <p class="lead text-muted">
+                    Chọn chủ đề phù hợp với nhu cầu và mục tiêu học tập của bạn
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Topics Grid -->
+<section class="py-5">
+    <div class="container">
+        <div class="row g-4">
+            {% for topic in topics %}
+            <div class="col-lg-4 col-md-6">
+                <div class="card h-100">
+                    {% if topic.image %}
+                        <img src="{{ topic.image.url }}" class="card-img-top" alt="{{ topic.name }}" style="height: 200px; object-fit: cover;">
+                    {% else %}
+                        <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                            <i class="fas fa-book-open text-muted" style="font-size: 3rem;"></i>
+                        </div>
+                    {% endif %}
+                    
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">{{ topic.name }}</h5>
+                        <p class="card-text flex-grow-1">{{ topic.description }}</p>
+                        
+                        <div class="mt-auto">
+                            <a href="{{ topic.get_absolute_url }}" class="btn btn-primary w-100">
+                                <i class="fas fa-play"></i> Bắt đầu học
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="card-footer bg-transparent">
+                        <small class="text-muted">
+                            <i class="fas fa-list"></i> {{ topic.lessons.count }} bài học
+                        </small>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center">
+                <div class="py-5">
+                    <i class="fas fa-book-open text-muted" style="font-size: 4rem;"></i>
+                    <h3 class="mt-3 text-muted">Chưa có chủ đề nào</h3>
+                    <p class="text-muted">Các chủ đề học tập sẽ được thêm vào sớm.</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Learning Paths -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Lộ trình học tập</h2>
+            <p class="text-muted">Chọn lộ trình phù hợp với mục tiêu của bạn</p>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card text-center h-100">
+                    <div class="card-body">
+                        <i class="fas fa-plane text-primary" style="font-size: 3rem;"></i>
+                        <h4 class="card-title mt-3">Du lịch ngắn hạn</h4>
+                        <p class="card-text">
+                            Học các câu giao tiếp cơ bản cho chuyến du lịch Việt Nam
+                        </p>
+                        <ul class="list-unstyled text-start">
+                            <li><i class="fas fa-check text-success"></i> Giao tiếp tại sân bay</li>
+                            <li><i class="fas fa-check text-success"></i> Đặt phòng khách sạn</li>
+                            <li><i class="fas fa-check text-success"></i> Gọi món tại nhà hàng</li>
+                            <li><i class="fas fa-check text-success"></i> Mua sắm và trả giá</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card text-center h-100">
+                    <div class="card-body">
+                        <i class="fas fa-graduation-cap text-secondary" style="font-size: 3rem;"></i>
+                        <h4 class="card-title mt-3">Du học sinh</h4>
+                        <p class="card-text">
+                            Học tiếng Việt để hòa nhập cuộc sống học tập tại Việt Nam
+                        </p>
+                        <ul class="list-unstyled text-start">
+                            <li><i class="fas fa-check text-success"></i> Giao tiếp với bạn bè</li>
+                            <li><i class="fas fa-check text-success"></i> Tham gia hoạt động trường</li>
+                            <li><i class="fas fa-check text-success"></i> Hiểu văn hóa Việt Nam</li>
+                            <li><i class="fas fa-check text-success"></i> Sử dụng phương tiện công cộng</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card text-center h-100">
+                    <div class="card-body">
+                        <i class="fas fa-home text-success" style="font-size: 3rem;"></i>
+                        <h4 class="card-title mt-3">Định cư lâu dài</h4>
+                        <p class="card-text">
+                            Học tiếng Việt để sống và làm việc tại Việt Nam
+                        </p>
+                        <ul class="list-unstyled text-start">
+                            <li><i class="fas fa-check text-success"></i> Giao tiếp công việc</li>
+                            <li><i class="fas fa-check text-success"></i> Hiểu văn hóa sâu sắc</li>
+                            <li><i class="fas fa-check text-success"></i> Kết nối với cộng đồng</li>
+                            <li><i class="fas fa-check text-success"></i> Tham gia lễ hội truyền thống</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

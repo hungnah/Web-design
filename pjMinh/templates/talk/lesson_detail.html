@@ -1,0 +1,230 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ lesson.title }} - {{ topic.name }}{% endblock %}
+
+{% block content %}
+<!-- Breadcrumb -->
+<nav aria-label="breadcrumb" class="py-3 bg-light">
+    <div class="container">
+        <ol class="breadcrumb mb-0">
+            <li class="breadcrumb-item"><a href="{% url 'talk:home' %}">Trang chủ</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'talk:topic_list' %}">Chủ đề</a></li>
+            <li class="breadcrumb-item"><a href="{{ topic.get_absolute_url }}">{{ topic.name }}</a></li>
+            <li class="breadcrumb-item active">{{ lesson.title }}</li>
+        </ol>
+    </div>
+</nav>
+
+<!-- Lesson Header -->
+<section class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <div class="text-center mb-5">
+                    <h1 class="display-5 fw-bold mb-3">{{ lesson.title }}</h1>
+                    <p class="lead text-muted">{{ lesson.description }}</p>
+                    <div class="badge bg-primary fs-6">{{ topic.name }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Lesson Content -->
+<section class="py-4">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h3 class="card-title">
+                            <i class="fas fa-book-open text-primary"></i> Nội dung bài học
+                        </h3>
+                        <div class="lesson-content">
+                            {{ lesson.content|safe }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Sample Sentences -->
+<section class="py-4">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h3 class="card-title mb-0">
+                            <i class="fas fa-comments"></i> Mẫu câu
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        {% for sentence in sentences %}
+                        <div class="sentence-item mb-4 p-3 border rounded">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h5 class="text-primary">Tiếng Việt</h5>
+                                    <p class="fs-5 mb-2">{{ sentence.vietnamese }}</p>
+                                    <p class="pronunciation">[{{ sentence.pronunciation }}]</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <h5 class="text-secondary">English</h5>
+                                    <p class="fs-5">{{ sentence.english }}</p>
+                                </div>
+                            </div>
+                            
+                            <div class="usage-context mt-3">
+                                <h6><i class="fas fa-info-circle"></i> Tình huống sử dụng:</h6>
+                                <p class="mb-0">{{ sentence.usage_context }}</p>
+                            </div>
+                            
+                            <!-- Food links in sentence -->
+                            {% for food_link in food_links %}
+                                {% if food_link.keyword in sentence.vietnamese %}
+                                <div class="mt-2">
+                                    <a href="{{ food_link.food.get_absolute_url }}" class="food-link">
+                                        <i class="fas fa-utensils"></i> Tìm hiểu về {{ food_link.food.name }}
+                                    </a>
+                                </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                        {% empty %}
+                        <div class="text-center py-4">
+                            <i class="fas fa-comments text-muted" style="font-size: 3rem;"></i>
+                            <p class="text-muted mt-2">Chưa có mẫu câu nào cho bài học này.</p>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Mini Games -->
+{% if minigames %}
+<section class="py-4">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <div class="card">
+                    <div class="card-header bg-secondary text-white">
+                        <h3 class="card-title mb-0">
+                            <i class="fas fa-gamepad"></i> Luyện tập
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-3">
+                            {% for game in minigames %}
+                            <div class="col-md-6">
+                                <div class="card h-100">
+                                    <div class="card-body text-center">
+                                        <i class="fas fa-gamepad text-secondary" style="font-size: 2rem;"></i>
+                                        <h5 class="card-title mt-2">{{ game.title }}</h5>
+                                        <p class="card-text">{{ game.instructions|truncatewords:15 }}</p>
+                                        <a href="{% url 'talk:minigame_play' game.id %}" class="btn btn-outline-secondary">
+                                            <i class="fas fa-play"></i> Chơi ngay
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Related Foods -->
+{% if food_links %}
+<section class="py-4">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <div class="card">
+                    <div class="card-header bg-success text-white">
+                        <h3 class="card-title mb-0">
+                            <i class="fas fa-utensils"></i> Món ăn liên quan
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-3">
+                            {% for food_link in food_links %}
+                            <div class="col-md-6">
+                                <div class="card h-100">
+                                    {% if food_link.food.image %}
+                                        <img src="{{ food_link.food.image.url }}" class="card-img-top" alt="{{ food_link.food.name }}" style="height: 150px; object-fit: cover;">
+                                    {% else %}
+                                        <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 150px;">
+                                            <i class="fas fa-utensils text-muted" style="font-size: 2rem;"></i>
+                                        </div>
+                                    {% endif %}
+                                    
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ food_link.food.name }}</h5>
+                                        <p class="card-text">{{ food_link.food.description|truncatewords:15 }}</p>
+                                        <a href="{{ food_link.food.get_absolute_url }}" class="btn btn-outline-success">
+                                            <i class="fas fa-info-circle"></i> Tìm hiểu thêm
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Navigation -->
+<section class="py-4">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <div class="d-flex justify-content-between">
+                    <a href="{{ topic.get_absolute_url }}" class="btn btn-outline-primary">
+                        <i class="fas fa-arrow-left"></i> Quay lại chủ đề
+                    </a>
+                    <a href="{% url 'talk:topic_list' %}" class="btn btn-primary">
+                        <i class="fas fa-list"></i> Xem tất cả chủ đề
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Highlight food keywords in sentences
+document.addEventListener('DOMContentLoaded', function() {
+    const sentences = document.querySelectorAll('.sentence-item');
+    const foodLinks = {{ food_links|safe }};
+    
+    sentences.forEach(sentence => {
+        const vietnameseText = sentence.querySelector('.text-primary + p');
+        if (vietnameseText) {
+            let text = vietnameseText.innerHTML;
+            
+            foodLinks.forEach(link => {
+                const regex = new RegExp(`(${link.keyword})`, 'gi');
+                text = text.replace(regex, '<span class="food-link" onclick="window.open(\'{{ link.food.get_absolute_url }}\', \'_blank\')">$1</span>');
+            });
+            
+            vietnameseText.innerHTML = text;
+        }
+    });
+});
+</script>
+{% endblock %}

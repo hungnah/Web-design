@@ -1,0 +1,189 @@
+{% extends 'base.html' %}
+
+{% block title %}Ẩm thực truyền thống - Vietnam Talk & Taste{% endblock %}
+
+{% block content %}
+<!-- Header Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto text-center">
+                <h1 class="display-5 fw-bold mb-3">Ẩm thực truyền thống Việt Nam</h1>
+                <p class="lead text-muted">
+                    Khám phá các món ăn đặc sắc với câu chuyện văn hóa và lịch sử thú vị
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Filter Section -->
+<section class="py-4">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <i class="fas fa-filter"></i> Lọc theo vùng miền
+                        </h5>
+                        <div class="d-flex flex-wrap gap-2">
+                            <a href="{% url 'food_culture:food_list' %}" class="btn btn-outline-primary">
+                                Tất cả
+                            </a>
+                            <a href="{% url 'food_culture:food_by_region' 'Miền Bắc' %}" class="btn btn-outline-primary">
+                                Miền Bắc
+                            </a>
+                            <a href="{% url 'food_culture:food_by_region' 'Miền Trung' %}" class="btn btn-outline-primary">
+                                Miền Trung
+                            </a>
+                            <a href="{% url 'food_culture:food_by_region' 'Miền Nam' %}" class="btn btn-outline-primary">
+                                Miền Nam
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Foods Grid -->
+<section class="py-4">
+    <div class="container">
+        <div class="row g-4">
+            {% for food in foods %}
+            <div class="col-lg-4 col-md-6">
+                <div class="card h-100">
+                    {% if food.image %}
+                        <img src="{{ food.image.url }}" class="card-img-top" alt="{{ food.name }}" style="height: 250px; object-fit: cover;">
+                    {% else %}
+                        <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 250px;">
+                            <i class="fas fa-utensils text-muted" style="font-size: 4rem;"></i>
+                        </div>
+                    {% endif %}
+                    
+                    <div class="card-body d-flex flex-column">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <h5 class="card-title">{{ food.name }}</h5>
+                            <span class="badge bg-secondary">{{ food.region }}</span>
+                        </div>
+                        
+                        <p class="card-text flex-grow-1">{{ food.description|truncatewords:25 }}</p>
+                        
+                        <div class="mt-auto">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <small class="text-muted">
+                                    <i class="fas fa-star"></i> Độ khó: 
+                                    {% for i in ""|center:food.difficulty_level %}
+                                        <i class="fas fa-star text-warning"></i>
+                                    {% endfor %}
+                                </small>
+                                <small class="text-muted">
+                                    <i class="fas fa-utensils"></i> {{ food.ingredients.count }} nguyên liệu
+                                </small>
+                            </div>
+                            
+                            <a href="{{ food.get_absolute_url }}" class="btn btn-primary w-100">
+                                <i class="fas fa-info-circle"></i> Tìm hiểu thêm
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center">
+                <div class="py-5">
+                    <i class="fas fa-utensils text-muted" style="font-size: 4rem;"></i>
+                    <h3 class="mt-3 text-muted">Chưa có món ăn nào</h3>
+                    <p class="text-muted">Các món ăn truyền thống sẽ được thêm vào sớm.</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Featured Foods -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Món ăn nổi tiếng</h2>
+            <p class="text-muted">Những món ăn không thể bỏ qua khi đến Việt Nam</p>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card text-center h-100">
+                    <div class="card-body">
+                        <i class="fas fa-bowl-food text-primary" style="font-size: 3rem;"></i>
+                        <h4 class="card-title mt-3">Phở</h4>
+                        <p class="card-text">
+                            Món ăn quốc hồn quốc túy của Việt Nam, được yêu thích trên toàn thế giới
+                        </p>
+                        <ul class="list-unstyled text-start">
+                            <li><i class="fas fa-check text-success"></i> Nước dùng đậm đà</li>
+                            <li><i class="fas fa-check text-success"></i> Bánh phở mềm mại</li>
+                            <li><i class="fas fa-check text-success"></i> Thịt bò tươi ngon</li>
+                            <li><i class="fas fa-check text-success"></i> Rau thơm đa dạng</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card text-center h-100">
+                    <div class="card-body">
+                        <i class="fas fa-fish text-secondary" style="font-size: 3rem;"></i>
+                        <h4 class="card-title mt-3">Bún bò Huế</h4>
+                        <p class="card-text">
+                            Món ăn đặc trưng của xứ Huế với hương vị cay nồng đặc biệt
+                        </p>
+                        <ul class="list-unstyled text-start">
+                            <li><i class="fas fa-check text-success"></i> Nước dùng cay</li>
+                            <li><i class="fas fa-check text-success"></i> Thịt bò và giò heo</li>
+                            <li><i class="fas fa-check text-success"></i> Bún sợi to</li>
+                            <li><i class="fas fa-check text-success"></i> Rau sống phong phú</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card text-center h-100">
+                    <div class="card-body">
+                        <i class="fas fa-drumstick-bite text-success" style="font-size: 3rem;"></i>
+                        <h4 class="card-title mt-3">Bánh chưng</h4>
+                        <p class="card-text">
+                            Món ăn truyền thống không thể thiếu trong dịp Tết Nguyên Đán
+                        </p>
+                        <ul class="list-unstyled text-start">
+                            <li><i class="fas fa-check text-success"></i> Gạo nếp thơm</li>
+                            <li><i class="fas fa-check text-success"></i> Đậu xanh bùi</li>
+                            <li><i class="fas fa-check text-success"></i> Thịt mỡ đậm đà</li>
+                            <li><i class="fas fa-check text-success"></i> Lá dong xanh</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Cultural Tips Preview -->
+<section class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto text-center">
+                <h2 class="fw-bold mb-3">Mẹo văn hóa ẩm thực</h2>
+                <p class="lead text-muted mb-4">
+                    Tìm hiểu về phép tắc bàn ăn, cách dùng đũa và các phong tục truyền thống
+                </p>
+                <a href="{% url 'food_culture:cultural_tips' %}" class="btn btn-primary btn-lg">
+                    <i class="fas fa-lightbulb"></i> Xem mẹo văn hóa
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,140 @@
+{% extends 'base.html' %}
+
+{% block title %}Mẹo văn hóa ẩm thực - Vietnam Talk & Taste{% endblock %}
+
+{% block content %}
+<!-- Header Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto text-center">
+                <h1 class="display-5 fw-bold mb-3">Mẹo văn hóa ẩm thực</h1>
+                <p class="lead text-muted">
+                    Tìm hiểu về phép tắc bàn ăn, cách dùng đũa và các phong tục truyền thống Việt Nam
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Cultural Tips by Category -->
+<section class="py-5">
+    <div class="container">
+        {% for category, tips in tips_by_category.items %}
+        <div class="row mb-5">
+            <div class="col-lg-8 mx-auto">
+                <div class="card">
+                    <div class="card-header bg-info text-white">
+                        <h3 class="card-title mb-0">
+                            {% if category == 'table_manners' %}
+                                <i class="fas fa-utensils"></i> Phép tắc bàn ăn
+                            {% elif category == 'chopsticks' %}
+                                <i class="fas fa-hand-paper"></i> Cách dùng đũa
+                            {% elif category == 'festival' %}
+                                <i class="fas fa-calendar-alt"></i> Phong tục lễ Tết
+                            {% else %}
+                                <i class="fas fa-globe"></i> Văn hóa chung
+                            {% endif %}
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        {% for tip in tips %}
+                        <div class="cultural-tip mb-4">
+                            <h5>{{ tip.title }}</h5>
+                            <p class="mb-2">{{ tip.content }}</p>
+                            {% if tip.food %}
+                                <small class="text-muted">
+                                    <i class="fas fa-utensils"></i> Liên quan đến: 
+                                    <a href="{{ tip.food.get_absolute_url }}" class="food-link">{{ tip.food.name }}</a>
+                                </small>
+                            {% endif %}
+                            {% if tip.image %}
+                                <img src="{{ tip.image.url }}" class="img-fluid mt-2 rounded" alt="{{ tip.title }}">
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="row">
+            <div class="col-lg-8 mx-auto text-center">
+                <div class="py-5">
+                    <i class="fas fa-lightbulb text-muted" style="font-size: 4rem;"></i>
+                    <h3 class="mt-3 text-muted">Chưa có mẹo văn hóa nào</h3>
+                    <p class="text-muted">Các mẹo văn hóa sẽ được thêm vào sớm.</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<!-- General Cultural Tips -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <div class="card">
+                    <div class="card-header bg-success text-white">
+                        <h3 class="card-title mb-0">
+                            <i class="fas fa-star"></i> Mẹo văn hóa chung
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <div class="cultural-tip">
+                                    <h5><i class="fas fa-handshake text-primary"></i> Chào hỏi</h5>
+                                    <p>Khi vào nhà hàng, hãy chào hỏi mọi người bằng cách gật đầu hoặc nói "Xin chào". Điều này thể hiện sự tôn trọng văn hóa Việt Nam.</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="cultural-tip">
+                                    <h5><i class="fas fa-users text-secondary"></i> Ăn cùng nhau</h5>
+                                    <p>Người Việt thích ăn cùng nhau và chia sẻ món ăn. Hãy thử nhiều món khác nhau và chia sẻ với mọi người.</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="cultural-tip">
+                                    <h5><i class="fas fa-comments text-success"></i> Giao tiếp</h5>
+                                    <p>Học một vài câu tiếng Việt cơ bản sẽ giúp bạn có trải nghiệm tốt hơn và được người Việt đánh giá cao.</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="cultural-tip">
+                                    <h5><i class="fas fa-heart text-danger"></i> Thể hiện sự thích thú</h5>
+                                    <p>Khi thích món ăn, hãy thể hiện bằng cách nói "Ngon quá!" hoặc "Rất ngon!". Điều này sẽ làm chủ nhà rất vui.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action -->
+<section class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto text-center">
+                <h2 class="fw-bold mb-3">Sẵn sàng thực hành?</h2>
+                <p class="lead text-muted mb-4">
+                    Học tiếng Việt và áp dụng các mẹo văn hóa vào thực tế
+                </p>
+                <div class="d-flex justify-content-center gap-3">
+                    <a href="{% url 'talk:topic_list' %}" class="btn btn-primary btn-lg">
+                        <i class="fas fa-graduation-cap"></i> Học tiếng Việt
+                    </a>
+                    <a href="{% url 'food_culture:food_list' %}" class="btn btn-secondary btn-lg">
+                        <i class="fas fa-utensils"></i> Khám phá ẩm thực
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
