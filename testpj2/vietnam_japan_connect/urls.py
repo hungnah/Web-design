@@ -24,8 +24,8 @@ urlpatterns = [
     # Django admin interface
     path('admin/', admin.site.urls),
     
-    # Home page redirects to user dashboard
-    path('', RedirectView.as_view(url='/auth/dashboard/', permanent=False), name='home'),
+    # Home page
+    path('', RedirectView.as_view(url='/auth/', permanent=False), name='home_redirect'),
     
     # Main application modules
     path('auth/', include('user_profile.urls')),     # User management & authentication

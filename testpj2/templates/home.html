@@ -1,0 +1,280 @@
+{% extends 'base.html' %}
+
+{% block title %}Vietnam-Japan Connect - Kết nối Việt Nam - Nhật Bản{% endblock %}
+
+{% block extra_css %}
+<style>
+/* Hero section với ảnh nền */
+.hero-section {
+    background: linear-gradient(135deg, rgba(103, 126, 234, 0.8), rgba(118, 75, 162, 0.8)),
+                url("https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1471&q=80") !important;
+    background-size: cover !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+    color: white !important;
+    padding: 150px 0 !important;
+    min-height: 500px !important;
+}
+
+.hero-section h1,
+.hero-section p {
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.7) !important;
+    color: white !important;
+}
+
+/* Nền trang với pattern */
+body {
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%),
+                url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23667eea' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E") !important;
+    min-height: 100vh;
+}
+
+/* CSS cho phần giới thiệu */
+.about-section {
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
+    position: relative;
+    overflow: hidden;
+}
+
+.about-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23667eea' fill-opacity='0.03'%3E%3Cpath d='M0 0h80v80H0V0zm20 20v40h40V20H20zm20 35a15 15 0 1 1 0-30 15 15 0 0 1 0 30z' fill-rule='evenodd'/%3E%3C/g%3E%3C/svg%3E");
+    z-index: -1;
+}
+
+.section-title {
+    color: #2c3e50;
+    font-weight: 700;
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.section-subtitle {
+    color: #7f8c8d;
+    font-size: 1.2rem;
+    font-weight: 300;
+}
+
+.feature-card {
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 15px;
+    padding: 2rem;
+    height: 100%;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid rgba(103, 126, 234, 0.1);
+}
+
+.feature-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+.feature-icon {
+    color: #e74c3c;
+    margin-bottom: 1.5rem;
+}
+
+.feature-card h4 {
+    color: #2c3e50;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.feature-card p {
+    color: #5a6c7d;
+    line-height: 1.6;
+}
+
+.info-card {
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 15px;
+    padding: 2rem;
+    height: 100%;
+    border: 1px solid rgba(231, 76, 60, 0.1);
+}
+
+.info-card h4 {
+    color: #2c3e50;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+}
+
+.feature-list {
+    list-style: none;
+    padding: 0;
+}
+
+.feature-list li {
+    padding: 0.5rem 0;
+    color: #5a6c7d;
+    font-size: 1rem;
+}
+
+.cta-section {
+    background: linear-gradient(135deg, rgba(231, 76, 60, 0.1), rgba(103, 126, 234, 0.1));
+    border-radius: 20px;
+    padding: 3rem 2rem;
+    margin-top: 2rem;
+}
+
+.cta-section h3 {
+    color: #2c3e50;
+    font-weight: 700;
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+.cta-section p {
+    color: #7f8c8d;
+    font-size: 1.1rem;
+}
+
+.btn-lg {
+    padding: 0.75rem 2rem;
+    font-size: 1.1rem;
+    border-radius: 10px;
+    font-weight: 600;
+}
+
+.btn-outline-primary {
+    border-color: #e74c3c;
+    color: #e74c3c;
+}
+
+.btn-outline-primary:hover {
+    background-color: #e74c3c;
+    border-color: #e74c3c;
+}
+
+/* Hero CTA buttons */
+.hero-cta {
+    margin-top: 2rem;
+}
+
+.hero-cta .btn {
+    margin: 0.5rem;
+    padding: 1rem 2rem;
+    font-size: 1.2rem;
+    font-weight: 600;
+    border-radius: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="hero-section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 text-center">
+                <h1 class="display-3 mb-4">Vietnam-Japan Connect</h1>
+                <p class="lead mb-4">Nền tảng kết nối giao lưu ngôn ngữ và văn hóa giữa Việt Nam và Nhật Bản</p>
+                <div class="hero-cta">
+                    <a href="{% url 'login' %}" class="btn btn-primary btn-lg">
+                        <i class="fas fa-sign-in-alt me-2"></i>Đăng Nhập
+                    </a>
+                    <a href="{% url 'register' %}" class="btn btn-outline-light btn-lg">
+                        <i class="fas fa-user-plus me-2"></i>Đăng Ký
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Phần giới thiệu về website -->
+<section class="about-section py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center mb-5">
+                <h2 class="section-title">Về Vietnam-Japan Connect</h2>
+                <p class="section-subtitle">Nền tảng kết nối giao lưu ngôn ngữ và văn hóa</p>
+            </div>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="feature-card text-center">
+                    <div class="feature-icon">
+                        <i class="fas fa-comments fa-3x"></i>
+                    </div>
+                    <h4>Giao Lưu Ngôn Ngữ</h4>
+                    <p>Kết nối với người bản xứ để thực hành tiếng Việt và tiếng Nhật một cách tự nhiên và hiệu quả.</p>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="feature-card text-center">
+                    <div class="feature-icon">
+                        <i class="fas fa-globe-asia fa-3x"></i>
+                    </div>
+                    <h4>Trao Đổi Văn Hóa</h4>
+                    <p>Khám phá và chia sẻ những nét đẹp văn hóa độc đáo giữa Việt Nam và Nhật Bản.</p>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="feature-card text-center">
+                    <div class="feature-icon">
+                        <i class="fas fa-users fa-3x"></i>
+                    </div>
+                    <h4>Cộng Đồng Thân Thiện</h4>
+                    <p>Tham gia cộng đồng năng động với hàng nghìn thành viên đam mê học tập và kết bạn.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row mt-5">
+            <div class="col-lg-6">
+                <div class="info-card">
+                    <h4><i class="fas fa-graduation-cap me-2"></i>Học Tập Hiệu Quả</h4>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check text-success me-2"></i>Luyện tập với người bản xứ</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Tài liệu học tập phong phú</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Phương pháp học tương tác</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Theo dõi tiến độ học tập</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="col-lg-6">
+                <div class="info-card">
+                    <h4><i class="fas fa-heart me-2"></i>Kết Nối Ý Nghĩa</h4>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check text-success me-2"></i>Tìm kiếm partner phù hợp</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Chat realtime tiện lợi</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Tổ chức các buổi gặp mặt</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Xây dựng tình bạn bền vững</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row mt-5">
+            <div class="col-12 text-center">
+                <div class="cta-section">
+                    <h3>Bắt Đầu Hành Trình Của Bạn Ngay Hôm Nay!</h3>
+                    <p class="mb-4">Tham gia cộng đồng Vietnam-Japan Connect để khám phá thế giới mới đầy thú vị</p>
+                    <a href="{% url 'login' %}" class="btn btn-primary btn-lg me-3">
+                        <i class="fas fa-sign-in-alt me-2"></i>Đăng Nhập
+                    </a>
+                    <a href="{% url 'register' %}" class="btn btn-outline-primary btn-lg me-3">
+                        <i class="fas fa-user-plus me-2"></i>Đăng Ký
+                    </a>
+                    <a href="{% url 'guide' %}" class="btn btn-outline-secondary btn-lg">
+                        <i class="fas fa-question-circle me-2"></i>Tìm Hiểu Thêm
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

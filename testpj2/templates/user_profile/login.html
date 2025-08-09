@@ -1,91 +1,341 @@
-{% extends 'base.html' %}
-{% load crispy_forms_tags %}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng Nhập - Vietnam-Japan Connect</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* Reset và base styling */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-{% block title %}Login - Vietnam-Japan Connect{% endblock %}
+/* Nền trang với gradient đẹp */
+body {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    overflow: hidden;
+}
 
-{% block content %}
-<div class="hero-section">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-8 text-center">
-                <h1 class="display-4 mb-4">Welcome Back</h1>
-                <p class="lead">Sign in to continue your language exchange journey.</p>
+/* Container chính */
+.login-wrapper {
+    width: 100%;
+    max-width: 420px;
+    position: relative;
+}
+
+/* Form đăng nhập */
+.login-form {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px);
+    border-radius: 24px;
+    padding: 2.5rem 2rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 25px 45px rgba(0, 0, 0, 0.15);
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+}
+
+.login-form::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -50%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transform: skewX(45deg);
+    transition: 0.5s;
+}
+
+.login-form:hover::before {
+    left: 100%;
+}
+
+/* Header */
+.login-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.login-header h2 {
+    color: white;
+    font-weight: 600;
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.login-header p {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 1rem;
+    margin: 0;
+}
+
+/* Form groups */
+.form-group {
+    margin-bottom: 1.5rem;
+    position: relative;
+}
+
+.form-group label {
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.form-group i {
+    margin-right: 0.5rem;
+}
+
+/* Fix for icons spacing */
+.me-2 {
+    margin-right: 0.5rem;
+}
+
+.me-1 {
+    margin-right: 0.25rem;
+}
+
+.mt-1 {
+    margin-top: 0.25rem;
+}
+
+.text-danger {
+    color: #ff6b6b !important;
+}
+
+/* Input styling */
+.form-control {
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 15px;
+    padding: 1rem 1.25rem;
+    color: white;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    width: 100%;
+}
+
+.form-control::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.form-control:focus {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.4);
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+    outline: none;
+}
+
+/* Button styling */
+.btn-login {
+    background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+    border: none;
+    border-radius: 15px;
+    padding: 1rem 2rem;
+    color: white;
+    font-weight: 600;
+    font-size: 1.1rem;
+    width: 100%;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 15px rgba(238, 90, 36, 0.3);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.btn-login:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 15px 25px rgba(238, 90, 36, 0.4);
+    background: linear-gradient(135deg, #ee5a24, #ff6b6b);
+}
+
+.btn-login:active {
+    transform: translateY(0);
+}
+
+/* Error messages */
+.alert-danger {
+    background: rgba(231, 76, 60, 0.2);
+    border: 1px solid rgba(231, 76, 60, 0.3);
+    border-radius: 10px;
+    color: white;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    backdrop-filter: blur(10px);
+}
+
+/* Links */
+.login-links {
+    text-align: center;
+    margin-top: 2rem;
+}
+
+.login-links a {
+    color: rgba(255, 255, 255, 0.9);
+    text-decoration: none;
+    transition: color 0.3s ease;
+    font-weight: 500;
+}
+
+.login-links a:hover {
+    color: white;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+.divider {
+    margin: 1.5rem 0;
+    text-align: center;
+    position: relative;
+}
+
+.divider::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.divider span {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 0 1rem;
+    color: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(10px);
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+    .login-wrapper {
+        max-width: 350px;
+    }
+    
+    .login-form {
+        padding: 2rem 1.5rem;
+        border-radius: 20px;
+    }
+    
+    .login-header h2 {
+        font-size: 1.6rem;
+    }
+    
+    .login-header p {
+        font-size: 0.9rem;
+    }
+}
+
+/* Animation cho form */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.login-form {
+    animation: fadeInUp 0.8s ease;
+}
+</style>
+</head>
+<body>
+<div class="login-wrapper">
+    <div class="login-form">
+        <!-- Header -->
+        <div class="login-header">
+            <h2><i class="fas fa-sign-in-alt me-2"></i>Đăng Nhập</h2>
+            <p>Chào mừng trở lại với Vietnam-Japan Connect</p>
+        </div>
+
+        <!-- Form -->
+        <form method="post">
+            {% csrf_token %}
+            
+            {% if form.errors %}
+                <div class="alert alert-danger">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <strong>Đăng nhập thất bại.</strong> Vui lòng kiểm tra lại thông tin.
+                </div>
+            {% endif %}
+            
+            <div class="form-group">
+                <label for="{{ form.username.id_for_label }}">
+                    <i class="fas fa-user"></i> Tên đăng nhập
+                </label>
+                <input type="text" 
+                       class="form-control" 
+                       name="{{ form.username.name }}" 
+                       id="{{ form.username.id_for_label }}"
+                       placeholder="Nhập tên đăng nhập"
+                       required>
+                {% if form.username.errors %}
+                    <div class="text-danger mt-1">{{ form.username.errors }}</div>
+                {% endif %}
             </div>
+            
+            <div class="form-group">
+                <label for="{{ form.password.id_for_label }}">
+                    <i class="fas fa-lock"></i> Mật khẩu
+                </label>
+                <input type="password" 
+                       class="form-control" 
+                       name="{{ form.password.name }}" 
+                       id="{{ form.password.id_for_label }}"
+                       placeholder="Nhập mật khẩu"
+                       required>
+                {% if form.password.errors %}
+                    <div class="text-danger mt-1">{{ form.password.errors }}</div>
+                {% endif %}
+            </div>
+            
+            <button type="submit" class="btn-login">
+                <i class="fas fa-sign-in-alt me-2"></i>Đăng Nhập
+            </button>
+        </form>
+        
+        <div class="divider">
+            <span>hoặc</span>
+        </div>
+        
+        <div class="login-links">
+            <p style="color: rgba(255, 255, 255, 0.8); margin-bottom: 1rem;">
+                Chưa có tài khoản? 
+                <a href="{% url 'register' %}">Đăng ký ngay</a>
+            </p>
+            
+            <a href="{% url 'home' %}">
+                <i class="fas fa-arrow-left me-1"></i>Về trang chủ
+            </a>
         </div>
     </div>
 </div>
 
-<div class="container my-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-header bg-primary text-white">
-                    <h3 class="mb-0">
-                        <i class="fas fa-sign-in-alt"></i> Sign In
-                    </h3>
-                </div>
-                <div class="card-body">
-                    <form method="post">
-                        {% csrf_token %}
-                        
-                        {% if form.errors %}
-                            <div class="alert alert-danger">
-                                <i class="fas fa-exclamation-triangle"></i>
-                                <strong>Login failed.</strong> Please check your username and password.
-                            </div>
-                        {% endif %}
-                        
-                        <div class="mb-3">
-                            <label for="{{ form.username.id_for_label }}" class="form-label">
-                                <i class="fas fa-user"></i> Username
-                            </label>
-                            {{ form.username }}
-                            {% if form.username.errors %}
-                                <div class="text-danger">{{ form.username.errors }}</div>
-                            {% endif %}
-                        </div>
-                        
-                        <div class="mb-3">
-                            <label for="{{ form.password.id_for_label }}" class="form-label">
-                                <i class="fas fa-lock"></i> Password
-                            </label>
-                            {{ form.password }}
-                            {% if form.password.errors %}
-                                <div class="text-danger">{{ form.password.errors }}</div>
-                            {% endif %}
-                        </div>
-                        
-                        <div class="d-grid gap-2">
-                            <button type="submit" class="btn btn-primary btn-lg">
-                                <i class="fas fa-sign-in-alt"></i> Sign In
-                            </button>
-                        </div>
-                    </form>
-                    
-                    <hr class="my-4">
-                    
-                    <div class="text-center">
-                        <p>Don't have an account? <a href="{% url 'register' %}" class="text-decoration-none">Register here</a></p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-{% endblock %}
-
-{% block extra_js %}
 <script>
 // Additional client-side check for authenticated users
-// This handles cases where cached pages might be shown
 document.addEventListener('DOMContentLoaded', function() {
-    // Check if user is authenticated by looking for user-specific elements in the navbar
-    const userDropdown = document.querySelector('.navbar-nav .dropdown-toggle');
-    const loginForm = document.querySelector('form[method="post"]');
-    
-    // If we find user dropdown but we're on login page, redirect to dashboard
-    if (userDropdown && loginForm && userDropdown.textContent.trim() !== 'ガイド' && userDropdown.textContent.trim() !== 'Guide') {
-        window.location.href = "{% url 'dashboard' %}";
+    // Auto focus on username field
+    const usernameField = document.querySelector('input[name="username"]');
+    if (usernameField) {
+        usernameField.focus();
     }
 });
 
@@ -95,5 +345,17 @@ window.addEventListener('pageshow', function(event) {
         window.location.reload();
     }
 });
+
+// Add smooth transitions
+document.querySelectorAll('.form-control').forEach(input => {
+    input.addEventListener('focus', function() {
+        this.style.transform = 'scale(1.02)';
+    });
+    
+    input.addEventListener('blur', function() {
+        this.style.transform = 'scale(1)';
+    });
+});
 </script>
-{% endblock %}
+</body>
+</html>

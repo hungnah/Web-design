@@ -138,3 +138,7 @@ def guide(request):
         return render(request, 'user_profile/guide_vi.html')
     else:
         return render(request, 'user_profile/guide.html')
+
+def home(request):
+    """Trang chủ với giới thiệu về website"""
+    return render(request, 'home.html')
