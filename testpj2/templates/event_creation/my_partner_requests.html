@@ -1,0 +1,132 @@
+{% extends 'base.html' %}
+
+{% block title %}Yêu cầu của tôi - Vietnam-Japan Connect{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2>
+                    <i class="fas fa-list me-2"></i>
+                    Yêu cầu tìm partner của tôi
+                </h2>
+                <a href="{% url 'create_partner_request' %}" class="btn btn-primary">
+                    <i class="fas fa-plus me-2"></i>
+                    Tạo yêu cầu mới
+                </a>
+            </div>
+            
+            {% if partner_requests %}
+                <div class="row">
+                    {% for request in partner_requests %}
+                        <div class="col-md-6 mb-3">
+                            <div class="card h-100">
+                                <div class="card-header d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h5 class="mb-0">{{ request.title }}</h5>
+                                        <small class="text-muted">
+                                            <i class="fas fa-clock me-1"></i>
+                                            {{ request.created_at|date:"d/m/Y H:i" }}
+                                        </small>
+                                    </div>
+                                    <div>
+                                        {% if request.status == 'active' %}
+                                            <span class="badge bg-success">Đang hoạt động</span>
+                                        {% elif request.status == 'matched' %}
+                                            <span class="badge bg-primary">Đã kết nối</span>
+                                        {% elif request.status == 'completed' %}
+                                            <span class="badge bg-secondary">Hoàn thành</span>
+                                        {% else %}
+                                            <span class="badge bg-danger">Đã hủy</span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <p class="card-text">{{ request.description }}</p>
+                                    
+                                    <div class="row text-center mb-3">
+                                        <div class="col-3">
+                                            <small class="text-muted d-block">Loại</small>
+                                            <strong>
+                                                {% if request.request_type == 'japanese_to_vietnamese' %}
+                                                    Nhật → Việt
+                                                {% elif request.request_type == 'vietnamese_to_japanese' %}
+                                                    Việt → Nhật
+                                                {% else %}
+                                                    Cả hai
+                                                {% endif %}
+                                            </strong>
+                                        </div>
+                                        <div class="col-3">
+                                            <small class="text-muted d-block">Thành phố</small>
+                                            <strong>{{ request.get_preferred_city_display }}</strong>
+                                        </div>
+                                        <div class="col-3">
+                                            <small class="text-muted d-block">Gặp mặt</small>
+                                            <strong>{{ request.get_meeting_preference_display }}</strong>
+                                        </div>
+                                        <div class="col-3">
+                                            <small class="text-muted d-block">Tần suất</small>
+                                            <strong>{{ request.get_frequency_display }}</strong>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            {% if request.status == 'matched' %}
+                                                <a href="#" class="btn btn-success btn-sm">
+                                                    <i class="fas fa-comments me-1"></i>
+                                                    Chat với partner
+                                                </a>
+                                            {% endif %}
+                                        </div>
+                                        <div class="btn-group">
+                                            {% if request.status == 'active' %}
+                                                <button type="button" class="btn btn-outline-danger btn-sm" 
+                                                        onclick="cancelRequest({{ request.id }})">
+                                                    <i class="fas fa-times me-1"></i>
+                                                    Hủy
+                                                </button>
+                                            {% endif %}
+                                            <button type="button" class="btn btn-outline-info btn-sm" 
+                                                    onclick="editRequest({{ request.id }})">
+                                                <i class="fas fa-edit me-1"></i>
+                                                Sửa
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="text-center py-5">
+                    <i class="fas fa-file-alt fa-3x text-muted mb-3"></i>
+                    <h4 class="text-muted">Bạn chưa có yêu cầu nào</h4>
+                    <p class="text-muted">Tạo yêu cầu đầu tiên để tìm partner học ngôn ngữ!</p>
+                    <a href="{% url 'create_partner_request' %}" class="btn btn-primary btn-lg">
+                        <i class="fas fa-plus me-2"></i>
+                        Tạo yêu cầu đầu tiên
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<script>
+function cancelRequest(requestId) {
+    if (confirm('Bạn có chắc muốn hủy yêu cầu này?')) {
+        // TODO: Implement cancel request functionality
+        alert('Chức năng hủy yêu cầu sẽ được thêm sau.');
+    }
+}
+
+function editRequest(requestId) {
+    // TODO: Implement edit request functionality
+    alert('Chức năng sửa yêu cầu sẽ được thêm sau.');
+}
+</script>
+{% endblock %}

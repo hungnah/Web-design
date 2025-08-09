@@ -1,0 +1,330 @@
+{% extends 'base.html' %}
+
+{% block title %}ウェブサイト利用ガイド - Vietnam-Japan Connect{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="text-center mb-4">
+                <i class="fas fa-question-circle text-primary"></i>
+                ウェブサイト利用ガイド
+            </h1>
+            <p class="text-center text-muted mb-5">
+                Vietnam-Japan Connectの使い方をご説明します
+            </p>
+            
+            <!-- Language Switcher -->
+            <div class="text-center mb-4">
+                <div class="btn-group" role="group">
+                    <a href="{% url 'guide' %}?lang=vi" class="btn btn-outline-primary">Tiếng Việt</a>
+                    <a href="{% url 'guide' %}?lang=ja" class="btn btn-primary active">日本語</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 目次 -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="fas fa-list"></i> 目次</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled">
+                        <li><a href="#registration" class="text-decoration-none">1. アカウント登録</a></li>
+                        <li><a href="#login" class="text-decoration-none">2. ログイン</a></li>
+                        <li><a href="#dashboard" class="text-decoration-none">3. ダッシュボード</a></li>
+                        <li><a href="#japanese-features" class="text-decoration-none">4. 日本人ユーザー向け機能</a></li>
+                        <li><a href="#vietnamese-features" class="text-decoration-none">5. ベトナム人ユーザー向け機能</a></li>
+                        <li><a href="#chat" class="text-decoration-none">6. チャット機能</a></li>
+                        <li><a href="#profile" class="text-decoration-none">7. プロフィール管理</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 1. アカウント登録 -->
+    <div class="row mb-5" id="registration">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0"><i class="fas fa-user-plus"></i> 1. アカウント登録</h5>
+                </div>
+                <div class="card-body">
+                    <h6>手順：</h6>
+                    <ol>
+                        <li>トップページの「登録」ボタンをクリック</li>
+                        <li>必要な情報を入力：
+                            <ul>
+                                <li>ユーザー名</li>
+                                <li>メールアドレス</li>
+                                <li>パスワード</li>
+                                <li>国籍（日本人/ベトナム人）</li>
+                                <li>居住都市</li>
+                                <li>プロフィール写真（任意）</li>
+                            </ul>
+                        </li>
+                        <li>「登録」ボタンをクリックしてアカウントを作成</li>
+                    </ol>
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle"></i>
+                        <strong>注意：</strong> 国籍の選択により、利用できる機能が異なります。
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. ログイン -->
+    <div class="row mb-5" id="login">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0"><i class="fas fa-sign-in-alt"></i> 2. ログイン</h5>
+                </div>
+                <div class="card-body">
+                    <h6>手順：</h6>
+                    <ol>
+                        <li>ナビゲーションバーの「ログイン」をクリック</li>
+                        <li>ユーザー名とパスワードを入力</li>
+                        <li>「ログイン」ボタンをクリック</li>
+                    </ol>
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <strong>パスワードを忘れた場合：</strong> 現在は管理者にお問い合わせください。
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. ダッシュボード -->
+    <div class="row mb-5" id="dashboard">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="mb-0"><i class="fas fa-home"></i> 3. ダッシュボード</h5>
+                </div>
+                <div class="card-body">
+                    <p>ログイン後、自動的にダッシュボードに移動します。ダッシュボードでは以下が表示されます：</p>
+                    
+                                         <h6>日本人ユーザー向け：</h6>
+                     <ul>
+                         <li>最近作成した投稿の一覧</li>
+                         <li>ベトナム語レッスンのリスト</li>
+                         <li>アクティブなチャット</li>
+                     </ul>
+
+                    <h6>ベトナム人ユーザー向け：</h6>
+                    <ul>
+                        <li>利用可能な投稿の一覧</li>
+                        <li>統計情報（受諾済み投稿数、利用可能投稿数）</li>
+                        <li>最近の活動</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 4. 日本人ユーザー向け機能 -->
+    <div class="row mb-5" id="japanese-features">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-danger text-white">
+                    <h5 class="mb-0"><i class="fas fa-flag"></i> 4. 日本人ユーザー向け機能</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6><i class="fas fa-language"></i> ベトナム語学習</h6>
+                            <ul>
+                                <li>ベトナム語のフレーズを学習</li>
+                                <li>発音練習</li>
+                                <li>日常会話の練習</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h6><i class="fas fa-graduation-cap"></i> レッスン</h6>
+                            <ul>
+                                <li>構造化されたベトナム語レッスン</li>
+                                <li>段階的な学習</li>
+                                <li>練習問題</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-12">
+                            <h6><i class="fas fa-list"></i> 投稿管理</h6>
+                            <ul>
+                                <li>新しい言語交換投稿を作成</li>
+                                <li>既存の投稿を編集・削除</li>
+                                <li>投稿の状況を確認</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 5. ベトナム人ユーザー向け機能 -->
+    <div class="row mb-5" id="vietnamese-features">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0"><i class="fas fa-search"></i> 5. ベトナム人ユーザー向け機能</h5>
+                </div>
+                <div class="card-body">
+                    <h6><i class="fas fa-search"></i> 投稿検索</h6>
+                    <ul>
+                        <li>日本人ユーザーが作成した投稿を閲覧</li>
+                        <li>都市別フィルタリング</li>
+                        <li>投稿の詳細を確認</li>
+                    </ul>
+
+                    <h6><i class="fas fa-handshake"></i> パートナーリクエスト</h6>
+                    <ul>
+                        <li>興味のある投稿にリクエストを送信</li>
+                        <li>リクエストの状況を確認</li>
+                        <li>承認されたリクエストでチャット開始</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 6. チャット機能 -->
+    <div class="row mb-5" id="chat">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="fas fa-comments"></i> 6. チャット機能</h5>
+                </div>
+                <div class="card-body">
+                    <h6>チャットの開始：</h6>
+                    <ol>
+                        <li>パートナーリクエストが承認される</li>
+                        <li>ナビゲーションバーの「チャット」をクリック</li>
+                        <li>チャットルームに参加</li>
+                    </ol>
+
+                    <h6>チャット機能：</h6>
+                    <ul>
+                        <li>リアルタイムメッセージ送受信</li>
+                        <li>未読メッセージ通知</li>
+                        <li>チャット履歴の保存</li>
+                        <li>複数のチャットルーム管理</li>
+                    </ul>
+
+                    <div class="alert alert-info">
+                        <i class="fas fa-lightbulb"></i>
+                        <strong>ヒント：</strong> チャットでは、お互いの言語でコミュニケーションを取ることができます。
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 7. プロフィール管理 -->
+    <div class="row mb-5" id="profile">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-secondary text-white">
+                    <h5 class="mb-0"><i class="fas fa-user-edit"></i> 7. プロフィール管理</h5>
+                </div>
+                <div class="card-body">
+                    <h6>プロフィールの編集：</h6>
+                    <ol>
+                        <li>ナビゲーションバーのユーザー名をクリック</li>
+                        <li>「プロフィール」を選択</li>
+                        <li>情報を編集</li>
+                        <li>「保存」ボタンをクリック</li>
+                    </ol>
+
+                    <h6>編集可能な項目：</h6>
+                    <ul>
+                        <li>プロフィール写真</li>
+                        <li>居住都市</li>
+                        <li>自己紹介</li>
+                        <li>言語レベル</li>
+                        <li>興味・趣味</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- よくある質問 -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0"><i class="fas fa-question-circle"></i> よくある質問（FAQ）</h5>
+                </div>
+                <div class="card-body">
+                    <div class="accordion" id="faqAccordion">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="faq1">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse1">
+                                    パスワードを忘れた場合はどうすればよいですか？
+                                </button>
+                            </h2>
+                            <div id="collapse1" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    現在、パスワードリセット機能は開発中です。パスワードを忘れた場合は、管理者にお問い合わせください。
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="faq2">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse2">
+                                    チャットで相手が応答しない場合はどうすればよいですか？
+                                </button>
+                            </h2>
+                            <div id="collapse2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    相手が忙しい場合があります。しばらく待ってから再度メッセージを送信するか、他のパートナーを探すことをお勧めします。
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="faq3">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse3">
+                                    投稿を削除できますか？
+                                </button>
+                            </h2>
+                            <div id="collapse3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    はい、自分が作成した投稿は「投稿管理」ページから削除できます。ただし、既にリクエストが送信されている投稿は削除できません。
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- お問い合わせ -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0"><i class="fas fa-envelope"></i> お問い合わせ</h5>
+                </div>
+                <div class="card-body text-center">
+                    <p>このガイドで解決できない問題がある場合は、お気軽にお問い合わせください。</p>
+                    <a href="mailto:support@vietnam-japan-connect.com" class="btn btn-primary">
+                        <i class="fas fa-envelope"></i> サポートに連絡
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

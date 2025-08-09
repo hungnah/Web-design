@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Tạo yêu cầu tìm partner - Vietnam-Japan Connect{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-user-plus me-2"></i>
+                        Tạo yêu cầu tìm partner
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ form|crispy }}
+                        
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle me-2"></i>
+                            <strong>Lưu ý:</strong> Mô tả chi tiết sẽ giúp bạn tìm được partner phù hợp hơn. 
+                            Hãy chia sẻ về mục tiêu học tập, sở thích và lịch trình của bạn.
+                        </div>
+                        
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-paper-plane me-2"></i>
+                                Đăng yêu cầu
+                            </button>
+                            <a href="{% url 'find_partners' %}" class="btn btn-outline-secondary">
+                                <i class="fas fa-search me-2"></i>
+                                Xem các yêu cầu khác
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

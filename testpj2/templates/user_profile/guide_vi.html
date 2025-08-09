@@ -1,0 +1,330 @@
+{% extends 'base.html' %}
+
+{% block title %}Hướng dẫn sử dụng - Vietnam-Japan Connect{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="text-center mb-4">
+                <i class="fas fa-question-circle text-primary"></i>
+                Hướng dẫn sử dụng website
+            </h1>
+            <p class="text-center text-muted mb-5">
+                Hướng dẫn chi tiết cách sử dụng Vietnam-Japan Connect
+            </p>
+            
+            <!-- Language Switcher -->
+            <div class="text-center mb-4">
+                <div class="btn-group" role="group">
+                    <a href="{% url 'guide' %}?lang=vi" class="btn btn-primary active">Tiếng Việt</a>
+                    <a href="{% url 'guide' %}?lang=ja" class="btn btn-outline-primary">日本語</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mục lục -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="fas fa-list"></i> Mục lục</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled">
+                        <li><a href="#registration" class="text-decoration-none">1. Đăng ký tài khoản</a></li>
+                        <li><a href="#login" class="text-decoration-none">2. Đăng nhập</a></li>
+                        <li><a href="#dashboard" class="text-decoration-none">3. Bảng điều khiển</a></li>
+                        <li><a href="#japanese-features" class="text-decoration-none">4. Tính năng cho người Nhật</a></li>
+                        <li><a href="#vietnamese-features" class="text-decoration-none">5. Tính năng cho người Việt</a></li>
+                        <li><a href="#chat" class="text-decoration-none">6. Tính năng chat</a></li>
+                        <li><a href="#profile" class="text-decoration-none">7. Quản lý hồ sơ</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 1. Đăng ký tài khoản -->
+    <div class="row mb-5" id="registration">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0"><i class="fas fa-user-plus"></i> 1. Đăng ký tài khoản</h5>
+                </div>
+                <div class="card-body">
+                    <h6>Các bước thực hiện:</h6>
+                    <ol>
+                        <li>Nhấp vào nút "Đăng ký" trên trang chủ</li>
+                        <li>Điền thông tin cần thiết:
+                            <ul>
+                                <li>Tên đăng nhập</li>
+                                <li>Địa chỉ email</li>
+                                <li>Mật khẩu</li>
+                                <li>Quốc tịch (Nhật Bản/Việt Nam)</li>
+                                <li>Thành phố sinh sống</li>
+                                <li>Ảnh đại diện (tùy chọn)</li>
+                            </ul>
+                        </li>
+                        <li>Nhấp vào nút "Đăng ký" để tạo tài khoản</li>
+                    </ol>
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle"></i>
+                        <strong>Lưu ý:</strong> Việc chọn quốc tịch sẽ quyết định các tính năng bạn có thể sử dụng.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. Đăng nhập -->
+    <div class="row mb-5" id="login">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0"><i class="fas fa-sign-in-alt"></i> 2. Đăng nhập</h5>
+                </div>
+                <div class="card-body">
+                    <h6>Các bước thực hiện:</h6>
+                    <ol>
+                        <li>Nhấp vào "Đăng nhập" trên thanh điều hướng</li>
+                        <li>Nhập tên đăng nhập và mật khẩu</li>
+                        <li>Nhấp vào nút "Đăng nhập"</li>
+                    </ol>
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <strong>Quên mật khẩu:</strong> Hiện tại vui lòng liên hệ quản trị viên để được hỗ trợ.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. Bảng điều khiển -->
+    <div class="row mb-5" id="dashboard">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="mb-0"><i class="fas fa-home"></i> 3. Bảng điều khiển</h5>
+                </div>
+                <div class="card-body">
+                    <p>Sau khi đăng nhập, bạn sẽ được chuyển đến bảng điều khiển. Tại đây hiển thị:</p>
+                    
+                                         <h6>Dành cho người Nhật:</h6>
+                     <ul>
+                         <li>Danh sách bài đăng gần đây</li>
+                         <li>Danh sách các bài học</li>
+                         <li>Các cuộc trò chuyện đang hoạt động</li>
+                     </ul>
+
+                    <h6>Dành cho người Việt:</h6>
+                    <ul>
+                        <li>Danh sách bài đăng có sẵn</li>
+                        <li>Thống kê (số bài đăng đã chấp nhận, số bài đăng có sẵn)</li>
+                        <li>Hoạt động gần đây</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 4. Tính năng cho người Nhật -->
+    <div class="row mb-5" id="japanese-features">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-danger text-white">
+                    <h5 class="mb-0"><i class="fas fa-flag"></i> 4. Tính năng cho người Nhật</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6><i class="fas fa-language"></i> Học tiếng Việt</h6>
+                            <ul>
+                                <li>Học các cụm từ tiếng Việt</li>
+                                <li>Luyện tập phát âm</li>
+                                <li>Thực hành hội thoại hàng ngày</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h6><i class="fas fa-graduation-cap"></i> Bài học</h6>
+                            <ul>
+                                <li>Bài học tiếng Việt có cấu trúc</li>
+                                <li>Học tập theo từng cấp độ</li>
+                                <li>Bài tập thực hành</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-12">
+                            <h6><i class="fas fa-list"></i> Quản lý bài đăng</h6>
+                            <ul>
+                                <li>Tạo bài đăng trao đổi ngôn ngữ mới</li>
+                                <li>Chỉnh sửa hoặc xóa bài đăng hiện có</li>
+                                <li>Theo dõi trạng thái bài đăng</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 5. Tính năng cho người Việt -->
+    <div class="row mb-5" id="vietnamese-features">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0"><i class="fas fa-search"></i> 5. Tính năng cho người Việt</h5>
+                </div>
+                <div class="card-body">
+                    <h6><i class="fas fa-search"></i> Tìm kiếm bài đăng</h6>
+                    <ul>
+                        <li>Xem các bài đăng của người Nhật</li>
+                        <li>Lọc theo thành phố</li>
+                        <li>Xem chi tiết bài đăng</li>
+                    </ul>
+
+                    <h6><i class="fas fa-handshake"></i> Yêu cầu kết nối</h6>
+                    <ul>
+                        <li>Gửi yêu cầu cho bài đăng quan tâm</li>
+                        <li>Theo dõi trạng thái yêu cầu</li>
+                        <li>Bắt đầu chat khi yêu cầu được chấp nhận</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 6. Tính năng chat -->
+    <div class="row mb-5" id="chat">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="fas fa-comments"></i> 6. Tính năng chat</h5>
+                </div>
+                <div class="card-body">
+                    <h6>Bắt đầu chat:</h6>
+                    <ol>
+                        <li>Yêu cầu kết nối được chấp nhận</li>
+                        <li>Nhấp vào "Chat" trên thanh điều hướng</li>
+                        <li>Tham gia vào phòng chat</li>
+                    </ol>
+
+                    <h6>Tính năng chat:</h6>
+                    <ul>
+                        <li>Gửi và nhận tin nhắn theo thời gian thực</li>
+                        <li>Thông báo tin nhắn chưa đọc</li>
+                        <li>Lưu trữ lịch sử chat</li>
+                        <li>Quản lý nhiều phòng chat</li>
+                    </ul>
+
+                    <div class="alert alert-info">
+                        <i class="fas fa-lightbulb"></i>
+                        <strong>Gợi ý:</strong> Trong chat, bạn có thể giao tiếp bằng ngôn ngữ của mình.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 7. Quản lý hồ sơ -->
+    <div class="row mb-5" id="profile">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-secondary text-white">
+                    <h5 class="mb-0"><i class="fas fa-user-edit"></i> 7. Quản lý hồ sơ</h5>
+                </div>
+                <div class="card-body">
+                    <h6>Chỉnh sửa hồ sơ:</h6>
+                    <ol>
+                        <li>Nhấp vào tên người dùng trên thanh điều hướng</li>
+                        <li>Chọn "Hồ sơ"</li>
+                        <li>Chỉnh sửa thông tin</li>
+                        <li>Nhấp vào nút "Lưu"</li>
+                    </ol>
+
+                    <h6>Các mục có thể chỉnh sửa:</h6>
+                    <ul>
+                        <li>Ảnh đại diện</li>
+                        <li>Thành phố sinh sống</li>
+                        <li>Giới thiệu bản thân</li>
+                        <li>Trình độ ngôn ngữ</li>
+                        <li>Sở thích</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Câu hỏi thường gặp -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0"><i class="fas fa-question-circle"></i> Câu hỏi thường gặp (FAQ)</h5>
+                </div>
+                <div class="card-body">
+                    <div class="accordion" id="faqAccordion">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="faq1">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse1">
+                                    Tôi quên mật khẩu thì phải làm sao?
+                                </button>
+                            </h2>
+                            <div id="collapse1" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    Hiện tại tính năng đặt lại mật khẩu đang được phát triển. Nếu quên mật khẩu, vui lòng liên hệ quản trị viên.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="faq2">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse2">
+                                    Trong chat, đối phương không trả lời thì phải làm sao?
+                                </button>
+                            </h2>
+                            <div id="collapse2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    Có thể đối phương đang bận. Hãy đợi một lúc rồi gửi tin nhắn lại hoặc tìm bạn kết nối khác.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="faq3">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse3">
+                                    Tôi có thể xóa bài đăng không?
+                                </button>
+                            </h2>
+                            <div id="collapse3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    Có, bạn có thể xóa bài đăng của mình trong trang "Quản lý bài đăng". Tuy nhiên, bài đăng đã có yêu cầu gửi đến thì không thể xóa.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Liên hệ -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0"><i class="fas fa-envelope"></i> Liên hệ hỗ trợ</h5>
+                </div>
+                <div class="card-body text-center">
+                    <p>Nếu có vấn đề không được giải quyết trong hướng dẫn này, vui lòng liên hệ với chúng tôi.</p>
+                    <a href="mailto:support@vietnam-japan-connect.com" class="btn btn-primary">
+                        <i class="fas fa-envelope"></i> Liên hệ hỗ trợ
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

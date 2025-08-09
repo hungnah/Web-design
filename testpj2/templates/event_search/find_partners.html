@@ -1,0 +1,141 @@
+{% extends 'base.html' %}
+
+{% block title %}Tìm partner - Vietnam-Japan Connect{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-3">
+            <!-- Filter Sidebar -->
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-filter me-2"></i>
+                        Bộ lọc
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <form method="get">
+                        <div class="mb-3">
+                            <label for="city" class="form-label">Thành phố</label>
+                            <select name="city" id="city" class="form-select">
+                                <option value="">Tất cả thành phố</option>
+                                {% for city_code, city_name in cities %}
+                                    <option value="{{ city_code }}" {% if city_code == selected_city %}selected{% endif %}>
+                                        {{ city_name }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="request_type" class="form-label">Loại yêu cầu</label>
+                            <select name="request_type" id="request_type" class="form-select">
+                                <option value="">Tất cả</option>
+                                {% for type_code, type_name in request_types %}
+                                    <option value="{{ type_code }}" {% if type_code == selected_request_type %}selected{% endif %}>
+                                        {{ type_name }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="fas fa-search me-2"></i>
+                            Lọc
+                        </button>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="mt-3">
+                <a href="{% url 'create_partner_request' %}" class="btn btn-success w-100">
+                    <i class="fas fa-plus me-2"></i>
+                    Tạo yêu cầu mới
+                </a>
+            </div>
+        </div>
+        
+        <div class="col-md-9">
+            <!-- Partner Requests List -->
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h3>
+                    <i class="fas fa-users me-2"></i>
+                    Tìm partner học ngôn ngữ
+                </h3>
+                <span class="badge bg-primary">{{ partner_requests.count }} yêu cầu</span>
+            </div>
+            
+            {% if partner_requests %}
+                <div class="row">
+                    {% for request in partner_requests %}
+                        <div class="col-md-6 mb-3">
+                            <div class="card h-100">
+                                <div class="card-header d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="mb-0">{{ request.title }}</h6>
+                                        <small class="text-muted">
+                                            <i class="fas fa-user me-1"></i>
+                                            {{ request.requester.full_name }}
+                                        </small>
+                                    </div>
+                                    <span class="badge bg-info">
+                                        {% if request.request_type == 'japanese_to_vietnamese' %}
+                                            Nhật → Việt
+                                        {% elif request.request_type == 'vietnamese_to_japanese' %}
+                                            Việt → Nhật
+                                        {% else %}
+                                            Cả hai
+                                        {% endif %}
+                                    </span>
+                                </div>
+                                <div class="card-body">
+                                    <p class="card-text">{{ request.description|truncatewords:30 }}</p>
+                                    
+                                    <div class="row text-center mb-3">
+                                        <div class="col-4">
+                                            <small class="text-muted d-block">Thành phố</small>
+                                            <strong>{{ request.get_preferred_city_display }}</strong>
+                                        </div>
+                                        <div class="col-4">
+                                            <small class="text-muted d-block">Gặp mặt</small>
+                                            <strong>{{ request.get_meeting_preference_display }}</strong>
+                                        </div>
+                                        <div class="col-4">
+                                            <small class="text-muted d-block">Tần suất</small>
+                                            <strong>{{ request.get_frequency_display }}</strong>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <small class="text-muted">
+                                            <i class="fas fa-clock me-1"></i>
+                                            {{ request.created_at|timesince }} trước
+                                        </small>
+                                        <a href="{% url 'accept_partner_request' request.id %}" 
+                                           class="btn btn-primary btn-sm"
+                                           onclick="return confirm('Bạn có chắc muốn chấp nhận yêu cầu này?')">
+                                            <i class="fas fa-handshake me-1"></i>
+                                            Chấp nhận
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="text-center py-5">
+                    <i class="fas fa-search fa-3x text-muted mb-3"></i>
+                    <h4 class="text-muted">Không tìm thấy yêu cầu nào</h4>
+                    <p class="text-muted">Hãy thử thay đổi bộ lọc hoặc tạo yêu cầu mới.</p>
+                    <a href="{% url 'create_partner_request' %}" class="btn btn-primary">
+                        <i class="fas fa-plus me-2"></i>
+                        Tạo yêu cầu mới
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

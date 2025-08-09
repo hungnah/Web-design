@@ -1,0 +1,228 @@
+{% extends 'base.html' %}
+
+{% block title %}Bài đăng của tôi - Vietnam-Japan Connect{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <!-- Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1 class="text-center mb-3">
+                <i class="fas fa-list"></i> 
+                {% if user.nationality == 'japanese' %}
+                    マイ投稿
+                {% else %}
+                    Bài đăng của tôi
+                {% endif %}
+            </h1>
+            <p class="text-center text-muted">
+                {% if user.nationality == 'japanese' %}
+                    あなたが作成した投稿の一覧です
+                {% else %}
+                    Danh sách các bài đăng bạn đã chấp nhận
+                {% endif %}
+            </p>
+        </div>
+    </div>
+
+    <!-- Recent Accepted Posts Notification -->
+    {% if recent_accepted_posts and user.nationality == 'japanese' %}
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="alert alert-success">
+                    <h5><i class="fas fa-bell"></i> Thông báo mới!</h5>
+                    <p class="mb-2">Các bài đăng sau đã được người Việt chấp nhận:</p>
+                    <div class="row">
+                        {% for post in recent_accepted_posts %}
+                            <div class="col-md-4 mb-2">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-check-circle text-success me-2"></i>
+                                    <div>
+                                        <strong>{{ post.phrase.vietnamese_text }}</strong><br>
+                                        <small class="text-muted">
+                                            Chấp nhận bởi: {{ post.vietnamese_user.full_name|default:post.vietnamese_user.username }}
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="mt-3">
+                        <a href="{% url 'my_chats' %}" class="btn btn-success btn-sm">
+                            <i class="fas fa-comments"></i> Xem tất cả chat
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    <!-- Posts -->
+    <div class="row">
+        {% for post in posts %}
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <span class="badge bg-primary">{{ post.phrase.get_category_display }}</span>
+                        <span class="badge bg-{% if post.status == 'active' %}warning{% elif post.status == 'matched' %}success{% else %}secondary{% endif %}">
+                            {{ post.get_status_display }}
+                        </span>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title text-center mb-3">{{ post.phrase.vietnamese_text }}</h5>
+                        
+                        {% if user.nationality == 'japanese' %}
+                            <div class="mb-3">
+                                <small class="text-muted">
+                                    {% if post.vietnamese_user %}
+                                        パートナー: {{ post.vietnamese_user.full_name|default:post.vietnamese_user.username }}
+                                    {% else %}
+                                        パートナー: まだマッチングしていません
+                                    {% endif %}
+                                </small>
+                            </div>
+                        {% else %}
+                            <div class="mb-3">
+                                <small class="text-muted">
+                                    日本人: {{ post.japanese_user.full_name|default:post.japanese_user.username }}
+                                </small>
+                            </div>
+                        {% endif %}
+                        
+                        <div class="mb-3">
+                            <small class="text-muted">
+                                <i class="fas fa-map-marker-alt"></i> {{ post.cafe_location.name }}
+                            </small>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <small class="text-muted">
+                                <i class="fas fa-calendar"></i> {{ post.meeting_date|date:"d/m/Y H:i" }}
+                            </small>
+                        </div>
+                        
+                        {% if post.notes %}
+                            <div class="mb-3">
+                                <small class="text-muted">Ghi chú:</small>
+                                <p class="mb-1">{{ post.notes }}</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="card-footer text-center">
+                        {% if post.status == 'matched' %}
+                            <a href="{% url 'chat_room' post.chatroom.id %}" class="btn btn-primary w-100">
+                                <i class="fas fa-comments"></i> 
+                                {% if user.nationality == 'japanese' %}
+                                    チャットに参加
+                                {% else %}
+                                    Vào chat
+                                {% endif %}
+                            </a>
+                        {% elif post.status == 'active' and user.nationality == 'japanese' %}
+                            <div class="d-grid gap-2">
+                                <span class="text-muted">
+                                    <i class="fas fa-clock"></i> 
+                                    ベトナム人のパートナーを待っています
+                                </span>
+                                <a href="{% url 'edit_post' post.id %}" class="btn btn-outline-primary btn-sm">
+                                    <i class="fas fa-edit"></i> 
+                                    {% if user.nationality == 'japanese' %}
+                                        編集
+                                    {% else %}
+                                        Chỉnh sửa
+                                    {% endif %}
+                                </a>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <div class="col-12">
+                <div class="text-center">
+                    <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
+                    <h4>
+                        {% if user.nationality == 'japanese' %}
+                            まだ投稿がありません
+                        {% else %}
+                            Chưa có bài đăng nào
+                        {% endif %}
+                    </h4>
+                    <p class="text-muted">
+                        {% if user.nationality == 'japanese' %}
+                            最初の投稿を作成して、ベトナム人のパートナーを見つけましょう！
+                        {% else %}
+                            Hãy tìm và chấp nhận bài đăng từ người Nhật để bắt đầu kết nối!
+                        {% endif %}
+                    </p>
+                    <div class="mt-3">
+                        {% if user.nationality == 'japanese' %}
+                            <a href="{% url 'phrase_list' %}" class="btn btn-primary">
+                                <i class="fas fa-plus"></i> 投稿を作成
+                            </a>
+                        {% else %}
+                            <a href="{% url 'available_posts' %}" class="btn btn-primary">
+                                <i class="fas fa-search"></i> Tìm bài đăng
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <!-- Stats -->
+    {% if posts %}
+        <div class="row mt-5">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            <i class="fas fa-chart-bar"></i> 
+                            {% if user.nationality == 'japanese' %}
+                                統計
+                            {% else %}
+                                Thống kê
+                            {% endif %}
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row text-center">
+                            <div class="col-md-4">
+                                <h4 class="text-primary">{{ posts.count }}</h4>
+                                <small class="text-muted">
+                                    {% if user.nationality == 'japanese' %}
+                                        総投稿数
+                                    {% else %}
+                                        Tổng bài đăng
+                                    {% endif %}
+                                </small>
+                            </div>
+                            <div class="col-md-4">
+                                <h4 class="text-success">{{ matched_posts_count }}</h4>
+                                <small class="text-muted">
+                                    {% if user.nationality == 'japanese' %}
+                                        マッチング済み
+                                    {% else %}
+                                        Đã kết nối
+                                    {% endif %}
+                                </small>
+                            </div>
+                            <div class="col-md-4">
+                                <h4 class="text-warning">{{ active_posts_count }}</h4>
+                                <small class="text-muted">
+                                    {% if user.nationality == 'japanese' %}
+                                        待機中
+                                    {% else %}
+                                        Đang chờ
+                                    {% endif %}
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

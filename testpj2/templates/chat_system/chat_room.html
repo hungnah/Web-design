@@ -1,0 +1,318 @@
+{% extends 'base.html' %}
+
+{% block title %}Chat Room - Vietnam-Japan Connect{% endblock %}
+
+{% block extra_css %}
+<style>
+    .chat-container {
+        height: 70vh;
+        overflow-y: auto;
+        border: 1px solid #dee2e6;
+        border-radius: 0.375rem;
+        padding: 1rem;
+        background-color: #f8f9fa;
+    }
+    .message-input {
+        border-top: 1px solid #dee2e6;
+        padding: 1rem;
+        background-color: white;
+    }
+    .message {
+        margin-bottom: 1rem;
+        padding: 0.75rem;
+        border-radius: 1rem;
+        max-width: 70%;
+        word-wrap: break-word;
+    }
+    .message.sent {
+        background-color: #007bff;
+        color: white;
+        margin-left: auto;
+    }
+    .message.received {
+        background-color: white;
+        border: 1px solid #dee2e6;
+    }
+    .message-time {
+        font-size: 0.75rem;
+        opacity: 0.7;
+        margin-top: 0.25rem;
+    }
+    .chat-header {
+        background-color: #f8f9fa;
+        border-bottom: 1px solid #dee2e6;
+        padding: 1rem;
+    }
+    .typing-indicator {
+        font-style: italic;
+        color: #6c757d;
+        padding: 0.5rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid my-4">
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <!-- Chat Header -->
+            <div class="card">
+                <div class="chat-header">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h5 class="mb-0">
+                                <i class="fas fa-comments"></i> 
+                                {% if chat_room.post %}
+                                    Chat với {{ chat_room.post.japanese_user.full_name|default:chat_room.post.japanese_user.username }}
+                                {% elif chat_room.partner_request %}
+                                    {% if user == chat_room.partner_request.requester %}
+                                        Chat với {{ chat_room.partner_request.accepted_by.full_name|default:chat_room.partner_request.accepted_by.username }}
+                                    {% else %}
+                                        Chat với {{ chat_room.partner_request.requester.full_name|default:chat_room.partner_request.requester.username }}
+                                    {% endif %}
+                                {% endif %}
+                            </h5>
+                            <small class="text-muted">
+                                {% if chat_room.post %}
+                                    Học: {{ chat_room.post.phrase.vietnamese_text }}
+                                {% elif chat_room.partner_request %}
+                                    {{ chat_room.partner_request.title }}
+                                {% endif %}
+                            </small>
+                        </div>
+                        <div class="text-end">
+                            {% if chat_room.post %}
+                                <small class="text-muted">
+                                    <i class="fas fa-map-marker-alt"></i> {{ chat_room.post.cafe_location.name }}<br>
+                                    <i class="fas fa-calendar"></i> {{ chat_room.post.meeting_date|date:"d/m/Y H:i" }}
+                                </small>
+                            {% elif chat_room.partner_request %}
+                                <small class="text-muted">
+                                    <i class="fas fa-map-marker-alt"></i> {{ chat_room.partner_request.get_preferred_city_display }}<br>
+                                    <i class="fas fa-clock"></i> {{ chat_room.partner_request.get_frequency_display }}
+                                </small>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chat Messages -->
+                <div class="chat-container" id="chat-messages">
+                    {% for message in messages %}
+                        <div class="message {% if message.sender == user %}sent{% else %}received{% endif %}">
+                            <div class="message-content">
+                                {{ message.content }}
+                            </div>
+                            <div class="message-time">
+                                {{ message.timestamp|date:"H:i" }}
+                                {% if message.sender == user %}
+                                    <i class="fas fa-check"></i>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% empty %}
+                        <div class="text-center text-muted mt-4">
+                            <i class="fas fa-comments fa-2x mb-2"></i>
+                            <p>Chưa có tin nhắn nào. Hãy bắt đầu cuộc trò chuyện!</p>
+                        </div>
+                    {% endfor %}
+                    <div id="typing-indicator" class="typing-indicator" style="display: none;">
+                        <i class="fas fa-ellipsis-h"></i> Đang nhập...
+                    </div>
+                </div>
+
+                <!-- Message Input -->
+                <div class="message-input">
+                    <form id="message-form" method="post" action="{% url 'send_message' chat_room.id %}">
+                        {% csrf_token %}
+                        <div class="input-group">
+                            <input type="text" 
+                                   class="form-control" 
+                                   id="message-input" 
+                                   name="content" 
+                                   placeholder="Nhập tin nhắn..." 
+                                   required>
+                            <button class="btn btn-primary" type="submit">
+                                <i class="fas fa-paper-plane"></i> Gửi
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Meeting/Partner Info -->
+            <div class="card mt-3">
+                <div class="card-body">
+                    {% if chat_room.post %}
+                        <h6><i class="fas fa-info-circle"></i> Thông tin cuộc gặp mặt</h6>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p><strong>Địa điểm:</strong> {{ chat_room.post.cafe_location.name }}</p>
+                                <p><strong>Địa chỉ:</strong> {{ chat_room.post.cafe_location.address }}</p>
+                            </div>
+                            <div class="col-md-6">
+                                <p><strong>Thời gian:</strong> {{ chat_room.post.meeting_date|date:"d/m/Y H:i" }}</p>
+                                <p><strong>Trạng thái:</strong> 
+                                    <span class="badge bg-success">{{ chat_room.post.get_status_display }}</span>
+                                </p>
+                            </div>
+                        </div>
+                        {% if chat_room.post.notes %}
+                            <p><strong>Ghi chú:</strong> {{ chat_room.post.notes }}</p>
+                        {% endif %}
+                    {% elif chat_room.partner_request %}
+                        <h6><i class="fas fa-info-circle"></i> Thông tin partner</h6>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p><strong>Yêu cầu:</strong> {{ chat_room.partner_request.title }}</p>
+                                <p><strong>Thành phố:</strong> {{ chat_room.partner_request.get_preferred_city_display }}</p>
+                            </div>
+                            <div class="col-md-6">
+                                <p><strong>Gặp mặt:</strong> {{ chat_room.partner_request.get_meeting_preference_display }}</p>
+                                <p><strong>Tần suất:</strong> {{ chat_room.partner_request.get_frequency_display }}</p>
+                            </div>
+                        </div>
+                        <p><strong>Mô tả:</strong> {{ chat_room.partner_request.description }}</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+$(document).ready(function() {
+    let lastMessageId = 0;
+    let isTyping = false;
+    let typingTimer;
+    
+    // Scroll to bottom of chat
+    function scrollToBottom() {
+        const chatContainer = document.getElementById('chat-messages');
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+    
+    scrollToBottom();
+    
+    // Get last message ID for real-time updates
+    {% if messages %}
+        lastMessageId = {{ messages.last.id|default:0 }};
+    {% endif %}
+    
+    // Handle message form submission
+    $('#message-form').on('submit', function(e) {
+        e.preventDefault();
+        
+        const messageInput = $('#message-input');
+        const content = messageInput.val().trim();
+        
+        if (!content) return;
+        
+        // Show typing indicator
+        $('#typing-indicator').show();
+        scrollToBottom();
+        
+        $.ajax({
+            url: $(this).attr('action'),
+            method: 'POST',
+            data: {
+                'content': content,
+                'csrfmiddlewaretoken': $('[name=csrfmiddlewaretoken]').val()
+            },
+            success: function(response) {
+                if (response.success) {
+                    // Add message to chat
+                    const messageHtml = `
+                        <div class="message sent">
+                            <div class="message-content">
+                                ${response.message.content}
+                            </div>
+                            <div class="message-time">
+                                ${response.message.timestamp}
+                                <i class="fas fa-check"></i>
+                            </div>
+                        </div>
+                    `;
+                    $('#chat-messages').append(messageHtml);
+                    messageInput.val('');
+                    $('#typing-indicator').hide();
+                    scrollToBottom();
+                    lastMessageId = response.message.id;
+                }
+            },
+            error: function() {
+                alert('Có lỗi xảy ra khi gửi tin nhắn. Vui lòng thử lại.');
+                $('#typing-indicator').hide();
+            }
+        });
+    });
+    
+    // Real-time message updates
+    function checkNewMessages() {
+        $.ajax({
+            url: '{% url "get_messages" chat_room.id %}',
+            method: 'GET',
+            success: function(response) {
+                if (response.success) {
+                    let hasNewMessages = false;
+                    response.messages.forEach(function(message) {
+                        if (message.id > lastMessageId) {
+                            const messageHtml = `
+                                <div class="message ${message.is_own ? 'sent' : 'received'}">
+                                    <div class="message-content">
+                                        ${message.content}
+                                    </div>
+                                    <div class="message-time">
+                                        ${message.timestamp}
+                                        ${message.is_own ? (message.is_read ? '<i class="fas fa-check-double text-primary"></i>' : '<i class="fas fa-check"></i>') : ''}
+                                    </div>
+                                </div>
+                            `;
+                            $('#chat-messages').append(messageHtml);
+                            lastMessageId = message.id;
+                            hasNewMessages = true;
+                        }
+                    });
+                    
+                    if (hasNewMessages) {
+                        scrollToBottom();
+                    }
+                } else {
+                    console.error('Failed to get messages:', response.error);
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('AJAX error:', error);
+            }
+        });
+    }
+    
+    // Check for new messages every 2 seconds for better real-time experience
+    setInterval(checkNewMessages, 2000);
+    
+    // Typing indicator
+    $('#message-input').on('input', function() {
+        if (!isTyping) {
+            isTyping = true;
+            // You could send a typing indicator to the server here
+        }
+        
+        clearTimeout(typingTimer);
+        typingTimer = setTimeout(function() {
+            isTyping = false;
+            // You could send a stop typing indicator to the server here
+        }, 1000);
+    });
+    
+    // Enter key to send message
+    $('#message-input').on('keypress', function(e) {
+        if (e.which === 13 && !e.shiftKey) {
+            e.preventDefault();
+            $('#message-form').submit();
+        }
+    });
+});
+</script>
+{% endblock %}

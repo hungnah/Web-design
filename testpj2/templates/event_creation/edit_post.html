@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Chỉnh sửa bài đăng - Vietnam-Japan Connect{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">
+                        <i class="fas fa-edit"></i> Chỉnh sửa bài đăng
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <!-- Selected Phrase -->
+                    <div class="alert alert-info">
+                        <h5>Phrase đã chọn:</h5>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <strong>Tiếng Việt:</strong><br>
+                                {{ post.phrase.vietnamese_text }}
+                            </div>
+                            <div class="col-md-4">
+                                <strong>Tiếng Nhật:</strong><br>
+                                {{ post.phrase.japanese_translation }}
+                            </div>
+                            <div class="col-md-4">
+                                <strong>Tiếng Anh:</strong><br>
+                                {{ post.phrase.english_translation }}
+                            </div>
+                        </div>
+                        <div class="mt-2">
+                            <span class="badge bg-primary">{{ post.phrase.get_category_display }}</span>
+                            <span class="badge bg-{% if post.phrase.difficulty == 'beginner' %}success{% elif post.phrase.difficulty == 'intermediate' %}warning{% else %}danger{% endif %}">
+                                {{ post.phrase.get_difficulty_display }}
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Edit Post Form -->
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                {{ form.cafe_location|as_crispy_field }}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form.meeting_date|as_crispy_field }}
+                            </div>
+                        </div>
+                        
+                        {{ form.notes|as_crispy_field }}
+                        
+                        <div class="alert alert-warning">
+                            <i class="fas fa-info-circle"></i>
+                            <strong>Lưu ý:</strong> Chỉ có thể chỉnh sửa bài đăng chưa được chấp nhận. 
+                            Sau khi được chấp nhận, bài đăng sẽ không thể chỉnh sửa nữa.
+                        </div>
+                        
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-save"></i> Cập nhật bài đăng
+                            </button>
+                            <a href="{% url 'my_posts' %}" class="btn btn-outline-secondary">
+                                <i class="fas fa-arrow-left"></i> Quay lại bài đăng của tôi
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

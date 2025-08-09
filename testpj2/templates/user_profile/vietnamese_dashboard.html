@@ -1,0 +1,315 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - Vietnam-Japan Connect{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-md-4">
+            <!-- User Profile Card -->
+            <div class="card mb-4">
+                <div class="card-body text-center">
+                    {% if user.profile_picture %}
+                        <img src="{{ user.profile_picture.url }}" alt="Profile Picture" class="rounded-circle mb-3" style="width: 100px; height: 100px; object-fit: cover;">
+                    {% else %}
+                        <div class="bg-secondary rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 100px; height: 100px;">
+                            <i class="fas fa-user fa-3x text-white"></i>
+                        </div>
+                    {% endif %}
+                    <h4>{{ user.full_name|default:user.username }}</h4>
+                    <p class="text-muted">{{ user.city }}</p>
+                    <span class="badge bg-success language-badge">Người Việt</span>
+                    <div class="mt-3">
+                        <a href="{% url 'profile' %}" class="btn btn-outline-primary btn-sm">
+                            <i class="fas fa-edit"></i> Chỉnh sửa hồ sơ
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Stats -->
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-chart-bar"></i> Thống kê</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row text-center">
+                        <div class="col-6">
+                            <h4 class="text-primary">{{ accepted_posts_count }}</h4>
+                            <small class="text-muted">Bài đăng đã chấp nhận</small>
+                        </div>
+                        <div class="col-6">
+                            <h4 class="text-success">{{ available_posts_count }}</h4>
+                            <small class="text-muted">Bài đăng có sẵn</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <!-- Welcome Section -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h2 class="card-title">Chào mừng, {{ user.full_name|default:user.username }}!</h2>
+                    <p class="card-text">Giúp người Nhật học tiếng Việt và kết nối văn hóa Việt - Nhật.</p>
+                    <a href="/search/available-posts/" class="btn btn-primary">
+                        <i class="fas fa-search"></i> Xem tất cả bài đăng
+                    </a>
+                </div>
+            </div>
+
+            <!-- Lesson Plan Section -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-chalkboard-teacher"></i> Bộ Lesson Plan Sẵn</h5>
+                </div>
+                <div class="card-body">
+                    <p class="card-text mb-4">
+                        Tạo bộ lesson plan sẵn cho mỗi bài học: mỗi bài có mục tiêu, từ vựng, ngữ pháp, mẫu câu, hoạt động. 
+                        Cung cấp ví dụ hội thoại song ngữ Việt – Nhật để người dạy dựa vào.
+                    </p>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <div class="card border-primary">
+                                <div class="card-body">
+                                    <h6 class="card-title text-primary">
+                                        <i class="fas fa-target"></i> Mục tiêu học tập
+                                    </h6>
+                                    <ul class="list-unstyled">
+                                        <li><i class="fas fa-check text-success me-2"></i>Xác định mục tiêu rõ ràng cho mỗi bài học</li>
+                                        <li><i class="fas fa-check text-success me-2"></i>Đo lường tiến độ học tập</li>
+                                        <li><i class="fas fa-check text-success me-2"></i>Đánh giá kết quả cuối bài</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <div class="card border-success">
+                                <div class="card-body">
+                                    <h6 class="card-title text-success">
+                                        <i class="fas fa-book"></i> Từ vựng & Ngữ pháp
+                                    </h6>
+                                    <ul class="list-unstyled">
+                                        <li><i class="fas fa-check text-success me-2"></i>Danh sách từ vựng theo chủ đề</li>
+                                        <li><i class="fas fa-check text-success me-2"></i>Giải thích ngữ pháp đơn giản</li>
+                                        <li><i class="fas fa-check text-success me-2"></i>Ví dụ minh họa thực tế</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <div class="card border-warning">
+                                <div class="card-body">
+                                    <h6 class="card-title text-warning">
+                                        <i class="fas fa-comments"></i> Mẫu câu & Hội thoại
+                                    </h6>
+                                    <ul class="list-unstyled">
+                                        <li><i class="fas fa-check text-success me-2"></i>Hội thoại song ngữ Việt-Nhật</li>
+                                        <li><i class="fas fa-check text-success me-2"></i>Mẫu câu thực dụng</li>
+                                        <li><i class="fas fa-check text-success me-2"></i>Phát âm và ngữ điệu</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <div class="card border-info">
+                                <div class="card-body">
+                                    <h6 class="card-title text-info">
+                                        <i class="fas fa-gamepad"></i> Hoạt động & Thực hành
+                                    </h6>
+                                    <ul class="list-unstyled">
+                                        <li><i class="fas fa-check text-success me-2"></i>Bài tập tương tác</li>
+                                        <li><i class="fas fa-check text-success me-2"></i>Trò chơi học tập</li>
+                                        <li><i class="fas fa-check text-success me-2"></i>Thực hành giao tiếp</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center mt-3">
+                        <a href="/create/lessons/" class="btn btn-primary me-2">
+                            <i class="fas fa-list"></i> Xem Lessons
+                        </a>
+                        <a href="/create/phrases/" class="btn btn-outline-primary">
+                            <i class="fas fa-plus"></i> Học từ vựng
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Available Posts Section -->
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0"><i class="fas fa-list"></i> Bài đăng từ người Nhật</h5>
+                    <span class="badge bg-primary">{{ available_posts|length }} bài đăng</span>
+                </div>
+                <div class="card-body">
+                    <!-- Filter Section -->
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="city" class="form-label">Thành phố</label>
+                            <select id="city" class="form-select" onchange="filterPosts()">
+                                <option value="">Tất cả thành phố</option>
+                                {% for city_code, city_name in user.CITY_CHOICES %}
+                                    <option value="{{ city_code }}" {% if city_code == user.city %}selected{% endif %}>{{ city_name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="category" class="form-label">Danh mục</label>
+                            <select id="category" class="form-select" onchange="filterPosts()">
+                                <option value="">Tất cả danh mục</option>
+                                <option value="greetings">Chào hỏi</option>
+                                <option value="food">Ẩm thực</option>
+                                <option value="shopping">Mua sắm</option>
+                                <option value="transport">Giao thông</option>
+                                <option value="daily">Cuộc sống hàng ngày</option>
+                                <option value="business">Công việc</option>
+                                <option value="travel">Du lịch</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Posts List -->
+                    <div id="posts-container">
+                        {% if available_posts %}
+                            <div class="row">
+                                {% for post in available_posts %}
+                                    <div class="col-md-6 mb-3 post-item" 
+                                         data-city="{{ post.cafe_location.city }}" 
+                                         data-category="{{ post.phrase.category }}">
+                                        <div class="card h-100">
+                                            <div class="card-header d-flex justify-content-between align-items-center">
+                                                <div>
+                                                    <h6 class="mb-0">{{ post.phrase.vietnamese_text }}</h6>
+                                                    <small class="text-muted">
+                                                        <i class="fas fa-user me-1"></i>
+                                                        {{ post.japanese_user.full_name|default:post.japanese_user.username }}
+                                                    </small>
+                                                </div>
+                                                <div class="text-end">
+                                                    <span class="badge bg-info">{{ post.phrase.get_category_display }}</span>
+                                                    <span class="badge bg-warning ms-1">Chờ chấp nhận</span>
+                                                </div>
+                                            </div>
+                                            <div class="card-body">
+                                                <p class="card-text">
+                                                    <strong>Tiếng Nhật:</strong> {{ post.phrase.japanese_translation }}<br>
+                                                    <strong>Tiếng Anh:</strong> {{ post.phrase.english_translation }}
+                                                </p>
+                                                
+                                                <div class="row text-center mb-3">
+                                                    <div class="col-4">
+                                                        <small class="text-muted d-block">Địa điểm</small>
+                                                        <strong>{{ post.cafe_location.name }}</strong>
+                                                    </div>
+                                                    <div class="col-4">
+                                                        <small class="text-muted d-block">Thành phố</small>
+                                                        <strong>{{ post.cafe_location.get_city_display }}</strong>
+                                                    </div>
+                                                    <div class="col-4">
+                                                        <small class="text-muted d-block">Thời gian</small>
+                                                        <strong>{{ post.meeting_date|date:"d/m H:i" }}</strong>
+                                                    </div>
+                                                </div>
+                                                
+                                                {% if post.notes %}
+                                                    <div class="mb-3">
+                                                        <small class="text-muted"><strong>Ghi chú:</strong></small><br>
+                                                        <small>{{ post.notes|truncatewords:15 }}</small>
+                                                    </div>
+                                                {% endif %}
+                                                
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <small class="text-muted">
+                                                        <i class="fas fa-clock me-1"></i>
+                                                        {{ post.created_at|timesince }} trước
+                                                    </small>
+                                                    <a href="/create/accept-post/{{ post.id }}/" 
+                                                       class="btn btn-primary btn-sm"
+                                                       onclick="return acceptPost({{ post.id }}, '{{ post.phrase.vietnamese_text }}')">
+                                                        <i class="fas fa-handshake me-1"></i>
+                                                        Chấp nhận
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <div class="text-center py-4">
+                                <i class="fas fa-search fa-3x text-muted mb-3"></i>
+                                <h5 class="text-muted">Không có bài đăng nào</h5>
+                                <p class="text-muted">Hiện tại không có bài đăng nào trong khu vực của bạn.</p>
+                                <a href="/search/available-posts/" class="btn btn-primary">
+                                    <i class="fas fa-search me-2"></i>
+                                    Xem tất cả bài đăng
+                                </a>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function acceptPost(postId, phraseText) {
+    console.log('Accept button clicked for post:', postId, 'phrase:', phraseText);
+    
+    // Show confirmation dialog
+    const confirmed = confirm('Bạn có chắc muốn chấp nhận bài đăng này? Bạn sẽ được chuyển đến chat room để trò chuyện với người Nhật.');
+    
+    if (confirmed) {
+        console.log('User confirmed, redirecting to accept post...');
+        // The link will handle the redirect
+        return true;
+    } else {
+        console.log('User cancelled');
+        return false;
+    }
+}
+
+function filterPosts() {
+    const cityFilter = document.getElementById('city').value;
+    const categoryFilter = document.getElementById('category').value;
+    const items = document.querySelectorAll('.post-item');
+    
+    items.forEach(item => {
+        const city = item.getAttribute('data-city');
+        const category = item.getAttribute('data-category');
+        
+        const cityMatch = !cityFilter || city === cityFilter;
+        const categoryMatch = !categoryFilter || category === categoryFilter;
+        
+        if (cityMatch && categoryMatch) {
+            item.style.display = 'block';
+        } else {
+            item.style.display = 'none';
+        }
+    });
+}
+
+// Add click event listener for debugging
+document.addEventListener('DOMContentLoaded', function() {
+    const acceptButtons = document.querySelectorAll('a[href*="accept-post"]');
+    console.log('Found', acceptButtons.length, 'accept buttons in dashboard');
+    
+    acceptButtons.forEach(function(button, index) {
+        console.log('Accept button', index, ':', button.href);
+        
+        button.addEventListener('click', function(e) {
+            console.log('Accept button clicked via event listener:', this.href);
+        });
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,188 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+{% if user.nationality == 'japanese' %}
+    プロフィール - Vietnam-Japan Connect
+{% else %}
+    Hồ sơ - Vietnam-Japan Connect
+{% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-md-4">
+            <!-- Profile Card -->
+            <div class="card mb-4">
+                <div class="card-body text-center">
+                    {% if user.profile_picture %}
+                        <img src="{{ user.profile_picture.url }}" alt="Profile Picture" class="rounded-circle mb-3" style="width: 150px; height: 150px; object-fit: cover;">
+                    {% else %}
+                        <div class="bg-secondary rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 150px; height: 150px;">
+                            <i class="fas fa-user fa-4x text-white"></i>
+                        </div>
+                    {% endif %}
+                    <h4>{{ user.full_name|default:user.username }}</h4>
+                    <p class="text-muted">{{ user.email }}</p>
+                    <span class="badge bg-{% if user.nationality == 'japanese' %}primary{% else %}success{% endif %} language-badge">
+                        {% if user.nationality == 'japanese' %}
+                            日本人
+                        {% else %}
+                            Người Việt
+                        {% endif %}
+                    </span>
+                    <p class="mt-2">
+                        <i class="fas fa-map-marker-alt"></i> {{ user.get_city_display }}
+                    </p>
+                    {% if user.get_age %}
+                        <p><i class="fas fa-birthday-cake"></i> {{ user.get_age }} tuổi</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Quick Stats -->
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-chart-bar"></i> 
+                        {% if user.nationality == 'japanese' %}
+                            統計
+                        {% else %}
+                            Thống kê
+                        {% endif %}
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row text-center">
+                        <div class="col-6">
+                            <h4 class="text-primary">
+                                {% if user.nationality == 'japanese' %}
+                                    {{ user.japanese_posts.count }}
+                                {% else %}
+                                    {{ user.vietnamese_posts.count }}
+                                {% endif %}
+                            </h4>
+                            <small class="text-muted">
+                                {% if user.nationality == 'japanese' %}
+                                    投稿数
+                                {% else %}
+                                    Bài đăng
+                                {% endif %}
+                            </small>
+                        </div>
+                        <div class="col-6">
+                            <h4 class="text-success">
+                                {% if user.nationality == 'japanese' %}
+                                    {{ user.japanese_posts.all|length }}
+                                {% else %}
+                                    {{ user.vietnamese_posts.all|length }}
+                                {% endif %}
+                            </h4>
+                            <small class="text-muted">
+                                {% if user.nationality == 'japanese' %}
+                                    マッチング
+                                {% else %}
+                                    Kết nối
+                                {% endif %}
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <!-- Profile Form -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="mb-0">
+                        <i class="fas fa-edit"></i> 
+                        {% if user.nationality == 'japanese' %}
+                            プロフィール編集
+                        {% else %}
+                            Chỉnh sửa hồ sơ
+                        {% endif %}
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                {{ form.full_name|as_crispy_field }}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form.city|as_crispy_field }}
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                {{ form.profile_picture|as_crispy_field }}
+                            </div>
+                        </div>
+                        
+                        {{ form.bio|as_crispy_field }}
+                        {{ form.interests|as_crispy_field }}
+                        
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle"></i>
+                            <strong>
+                                {% if user.nationality == 'japanese' %}
+                                    注意:
+                                {% else %}
+                                    Lưu ý:
+                                {% endif %}
+                            </strong>
+                            {% if user.nationality == 'japanese' %}
+                                プロフィール情報を更新すると、ベトナム人のパートナーがあなたについてより詳しく知ることができます。
+                            {% else %}
+                                Cập nhật thông tin hồ sơ sẽ giúp người Nhật hiểu rõ hơn về bạn.
+                            {% endif %}
+                        </div>
+                        
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-save"></i> 
+                                {% if user.nationality == 'japanese' %}
+                                    保存
+                                {% else %}
+                                    Lưu thay đổi
+                                {% endif %}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Account Info -->
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-user-cog"></i> 
+                        {% if user.nationality == 'japanese' %}
+                            アカウント情報
+                        {% else %}
+                            Thông tin tài khoản
+                        {% endif %}
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>Username:</strong> {{ user.username }}</p>
+                            <p><strong>Email:</strong> {{ user.email }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Ngày tham gia:</strong> {{ user.date_joined|date:"d/m/Y" }}</p>
+                            <p><strong>Lần đăng nhập cuối:</strong> {{ user.last_login|date:"d/m/Y H:i" }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

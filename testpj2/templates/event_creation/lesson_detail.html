@@ -1,0 +1,227 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ lesson.title }} - Vietnam-Japan Connect{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <!-- Lesson Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'lessons' %}">Bài học</a></li>
+                    <li class="breadcrumb-item active">{{ lesson.title }}</li>
+                </ol>
+            </nav>
+            
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h1 class="mb-3">{{ lesson.title }}</h1>
+                            <p class="lead">{{ lesson.description }}</p>
+                            
+                            <div class="mb-3">
+                                <span class="badge bg-primary me-2">{{ lesson.get_category_display }}</span>
+                                <span class="badge bg-{% if lesson.difficulty == 'beginner' %}success{% elif lesson.difficulty == 'intermediate' %}warning{% else %}danger{% endif %}">
+                                    {{ lesson.get_difficulty_display }}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-4 text-center">
+                            {% if lesson.image %}
+                                <img src="{{ lesson.image.url }}" alt="{{ lesson.title }}" class="img-fluid rounded" style="max-height: 200px;">
+                            {% else %}
+                                <div class="bg-light rounded d-flex align-items-center justify-content-center" style="height: 200px;">
+                                    <i class="fas fa-book fa-3x text-muted"></i>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Phrases Section -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="mb-0">
+                        <i class="fas fa-volume-up"></i> Các câu nói trong bài học
+                    </h3>
+                </div>
+                <div class="card-body">
+                    {% for phrase in phrases %}
+                        <div class="phrase-item mb-4 p-3 border rounded">
+                            <div class="row align-items-center">
+                                <div class="col-md-8">
+                                    <div class="mb-2">
+                                        <h5 class="text-primary mb-1">{{ phrase.vietnamese_text }}</h5>
+                                        {% if phrase.pronunciation_guide %}
+                                            <small class="text-muted">
+                                                <i class="fas fa-microphone"></i> {{ phrase.pronunciation_guide }}
+                                            </small>
+                                        {% endif %}
+                                    </div>
+                                    
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <strong>Tiếng Nhật:</strong><br>
+                                            <span class="text-muted">{{ phrase.japanese_translation }}</span>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <strong>Tiếng Anh:</strong><br>
+                                            <span class="text-muted">{{ phrase.english_translation }}</span>
+                                        </div>
+                                    </div>
+                                    
+                                    {% if phrase.usage_note %}
+                                        <div class="mt-2">
+                                            <small class="text-info">
+                                                <i class="fas fa-info-circle"></i> {{ phrase.usage_note }}
+                                            </small>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                
+                                <div class="col-md-4 text-center">
+                                    {% if phrase.audio_file %}
+                                        <div class="audio-player">
+                                            <audio id="audio-{{ phrase.id }}" controls class="w-100">
+                                                <source src="{{ phrase.audio_file.url }}" type="audio/mpeg">
+                                                Trình duyệt của bạn không hỗ trợ audio.
+                                            </audio>
+                                            <div class="mt-2">
+                                                <button class="btn btn-outline-primary btn-sm" onclick="playAudio({{ phrase.id }})">
+                                                    <i class="fas fa-play"></i> Phát
+                                                </button>
+                                                <button class="btn btn-outline-secondary btn-sm" onclick="pauseAudio({{ phrase.id }})">
+                                                    <i class="fas fa-pause"></i> Tạm dừng
+                                                </button>
+                                            </div>
+                                        </div>
+                                    {% else %}
+                                        <div class="text-muted">
+                                            <i class="fas fa-volume-mute fa-2x mb-2"></i>
+                                            <br>
+                                            <small>Chưa có audio</small>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    {% empty %}
+                        <div class="text-center py-4">
+                            <i class="fas fa-volume-mute fa-3x text-muted mb-3"></i>
+                            <h4>Chưa có câu nói nào</h4>
+                            <p class="text-muted">Các câu nói sẽ được thêm vào sớm!</p>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Practice Section -->
+    {% if phrases %}
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="mb-0">
+                            <i class="fas fa-dumbbell"></i> Luyện tập
+                        </h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h5>Mẹo học tập:</h5>
+                                <ul class="list-unstyled">
+                                    <li><i class="fas fa-check text-success me-2"></i>Nghe audio nhiều lần để quen với phát âm</li>
+                                    <li><i class="fas fa-check text-success me-2"></i>Lặp lại theo audio để luyện phát âm</li>
+                                    <li><i class="fas fa-check text-success me-2"></i>Học thuộc các câu nói thường dùng</li>
+                                    <li><i class="fas fa-check text-success me-2"></i>Thực hành với người Việt Nam</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <h5>Bài học liên quan:</h5>
+                                <div class="list-group">
+                                    <a href="{% url 'phrase_list' %}" class="list-group-item list-group-item-action">
+                                        <i class="fas fa-language me-2"></i>Danh sách câu nói
+                                    </a>
+                                    <a href="{% url 'lessons' %}" class="list-group-item list-group-item-action">
+                                        <i class="fas fa-graduation-cap me-2"></i>Tất cả bài học
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>
+
+<script>
+function playAudio(phraseId) {
+    const audio = document.getElementById(`audio-${phraseId}`);
+    if (audio) {
+        audio.play();
+    }
+}
+
+function pauseAudio(phraseId) {
+    const audio = document.getElementById(`audio-${phraseId}`);
+    if (audio) {
+        audio.pause();
+    }
+}
+
+// Auto-play next audio when current one ends
+document.addEventListener('DOMContentLoaded', function() {
+    const audios = document.querySelectorAll('audio');
+    audios.forEach((audio, index) => {
+        audio.addEventListener('ended', function() {
+            // Auto-play next audio if available
+            if (index + 1 < audios.length) {
+                setTimeout(() => {
+                    audios[index + 1].play();
+                }, 1000); // 1 second delay
+            }
+        });
+    });
+});
+</script>
+
+<style>
+.phrase-item {
+    transition: all 0.3s ease;
+}
+
+.phrase-item:hover {
+    background-color: #f8f9fa;
+    transform: translateX(5px);
+}
+
+.audio-player {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+}
+
+audio {
+    border-radius: 20px;
+}
+
+audio::-webkit-media-controls-panel {
+    background-color: #e9ecef;
+}
+
+audio::-webkit-media-controls-play-button {
+    background-color: #007bff;
+    border-radius: 50%;
+}
+</style>
+{% endblock %}

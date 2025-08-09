@@ -1,0 +1,153 @@
+{% extends 'base.html' %}
+
+{% block title %}ベトナム語レッスン - Vietnam-Japan Connect{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <!-- Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1 class="text-center mb-3">
+                <i class="fas fa-graduation-cap"></i> ベトナム語レッスン
+            </h1>
+            <p class="text-center text-muted">
+                実践的な状況を通じてベトナム語を学び、音声ガイド付きで学習
+            </p>
+        </div>
+    </div>
+
+    <!-- Filter Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-filter"></i> レッスンフィルター</h5>
+                </div>
+                <div class="card-body">
+                    <form method="get" class="row g-3">
+                        <div class="col-md-6">
+                            <label for="category" class="form-label">カテゴリー</label>
+                            <select name="category" id="category" class="form-select">
+                                <option value="">すべてのカテゴリー</option>
+                                {% for category_code, category_name in categories %}
+                                    <option value="{{ category_code }}" {% if category_code == selected_category %}selected{% endif %}>
+                                        {{ category_name }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="difficulty" class="form-label">難易度</label>
+                            <select name="difficulty" id="difficulty" class="form-select">
+                                <option value="">すべての難易度</option>
+                                {% for difficulty_code, difficulty_name in difficulties %}
+                                    <option value="{{ difficulty_code }}" {% if difficulty_code == selected_difficulty %}selected{% endif %}>
+                                        {{ difficulty_name }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-search"></i> フィルター
+                            </button>
+                            <a href="{% url 'lessons' %}" class="btn btn-outline-secondary">
+                                <i class="fas fa-times"></i> フィルタークリア
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lessons Grid -->
+    <div class="row">
+        {% for lesson in lessons %}
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card h-100 lesson-card">
+                    {% if lesson.image %}
+                        <img src="{{ lesson.image.url }}" class="card-img-top" alt="{{ lesson.title }}" style="height: 200px; object-fit: cover;">
+                    {% else %}
+                        <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                            <i class="fas fa-book fa-3x text-muted"></i>
+                        </div>
+                    {% endif %}
+                    
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <span class="badge bg-primary">{{ lesson.get_category_display }}</span>
+                            <span class="badge bg-{% if lesson.difficulty == 'beginner' %}success{% elif lesson.difficulty == 'intermediate' %}warning{% else %}danger{% endif %}">
+                                {{ lesson.get_difficulty_display }}
+                            </span>
+                        </div>
+                        
+                        <h5 class="card-title">{{ lesson.title }}</h5>
+                        <p class="card-text text-muted">{{ lesson.description|truncatewords:20 }}</p>
+                        
+                        <div class="mt-3">
+                            <small class="text-muted">
+                                <i class="fas fa-list"></i> {{ lesson.phrases.count }} フレーズ
+                            </small>
+                        </div>
+                    </div>
+                    
+                    <div class="card-footer">
+                        <a href="{% url 'lesson_detail' lesson.id %}" class="btn btn-primary w-100">
+                            <i class="fas fa-play"></i> 学習開始
+                        </a>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <div class="col-12">
+                <div class="text-center">
+                    <i class="fas fa-book fa-3x text-muted mb-3"></i>
+                    <h4>レッスンがありません</h4>
+                    <p class="text-muted">レッスンは近日中に追加されます！</p>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <!-- Stats -->
+    {% if lessons %}
+        <div class="row mt-5">
+            <div class="col-12">
+                <div class="card">
+                                    <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-chart-bar"></i> 統計</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row text-center">
+                        <div class="col-md-4">
+                            <h4 class="text-primary">{{ lessons.count }}</h4>
+                            <small class="text-muted">総レッスン数</small>
+                        </div>
+                        <div class="col-md-4">
+                            <h4 class="text-success">{{ lessons|dictsort:"difficulty"|length }}</h4>
+                            <small class="text-muted">異なるレベル</small>
+                        </div>
+                        <div class="col-md-4">
+                            <h4 class="text-info">{{ lessons|dictsort:"category"|length }}</h4>
+                            <small class="text-muted">異なるカテゴリー</small>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>
+
+<style>
+.lesson-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.lesson-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+</style>
+{% endblock %}

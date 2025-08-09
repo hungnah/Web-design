@@ -1,0 +1,10 @@
+Django==4.2.7
+django-crispy-forms==2.0
+crispy-bootstrap5==0.7
+Pillow==10.0.1
+channels==4.0.0
+channels-redis==4.1.0
+redis==5.0.1
+django-allauth==0.57.0
+python-decouple==3.8
+django-cors-headers==4.3.1

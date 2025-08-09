@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}投稿作成 - Vietnam-Japan Connect{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h3 class="mb-0">
+                        <i class="fas fa-plus"></i> 新しい投稿を作成
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <!-- Selected Phrase -->
+                    <div class="alert alert-info">
+                        <h5>選択されたフレーズ:</h5>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <strong>ベトナム語:</strong><br>
+                                {{ phrase.vietnamese_text }}
+                            </div>
+                            <div class="col-md-4">
+                                <strong>日本語訳:</strong><br>
+                                {{ phrase.japanese_translation }}
+                            </div>
+                            <div class="col-md-4">
+                                <strong>英語訳:</strong><br>
+                                {{ phrase.english_translation }}
+                            </div>
+                        </div>
+                        <div class="mt-2">
+                            <span class="badge bg-primary">{{ phrase.get_category_display }}</span>
+                            <span class="badge bg-{% if phrase.difficulty == 'beginner' %}success{% elif phrase.difficulty == 'intermediate' %}warning{% else %}danger{% endif %}">
+                                {{ phrase.get_difficulty_display }}
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Create Post Form -->
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                {{ form.cafe_location|as_crispy_field }}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form.meeting_date|as_crispy_field }}
+                            </div>
+                        </div>
+                        
+                        {{ form.notes|as_crispy_field }}
+                        
+                        <div class="alert alert-warning">
+                            <i class="fas fa-info-circle"></i>
+                            <strong>注意:</strong> 投稿を作成すると、ベトナム人のユーザーが表示できるようになります。
+                            マッチングが成立すると、チャットルームが作成されます。
+                        </div>
+                        
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-success btn-lg">
+                                <i class="fas fa-paper-plane"></i> 投稿を作成
+                            </button>
+                            <a href="{% url 'phrase_list' %}" class="btn btn-outline-secondary">
+                                <i class="fas fa-arrow-left"></i> フレーズ一覧に戻る
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

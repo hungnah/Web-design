@@ -1,0 +1,164 @@
+{% extends 'base.html' %}
+
+{% block title %}Chat của tôi - Vietnam-Japan Connect{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <!-- Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1 class="text-center mb-3">
+                <i class="fas fa-comments"></i> Chat của tôi
+            </h1>
+            <p class="text-center text-muted">Danh sách các cuộc trò chuyện với partner của bạn</p>
+        </div>
+    </div>
+
+    <!-- Chat Rooms List -->
+    <div class="row">
+        {% if chat_rooms %}
+            <div class="col-12 mb-3">
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle"></i> 
+                    Tìm thấy {{ chat_rooms|length }} cuộc trò chuyện
+                </div>
+            </div>
+            {% for chat_info in chat_rooms %}
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card h-100 chat-card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <div class="d-flex align-items-center">
+                                <div class="avatar me-3">
+                                    {% if chat_info.partner.profile_picture %}
+                                        <img src="{{ chat_info.partner.profile_picture.url }}" alt="Avatar" class="rounded-circle" style="width: 40px; height: 40px; object-fit: cover;">
+                                    {% else %}
+                                        <div class="bg-secondary rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                            <i class="fas fa-user text-white"></i>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <div>
+                                    <h6 class="mb-0">{{ chat_info.title }}</h6>
+                                    <small class="text-muted">{{ chat_info.subtitle }}</small>
+                                </div>
+                            </div>
+                            {% if chat_info.unread_count > 0 %}
+                                <span class="badge bg-danger">{{ chat_info.unread_count }}</span>
+                            {% endif %}
+                        </div>
+                        <div class="card-body">
+                            {% if chat_info.meeting_info %}
+                                <div class="meeting-info mb-2">
+                                    <small class="text-muted">
+                                        <i class="fas fa-map-marker-alt me-1"></i>
+                                        {{ chat_info.meeting_info }}
+                                    </small>
+                                </div>
+                            {% endif %}
+                            {% if chat_info.last_message %}
+                                <div class="last-message">
+                                    <small class="text-muted">
+                                        <strong>{{ chat_info.last_message.sender.full_name|default:chat_info.last_message.sender.username }}:</strong>
+                                        {{ chat_info.last_message.content|truncatechars:50 }}
+                                    </small>
+                                    <br>
+                                    <small class="text-muted">
+                                        <i class="fas fa-clock me-1"></i>
+                                        {{ chat_info.last_message.timestamp|timesince }} trước
+                                    </small>
+                                </div>
+                            {% else %}
+                                <div class="text-center text-muted">
+                                    <small>Chưa có tin nhắn nào</small>
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="card-footer text-center">
+                            <a href="{% url 'chat_room' chat_info.chat_room.id %}" class="btn btn-primary w-100">
+                                <i class="fas fa-comments me-2"></i>
+                                Mở Chat
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="col-12">
+                <div class="text-center py-5">
+                    <i class="fas fa-comments fa-3x text-muted mb-3"></i>
+                    <h4 class="text-muted">Chưa có cuộc trò chuyện nào</h4>
+                    <p class="text-muted">
+                        Bạn chưa có cuộc trò chuyện nào. Hãy chấp nhận một bài đăng hoặc tạo yêu cầu tìm partner để bắt đầu chat.
+                    </p>
+                    <div class="mt-3">
+                        {% if user.nationality == 'japanese' %}
+                            <a href="{% url 'phrase_list' %}" class="btn btn-primary me-2">
+                                <i class="fas fa-plus me-2"></i>
+                                Tạo bài đăng mới
+                            </a>
+                        {% else %}
+                            <a href="{% url 'available_posts' %}" class="btn btn-primary me-2">
+                                <i class="fas fa-search me-2"></i>
+                                Tìm bài đăng
+                            </a>
+                        {% endif %}
+                        <a href="{% url 'dashboard' %}" class="btn btn-outline-secondary">
+                            <i class="fas fa-home me-2"></i>
+                            Về Dashboard
+                        </a>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Info Section -->
+    {% if chat_rooms %}
+        <div class="row mt-5">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="fas fa-info-circle"></i> Hướng dẫn</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <h6><i class="fas fa-comments text-primary"></i> Trò chuyện</h6>
+                                <small class="text-muted">Nhấn "Mở Chat" để bắt đầu trò chuyện với partner</small>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <h6><i class="fas fa-bell text-warning"></i> Thông báo</h6>
+                                <small class="text-muted">Số đỏ hiển thị số tin nhắn chưa đọc</small>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <h6><i class="fas fa-clock text-info"></i> Thời gian</h6>
+                                <small class="text-muted">Tin nhắn được sắp xếp theo thời gian gần nhất</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>
+
+<style>
+.chat-card {
+    transition: transform 0.2s ease;
+    border: 1px solid #e9ecef;
+}
+
+.chat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.last-message {
+    min-height: 60px;
+}
+
+.avatar img {
+    border: 2px solid #e9ecef;
+}
+</style>
+{% endblock %}
