@@ -70,3 +70,27 @@
     </div>
 </div>
 {% endblock %}
+
+{% block extra_js %}
+<script>
+// Additional client-side check for authenticated users
+// This handles cases where cached pages might be shown
+document.addEventListener('DOMContentLoaded', function() {
+    // Check if user is authenticated by looking for user-specific elements in the navbar
+    const userDropdown = document.querySelector('.navbar-nav .dropdown-toggle');
+    const registerForm = document.querySelector('form[method="post"]');
+    
+    // If we find user dropdown but we're on register page, redirect to dashboard
+    if (userDropdown && registerForm && userDropdown.textContent.trim() !== 'ガイド' && userDropdown.textContent.trim() !== 'Guide') {
+        window.location.href = "{% url 'dashboard' %}";
+    }
+});
+
+// Prevent back button caching issues
+window.addEventListener('pageshow', function(event) {
+    if (event.persisted) {
+        window.location.reload();
+    }
+});
+</script>
+{% endblock %}

@@ -133,20 +133,25 @@
                             </a>
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" href="{% url 'profile' %}">
-                                    <i class="fas fa-user-edit me-2"></i> Hồ sơ
+                                    <i class="fas fa-user-edit me-2"></i> Profile
                                 </a></li>
                                 <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="{% url 'logout' %}">
-                                    <i class="fas fa-sign-out-alt me-2"></i> Đăng xuất
-                                </a></li>
+                                <li>
+                                    <form method="post" action="{% url 'logout' %}" style="display: inline;">
+                                        {% csrf_token %}
+                                        <button type="submit" class="dropdown-item" style="border: none; background: none; width: 100%; text-align: left;">
+                                            <i class="fas fa-sign-out-alt me-2"></i> Logout
+                                        </button>
+                                    </form>
+                                </li>
                             </ul>
                         </li>
                     {% else %}
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'login' %}">Đăng nhập</a>
+                            <a class="nav-link" href="{% url 'login' %}">Login</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'register' %}">Đăng ký</a>
+                            <a class="nav-link" href="{% url 'register' %}">Register</a>
                         </li>
                     {% endif %}
                 </ul>
@@ -188,8 +193,8 @@
                             <li><a href="{% url 'dashboard' %}" class="text-light">Dashboard</a></li>
                             <li><a href="{% url 'profile' %}" class="text-light">Hồ sơ</a></li>
                         {% else %}
-                            <li><a href="{% url 'login' %}" class="text-light">Đăng nhập</a></li>
-                            <li><a href="{% url 'register' %}" class="text-light">Đăng ký</a></li>
+                            <li><a href="{% url 'login' %}" class="text-light">Login</a></li>
+                            <li><a href="{% url 'register' %}" class="text-light">Register</a></li>
                         {% endif %}
                     </ul>
                 </div>

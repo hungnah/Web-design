@@ -7,17 +7,48 @@ Supports both Vietnamese and Japanese users with different dashboard experiences
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.views import LoginView
 from django.contrib import messages
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.db.models import Q
+from django.http import HttpResponse
 from .forms import CustomUserCreationForm, ProfileUpdateForm
 from event_creation.models import LanguageExchangePost, PartnerRequest
+
+class CustomLoginView(LoginView):
+    """
+    Custom login view that redirects already authenticated users to dashboard
+    and adds cache control headers to prevent back button issues
+    """
+    template_name = 'user_profile/login.html'
+    success_url = reverse_lazy('dashboard')
+    
+    def dispatch(self, request, *args, **kwargs):
+        # If user is already authenticated, redirect to dashboard
+        if request.user.is_authenticated:
+            return redirect('dashboard')
+        return super().dispatch(request, *args, **kwargs)
+    
+    def get(self, request, *args, **kwargs):
+        response = super().get(request, *args, **kwargs)
+        # Add cache control headers to prevent caching
+        response['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+        response['Pragma'] = 'no-cache'
+        response['Expires'] = '0'
+        return response
+    
+    def get_success_url(self):
+        return reverse('dashboard')
 
 def register(request):
     """
     User registration view supporting both Vietnamese and Japanese users
     Validates age requirement (18+) and creates new user account
     """
+    # If user is already authenticated, redirect to dashboard
+    if request.user.is_authenticated:
+        return redirect('dashboard')
+    
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST, request.FILES)
         if form.is_valid():
@@ -32,7 +63,12 @@ def register(request):
         # Display empty registration form
         form = CustomUserCreationForm()
     
-    return render(request, 'user_profile/register.html', {'form': form})
+    response = render(request, 'user_profile/register.html', {'form': form})
+    # Add cache control headers to prevent caching
+    response['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+    response['Pragma'] = 'no-cache'
+    response['Expires'] = '0'
+    return response
 
 @login_required
 def dashboard(request):
