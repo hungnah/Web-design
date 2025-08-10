@@ -261,6 +261,101 @@
     </div>
 </div>
 
+<div class="container my-5">
+    <div class="row">
+        <div class="col-md-4">
+
+            <!-- Quick Stats -->
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-chart-bar"></i> 統計</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row text-center">
+                        <div class="col-6">
+                            <h4 class="text-primary">{{ user.japanese_posts.count }}</h4>
+                            <small class="text-muted">投稿数</small>
+                        </div>
+                        <div class="col-6">
+                            <h4 class="text-success">{{ user.japanese_posts.all|length }}</h4>
+                            <small class="text-muted">マッチング</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <!-- Welcome Section -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h2 class="card-title">ようこそ、{{ user.full_name|default:user.username }}さん！</h2>
+                    <p class="card-text">ベトナム語を学び、ベトナム人と交流しましょう。</p>
+                    <a href="/create/phrases/" class="btn btn-primary">
+                        <i class="fas fa-language"></i> ベトナム語を学ぶ
+                    </a>
+                </div>
+            </div>
+
+            <!-- Recent Posts -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-list"></i> 最近の投稿</h5>
+                </div>
+                <div class="card-body">
+                    {% if recent_posts %}
+                        {% for post in recent_posts|slice:":3" %}
+                            <div class="d-flex justify-content-between align-items-center mb-3 p-3 border rounded">
+                                <div>
+                                    <h6 class="mb-1">{{ post.phrase.vietnamese_text }}</h6>
+                                    <small class="text-muted">
+                                        <i class="fas fa-map-marker-alt"></i> {{ post.cafe_location.name }} - 
+                                        <i class="fas fa-calendar"></i> {{ post.meeting_date|date:"M d, Y H:i" }}
+                                    </small>
+                                </div>
+                                <span class="badge bg-{% if post.status == 'active' %}warning{% elif post.status == 'matched' %}success{% else %}secondary{% endif %}">
+                                    {{ post.get_status_display }}
+                                </span>
+                            </div>
+                        {% endfor %}
+                        <div class="text-center">
+                            <a href="/create/my-posts/" class="btn btn-outline-primary">すべての投稿を見る</a>
+                        </div>
+                    {% else %}
+                        <p class="text-muted text-center">まだ投稿がありません。</p>
+                        <div class="text-center">
+                            <a href="/create/phrases/" class="btn btn-primary">最初の投稿を作成</a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-bolt"></i> クイックアクション</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <a href="/create/phrases/" class="btn btn-outline-primary w-100">
+                                <i class="fas fa-language"></i><br>
+                                ベトナム語フレーズ
+                            </a>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <a href="/create/my-posts/" class="btn btn-outline-success w-100">
+                                <i class="fas fa-list"></i><br>
+                                マイ投稿
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
 function acceptPost(postId, phraseText) {
     console.log('Accept button clicked for post:', postId, 'phrase:', phraseText);

@@ -23,8 +23,8 @@ def phrase_list(request):
     Display Vietnamese phrases with filtering options for Japanese users
     Allows filtering by category and difficulty level
     """
-    if request.user.nationality != 'japanese':
-        return redirect('dashboard')
+    # if request.user.nationality != 'japanese':
+    #     return redirect('dashboard')
     
     category = request.GET.get('category', '')
     difficulty = request.GET.get('difficulty', '')
@@ -49,8 +49,8 @@ def phrase_list(request):
 @login_required
 def lessons(request):
     """Display Vietnamese language lessons"""
-    if request.user.nationality != 'japanese':
-        return redirect('dashboard')
+    # if request.user.nationality != 'japanese':
+    #     return redirect('dashboard')
     
     category = request.GET.get('category', '')
     difficulty = request.GET.get('difficulty', '')
@@ -75,8 +75,8 @@ def lessons(request):
 @login_required
 def lesson_detail(request, lesson_id):
     """Display lesson detail with phrases"""
-    if request.user.nationality != 'japanese':
-        return redirect('dashboard')
+    # if request.user.nationality != 'japanese':
+    #     return redirect('dashboard')
     
     lesson = get_object_or_404(Lesson, id=lesson_id)
     phrases = lesson.phrases.all()
@@ -91,8 +91,8 @@ def lesson_detail(request, lesson_id):
 @login_required
 def create_post(request, phrase_id):
     """Create a language exchange post"""
-    if request.user.nationality != 'japanese':
-        return redirect('dashboard')
+    # if request.user.nationality != 'japanese':
+    #     return redirect('dashboard')
     
     phrase = get_object_or_404(VietnamesePhrase, id=phrase_id)
     
@@ -118,8 +118,8 @@ def create_post(request, phrase_id):
 @login_required
 def edit_post(request, post_id):
     """Edit a language exchange post"""
-    if request.user.nationality != 'japanese':
-        return redirect('dashboard')
+    # if request.user.nationality != 'japanese':
+    #     return redirect('dashboard')
     
     post = get_object_or_404(LanguageExchangePost, id=post_id, japanese_user=request.user)
     
