@@ -500,12 +500,7 @@ select.form-control option {
                 <label for="{{ form.city.id_for_label }}">
                     <i class="fas fa-map-marker-alt"></i> Thành phố
                 </label>
-                <input type="text" 
-                       class="form-control" 
-                       name="{{ form.city.name }}" 
-                       id="{{ form.city.id_for_label }}"
-                       placeholder="Thành phố bạn đang sống"
-                       required>
+                {{ form.city }}
                 {% if form.city.errors %}
                     <div class="text-danger mt-1">{{ form.city.errors }}</div>
                 {% endif %}

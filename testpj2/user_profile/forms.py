@@ -22,6 +22,11 @@ class CustomUserCreationForm(UserCreationForm):
         widget=forms.DateInput(attrs={'type': 'date'}),
         required=True
     )
+    city = forms.ChoiceField(
+        choices=CustomUser.CITY_CHOICES,
+        widget=forms.Select(attrs={'class': 'form-control'}),
+        required=True
+    )
     
     class Meta:
         model = CustomUser
@@ -57,4 +62,5 @@ class ProfileUpdateForm(forms.ModelForm):
         widgets = {
             'bio': forms.Textarea(attrs={'rows': 4}),
             'interests': forms.Textarea(attrs={'rows': 3}),
+            'city': forms.Select(attrs={'class': 'form-control'}, choices=CustomUser.CITY_CHOICES),
         }

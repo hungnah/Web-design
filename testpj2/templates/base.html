@@ -120,7 +120,25 @@
                     {% endif %}
                 </ul>
                 
-
+                <!-- Right side of navbar -->
+                <ul class="navbar-nav">
+                    {% if user.is_authenticated %}
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-user"></i> {{ user.username }}
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item" href="{% url 'profile' %}">
+                                    <i class="fas fa-user-edit"></i> Hồ sơ
+                                </a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="{% url 'logout' %}">
+                                    <i class="fas fa-sign-out-alt"></i> Đăng xuất
+                                </a></li>
+                            </ul>
+                        </li>
+                    {% endif %}
+                </ul>
             </div>
         </div>
     </nav>
@@ -158,9 +176,6 @@
                         {% if user.is_authenticated %}
                             <li><a href="{% url 'dashboard' %}" class="text-light">Dashboard</a></li>
                             <li><a href="{% url 'profile' %}" class="text-light">Hồ sơ</a></li>
-                        {% else %}
-                            <li><a href="{% url 'login' %}" class="text-light">Login</a></li>
-                            <li><a href="{% url 'register' %}" class="text-light">Register</a></li>
                         {% endif %}
                     </ul>
                 </div>
