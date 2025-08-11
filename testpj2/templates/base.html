@@ -1,3 +1,4 @@
+{% load i18n %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -81,12 +82,12 @@
                     {% if user.is_authenticated %}
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'dashboard' %}">
-                                <i class="fas fa-home"></i> ダッシュボード
+                                <i class="fas fa-home"></i> {% trans "Dashboard" %}
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link position-relative" href="/chat/my-chats/">
-                                <i class="fas fa-comments"></i> チャット
+                                <i class="fas fa-comments"></i> {% trans "Chat" %}
                                 {% if unread_messages_count > 0 %}
                                     <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                                         {{ unread_messages_count }}
@@ -97,23 +98,23 @@
                         {% if user.nationality == 'japanese' %}
                             <li class="nav-item">
                                 <a class="nav-link" href="/create/phrases/">
-                                    <i class="fas fa-language"></i> ベトナム語学習
+                                    <i class="fas fa-language"></i> {% trans "Vietnamese Learning" %}
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="/create/lessons/">
-                                    <i class="fas fa-graduation-cap"></i> レッスン
+                                    <i class="fas fa-graduation-cap"></i> {% trans "Lessons" %}
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="/create/my-posts/">
-                                    <i class="fas fa-list"></i> マイ投稿
+                                    <i class="fas fa-list"></i> {% trans "My Posts" %}
                                 </a>
                             </li>
                         {% else %}
                             <li class="nav-item">
                                 <a class="nav-link" href="/search/available-posts/">
-                                    <i class="fas fa-search"></i> 投稿検索
+                                    <i class="fas fa-search"></i> {% trans "Search Posts" %}
                                 </a>
                             </li>
                         {% endif %}
@@ -129,11 +130,11 @@
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <li><a class="dropdown-item" href="{% url 'profile' %}">
-                                    <i class="fas fa-user-edit"></i> Hồ sơ
+                                    <i class="fas fa-user-edit"></i> {% trans "Profile" %}
                                 </a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" href="{% url 'logout' %}">
-                                    <i class="fas fa-sign-out-alt"></i> Đăng xuất
+                                    <i class="fas fa-sign-out-alt"></i> {% trans "Logout" %}
                                 </a></li>
                             </ul>
                         </li>
@@ -166,16 +167,16 @@
             <div class="row">
                 <div class="col-md-6">
                     <h5>Vietnam-Japan Connect</h5>
-                    <p>Connecting Vietnamese and Japanese people for language exchange and cultural understanding.</p>
+                    <p>{% trans "Connecting Vietnamese and Japanese people for language exchange and cultural understanding." %}</p>
                 </div>
                 <div class="col-md-6 text-md-end">
-                    <h5>Quick Links</h5>
+                    <h5>{% trans "Quick Links" %}</h5>
                     <ul class="list-unstyled">
-                        <li><a href="{% url 'home' %}" class="text-light">Home</a></li>
-                        <li><a href="{% url 'guide' %}" class="text-light">ガイド</a></li>
+                        <li><a href="{% url 'home' %}" class="text-light">{% trans "Home" %}</a></li>
+                        <li><a href="{% url 'guide' %}" class="text-light">{% trans "Guide" %}</a></li>
                         {% if user.is_authenticated %}
-                            <li><a href="{% url 'dashboard' %}" class="text-light">Dashboard</a></li>
-                            <li><a href="{% url 'profile' %}" class="text-light">Hồ sơ</a></li>
+                            <li><a href="{% url 'dashboard' %}" class="text-light">{% trans "Dashboard" %}</a></li>
+                            <li><a href="{% url 'profile' %}" class="text-light">{% trans "Profile" %}</a></li>
                         {% endif %}
                     </ul>
                 </div>
