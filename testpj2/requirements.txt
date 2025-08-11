@@ -1,7 +1,8 @@
 Django==4.2.7
 django-crispy-forms==2.0
 crispy-bootstrap5==0.7
-Pillow==10.0.1
+# Pillow 10.0.1 fails to build on Python 3.13. Use a version with wheels for 3.13.
+Pillow>=11.0.0,<12
 channels==4.0.0
 channels-redis==4.1.0
 redis==5.0.1
