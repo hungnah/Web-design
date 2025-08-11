@@ -18,7 +18,7 @@ from .forms import LanguageExchangePostForm, PartnerRequestForm
 from chat_system.models import ChatRoom, Message
 
 @login_required
-def phrase_list(request):
+def phrase_list(request, post_id=None):
     """
     Display Vietnamese phrases with filtering options for Japanese users
     Allows filtering by category and difficulty level
@@ -37,6 +37,7 @@ def phrase_list(request):
         phrases = phrases.filter(difficulty=difficulty)
     
     context = {
+        'post_id': post_id,
         'phrases': phrases,
         'categories': VietnamesePhrase.CATEGORY_CHOICES,
         'difficulties': VietnamesePhrase.DIFFICULTY_CHOICES,

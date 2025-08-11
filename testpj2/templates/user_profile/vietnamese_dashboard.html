@@ -63,21 +63,9 @@
                     {% else %}
                         <p class="text-muted text-center">まだ投稿がありません。</p>
                         <div class="text-center">
-                            <a href="/create/phrases/" class="btn btn-primary">最初の投稿を作成</a>
+                            <a href="/create/create-post/" class="btn btn-primary">最初の投稿を作成</a>
                         </div>
                     {% endif %}
-                </div>
-            </div>
-
-        <div class="col-md-8">
-            <!-- Welcome Section -->
-            <div class="card mb-4">
-                <div class="card-body">
-                    <h2 class="card-title">Chào mừng, {{ user.full_name|default:user.username }}!</h2>
-                    <p class="card-text">Giúp người Nhật học tiếng Việt và kết nối văn hóa Việt - Nhật.</p>
-                    <a href="/search/available-posts/" class="btn btn-primary">
-                        <i class="fas fa-search"></i> Xem tất cả bài đăng
-                    </a>
                 </div>
             </div>
 

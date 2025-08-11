@@ -100,7 +100,7 @@
                         {% endif %}
                     </div>
                     <div class="card-footer text-center">
-                        <a href="{% url 'accept_post' post.id %}" 
+                        <a href="{% url 'accept_post' post.id %}phrases/" 
                            class="btn btn-success w-100"
                            onclick="return acceptPost({{ post.id }}, '{{ post.phrase.vietnamese_text }}')">
                             <i class="fas fa-check"></i> 応募する
@@ -160,7 +160,7 @@ function acceptPost(postId, phraseText) {
     console.log('Accept button clicked for post:', postId, 'phrase:', phraseText);
     
     // Show confirmation dialog
-    const confirmed = confirm('この投稿を承認してもよろしいですか？日本人とチャットできるチャットルームへリダイレクトされます。');
+    // const confirmed = confirm('この投稿を承認してもよろしいですか？日本人とチャットできるチャットルームへリダイレクトされます。');
     
     if (confirmed) {
         console.log('User confirmed, redirecting to accept post...');

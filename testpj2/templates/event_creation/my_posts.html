@@ -22,6 +22,17 @@
                     Danh sách các bài đăng bạn đã chấp nhận
                 {% endif %}
             </p>
+            {% if user.nationality == 'vietnamese' %}
+                <div class="text-center">
+                {% if phrase %}
+                    <a href="{% url 'create_post' phrase.id %}" class="btn btn-outline-success">
+                {% else %}
+                    <a href="{% url 'create_post' %}" class="btn btn-outline-success">
+                {% endif %}
+                    <i class="fas fa-coffee"></i> パートナーを募集する
+                </a>
+            </div>
+            {% endif %}
         </div>
     </div>
 
