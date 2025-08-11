@@ -84,7 +84,11 @@
                         {% else %}
                             <div class="mb-3">
                                 <small class="text-muted">
-                                    日本人: {{ post.japanese_user.full_name|default:post.japanese_user.username }}
+                                    {% if post.japanese_user %}
+                                        日本人: {{ post.japanese_user.full_name|default:post.japanese_user.username }}
+                                    {% else %}
+                                        日本人: まだマッチングしていません
+                                    {% endif %}
                                 </small>
                             </div>
                         {% endif %}

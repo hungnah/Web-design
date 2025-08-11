@@ -125,8 +125,8 @@ class LanguageExchangePost(models.Model):
         ('cancelled', 'Cancelled'),
     ]
     
-    japanese_user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='japanese_posts')
-    vietnamese_user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='vietnamese_posts', null=True, blank=True)
+    japanese_user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='japanese_posts', null=True, blank=True)
+    vietnamese_user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='vietnamese_posts', null=False, blank=True)
     phrase = models.ForeignKey(VietnamesePhrase, on_delete=models.CASCADE)
     cafe_location = models.ForeignKey(CafeLocation, on_delete=models.CASCADE)
     meeting_date = models.DateTimeField()
