@@ -181,5 +181,12 @@ SECURE_CONTENT_TYPE_NOSNIFF = True
 X_FRAME_OPTIONS = 'DENY'
 
 CSRF_TRUSTED_ORIGINS = [
-    'https://3b6bf207beed.ngrok-free.app',
+    'https://9ab46c64aca8.ngrok-free.app',
 ]
+
+
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+    '9ab46c64aca8.ngrok-free.app'  # domain ngrok của bạn
+] 
