@@ -13,7 +13,7 @@ from django.contrib import messages
 from django.http import JsonResponse
 from django.utils import timezone
 from django.db.models import Q
-from .models import VietnamesePhrase, CafeLocation, LanguageExchangePost, PartnerRequest, Lesson, LessonPhrase
+from .models import VietnamesePhrase, CafeLocation, LanguageExchangePost, PartnerRequest, Lesson, LessonPhrase, QuizQuestion, TheorySection
 from .forms import LanguageExchangePostForm, PartnerRequestForm
 from chat_system.models import ChatRoom, Message
 
@@ -74,19 +74,88 @@ def lessons(request):
 
 @login_required
 def lesson_detail(request, lesson_id):
-    """Display lesson detail with phrases"""
+    """Display lesson detail with phrases, theory sections, and quiz questions"""
     if request.user.nationality != 'japanese':
         return redirect('dashboard')
     
     lesson = get_object_or_404(Lesson, id=lesson_id)
     phrases = lesson.phrases.all()
+    theory_sections = lesson.theory_sections.all()
+    quiz_questions = lesson.quiz_questions.all()
     
     context = {
         'lesson': lesson,
         'phrases': phrases,
+        'theory_sections': theory_sections,
+        'quiz_questions': quiz_questions,
     }
     
     return render(request, 'event_creation/lesson_detail.html', context)
+
+@login_required
+def theory_section_detail(request, lesson_id, section_id):
+    """Display theory section detail with phrases and conversation examples"""
+    if request.user.nationality != 'japanese':
+        return redirect('dashboard')
+    
+    lesson = get_object_or_404(Lesson, id=lesson_id)
+    theory_section = get_object_or_404(TheorySection, id=section_id, lesson=lesson)
+    phrases = theory_section.phrases.all()
+    conversations = theory_section.conversations.all()
+    
+    context = {
+        'lesson': lesson,
+        'theory_section': theory_section,
+        'phrases': phrases,
+        'conversations': conversations,
+    }
+    
+    return render(request, 'event_creation/theory_section_detail.html', context)
+
+@login_required
+def lesson_quiz(request, lesson_id):
+    """Display quiz for a specific lesson"""
+    if request.user.nationality != 'japanese':
+        return redirect('dashboard')
+    
+    lesson = get_object_or_404(Lesson, id=lesson_id)
+    quiz_questions = lesson.quiz_questions.all()
+    
+    if request.method == 'POST':
+        # Handle quiz submission
+        score = 0
+        total_questions = quiz_questions.count()
+        user_answers = {}
+        
+        for question in quiz_questions:
+            answer_key = f'question_{question.id}'
+            user_answer = request.POST.get(answer_key)
+            user_answers[question.id] = user_answer
+            
+            if user_answer == question.correct_answer:
+                score += 1
+        
+        percentage = (score / total_questions) * 100 if total_questions > 0 else 0
+        
+        context = {
+            'lesson': lesson,
+            'quiz_questions': quiz_questions,
+            'user_answers': user_answers,
+            'score': score,
+            'total_questions': total_questions,
+            'percentage': percentage,
+            'show_results': True,
+        }
+        
+        return render(request, 'event_creation/lesson_quiz.html', context)
+    
+    context = {
+        'lesson': lesson,
+        'quiz_questions': quiz_questions,
+        'show_results': False,
+    }
+    
+    return render(request, 'event_creation/lesson_quiz.html', context)
 
 @login_required
 def create_post(request, phrase_id):
@@ -267,3 +336,37 @@ def accept_partner_request(request, request_id):
     
     messages.success(request, 'Partner request accepted! You can now chat with your language partner.')
     return redirect('chat_room', room_id=chat_room.id)
+
+@login_required
+def all_theory_sections(request):
+    """Display all theory sections across all lessons"""
+    if request.user.nationality != 'japanese':
+        return redirect('dashboard')
+    
+    category = request.GET.get('category', '')
+    difficulty = request.GET.get('difficulty', '')
+    
+    lessons = Lesson.objects.all()
+    
+    if category:
+        lessons = lessons.filter(category=category)
+    if difficulty:
+        lessons = lessons.filter(difficulty=difficulty)
+    
+    # Get theory sections for filtered lessons
+    theory_sections = TheorySection.objects.filter(lesson__in=lessons).select_related('lesson')
+    
+    # Calculate total unique lessons
+    total_lessons = lessons.count()
+    
+    context = {
+        'lessons': lessons,
+        'theory_sections': theory_sections,
+        'total_lessons': total_lessons,
+        'categories': Lesson.CATEGORY_CHOICES,
+        'difficulties': Lesson.DIFFICULTY_CHOICES,
+        'selected_category': category,
+        'selected_difficulty': difficulty,
+    }
+    
+    return render(request, 'event_creation/all_theory_sections.html', context)

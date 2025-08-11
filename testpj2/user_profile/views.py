@@ -5,7 +5,7 @@ Supports both Vietnamese and Japanese users with different dashboard experiences
 """
 
 from django.shortcuts import render, redirect
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView
 from django.contrib import messages
@@ -13,6 +13,7 @@ from django.urls import reverse, reverse_lazy
 from django.db.models import Q
 from django.http import HttpResponse
 from .forms import CustomUserCreationForm, ProfileUpdateForm
+from .decorators import prevent_back_button
 from event_creation.models import LanguageExchangePost, PartnerRequest
 
 class CustomLoginView(LoginView):
@@ -32,13 +33,30 @@ class CustomLoginView(LoginView):
     def get(self, request, *args, **kwargs):
         response = super().get(request, *args, **kwargs)
         # Add cache control headers to prevent caching
-        response['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+        response['Cache-Control'] = 'no-cache, no-store, must-revalidate, private'
         response['Pragma'] = 'no-cache'
         response['Expires'] = '0'
+        response['X-Frame-Options'] = 'DENY'
+        return response
+    
+    def post(self, request, *args, **kwargs):
+        response = super().post(request, *args, **kwargs)
+        # Add cache control headers to prevent caching
+        response['Cache-Control'] = 'no-cache, no-store, must-revalidate, private'
+        response['Pragma'] = 'no-cache'
+        response['Expires'] = '0'
+        response['X-Frame-Options'] = 'DENY'
         return response
     
     def get_success_url(self):
         return reverse('dashboard')
+    
+    def form_valid(self, form):
+        """Handle successful login"""
+        response = super().form_valid(form)
+        # Clear any existing session data that might cause issues
+        self.request.session.set_expiry(0)  # Session expires when browser closes
+        return response
 
 def register(request):
     """
@@ -55,6 +73,8 @@ def register(request):
             # Create new user and automatically log them in
             user = form.save()
             login(request, user)
+            # Clear session data and set expiry
+            request.session.set_expiry(0)
             messages.success(request, 'Registration successful! Welcome to Vietnam-Japan Connect!')
             return redirect('dashboard')
         else:
@@ -65,12 +85,24 @@ def register(request):
     
     response = render(request, 'user_profile/register.html', {'form': form})
     # Add cache control headers to prevent caching
-    response['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+    response['Cache-Control'] = 'no-cache, no-store, must-revalidate, private'
     response['Pragma'] = 'no-cache'
     response['Expires'] = '0'
+    response['X-Frame-Options'] = 'DENY'
     return response
 
+def custom_logout(request):
+    """Custom logout view that clears session and prevents back button issues"""
+    # Clear session data
+    request.session.flush()
+    logout(request)
+    
+    # Redirect to home with message
+    
+    return redirect('home')
+
 @login_required
+@prevent_back_button
 def dashboard(request):
     """
     Main dashboard view with different experiences for Vietnamese and Japanese users
@@ -91,7 +123,7 @@ def dashboard(request):
             'user': user,
             'recent_posts': recent_posts,
         }
-        return render(request, 'user_profile/japanese_dashboard.html', context)
+        response = render(request, 'user_profile/japanese_dashboard.html', context)
     else:
         # Vietnamese user dashboard
         # For Vietnamese users, get available posts from Japanese users in their city
@@ -116,9 +148,18 @@ def dashboard(request):
             'accepted_posts_count': accepted_posts_count,
             'available_posts_count': available_posts_count,
         }
-        return render(request, 'user_profile/vietnamese_dashboard.html', context)
+        response = render(request, 'user_profile/vietnamese_dashboard.html', context)
+    
+    # Add cache control headers
+    response['Cache-Control'] = 'no-cache, no-store, must-revalidate, private'
+    response['Pragma'] = 'no-cache'
+    response['Expires'] = '0'
+    response['X-Frame-Options'] = 'DENY'
+    
+    return response
 
 @login_required
+@prevent_back_button
 def profile(request):
     if request.method == 'POST':
         form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user)
@@ -129,16 +170,40 @@ def profile(request):
     else:
         form = ProfileUpdateForm(instance=request.user)
     
-    return render(request, 'user_profile/profile.html', {'form': form})
+    response = render(request, 'user_profile/profile.html', {'form': form})
+    # Add cache control headers
+    response['Cache-Control'] = 'no-cache, no-store, must-revalidate, private'
+    response['Pragma'] = 'no-cache'
+    response['Expires'] = '0'
+    response['X-Frame-Options'] = 'DENY'
+    
+    return response
 
 def guide(request):
     """Hướng dẫn sử dụng web bằng tiếng Nhật hoặc tiếng Việt"""
     language = request.GET.get('lang', 'ja')  # Default to Japanese
     if language == 'vi':
-        return render(request, 'user_profile/guide_vi.html')
+        response = render(request, 'user_profile/guide_vi.html')
     else:
-        return render(request, 'user_profile/guide.html')
+        response = render(request, 'user_profile/guide.html')
+    
+    # Add cache control headers
+    response['Cache-Control'] = 'no-cache, no-store, must-revalidate, private'
+    response['Pragma'] = 'no-cache'
+    response['Expires'] = '0'
+    response['X-Frame-Options'] = 'DENY'
+    
+    return response
 
 def home(request):
     """Trang chủ với giới thiệu về website"""
-    return render(request, 'home.html')
+    # Nếu người dùng đã đăng nhập, redirect về dashboard
+    if request.user.is_authenticated:
+        return redirect('dashboard')
+    
+    response = render(request, 'home.html')
+    # Thêm cache control headers để ngăn back button
+    response['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+    response['Pragma'] = 'no-cache'
+    response['Expires'] = '0'
+    return response
