@@ -22,9 +22,9 @@
     <div class="row mb-4">
         <div class="col-12">
             <h1 class="text-center mb-3">
-                <i class="fas fa-search"></i> Tìm người Nhật
+                <i class="fas fa-search"></i> パートナーを探す
             </h1>
-            <p class="text-center text-muted">Kết nối với người Nhật để dạy tiếng Việt và giao lưu văn hóa</p>
+            <p class="text-center text-muted">ベトナム人のパートナーと交流し、言語学習しながら文化交流しよう</p>
         </div>
     </div>
 
@@ -33,7 +33,7 @@
         <div class="col-md-6 mx-auto">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">Chọn thành phố</h5>
+                    <h5 class="card-title">都市で検索</h5>
                     <div class="btn-group w-100" role="group">
                         {% for value, label in cities %}
                             <a href="?city={{ value }}" 
@@ -51,7 +51,7 @@
     <div class="row mb-3">
         <div class="col-12">
             <div class="alert alert-success">
-                <strong>Posts Found:</strong> {{ posts|length }} posts available in {{ selected_city }}
+                <strong>{{ selected_city }}</strong> に <strong>{{ posts|length }}</strong> 件の募集があります
             </div>
         </div>
     </div>
@@ -76,7 +76,7 @@
                     <div class="card-body">
                         
                         <div class="mb-3">
-                            <small class="text-muted">Địa điểm:</small>
+                            <small class="text-muted">場所:</small>
                             <p class="mb-1">
                                 <i class="fas fa-map-marker-alt"></i> 
                                 {{ post.cafe_location.name }}
@@ -85,7 +85,7 @@
                         </div>
                         
                         <div class="mb-3">
-                            <small class="text-muted">Thời gian:</small>
+                            <small class="text-muted">時間:</small>
                             <p class="mb-1">
                                 <i class="fas fa-calendar"></i> 
                                 {{ post.meeting_date|date:"d/m/Y H:i" }}
@@ -103,7 +103,7 @@
                         <a href="{% url 'accept_post' post.id %}" 
                            class="btn btn-success w-100"
                            onclick="return acceptPost({{ post.id }}, '{{ post.phrase.vietnamese_text }}')">
-                            <i class="fas fa-check"></i> Chấp nhận
+                            <i class="fas fa-check"></i> 応募する
                         </a>
                     </div>
                 </div>
@@ -160,7 +160,7 @@ function acceptPost(postId, phraseText) {
     console.log('Accept button clicked for post:', postId, 'phrase:', phraseText);
     
     // Show confirmation dialog
-    const confirmed = confirm('Bạn có chắc muốn chấp nhận bài đăng này? Bạn sẽ được chuyển đến chat room để trò chuyện với người Nhật.');
+    const confirmed = confirm('この投稿を承認してもよろしいですか？日本人とチャットできるチャットルームへリダイレクトされます。');
     
     if (confirmed) {
         console.log('User confirmed, redirecting to accept post...');
