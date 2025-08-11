@@ -223,3 +223,70 @@ class QuizQuestion(models.Model):
     
     def __str__(self):
         return f"{self.lesson.title} - Question {self.order}"
+
+class TheorySection(models.Model):
+    """Model for theory sections with basic conversation phrases"""
+    lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, related_name='theory_sections')
+    title = models.CharField(max_length=200, help_text="Tiêu đề phần lý thuyết")
+    description = models.TextField(help_text="Mô tả phần lý thuyết")
+    order = models.PositiveIntegerField(default=0, help_text="Thứ tự hiển thị")
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        ordering = ['lesson', 'order']
+    
+    def __str__(self):
+        return f"{self.lesson.title} - {self.title}"
+
+class TheoryPhrase(models.Model):
+    """Model for phrases in theory sections"""
+    theory_section = models.ForeignKey(TheorySection, on_delete=models.CASCADE, related_name='phrases')
+    vietnamese_text = models.CharField(max_length=200, help_text="Câu tiếng Việt")
+    japanese_translation = models.CharField(max_length=200, help_text="Bản dịch tiếng Nhật")
+    english_translation = models.CharField(max_length=200, help_text="Bản dịch tiếng Anh")
+    pronunciation_guide = models.CharField(max_length=200, blank=True, help_text="Hướng dẫn phát âm")
+    usage_note = models.TextField(blank=True, help_text="Ghi chú cách sử dụng")
+    is_essential = models.BooleanField(default=False, help_text="Câu nói cần thiết")
+    order = models.PositiveIntegerField(default=0, help_text="Thứ tự hiển thị")
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        ordering = ['theory_section', 'order']
+    
+    def __str__(self):
+        return f"{self.theory_section.title} - {self.vietnamese_text}"
+
+class ConversationExample(models.Model):
+    """Model for conversation examples in theory sections"""
+    theory_section = models.ForeignKey(TheorySection, on_delete=models.CASCADE, related_name='conversations')
+    title = models.CharField(max_length=200, help_text="Tiêu đề đoạn hội thoại")
+    description = models.TextField(help_text="Mô tả tình huống")
+    order = models.PositiveIntegerField(default=0, help_text="Thứ tự hiển thị")
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        ordering = ['theory_section', 'order']
+    
+    def __str__(self):
+        return f"{self.theory_section.title} - {self.title}"
+
+class ConversationLine(models.Model):
+    """Model for individual lines in conversation examples"""
+    conversation = models.ForeignKey(ConversationExample, on_delete=models.CASCADE, related_name='lines')
+    speaker = models.CharField(max_length=50, choices=[
+        ('tutor', 'TUTOR'),
+        ('student', 'STUDENT'),
+        ('person_a', 'PERSON A'),
+        ('person_b', 'PERSON B'),
+    ], help_text="Người nói")
+    vietnamese_text = models.CharField(max_length=300, help_text="Nội dung tiếng Việt")
+    japanese_translation = models.CharField(max_length=300, help_text="Bản dịch tiếng Nhật")
+    english_translation = models.CharField(max_length=300, help_text="Bản dịch tiếng Anh")
+    order = models.PositiveIntegerField(default=0, help_text="Thứ tự trong hội thoại")
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        ordering = ['conversation', 'order']
+    
+    def __str__(self):
+        return f"{self.conversation.title} - {self.speaker} - Line {self.order}"

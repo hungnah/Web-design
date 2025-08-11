@@ -13,6 +13,16 @@
             <p class="text-center text-muted">
                 Học tiếng Việt thông qua các tình huống thực tế với hướng dẫn phát âm
             </p>
+            
+            <!-- Quick Actions -->
+            <div class="text-center mt-3">
+                <a href="{% url 'all_theory_sections' %}" class="btn btn-outline-primary me-2">
+                    <i class="fas fa-book-open me-2"></i>Xem tất cả phần lý thuyết
+                </a>
+                <a href="{% url 'phrase_list' %}" class="btn btn-outline-success">
+                    <i class="fas fa-language me-2"></i>Danh sách câu nói
+                </a>
+            </div>
         </div>
     </div>
 
@@ -67,7 +77,14 @@
             <div class="col-md-6 col-lg-4 mb-4">
                 <div class="card h-100 lesson-card">
                     {% if lesson.image %}
-                        <img src="{{ lesson.image.url }}" class="card-img-top" alt="{{ lesson.title }}" style="height: 200px; object-fit: cover;">
+                        <div class="lesson-image-container">
+                            <img src="{{ lesson.image.url }}" class="card-img-top lesson-image" alt="{{ lesson.title }}">
+                            <div class="lesson-overlay">
+                                <div class="lesson-category-badge">
+                                    {{ lesson.get_category_display }}
+                                </div>
+                            </div>
+                        </div>
                     {% else %}
                         <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
                             <i class="fas fa-book fa-3x text-muted"></i>
@@ -95,7 +112,7 @@
                     <div class="card-footer">
                         <div class="row g-2">
                             <div class="col-12">
-                                <a href="{% url 'lesson_detail' lesson.id %}" class="btn btn-primary w-100">
+                                <a href="{% url 'lesson_detail' lesson.id %}" class="btn btn-primary w-100 lesson-btn">
                                     <i class="fas fa-play"></i> Bắt đầu học
                                 </a>
                             </div>
@@ -147,11 +164,123 @@
 <style>
 .lesson-card {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: none;
+    border-radius: 15px;
+    overflow: hidden;
 }
 
 .lesson-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    transform: translateY(-8px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+}
+
+.lesson-image-container {
+    position: relative;
+    height: 220px;
+    overflow: hidden;
+}
+
+.lesson-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.lesson-card:hover .lesson-image {
+    transform: scale(1.05);
+}
+
+.lesson-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(255, 107, 53, 0.8), rgba(247, 147, 30, 0.8));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.lesson-card:hover .lesson-overlay {
+    opacity: 1;
+}
+
+.lesson-category-badge {
+    background: rgba(255, 255, 255, 0.9);
+    color: #ff6b35;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 0.9rem;
+    transform: translateY(20px);
+    transition: transform 0.3s ease;
+}
+
+.lesson-card:hover .lesson-category-badge {
+    transform: translateY(0);
+}
+
+.lesson-btn {
+    background: linear-gradient(135deg, #ff6b35, #f7931e);
+    border: none;
+    border-radius: 25px;
+    padding: 10px 20px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.lesson-btn:hover {
+    background: linear-gradient(135deg, #e55a2b, #e0851a);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255, 107, 53, 0.4);
+}
+
+.card-title {
+    color: #2c3e50;
+    font-weight: 700;
+    margin-bottom: 12px;
+}
+
+.card-text {
+    color: #7f8c8d;
+    line-height: 1.6;
+}
+
+.badge {
+    font-size: 0.75rem;
+    padding: 6px 12px;
+    border-radius: 12px;
+}
+
+.bg-primary {
+    background: linear-gradient(135deg, #3498db, #2980b9) !important;
+}
+
+.bg-success {
+    background: linear-gradient(135deg, #27ae60, #229954) !important;
+}
+
+.bg-warning {
+    background: linear-gradient(135deg, #f39c12, #e67e22) !important;
+}
+
+.bg-danger {
+    background: linear-gradient(135deg, #e74c3c, #c0392b) !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .lesson-image-container {
+        height: 180px;
+    }
+    
+    .lesson-card:hover {
+        transform: translateY(-5px);
+    }
 }
 </style>
 {% endblock %}

@@ -33,7 +33,7 @@ SECRET_KEY = 'django-insecure-your-secret-key-here'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '3b6bf207beed.ngrok-free.app', 'testserver']
 
 
 # Application definition
@@ -71,6 +71,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'user_profile.middleware.SessionSecurityMiddleware',  # Custom session security
 ]
 
 ROOT_URLCONF = 'vietnam_japan_connect.urls'
@@ -144,6 +145,7 @@ STATIC_URL = 'static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
@@ -166,7 +168,18 @@ LOGOUT_REDIRECT_URL = '/'
 # Custom User Model
 AUTH_USER_MODEL = 'user_profile.CustomUser'
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '3b6bf207beed.ngrok-free.app']
+# Session Security Settings
+SESSION_COOKIE_AGE = 3600  # 1 hour in seconds
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+SESSION_COOKIE_SECURE = False  # Set to True in production with HTTPS
+SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_SAMESITE = 'Lax'
+
+# Security Headers
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
+X_FRAME_OPTIONS = 'DENY'
+
 CSRF_TRUSTED_ORIGINS = [
     'https://3b6bf207beed.ngrok-free.app',
 ]

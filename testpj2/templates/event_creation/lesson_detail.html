@@ -30,7 +30,14 @@
                         </div>
                         <div class="col-md-4 text-center">
                             {% if lesson.image %}
-                                <img src="{{ lesson.image.url }}" alt="{{ lesson.title }}" class="img-fluid rounded" style="max-height: 200px;">
+                                <div class="lesson-detail-image-container">
+                                    <img src="{{ lesson.image.url }}" alt="{{ lesson.title }}" class="lesson-detail-image">
+                                    <div class="lesson-detail-overlay">
+                                        <div class="lesson-detail-category">
+                                            {{ lesson.get_category_display }}
+                                        </div>
+                                    </div>
+                                </div>
                             {% else %}
                                 <div class="bg-light rounded d-flex align-items-center justify-content-center" style="height: 200px;">
                                     <i class="fas fa-book fa-3x text-muted"></i>
@@ -58,12 +65,7 @@
                             <div class="row align-items-center">
                                 <div class="col-md-8">
                                     <div class="mb-2">
-                                        <h5 class="text-primary mb-1">{{ phrase.vietnamese_text }}</h5>
-                                        {% if phrase.pronunciation_guide %}
-                                            <small class="text-muted">
-                                                <i class="fas fa-microphone"></i> {{ phrase.pronunciation_guide }}
-                                            </small>
-                                        {% endif %}
+                                        {# Ẩn tiếng Việt và hướng dẫn phát âm #}
                                     </div>
                                     
                                     <div class="row">
@@ -77,38 +79,14 @@
                                         </div>
                                     </div>
                                     
-                                    {% if phrase.usage_note %}
-                                        <div class="mt-2">
-                                            <small class="text-info">
-                                                <i class="fas fa-info-circle"></i> {{ phrase.usage_note }}
-                                            </small>
-                                        </div>
-                                    {% endif %}
+                                    {# Ẩn ghi chú sử dụng tiếng Việt #}
                                 </div>
                                 
                                 <div class="col-md-4 text-center">
-                                    {% if phrase.audio_file %}
-                                        <div class="audio-player">
-                                            <audio id="audio-{{ phrase.id }}" controls class="w-100">
-                                                <source src="{{ phrase.audio_file.url }}" type="audio/mpeg">
-                                                Trình duyệt của bạn không hỗ trợ audio.
-                                            </audio>
-                                            <div class="mt-2">
-                                                <button class="btn btn-outline-primary btn-sm" onclick="playAudio({{ phrase.id }})">
-                                                    <i class="fas fa-play"></i> Phát
-                                                </button>
-                                                <button class="btn btn-outline-secondary btn-sm" onclick="pauseAudio({{ phrase.id }})">
-                                                    <i class="fas fa-pause"></i> Tạm dừng
-                                                </button>
-                                            </div>
-                                        </div>
-                                    {% else %}
-                                        <div class="text-muted">
-                                            <i class="fas fa-volume-mute fa-2x mb-2"></i>
-                                            <br>
-                                            <small>Chưa có audio</small>
-                                        </div>
-                                    {% endif %}
+                                    {# Ẩn phần audio vì chưa cần #}
+                                    <div class="text-muted">
+                                        <small>Audio sẽ được thêm sau</small>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -123,6 +101,120 @@
             </div>
         </div>
     </div>
+
+    <!-- Theory Sections -->
+    {% if theory_sections %}
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="mb-0">
+                            <i class="fas fa-book-open"></i> Phần lý thuyết - Câu giao tiếp cơ bản
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            {% for section in theory_sections %}
+                                <div class="col-md-6 mb-4">
+                                    <div class="theory-section-card h-100">
+                                        <div class="card border-primary">
+                                            <div class="card-body">
+                                                <h5 class="card-title text-primary">
+                                                    <i class="fas fa-lightbulb me-2"></i>{{ section.title }}
+                                                </h5>
+                                                <p class="card-text">{{ section.description }}</p>
+                                                
+                                                <div class="theory-preview">
+                                                    {% for phrase in section.phrases.all|slice:":3" %}
+                                                        <div class="phrase-preview mb-2 p-2 bg-light rounded">
+                                                            <div class="row">
+                                                                <div class="col-8">
+                                                                    <strong class="text-success">{{ phrase.vietnamese_text }}</strong>
+                                                                    {% if phrase.is_essential %}
+                                                                        <span class="badge bg-warning ms-2">Cần thiết</span>
+                                                                    {% endif %}
+                                                                </div>
+                                                                <div class="col-4 text-end">
+                                                                    <small class="text-muted">{{ phrase.japanese_translation }}</small>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    {% endfor %}
+                                                    
+                                                    {% if section.phrases.count > 3 %}
+                                                        <div class="text-center mt-2">
+                                                            <small class="text-muted">
+                                                                Và {{ section.phrases.count|add:"-3" }} câu nói khác...
+                                                            </small>
+                                                        </div>
+                                                    {% endif %}
+                                                </div>
+                                                
+                                                <div class="mt-3">
+                                                    <a href="{% url 'theory_section_detail' lesson.id section.id %}" class="btn btn-primary btn-sm">
+                                                        <i class="fas fa-arrow-right me-2"></i>Xem chi tiết
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        
+                        <div class="alert alert-info mt-3">
+                            <i class="fas fa-info-circle me-2"></i>
+                            <strong>Lưu ý:</strong> Phần lý thuyết này chứa các câu giao tiếp cơ bản mà bạn có thể sử dụng trong cuộc sống hàng ngày. 
+                            Hãy học thuộc và thực hành thường xuyên để giao tiếp tự tin hơn!
+                        </div>
+                        
+                        <!-- Quick Stats -->
+                        <div class="row mt-3">
+                            <div class="col-md-4 text-center">
+                                <div class="stat-card">
+                                    <i class="fas fa-star text-warning fa-2x mb-2"></i>
+                                    <h5 class="text-primary">{{ theory_sections|length }}</h5>
+                                    <small class="text-muted">Phần lý thuyết</small>
+                                </div>
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <div class="stat-card">
+                                    <i class="fas fa-comments text-success fa-2x mb-2"></i>
+                                    <h5 class="text-primary">
+                                        {% with total_conversations=0 %}
+                                            {% for section in theory_sections %}
+                                                {% for conversation in section.conversations.all %}
+                                                    {% with total_conversations=total_conversations|add:1 %}{% endwith %}
+                                                {% endfor %}
+                                            {% endfor %}
+                                            {{ total_conversations }}
+                                        {% endwith %}
+                                    </h5>
+                                    <small class="text-muted">Ví dụ hội thoại</small>
+                                </div>
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <div class="stat-card">
+                                    <i class="fas fa-language text-info fa-2x mb-2"></i>
+                                    <h5 class="text-primary">
+                                        {% with total_phrases=0 %}
+                                            {% for section in theory_sections %}
+                                                {% for phrase in section.phrases.all %}
+                                                    {% with total_phrases=total_phrases|add:1 %}{% endwith %}
+                                                {% endfor %}
+                                            {% endfor %}
+                                            {{ total_phrases }}
+                                        {% endwith %}
+                                    </h5>
+                                    <small class="text-muted">Câu nói cơ bản</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
 
     <!-- Practice Section -->
     {% if phrases %}
@@ -243,6 +335,163 @@ audio::-webkit-media-controls-panel {
 audio::-webkit-media-controls-play-button {
     background-color: #007bff;
     border-radius: 50%;
+}
+
+/* Lesson Detail Image Styles */
+.lesson-detail-image-container {
+    position: relative;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    transition: all 0.3s ease;
+}
+
+.lesson-detail-image-container:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+}
+
+.lesson-detail-image {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.lesson-detail-image-container:hover .lesson-detail-image {
+    transform: scale(1.05);
+}
+
+.lesson-detail-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(255, 107, 53, 0.9), rgba(247, 147, 30, 0.9));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.lesson-detail-image-container:hover .lesson-detail-overlay {
+    opacity: 1;
+}
+
+.lesson-detail-category {
+    background: rgba(255, 255, 255, 0.95);
+    color: #ff6b35;
+    padding: 12px 20px;
+    border-radius: 25px;
+    font-weight: bold;
+    font-size: 1rem;
+    transform: translateY(20px);
+    transition: transform 0.3s ease;
+}
+
+.lesson-detail-image-container:hover .lesson-detail-category {
+    transform: translateY(0);
+}
+
+/* Enhanced card styles */
+.card {
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+}
+
+.card-header {
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    border-bottom: 1px solid #dee2e6;
+    border-radius: 15px 15px 0 0 !important;
+}
+
+/* Enhanced button styles */
+.btn-success {
+    background: linear-gradient(135deg, #27ae60, #229954);
+    border: none;
+    border-radius: 25px;
+    padding: 12px 30px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-success:hover {
+    background: linear-gradient(135deg, #229954, #1e8449);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(39, 174, 96, 0.4);
+}
+
+/* Theory section styles */
+.theory-section-card {
+    transition: all 0.3s ease;
+}
+
+.theory-section-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+}
+
+.theory-section-card .card {
+    border: 2px solid #e9ecef;
+    transition: all 0.3s ease;
+}
+
+.theory-section-card:hover .card {
+    border-color: #007bff;
+    box-shadow: 0 15px 40px rgba(0, 123, 255, 0.2);
+}
+
+.phrase-preview {
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    border-left: 3px solid #007bff;
+    transition: all 0.3s ease;
+}
+
+.phrase-preview:hover {
+    background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+    transform: translateX(5px);
+}
+
+/* Stat cards */
+.stat-card {
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    padding: 20px;
+    border-radius: 15px;
+    border: 2px solid #dee2e6;
+    transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+    background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+    border-color: #007bff;
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(0, 123, 255, 0.2);
+}
+
+.stat-card h5 {
+    margin: 0;
+    font-weight: bold;
+}
+
+/* Enhanced phrase item styles */
+.phrase-item {
+    transition: all 0.3s ease;
+    border: 2px solid #e9ecef !important;
+}
+
+.phrase-item:hover {
+    background: linear-gradient(135deg, #f8f9fa, #e3f2fd);
+    transform: translateX(5px);
+    border-color: #007bff !important;
+    box-shadow: 0 10px 25px rgba(0, 123, 255, 0.1);
 }
 </style>
 {% endblock %}
