@@ -1,0 +1,270 @@
+{% extends 'base.html' %}
+{% load lesson_extras %}
+
+{% block title %}{{ lesson.title }} - Quiz - Vietnam-Japan Connect{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <!-- Quiz Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'lessons' %}">Bài học</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'lesson_detail' lesson.id %}">{{ lesson.title }}</a></li>
+                    <li class="breadcrumb-item active">Quiz</li>
+                </ol>
+            </nav>
+            
+            <div class="card">
+                <div class="card-body text-center">
+                    <h1 class="mb-3">
+                        <i class="fas fa-question-circle text-success me-3"></i>
+                        {{ lesson.title }} - Quiz
+                    </h1>
+                    <p class="lead">{{ lesson.description }}</p>
+                    
+                    {% if not show_results %}
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i>
+                        Hãy trả lời tất cả {{ quiz_questions.count }} câu hỏi để kiểm tra kiến thức của bạn
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if not show_results %}
+    <!-- Quiz Form -->
+    <form method="post">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="mb-0">
+                            <i class="fas fa-clipboard-list me-2"></i>Câu hỏi trắc nghiệm
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        {% for question in quiz_questions %}
+                        <div class="quiz-question mb-4 p-4 border rounded">
+                            <h5 class="mb-3">
+                                <span class="badge bg-primary me-2">Câu {{ forloop.counter }}</span>
+                                {{ question.question }}
+                            </h5>
+                            
+                            <div class="options">
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="radio" name="question_{{ question.id }}" id="q{{ question.id }}_a" value="A" required>
+                                    <label class="form-check-label" for="q{{ question.id }}_a">
+                                        <strong>A.</strong> {{ question.option_a }}
+                                    </label>
+                                </div>
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="radio" name="question_{{ question.id }}" id="q{{ question.id }}_b" value="B" required>
+                                    <label class="form-check-label" for="q{{ question.id }}_b">
+                                        <strong>B.</strong> {{ question.option_b }}
+                                    </label>
+                                </div>
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="radio" name="question_{{ question.id }}" id="q{{ question.id }}_c" value="C" required>
+                                    <label class="form-check-label" for="q{{ question.id }}_c">
+                                        <strong>C.</strong> {{ question.option_c }}
+                                    </label>
+                                </div>
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="radio" name="question_{{ question.id }}" id="q{{ question.id }}_d" value="D" required>
+                                    <label class="form-check-label" for="q{{ question.id }}_d">
+                                        <strong>D.</strong> {{ question.option_d }}
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                        
+                        <div class="text-center mt-4">
+                            <button type="submit" class="btn btn-success btn-lg">
+                                <i class="fas fa-paper-plane me-2"></i>Nộp bài
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    
+    {% else %}
+    <!-- Quiz Results -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="mb-0">
+                        <i class="fas fa-chart-bar me-2"></i>Kết quả bài kiểm tra
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <!-- Score Summary -->
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <div class="text-center p-4">
+                                <div class="display-4 text-{% if percentage >= 80 %}success{% elif percentage >= 60 %}warning{% else %}danger{% endif %}">
+                                    {{ percentage|floatformat:1 }}%
+                                </div>
+                                <p class="lead">Điểm số của bạn</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="text-center p-4">
+                                <div class="display-4 text-primary">
+                                    {{ score }}/{{ total_questions }}
+                                </div>
+                                <p class="lead">Số câu đúng</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Performance Message -->
+                    <div class="alert alert-{% if percentage >= 80 %}success{% elif percentage >= 60 %}warning{% else %}danger{% endif %} text-center">
+                        {% if percentage >= 80 %}
+                            <i class="fas fa-trophy me-2"></i>
+                            <strong>Xuất sắc!</strong> Bạn đã hoàn thành bài kiểm tra rất tốt!
+                        {% elif percentage >= 60 %}
+                            <i class="fas fa-thumbs-up me-2"></i>
+                            <strong>Tốt!</strong> Bạn đã hiểu được phần lớn nội dung bài học!
+                        {% else %}
+                            <i class="fas fa-book me-2"></i>
+                            <strong>Cần cải thiện!</strong> Hãy ôn tập lại bài học để hiểu rõ hơn!
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Question Review -->
+                    <h4 class="mb-3">
+                        <i class="fas fa-search me-2"></i>Xem lại từng câu hỏi
+                    </h4>
+                    
+                    {% for question in quiz_questions %}
+                    <div class="quiz-review mb-4 p-4 border rounded {% if user_answers|get_item:question.id == question.correct_answer %}border-success{% else %}border-danger{% endif %}">
+                        <h5 class="mb-3">
+                            <span class="badge bg-{% if user_answers|get_item:question.id == question.correct_answer %}success{% else %}danger{% endif %} me-2">
+                                Câu {{ forloop.counter }}
+                            </span>
+                            {{ question.question }}
+                        </h5>
+                        
+                        <div class="options mb-3">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="option {% if user_answers|get_item:question.id == 'A' %}user-answer{% endif %} {% if question.correct_answer == 'A' %}correct-answer{% endif %}">
+                                        <strong>A.</strong> {{ question.option_a }}
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="option {% if user_answers|get_item:question.id == 'B' %}user-answer{% endif %} {% if question.correct_answer == 'B' %}correct-answer{% endif %}">
+                                        <strong>B.</strong> {{ question.option_b }}
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="option {% if user_answers|get_item:question.id == 'C' %}user-answer{% endif %} {% if question.correct_answer == 'C' %}correct-answer{% endif %}">
+                                        <strong>C.</strong> {{ question.option_c }}
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="option {% if user_answers|get_item:question.id == 'D' %}user-answer{% endif %} {% if question.correct_answer == 'D' %}correct-answer{% endif %}">
+                                        <strong>D.</strong> {{ question.option_d }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="result-info">
+                            {% if user_answers|get_item:question.id == question.correct_answer %}
+                                <div class="alert alert-success">
+                                    <i class="fas fa-check-circle me-2"></i>
+                                    <strong>Đúng!</strong> Câu trả lời của bạn chính xác.
+                                </div>
+                            {% else %}
+                                <div class="alert alert-danger">
+                                    <i class="fas fa-times-circle me-2"></i>
+                                    <strong>Sai!</strong> 
+                                    Bạn đã chọn: <strong>{{ user_answers|get_item:question.id }}</strong><br>
+                                    Đáp án đúng: <strong>{{ question.correct_answer }}</strong>
+                                </div>
+                            {% endif %}
+                            
+                            {% if question.explanation %}
+                                <div class="alert alert-info">
+                                    <i class="fas fa-lightbulb me-2"></i>
+                                    <strong>Giải thích:</strong> {{ question.explanation }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                    
+                    <!-- Action Buttons -->
+                    <div class="text-center mt-4">
+                        <a href="{% url 'lesson_detail' lesson.id %}" class="btn btn-primary btn-lg me-3">
+                            <i class="fas fa-arrow-left me-2"></i>Quay lại bài học
+                        </a>
+                        <a href="{% url 'lesson_quiz' lesson.id %}" class="btn btn-success btn-lg">
+                            <i class="fas fa-redo me-2"></i>Làm lại bài kiểm tra
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<style>
+.quiz-question {
+    transition: all 0.3s ease;
+    background-color: #f8f9fa;
+}
+
+.quiz-question:hover {
+    background-color: #e9ecef;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.options .form-check {
+    padding: 10px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.options .form-check:hover {
+    background-color: #e9ecef;
+}
+
+.quiz-review {
+    transition: all 0.3s ease;
+}
+
+.option {
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+
+.user-answer {
+    background-color: #ffe6e6;
+    border: 2px solid #dc3545;
+}
+
+.correct-answer {
+    background-color: #d4edda;
+    border: 2px solid #28a745;
+}
+
+.option.user-answer.correct-answer {
+    background-color: #d4edda;
+    border: 2px solid #28a745;
+}
+</style>
+{% endblock %}

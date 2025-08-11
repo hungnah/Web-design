@@ -150,14 +150,16 @@ class LanguageExchangePost(models.Model):
 class Lesson(models.Model):
     """Model for Vietnamese language lessons"""
     CATEGORY_CHOICES = [
-        ('greetings', '挨拶'),
-        ('food', '料理'),
-        ('shopping', '買い物'),
-        ('transport', '交通'),
-        ('daily', '日常生活'),
-        ('business', '仕事'),
-        ('travel', '旅行'),
-        ('emergency', '緊急'),
+        ('greetings', 'Chào hỏi (挨拶)'),
+        ('self_introduction', 'Giới thiệu bản thân (自己紹介)'),
+        ('asking_directions', 'Hỏi đường (道を尋ねる)'),
+        ('shopping', 'Mua sắm (買い物)'),
+        ('restaurant', 'Nhà hàng / gọi món (レストラン)'),
+        ('transportation', 'Giao thông / đi lại (交通)'),
+        ('weather', 'Thời tiết (天気)'),
+        ('family', 'Gia đình (家族)'),
+        ('health_emergency', 'Sức khỏe / trường hợp khẩn cấp (健康・緊急)'),
+        ('time_schedule', 'Thời gian / lịch trình (時間・予定)'),
     ]
     
     DIFFICULTY_CHOICES = [
@@ -168,7 +170,7 @@ class Lesson(models.Model):
     
     title = models.CharField(max_length=200)
     description = models.TextField()
-    category = models.CharField(max_length=20, choices=CATEGORY_CHOICES)
+    category = models.CharField(max_length=25, choices=CATEGORY_CHOICES)
     difficulty = models.CharField(max_length=15, choices=DIFFICULTY_CHOICES)
     image = models.ImageField(upload_to='lesson_images/', null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -178,7 +180,7 @@ class Lesson(models.Model):
         ordering = ['difficulty', 'category', 'title']
     
     def __str__(self):
-        return f"{self.title} - {self.get_category_display()}"
+        return f"{self.get_category_display()} - {self.title}"
 
 
 class LessonPhrase(models.Model):
@@ -197,3 +199,27 @@ class LessonPhrase(models.Model):
     
     def __str__(self):
         return f"{self.lesson.title} - {self.vietnamese_text}"
+
+class QuizQuestion(models.Model):
+    """Model for quiz questions in Vietnamese lessons"""
+    lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, related_name='quiz_questions')
+    question = models.TextField(help_text="Câu hỏi trắc nghiệm")
+    option_a = models.CharField(max_length=100, help_text="Lựa chọn A")
+    option_b = models.CharField(max_length=100, help_text="Lựa chọn B")
+    option_c = models.CharField(max_length=100, help_text="Lựa chọn C")
+    option_d = models.CharField(max_length=100, help_text="Lựa chọn D")
+    correct_answer = models.CharField(max_length=1, choices=[
+        ('A', 'A'),
+        ('B', 'B'),
+        ('C', 'C'),
+        ('D', 'D'),
+    ], help_text="Đáp án đúng")
+    explanation = models.TextField(blank=True, help_text="Giải thích đáp án")
+    order = models.PositiveIntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        ordering = ['lesson', 'order']
+    
+    def __str__(self):
+        return f"{self.lesson.title} - Question {self.order}"

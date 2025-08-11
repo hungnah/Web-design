@@ -165,3 +165,8 @@ LOGOUT_REDIRECT_URL = '/'
 
 # Custom User Model
 AUTH_USER_MODEL = 'user_profile.CustomUser'
+
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '3b6bf207beed.ngrok-free.app']
+CSRF_TRUSTED_ORIGINS = [
+    'https://3b6bf207beed.ngrok-free.app',
+]

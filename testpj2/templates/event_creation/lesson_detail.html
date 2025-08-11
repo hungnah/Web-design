@@ -157,6 +157,27 @@
                                 </div>
                             </div>
                         </div>
+                        
+                        <!-- Quiz Section -->
+                        {% if quiz_questions %}
+                        <div class="row mt-4">
+                            <div class="col-12 text-center">
+                                <div class="card border-success">
+                                    <div class="card-body">
+                                        <h5 class="card-title text-success">
+                                            <i class="fas fa-question-circle me-2"></i>Bài kiểm tra trắc nghiệm
+                                        </h5>
+                                        <p class="card-text">
+                                            Kiểm tra kiến thức của bạn với {{ quiz_questions.count }} câu hỏi trắc nghiệm
+                                        </p>
+                                        <a href="{% url 'lesson_quiz' lesson.id %}" class="btn btn-success btn-lg">
+                                            <i class="fas fa-clipboard-check me-2"></i>Bắt đầu kiểm tra
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>

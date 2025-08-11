@@ -9,7 +9,7 @@ Provides Django admin interface for managing language exchange content:
 """
 
 from django.contrib import admin
-from .models import VietnamesePhrase, CafeLocation, LanguageExchangePost, PartnerRequest, Lesson, LessonPhrase
+from .models import VietnamesePhrase, CafeLocation, LanguageExchangePost, PartnerRequest, Lesson, LessonPhrase, QuizQuestion
 
 @admin.register(VietnamesePhrase)
 class VietnamesePhraseAdmin(admin.ModelAdmin):
@@ -60,3 +60,23 @@ class LessonPhraseAdmin(admin.ModelAdmin):
     search_fields = ['vietnamese_text', 'japanese_translation', 'english_translation']
     ordering = ['lesson', 'order']
     list_select_related = ['lesson']  # Optimize database queries
+
+@admin.register(QuizQuestion)
+class QuizQuestionAdmin(admin.ModelAdmin):
+    """Admin interface for managing quiz questions"""
+    list_display = ['lesson', 'question', 'correct_answer', 'order', 'created_at']
+    list_filter = ['lesson__category', 'lesson__difficulty', 'lesson']
+    search_fields = ['question', 'option_a', 'option_b', 'option_c', 'option_d']
+    ordering = ['lesson', 'order']
+    list_select_related = ['lesson']
+    fieldsets = (
+        ('Question Information', {
+            'fields': ('lesson', 'question', 'order')
+        }),
+        ('Answer Options', {
+            'fields': ('option_a', 'option_b', 'option_c', 'option_d', 'correct_answer')
+        }),
+        ('Learning Support', {
+            'fields': ('explanation',)
+        }),
+    )

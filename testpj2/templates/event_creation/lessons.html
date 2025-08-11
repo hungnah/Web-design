@@ -8,10 +8,10 @@
     <div class="row mb-4">
         <div class="col-12">
             <h1 class="text-center mb-3">
-                <i class="fas fa-graduation-cap"></i> ベトナム語レッスン
+                <i class="fas fa-graduation-cap"></i> Bài học tiếng Việt
             </h1>
             <p class="text-center text-muted">
-                実践的な状況を通じてベトナム語を学び、音声ガイド付きで学習
+                Học tiếng Việt thông qua các tình huống thực tế với hướng dẫn phát âm
             </p>
         </div>
     </div>
@@ -21,14 +21,14 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <h5 class="mb-0"><i class="fas fa-filter"></i> レッスンフィルター</h5>
+                    <h5 class="mb-0"><i class="fas fa-filter"></i> Lọc bài học</h5>
                 </div>
                 <div class="card-body">
                     <form method="get" class="row g-3">
                         <div class="col-md-6">
-                            <label for="category" class="form-label">カテゴリー</label>
+                            <label for="category" class="form-label">Chủ đề</label>
                             <select name="category" id="category" class="form-select">
-                                <option value="">すべてのカテゴリー</option>
+                                <option value="">Tất cả chủ đề</option>
                                 {% for category_code, category_name in categories %}
                                     <option value="{{ category_code }}" {% if category_code == selected_category %}selected{% endif %}>
                                         {{ category_name }}
@@ -37,9 +37,9 @@
                             </select>
                         </div>
                         <div class="col-md-6">
-                            <label for="difficulty" class="form-label">難易度</label>
+                            <label for="difficulty" class="form-label">Mức độ</label>
                             <select name="difficulty" id="difficulty" class="form-select">
-                                <option value="">すべての難易度</option>
+                                <option value="">Tất cả mức độ</option>
                                 {% for difficulty_code, difficulty_name in difficulties %}
                                     <option value="{{ difficulty_code }}" {% if difficulty_code == selected_difficulty %}selected{% endif %}>
                                         {{ difficulty_name }}
@@ -49,10 +49,10 @@
                         </div>
                         <div class="col-12">
                             <button type="submit" class="btn btn-primary">
-                                <i class="fas fa-search"></i> フィルター
+                                <i class="fas fa-search"></i> Lọc
                             </button>
                             <a href="{% url 'lessons' %}" class="btn btn-outline-secondary">
-                                <i class="fas fa-times"></i> フィルタークリア
+                                <i class="fas fa-times"></i> Xóa bộ lọc
                             </a>
                         </div>
                     </form>
@@ -87,15 +87,19 @@
                         
                         <div class="mt-3">
                             <small class="text-muted">
-                                <i class="fas fa-list"></i> {{ lesson.phrases.count }} フレーズ
+                                <i class="fas fa-list"></i> {{ lesson.phrases.count }} câu nói
                             </small>
                         </div>
                     </div>
                     
                     <div class="card-footer">
-                        <a href="{% url 'lesson_detail' lesson.id %}" class="btn btn-primary w-100">
-                            <i class="fas fa-play"></i> 学習開始
-                        </a>
+                        <div class="row g-2">
+                            <div class="col-12">
+                                <a href="{% url 'lesson_detail' lesson.id %}" class="btn btn-primary w-100">
+                                    <i class="fas fa-play"></i> Bắt đầu học
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -103,8 +107,8 @@
             <div class="col-12">
                 <div class="text-center">
                     <i class="fas fa-book fa-3x text-muted mb-3"></i>
-                    <h4>レッスンがありません</h4>
-                    <p class="text-muted">レッスンは近日中に追加されます！</p>
+                    <h4>Không có bài học nào</h4>
+                    <p class="text-muted">Các bài học sẽ được thêm vào trong thời gian sớm nhất!</p>
                 </div>
             </div>
         {% endfor %}
@@ -115,25 +119,25 @@
         <div class="row mt-5">
             <div class="col-12">
                 <div class="card">
-                                    <div class="card-header">
-                    <h5 class="mb-0"><i class="fas fa-chart-bar"></i> 統計</h5>
-                </div>
-                <div class="card-body">
-                    <div class="row text-center">
-                        <div class="col-md-4">
-                            <h4 class="text-primary">{{ lessons.count }}</h4>
-                            <small class="text-muted">総レッスン数</small>
-                        </div>
-                        <div class="col-md-4">
-                            <h4 class="text-success">{{ lessons|dictsort:"difficulty"|length }}</h4>
-                            <small class="text-muted">異なるレベル</small>
-                        </div>
-                        <div class="col-md-4">
-                            <h4 class="text-info">{{ lessons|dictsort:"category"|length }}</h4>
-                            <small class="text-muted">異なるカテゴリー</small>
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="fas fa-chart-bar"></i> Thống kê</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row text-center">
+                            <div class="col-md-4">
+                                <h4 class="text-primary">{{ lessons.count }}</h4>
+                                <small class="text-muted">Tổng số bài học</small>
+                            </div>
+                            <div class="col-md-4">
+                                <h4 class="text-success">{{ lessons|dictsort:"difficulty"|length }}</h4>
+                                <small class="text-muted">Các mức độ khác nhau</small>
+                            </div>
+                            <div class="col-md-4">
+                                <h4 class="text-info">{{ lessons|dictsort:"category"|length }}</h4>
+                                <small class="text-muted">Các chủ đề khác nhau</small>
+                            </div>
                         </div>
                     </div>
-                </div>
                 </div>
             </div>
         </div>
