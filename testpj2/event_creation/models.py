@@ -127,7 +127,7 @@ class LanguageExchangePost(models.Model):
     
     japanese_user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='japanese_posts', null=True, blank=True)
     vietnamese_user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='vietnamese_posts', null=False, blank=True)
-    phrase = models.ForeignKey(VietnamesePhrase, on_delete=models.CASCADE)
+    phrase = models.ForeignKey(VietnamesePhrase, on_delete=models.CASCADE, null=True, blank=True)
     cafe_location = models.ForeignKey(CafeLocation, on_delete=models.CASCADE)
     meeting_date = models.DateTimeField()
     status = models.CharField(max_length=15, choices=STATUS_CHOICES, default='active')
@@ -144,8 +144,9 @@ class LanguageExchangePost(models.Model):
         except ChatRoom.DoesNotExist:
             return None
     
-    def __str__(self):
-        return f"{self.japanese_user.username} - {self.phrase.vietnamese_text}"
+def __str__(self):
+    phrase_text = self.phrase.vietnamese_text if self.phrase else "No phrase"
+    return f"{self.japanese_user.username} - {phrase_text}"
 
 class Lesson(models.Model):
     """Model for Vietnamese language lessons"""

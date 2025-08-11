@@ -85,7 +85,10 @@ def dashboard(request):
         user.save()
         
         # Get user's recent language exchange posts
-        recent_posts = user.japanese_posts.all().select_related('phrase', 'cafe_location')[:5]
+        recent_posts = LanguageExchangePost.objects.filter(
+            vietnamese_user__nationality='vietnamese',
+            status='active'
+        ).select_related('phrase', 'cafe_location', 'vietnamese_user').order_by('-created_at')[:5]
         
         context = {
             'user': user,
@@ -105,6 +108,9 @@ def dashboard(request):
         
         # Only show active posts (not accepted ones)
         available_posts = available_posts.filter(status='active')
+
+        # Get user's recent language exchange posts
+        recent_posts = user.vietnamese_posts.all().select_related('phrase', 'cafe_location')[:5]
         
         # Calculate statistics
         accepted_posts_count = user.vietnamese_posts.filter(status='matched').count()
@@ -115,6 +121,7 @@ def dashboard(request):
             'available_posts': available_posts[:6],  # Show first 6 posts
             'accepted_posts_count': accepted_posts_count,
             'available_posts_count': available_posts_count,
+            'recent_posts' : recent_posts,
         }
         return render(request, 'user_profile/vietnamese_dashboard.html', context)
 

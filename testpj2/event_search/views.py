@@ -18,14 +18,14 @@ def available_posts(request):
     Display available language exchange posts for Vietnamese users
     Allows filtering by city and shows only active (unmatched) posts
     """
-    if request.user.nationality != 'vietnamese':
+    if request.user.nationality != 'japanese':
         return redirect('dashboard')
     
     city = request.GET.get('city', request.user.city)
     posts = LanguageExchangePost.objects.filter(
-        japanese_user__nationality='japanese',
+        vietnamese_user__nationality='vietnamese',
         cafe_location__city=city
-    ).select_related('japanese_user', 'phrase', 'cafe_location')
+    ).select_related('vietnamese_user', 'phrase', 'cafe_location')
     
     # Only show active posts (not accepted ones)
     posts = posts.filter(status='active')

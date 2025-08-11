@@ -89,12 +89,14 @@ def lesson_detail(request, lesson_id):
     return render(request, 'event_creation/lesson_detail.html', context)
 
 @login_required
-def create_post(request, phrase_id):
+def create_post(request, phrase_id=None):
     """Create a language exchange post"""
     # if request.user.nationality != 'japanese':
     #     return redirect('dashboard')
+    phrase = None
     
-    phrase = get_object_or_404(VietnamesePhrase, id=phrase_id)
+    if phrase_id:
+        phrase = get_object_or_404(VietnamesePhrase, id=phrase_id)
     
     if request.method == 'POST':
         form = LanguageExchangePostForm(request.POST)
