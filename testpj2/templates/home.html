@@ -579,28 +579,39 @@ body::before {
                 <h1 class="display-3 mb-4 floating">Vietnam-Japan Connect</h1>
                 <p class="lead mb-4">{% trans "Nền tảng kết nối giao lưu ngôn ngữ và văn hóa giữa Việt Nam và Nhật Bản" %}</p>
                 <div class="hero-cta">
-                    <a href="{% url 'login' %}" class="btn btn-primary btn-lg">
-                        <i class="fas fa-sign-in-alt me-2"></i>{% trans "Đăng Nhập" %}
-                    </a>
-                    <a href="{% url 'register' %}" class="btn btn-outline-light btn-lg">
-                        <i class="fas fa-user-plus me-2"></i>{% trans "Đăng Ký" %}
-                    </a>
-                    <!-- Language switching form -->
-                    <div class="language-switcher mt-3" style="font-size:0.8rem;">
-                        <form action="{% url 'set_language' %}" method="post" style="display:inline;">
-                            {% csrf_token %}
-                            <button type="submit" name="language" value="vi" 
-                                class="btn btn-sm btn-outline-light px-2 py-1" style="margin-right:4px;">
-                                Tiếng Việt
-                            </button>
-                        </form>
-                        <form action="{% url 'set_language' %}" method="post" style="display:inline;">
-                            {% csrf_token %}
-                            <button type="submit" name="language" value="ja" 
-                                class="btn btn-sm btn-outline-light px-2 py-1">
-                                日本語
-                            </button>
-                        </form>
+                    <!-- Hàng 1: Đăng Nhập và Đăng Ký -->
+                    <div class="row justify-content-center mb-3">
+                        <div class="col-6 col-md-4">
+                            <a href="{% url 'login' %}" class="btn btn-primary btn-lg w-100">
+                                <i class="fas fa-sign-in-alt me-2"></i>{% trans "Đăng Nhập" %}
+                            </a>
+                        </div>
+                        <div class="col-6 col-md-4">
+                            <a href="{% url 'register' %}" class="btn btn-outline-light btn-lg w-100">
+                                <i class="fas fa-user-plus me-2"></i>{% trans "Đăng Ký" %}
+                            </a>
+                        </div>
+                    </div>
+                    <!-- Hàng 2: Tiếng Việt và 日本語 -->
+                    <div class="row justify-content-center">
+                        <div class="col-6 col-md-4">
+                            <form action="{% url 'set_language' %}" method="post" class="w-100">
+                                {% csrf_token %}
+                                <button type="submit" name="language" value="vi" 
+                                    class="btn btn-outline-light btn-lg w-100">
+                                    Tiếng Việt
+                                </button>
+                            </form>
+                        </div>
+                        <div class="col-6 col-md-4">
+                            <form action="{% url 'set_language' %}" method="post" class="w-100">
+                                {% csrf_token %}
+                                <button type="submit" name="language" value="ja" 
+                                    class="btn btn-outline-light btn-lg w-100">
+                                    日本語
+                                </button>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
