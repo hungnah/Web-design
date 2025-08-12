@@ -22,6 +22,17 @@
                     Danh sách các bài đăng bạn đã chấp nhận
                 {% endif %}
             </p>
+            {% if user.nationality == 'vietnamese' %}
+                <div class="text-center">
+                {% if phrase %}
+                    <a href="{% url 'create_post' phrase.id %}" class="btn btn-outline-success">
+                {% else %}
+                    <a href="{% url 'create_post' %}" class="btn btn-outline-success">
+                {% endif %}
+                    <i class="fas fa-coffee"></i> パートナーを募集する
+                </a>
+            </div>
+            {% endif %}
         </div>
     </div>
 
@@ -84,7 +95,11 @@
                         {% else %}
                             <div class="mb-3">
                                 <small class="text-muted">
-                                    日本人: {{ post.japanese_user.full_name|default:post.japanese_user.username }}
+                                    {% if post.japanese_user %}
+                                        日本人: {{ post.japanese_user.full_name|default:post.japanese_user.username }}
+                                    {% else %}
+                                        日本人: まだマッチングしていません
+                                    {% endif %}
                                 </small>
                             </div>
                         {% endif %}

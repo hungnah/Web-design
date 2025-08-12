@@ -27,35 +27,45 @@
                 </div>
             </div>
 
-            <!-- Quick Stats -->
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="mb-0"><i class="fas fa-chart-bar"></i> Thống kê</h5>
-                </div>
-                <div class="card-body">
-                    <div class="row text-center">
-                        <div class="col-6">
-                            <h4 class="text-primary">{{ accepted_posts_count }}</h4>
-                            <small class="text-muted">Bài đăng đã chấp nhận</small>
-                        </div>
-                        <div class="col-6">
-                            <h4 class="text-success">{{ available_posts_count }}</h4>
-                            <small class="text-muted">Bài đăng có sẵn</small>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-8">
-            <!-- Welcome Section -->
+            <!-- Recent Posts -->
             <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-list"></i> 最近の投稿</h5>
+                </div>
                 <div class="card-body">
-                    <h2 class="card-title">Chào mừng, {{ user.full_name|default:user.username }}!</h2>
-                    <p class="card-text">Giúp người Nhật học tiếng Việt và kết nối văn hóa Việt - Nhật.</p>
-                    <a href="/search/available-posts/" class="btn btn-primary">
-                        <i class="fas fa-search"></i> Xem tất cả bài đăng
-                    </a>
+                    {% if recent_posts %}
+                        {% for post in recent_posts|slice:":3" %}
+                            <div class="d-flex justify-content-between align-items-center mb-3 p-3 border rounded">
+                                <div>
+                                    <h6 class="mb-1">{{ post.phrase.vietnamese_text }}</h6>
+                                    <small class="text-muted">
+                                        <i class="fas fa-map-marker-alt"></i> {{ post.cafe_location.name }} - 
+                                        <i class="fas fa-calendar"></i> {{ post.meeting_date|date:"M d, Y H:i" }}
+                                    </small>
+                                </div>
+                                <span class="badge bg-{% if post.status == 'active' %}warning{% elif post.status == 'matched' %}success{% else %}secondary{% endif %}">
+                                    {{ post.get_status_display }}
+                                </span>
+                            </div>
+                        {% endfor %}
+                        <div class="text-center">
+                            <a href="/create/my-posts/" class="btn btn-outline-primary">すべての投稿を見る</a>
+                        </div>
+                        <div class="text-center">
+                        {% if phrase %}
+                            <a href="{% url 'create_post' phrase.id %}" class="btn btn-outline-success">
+                        {% else %}
+                            <a href="{% url 'create_post' %}" class="btn btn-outline-success">
+                        {% endif %}
+                            <i class="fas fa-coffee"></i> パートナーを募集する
+                        </a>
+                    </div>
+                    {% else %}
+                        <p class="text-muted text-center">まだ投稿がありません。</p>
+                        <div class="text-center">
+                            <a href="/create/create-post/" class="btn btn-primary">最初の投稿を作成</a>
+                        </div>
+                    {% endif %}
                 </div>
             </div>
 
@@ -139,121 +149,6 @@
                         <a href="/create/phrases/" class="btn btn-outline-primary">
                             <i class="fas fa-plus"></i> Học từ vựng
                         </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Available Posts Section -->
-            <div class="card">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0"><i class="fas fa-list"></i> Bài đăng từ người Nhật</h5>
-                    <span class="badge bg-primary">{{ available_posts|length }} bài đăng</span>
-                </div>
-                <div class="card-body">
-                    <!-- Filter Section -->
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <label for="city" class="form-label">Thành phố</label>
-                            <select id="city" class="form-select" onchange="filterPosts()">
-                                <option value="">Tất cả thành phố</option>
-                                {% for city_code, city_name in user.CITY_CHOICES %}
-                                    <option value="{{ city_code }}" {% if city_code == user.city %}selected{% endif %}>{{ city_name }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="category" class="form-label">Danh mục</label>
-                            <select id="category" class="form-select" onchange="filterPosts()">
-                                <option value="">Tất cả danh mục</option>
-                                <option value="greetings">Chào hỏi</option>
-                                <option value="food">Ẩm thực</option>
-                                <option value="shopping">Mua sắm</option>
-                                <option value="transport">Giao thông</option>
-                                <option value="daily">Cuộc sống hàng ngày</option>
-                                <option value="business">Công việc</option>
-                                <option value="travel">Du lịch</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <!-- Posts List -->
-                    <div id="posts-container">
-                        {% if available_posts %}
-                            <div class="row">
-                                {% for post in available_posts %}
-                                    <div class="col-md-6 mb-3 post-item" 
-                                         data-city="{{ post.cafe_location.city }}" 
-                                         data-category="{{ post.phrase.category }}">
-                                        <div class="card h-100">
-                                            <div class="card-header d-flex justify-content-between align-items-center">
-                                                <div>
-                                                    <h6 class="mb-0">{{ post.phrase.vietnamese_text }}</h6>
-                                                    <small class="text-muted">
-                                                        <i class="fas fa-user me-1"></i>
-                                                        {{ post.japanese_user.full_name|default:post.japanese_user.username }}
-                                                    </small>
-                                                </div>
-                                                <div class="text-end">
-                                                    <span class="badge bg-info">{{ post.phrase.get_category_display }}</span>
-                                                    <span class="badge bg-warning ms-1">Chờ chấp nhận</span>
-                                                </div>
-                                            </div>
-                                            <div class="card-body">
-                                                <p class="card-text">
-                                                    <strong>Tiếng Nhật:</strong> {{ post.phrase.japanese_translation }}<br>
-                                                    <strong>Tiếng Anh:</strong> {{ post.phrase.english_translation }}
-                                                </p>
-                                                
-                                                <div class="row text-center mb-3">
-                                                    <div class="col-4">
-                                                        <small class="text-muted d-block">Địa điểm</small>
-                                                        <strong>{{ post.cafe_location.name }}</strong>
-                                                    </div>
-                                                    <div class="col-4">
-                                                        <small class="text-muted d-block">Thành phố</small>
-                                                        <strong>{{ post.cafe_location.get_city_display }}</strong>
-                                                    </div>
-                                                    <div class="col-4">
-                                                        <small class="text-muted d-block">Thời gian</small>
-                                                        <strong>{{ post.meeting_date|date:"d/m H:i" }}</strong>
-                                                    </div>
-                                                </div>
-                                                
-                                                {% if post.notes %}
-                                                    <div class="mb-3">
-                                                        <small class="text-muted"><strong>Ghi chú:</strong></small><br>
-                                                        <small>{{ post.notes|truncatewords:15 }}</small>
-                                                    </div>
-                                                {% endif %}
-                                                
-                                                <div class="d-flex justify-content-between align-items-center">
-                                                    <small class="text-muted">
-                                                        <i class="fas fa-clock me-1"></i>
-                                                        {{ post.created_at|timesince }} trước
-                                                    </small>
-                                                    <a href="/create/accept-post/{{ post.id }}/" 
-                                                       class="btn btn-primary btn-sm"
-                                                       onclick="return acceptPost({{ post.id }}, '{{ post.phrase.vietnamese_text }}')">
-                                                        <i class="fas fa-handshake me-1"></i>
-                                                        Chấp nhận
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                {% endfor %}
-                            </div>
-                        {% else %}
-                            <div class="text-center py-4">
-                                <i class="fas fa-search fa-3x text-muted mb-3"></i>
-                                <h5 class="text-muted">Không có bài đăng nào</h5>
-                                <p class="text-muted">Hiện tại không có bài đăng nào trong khu vực của bạn.</p>
-                                <a href="/search/available-posts/" class="btn btn-primary">
-                                    <i class="fas fa-search me-2"></i>
-                                    Xem tất cả bài đăng
-                                </a>
-                            </div>
-                        {% endif %}
                     </div>
                 </div>
             </div>

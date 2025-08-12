@@ -89,8 +89,8 @@
                         {% endif %}
                     </div>
                     <div class="card-footer text-center">
-                        <a href="{% url 'create_post' phrase.id %}" class="btn btn-success">
-                            <i class="fas fa-coffee"></i> このフレーズで投稿を作成
+                        <a href="{% url 'accept_post' post_id phrase.id %}" class="btn btn-success">
+                            <i class="fas fa-coffee"></i> このフレーズで応募
                         </a>
                     </div>
                 </div>
