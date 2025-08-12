@@ -16,6 +16,7 @@ The `urlpatterns` list routes URLs to views. For more information please see:
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.views.i18n import set_language
 from django.conf import settings
 from django.conf.urls.static import static
 from django.views.generic import RedirectView
@@ -32,6 +33,7 @@ urlpatterns = [
     path('chat/', include('chat_system.urls')),      # Real-time messaging system
     path('create/', include('event_creation.urls')), # Creating posts, lessons, requests
     path('search/', include('event_search.urls')),   # Finding & browsing opportunities
+    path('i18n/setlang/', set_language, name='set_language'),  # Language setting endpoint
 ]
 
 if settings.DEBUG:

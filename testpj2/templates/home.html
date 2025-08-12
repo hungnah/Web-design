@@ -1,12 +1,14 @@
 {% extends 'base.html' %}
 
+{% load i18n %}
+
 {% block title %}Vietnam-Japan Connect - Kết nối Việt Nam - Nhật Bản{% endblock %}
 
 {% block extra_css %}
 <style>
 /* Hero section với ảnh nền và hiệu ứng */
 .hero-section {
-    background: linear-gradient(135deg, rgba(103, 126, 234, 0.9), rgba(118, 75, 162, 0.9)),
+    background: linear-gradient(135deg, rgba(255, 107, 53, 0.9), rgba(247, 147, 30, 0.9)),
                 url("https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1471&q=80") !important;
     background-size: cover !important;
     background-position: center !important;
@@ -68,7 +70,7 @@
 
 /* Nền trang với gradient nhẹ */
 body {
-    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #cbd5e1 100%);
+    background: linear-gradient(135deg, #fff8f3 0%, #ffe8d6 50%, #ffd4a3 100%);
     min-height: 100vh;
     position: relative;
 }
@@ -80,7 +82,7 @@ body::before {
     left: 0;
     width: 100%;
     height: 100%;
-    background: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23667eea' fill-opacity='0.02'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z'/%3E%3C/g%3E%3C/svg%3E");
+    background: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ff6b35' fill-opacity='0.02'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z'/%3E%3C/g%3E%3C/svg%3E");
     z-index: -1;
 }
 
@@ -103,7 +105,7 @@ body::before {
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(135deg, rgba(103, 126, 234, 0.05), rgba(118, 75, 162, 0.05));
+    background: linear-gradient(135deg, rgba(255, 107, 53, 0.05), rgba(247, 147, 30, 0.05));
     z-index: -1;
 }
 
@@ -112,7 +114,7 @@ body::before {
     font-weight: 800;
     font-size: 3rem;
     margin-bottom: 1rem;
-    background: linear-gradient(135deg, #667eea, #764ba2);
+    background: linear-gradient(135deg, #ff6b35, #f7931e);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -128,12 +130,12 @@ body::before {
 }
 
 .feature-card {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(248, 250, 252, 0.9));
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 248, 243, 0.9));
     border-radius: 20px;
     padding: 2.5rem;
     height: 100%;
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    border: 1px solid rgba(103, 126, 234, 0.1);
+    border: 1px solid rgba(255, 107, 53, 0.1);
     position: relative;
     overflow: hidden;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
@@ -146,7 +148,7 @@ body::before {
     left: -100%;
     width: 100%;
     height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(103, 126, 234, 0.1), transparent);
+    background: linear-gradient(90deg, transparent, rgba(255, 107, 53, 0.1), transparent);
     transition: left 0.6s ease;
 }
 
@@ -156,12 +158,12 @@ body::before {
 
 .feature-card:hover {
     transform: translateY(-15px) scale(1.02);
-    box-shadow: 0 25px 60px rgba(103, 126, 234, 0.15);
-    border-color: rgba(103, 126, 234, 0.3);
+    box-shadow: 0 25px 60px rgba(255, 107, 53, 0.15);
+    border-color: rgba(255, 107, 53, 0.3);
 }
 
 .feature-icon {
-    color: #667eea;
+    color: #ff6b35;
     margin-bottom: 2rem;
     transition: transform 0.3s ease;
 }
@@ -184,11 +186,11 @@ body::before {
 }
 
 .info-card {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(248, 250, 252, 0.95));
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 248, 243, 0.95));
     border-radius: 20px;
     padding: 2.5rem;
     height: 100%;
-    border: 1px solid rgba(231, 76, 60, 0.1);
+    border: 1px solid rgba(255, 107, 53, 0.1);
     transition: all 0.3s ease;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
     position: relative;
@@ -202,7 +204,7 @@ body::before {
     left: 0;
     width: 100%;
     height: 3px;
-    background: linear-gradient(90deg, #667eea, #764ba2);
+    background: linear-gradient(90deg, #ff6b35, #f7931e);
     transform: scaleX(0);
     transition: transform 0.3s ease;
 }
@@ -238,8 +240,8 @@ body::before {
 }
 
 .feature-list li:hover {
-    color: #667eea;
-    border-left-color: #667eea;
+    color: #ff6b35;
+    border-left-color: #ff6b35;
     transform: translateX(5px);
 }
 
@@ -253,11 +255,11 @@ body::before {
 }
 
 .cta-section {
-    background: linear-gradient(135deg, rgba(103, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+    background: linear-gradient(135deg, rgba(255, 107, 53, 0.1), rgba(247, 147, 30, 0.1));
     border-radius: 25px;
     padding: 4rem 3rem;
     margin-top: 3rem;
-    border: 1px solid rgba(103, 126, 234, 0.2);
+    border: 1px solid rgba(255, 107, 53, 0.2);
     position: relative;
     overflow: hidden;
 }
@@ -269,7 +271,7 @@ body::before {
     left: -50%;
     width: 200%;
     height: 200%;
-    background: radial-gradient(circle, rgba(103, 126, 234, 0.05) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(255, 107, 53, 0.05) 0%, transparent 70%);
     animation: rotate 20s linear infinite;
 }
 
@@ -321,28 +323,28 @@ body::before {
 }
 
 .btn-primary {
-    background: linear-gradient(135deg, #667eea, #764ba2);
+    background: linear-gradient(135deg, #ff6b35, #f7931e);
     border: none;
-    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+    box-shadow: 0 8px 25px rgba(255, 107, 53, 0.3);
 }
 
 .btn-primary:hover {
     transform: translateY(-3px);
-    box-shadow: 0 15px 35px rgba(102, 126, 234, 0.4);
+    box-shadow: 0 15px 35px rgba(255, 107, 53, 0.4);
 }
 
 .btn-outline-primary {
-    border: 2px solid #667eea;
-    color: #667eea;
+    border: 2px solid #ff6b35;
+    color: #ff6b35;
     background: transparent;
 }
 
 .btn-outline-primary:hover {
-    background: linear-gradient(135deg, #667eea, #764ba2);
+    background: linear-gradient(135deg, #ff6b35, #f7931e);
     border-color: transparent;
     color: white;
     transform: translateY(-3px);
-    box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+    box-shadow: 0 10px 25px rgba(255, 107, 53, 0.3);
 }
 
 .btn-outline-secondary {
@@ -356,6 +358,51 @@ body::before {
     border-color: #64748b;
     color: white;
     transform: translateY(-3px);
+}
+
+.language-switcher button {
+    position: relative;
+    padding: 0.4rem 0.8rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border-radius: 12px;
+    border: 2px solid #388e3c;
+    background: #388e3c;
+    color: white;
+    cursor: pointer;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    margin-right: 6px;
+    z-index: 1;
+}
+
+.language-switcher button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(76, 175, 80, 0.25), transparent);
+    transition: left 0.5s ease;
+    z-index: -1;
+    border-radius: 12px;
+}
+
+.language-switcher button:hover,
+.language-switcher button:focus {
+    color: white;
+    border-color: #388e3c; /* 濃い緑 */
+    background: #388e3c;
+    outline: none;
+}
+
+.language-switcher button:hover::before {
+    left: 100%;
+}
+
+.language-switcher button:last-child {
+    margin-right: 0;
 }
 
 /* Hero CTA buttons */
@@ -376,6 +423,10 @@ body::before {
     transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
+    min-width: 200px; /* Đảm bảo kích thước tối thiểu */
+    width: auto; /* Cho phép nút tự điều chỉnh theo nội dung */
+    display: inline-block;
+    text-align: center;
 }
 
 .hero-cta .btn::before {
@@ -396,6 +447,67 @@ body::before {
 .hero-cta .btn:hover {
     transform: translateY(-5px);
     box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+}
+
+/* Nút đăng nhập - màu trắng với text cam */
+.hero-cta .btn-primary {
+    background: white;
+    border: 2px solid white;
+    color: #ff6b35;
+    font-weight: 700;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.hero-cta .btn-primary:hover {
+    background: rgba(255, 255, 255, 0.9);
+    border-color: white;
+    color: #e55a2b;
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+/* Nút đăng ký - màu trắng với text cam (giống hệt nút đăng nhập) */
+.hero-cta .btn-outline-light {
+    background: white;
+    border: 2px solid white;
+    color: #ff6b35;
+    font-weight: 700;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.hero-cta .btn-outline-light:hover {
+    background: rgba(255, 255, 255, 0.9);
+    border-color: white;
+    color: #e55a2b;
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+/* Hiệu ứng chung cho cả hai nút */
+.hero-cta .btn {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.hero-cta .btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.6s ease;
+}
+
+.hero-cta .btn:hover::before {
+    left: 100%;
+}
+
+.hero-cta .btn:active {
+    transform: translateY(-2px) scale(1.02);
+    transition: all 0.1s ease;
 }
 
 /* Floating elements animation */
@@ -465,14 +577,42 @@ body::before {
         <div class="row justify-content-center">
             <div class="col-lg-8 text-center">
                 <h1 class="display-3 mb-4 floating">Vietnam-Japan Connect</h1>
-                <p class="lead mb-4">Nền tảng kết nối giao lưu ngôn ngữ và văn hóa giữa Việt Nam và Nhật Bản</p>
+                <p class="lead mb-4">{% trans "Nền tảng kết nối giao lưu ngôn ngữ và văn hóa giữa Việt Nam và Nhật Bản" %}</p>
                 <div class="hero-cta">
-                    <a href="{% url 'login' %}" class="btn btn-primary btn-lg">
-                        <i class="fas fa-sign-in-alt me-2"></i>Đăng Nhập
-                    </a>
-                    <a href="{% url 'register' %}" class="btn btn-outline-light btn-lg">
-                        <i class="fas fa-user-plus me-2"></i>Đăng Ký
-                    </a>
+                    <!-- Hàng 1: Đăng Nhập và Đăng Ký -->
+                    <div class="row justify-content-center mb-3">
+                        <div class="col-6 col-md-4">
+                            <a href="{% url 'login' %}" class="btn btn-primary btn-lg w-100">
+                                <i class="fas fa-sign-in-alt me-2"></i>{% trans "Đăng Nhập" %}
+                            </a>
+                        </div>
+                        <div class="col-6 col-md-4">
+                            <a href="{% url 'register' %}" class="btn btn-outline-light btn-lg w-100">
+                                <i class="fas fa-user-plus me-2"></i>{% trans "Đăng Ký" %}
+                            </a>
+                        </div>
+                    </div>
+                    <!-- Hàng 2: Tiếng Việt và 日本語 -->
+                    <div class="row justify-content-center">
+                        <div class="col-6 col-md-4">
+                            <form action="{% url 'set_language' %}" method="post" class="w-100">
+                                {% csrf_token %}
+                                <button type="submit" name="language" value="vi" 
+                                    class="btn btn-outline-light btn-lg w-100">
+                                    Tiếng Việt
+                                </button>
+                            </form>
+                        </div>
+                        <div class="col-6 col-md-4">
+                            <form action="{% url 'set_language' %}" method="post" class="w-100">
+                                {% csrf_token %}
+                                <button type="submit" name="language" value="ja" 
+                                    class="btn btn-outline-light btn-lg w-100">
+                                    日本語
+                                </button>
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -484,8 +624,8 @@ body::before {
     <div class="container">
         <div class="row">
             <div class="col-lg-12 text-center mb-5">
-                <h2 class="section-title">Về Vietnam-Japan Connect</h2>
-                <p class="section-subtitle">Nền tảng kết nối giao lưu ngôn ngữ và văn hóa</p>
+                <h2 class="section-title">{% trans "Về Vietnam-Japan Connect" %}</h2>
+                <p class="section-subtitle">{% trans "Nền tảng kết nối giao lưu ngôn ngữ và văn hóa" %}</p>
             </div>
         </div>
         
@@ -495,8 +635,8 @@ body::before {
                     <div class="feature-icon">
                         <i class="fas fa-comments fa-3x"></i>
                     </div>
-                    <h4>Giao Lưu Ngôn Ngữ</h4>
-                    <p>Kết nối với người bản xứ để thực hành tiếng Việt và tiếng Nhật một cách tự nhiên và hiệu quả.</p>
+                    <h4>{% trans "Giao Lưu Ngôn Ngữ" %}</h4>
+                    <p>{% trans "Kết nối với người bản xứ để thực hành tiếng Việt và tiếng Nhật một cách tự nhiên và hiệu quả." %}</p>
                 </div>
             </div>
             
@@ -505,8 +645,8 @@ body::before {
                     <div class="feature-icon">
                         <i class="fas fa-globe-asia fa-3x"></i>
                     </div>
-                    <h4>Trao Đổi Văn Hóa</h4>
-                    <p>Khám phá và chia sẻ những nét đẹp văn hóa độc đáo giữa Việt Nam và Nhật Bản.</p>
+                    <h4>{% trans "Trao Đổi Văn Hóa" %}</h4>
+                    <p>{% trans "Khám phá và chia sẻ những nét đẹp văn hóa độc đáo giữa Việt Nam và Nhật Bản." %}</p>
                 </div>
             </div>
             
@@ -515,8 +655,8 @@ body::before {
                     <div class="feature-icon">
                         <i class="fas fa-users fa-3x"></i>
                     </div>
-                    <h4>Cộng Đồng Thân Thiện</h4>
-                    <p>Tham gia cộng đồng năng động với hàng nghìn thành viên đam mê học tập và kết bạn.</p>
+                    <h4>{% trans "Cộng Đồng Thân Thiện" %}</h4>
+                    <p>{% trans "Tham gia cộng đồng năng động với hàng nghìn thành viên đam mê học tập và kết bạn." %}</p>
                 </div>
             </div>
         </div>
@@ -524,24 +664,24 @@ body::before {
         <div class="row mt-5">
             <div class="col-lg-6">
                 <div class="info-card">
-                    <h4><i class="fas fa-graduation-cap me-2"></i>Học Tập Hiệu Quả</h4>
+                    <h4><i class="fas fa-graduation-cap me-2"></i>{% trans "Học Tập Hiệu Quả" %}</h4>
                     <ul class="feature-list">
-                        <li><i class="fas fa-check text-success me-2"></i>Luyện tập với người bản xứ</li>
-                        <li><i class="fas fa-check text-success me-2"></i>Tài liệu học tập phong phú</li>
-                        <li><i class="fas fa-check text-success me-2"></i>Phương pháp học tương tác</li>
-                        <li><i class="fas fa-check text-success me-2"></i>Theo dõi tiến độ học tập</li>
+                        <li><i class="fas fa-check text-success me-2"></i>{% trans "Luyện tập với người bản xứ" %}</li>
+                        <li><i class="fas fa-check text-success me-2"></i>{% trans "Tài liệu học tập phong phú" %}</li>
+                        <li><i class="fas fa-check text-success me-2"></i>{% trans "Phương pháp học tương tác" %}</li>
+                        <li><i class="fas fa-check text-success me-2"></i>{% trans "Theo dõi tiến độ học tập" %}</li>
                     </ul>
                 </div>
             </div>
             
             <div class="col-lg-6">
                 <div class="info-card">
-                    <h4><i class="fas fa-heart me-2"></i>Kết Nối Ý Nghĩa</h4>
+                    <h4><i class="fas fa-heart me-2"></i>{% trans "Kết Nối Ý Nghĩa" %}</h4>
                     <ul class="feature-list">
-                        <li><i class="fas fa-check text-success me-2"></i>Tìm kiếm partner phù hợp</li>
-                        <li><i class="fas fa-check text-success me-2"></i>Chat realtime tiện lợi</li>
-                        <li><i class="fas fa-check text-success me-2"></i>Tổ chức các buổi gặp mặt</li>
-                        <li><i class="fas fa-check text-success me-2"></i>Xây dựng tình bạn bền vững</li>
+                        <li><i class="fas fa-check text-success me-2"></i>{% trans "Tìm kiếm partner phù hợp" %}</li>
+                        <li><i class="fas fa-check text-success me-2"></i>{% trans "Chat realtime tiện lợi" %}</li>
+                        <li><i class="fas fa-check text-success me-2"></i>{% trans "Tổ chức các buổi gặp mặt" %}</li>
+                        <li><i class="fas fa-check text-success me-2"></i>{% trans "Xây dựng tình bạn bền vững" %}</li>
                     </ul>
                 </div>
             </div>
@@ -550,34 +690,34 @@ body::before {
         <!-- Phần so sánh với các web học tập ngoại ngữ khác -->
         <div class="row mt-5">
             <div class="col-lg-12 text-center mb-5">
-                <h2 class="section-title">Tại Sao Chọn Vietnam-Japan Connect?</h2>
-                <p class="section-subtitle">Những điểm khác biệt làm nên sự độc đáo của chúng tôi</p>
+                <h2 class="section-title">{% trans "Tại Sao Chọn Vietnam-Japan Connect?" %}</h2>
+                <p class="section-subtitle">{% trans "Những điểm khác biệt làm nên sự độc đáo của chúng tôi" %}</p>
             </div>
         </div>
         
         <div class="row g-4">
             <div class="col-lg-6">
                 <div class="info-card">
-                    <h4><i class="fas fa-star text-warning me-2"></i>Khác Biệt So Với Các Web Học Ngoại Ngữ Khác</h4>
+                    <h4><i class="fas fa-star text-warning me-2"></i>{% trans "Khác Biệt So Với Các Web Học Ngoại Ngữ Khác" %}</h4>
                     <ul class="feature-list">
-                        <li><i class="fas fa-arrow-right text-primary me-2"></i><strong>Chuyên biệt Việt-Nhật:</strong> Tập trung vào mối quan hệ song phương độc đáo</li>
-                        <li><i class="fas fa-arrow-right text-primary me-2"></i><strong>Giao lưu thực tế:</strong> Không chỉ học qua app, mà còn kết nối con người thật</li>
-                        <li><i class="fas fa-arrow-right text-primary me-2"></i><strong>Văn hóa song song:</strong> Học ngôn ngữ đi đôi với hiểu văn hóa</li>
-                        <li><i class="fas fa-arrow-right text-primary me-2"></i><strong>Cộng đồng địa phương:</strong> Kết nối với người thật từ Việt Nam và Nhật Bản</li>
-                        <li><i class="fas fa-arrow-right text-primary me-2"></i><strong>Học tập tương tác:</strong> Thực hành trực tiếp thay vì chỉ luyện tập một chiều</li>
+                        <li><i class="fas fa-arrow-right text-primary me-2"></i><strong>{% trans "Chuyên biệt Việt-Nhật:" %}</strong> {% trans "Tập trung vào mối quan hệ song phương độc đáo" %}</li>
+                        <li><i class="fas fa-arrow-right text-primary me-2"></i><strong>{% trans "Giao lưu thực tế:" %}</strong> {% trans "Không chỉ học qua app, mà còn kết nối con người thật" %}</li>
+                        <li><i class="fas fa-arrow-right text-primary me-2"></i><strong>{% trans "Văn hóa song song:" %}</strong> {% trans "Học ngôn ngữ đi đôi với hiểu văn hóa" %}</li>
+                        <li><i class="fas fa-arrow-right text-primary me-2"></i><strong>{% trans "Cộng đồng địa phương:" %}</strong> {% trans "Kết nối với người thật từ Việt Nam và Nhật Bản" %}</li>
+                        <li><i class="fas fa-arrow-right text-primary me-2"></i><strong>{% trans "Học tập tương tác:" %}</strong> {% trans "Thực hành trực tiếp thay vì chỉ luyện tập một chiều" %}</li>
                     </ul>
                 </div>
             </div>
             
             <div class="col-lg-6">
                 <div class="info-card">
-                    <h4><i class="fas fa-trophy text-success me-2"></i>Ưu Điểm Vượt Trội</h4>
+                    <h4><i class="fas fa-trophy text-success me-2"></i>{% trans "Ưu Điểm Vượt Trội" %}</h4>
                     <ul class="feature-list">
-                        <li><i class="fas fa-check-circle text-success me-2"></i><strong>Không có rào cản ngôn ngữ:</strong> Hỗ trợ đa ngôn ngữ hoàn hảo</li>
-                        <li><i class="fas fa-check-circle text-success me-2"></i><strong>Học tập có mục tiêu:</strong> Định hướng rõ ràng cho từng cấp độ</li>
-                        <li><i class="fas fa-check-circle text-success me-2"></i><strong>Kết nối bền vững:</strong> Xây dựng mối quan hệ lâu dài</li>
-                        <li><i class="fas fa-check-circle text-success me-2"></i><strong>Hỗ trợ 24/7:</strong> Cộng đồng luôn sẵn sàng giúp đỡ</li>
-                        <li><i class="fas fa-check-circle text-success me-2"></i><strong>Miễn phí hoàn toàn:</strong> Không có phí ẩn hay giới hạn</li>
+                        <li><i class="fas fa-check-circle text-success me-2"></i><strong>{% trans "Không có rào cản ngôn ngữ:" %}</strong> {% trans "Hỗ trợ đa ngôn ngữ hoàn hảo" %}</li>
+                        <li><i class="fas fa-check-circle text-success me-2"></i><strong>{% trans "Học tập có mục tiêu:" %}</strong> {% trans "Định hướng rõ ràng cho từng cấp độ" %}</li>
+                        <li><i class="fas fa-check-circle text-success me-2"></i><strong>{% trans "Kết nối bền vững:" %}</strong> {% trans "Xây dựng mối quan hệ lâu dài" %}</li>
+                        <li><i class="fas fa-check-circle text-success me-2"></i><strong>{% trans "Hỗ trợ 24/7:" %}</strong> {% trans "Cộng đồng luôn sẵn sàng giúp đỡ" %}</li>
+                        <li><i class="fas fa-check-circle text-success me-2"></i><strong>{% trans "Miễn phí hoàn toàn:" %}</strong> {% trans "Không có phí ẩn hay giới hạn" %}</li>
                     </ul>
                 </div>
             </div>
@@ -586,34 +726,34 @@ body::before {
         <div class="row mt-4">
             <div class="col-12">
                 <div class="info-card text-center">
-                    <h4><i class="fas fa-lightbulb text-info me-2"></i>Phương Pháp Học Tập Độc Đáo</h4>
+                    <h4><i class="fas fa-lightbulb text-info me-2"></i>{% trans "Phương Pháp Học Tập Độc Đáo" %}</h4>
                     <div class="row g-3 mt-3">
                         <div class="col-md-3">
                             <div class="text-center">
                                 <i class="fas fa-handshake fa-2x text-primary mb-2"></i>
-                                <h6>Kết Nối Trực Tiếp</h6>
-                                <small class="text-muted">Gặp gỡ và học từ người bản xứ thật</small>
+                                <h6>{% trans "Kết Nối Trực Tiếp" %}</h6>
+                                <small class="text-muted">{% trans "Gặp gỡ và học từ người bản xứ thật" %}</small>
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="text-center">
                                 <i class="fas fa-comments fa-2x text-success mb-2"></i>
-                                <h6>Giao Tiếp Tự Nhiên</h6>
-                                <small class="text-muted">Thực hành trong tình huống thực tế</small>
+                                <h6>{% trans "Giao Tiếp Tự Nhiên" %}</h6>
+                                <small class="text-muted">{% trans "Thực hành trong tình huống thực tế" %}</small>
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="text-center">
                                 <i class="fas fa-heart fa-2x text-danger mb-2"></i>
-                                <h6>Văn Hóa Sống Động</h6>
-                                <small class="text-muted">Trải nghiệm văn hóa qua con người thật</small>
+                                <h6>{% trans "Văn Hóa Sống Động" %}</h6>
+                                <small class="text-muted">{% trans "Trải nghiệm văn hóa qua con người thật" %}</small>
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="text-center">
                                 <i class="fas fa-users fa-2x text-warning mb-2"></i>
-                                <h6>Cộng Đồng Hỗ Trợ</h6>
-                                <small class="text-muted">Học hỏi từ cộng đồng đa dạng</small>
+                                <h6>{% trans "Cộng Đồng Hỗ Trợ" %}</h6>
+                                <small class="text-muted">{% trans "Học hỏi từ cộng đồng đa dạng" %}</small>
                             </div>
                         </div>
                     </div>
@@ -624,16 +764,16 @@ body::before {
         <div class="row mt-5">
             <div class="col-12 text-center">
                 <div class="cta-section">
-                    <h3>Bắt Đầu Hành Trình Của Bạn Ngay Hôm Nay!</h3>
-                    <p class="mb-4">Tham gia cộng đồng Vietnam-Japan Connect để khám phá thế giới mới đầy thú vị</p>
+                    <h3>{% trans "Bắt Đầu Hành Trình Của Bạn Ngay Hôm Nay!" %}</h3>
+                    <p class="mb-4">{% trans "Tham gia cộng đồng Vietnam-Japan Connect để khám phá thế giới mới đầy thú vị" %}</p>
                     <a href="{% url 'login' %}" class="btn btn-primary btn-lg me-3">
-                        <i class="fas fa-sign-in-alt me-2"></i>Đăng Nhập
+                        <i class="fas fa-sign-in-alt me-2"></i>{% trans "Đăng Nhập" %}
                     </a>
                     <a href="{% url 'register' %}" class="btn btn-outline-primary btn-lg me-3">
-                        <i class="fas fa-user-plus me-2"></i>Đăng Ký
+                        <i class="fas fa-user-plus me-2"></i>{% trans "Đăng Ký" %}
                     </a>
                     <a href="{% url 'guide' %}" class="btn btn-outline-secondary btn-lg">
-                        <i class="fas fa-question-circle me-2"></i>Tìm Hiểu Thêm
+                        <i class="fas fa-question-circle me-2"></i>{% trans "Tìm Hiểu Thêm" %}
                     </a>
                 </div>
             </div>

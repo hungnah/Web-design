@@ -1,0 +1,319 @@
+{% extends 'base.html' %}
+
+{% block title %}Tất cả phần lý thuyết - Vietnam-Japan Connect{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <!-- Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'lessons' %}">Bài học</a></li>
+                    <li class="breadcrumb-item active">Phần lý thuyết</li>
+                </ol>
+            </nav>
+            
+            <div class="card">
+                <div class="card-body text-center">
+                    <h1 class="mb-3">
+                        <i class="fas fa-book-open text-primary me-3"></i>
+                        Tất cả phần lý thuyết - Câu giao tiếp cơ bản
+                    </h1>
+                    <p class="lead">
+                        Học các câu giao tiếp cơ bản trong tiếng Việt để sử dụng trong cuộc sống hàng ngày
+                    </p>
+                    
+                    <div class="row mt-4">
+                        <div class="col-md-4">
+                            <div class="feature-card">
+                                <i class="fas fa-star text-warning fa-2x mb-3"></i>
+                                <h5>Câu nói cần thiết</h5>
+                                <p class="text-muted">Những câu nói quan trọng nhất để giao tiếp cơ bản</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="feature-card">
+                                <i class="fas fa-comments text-success fa-2x mb-3"></i>
+                                <h5>Ví dụ hội thoại</h5>
+                                <p class="text-muted">Các tình huống giao tiếp thực tế trong cuộc sống</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="feature-card">
+                                <i class="fas fa-lightbulb text-info fa-2x mb-3"></i>
+                                <h5>Mẹo thực hành</h5>
+                                <p class="text-muted">Hướng dẫn cách học và áp dụng hiệu quả</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-filter me-2"></i>Lọc theo
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <form method="get" class="row g-3">
+                        <div class="col-md-4">
+                            <label for="category" class="form-label">Chủ đề:</label>
+                            <select name="category" id="category" class="form-select">
+                                <option value="">Tất cả chủ đề</option>
+                                {% for category_code, category_name in categories %}
+                                    <option value="{{ category_code }}" {% if category_code == selected_category %}selected{% endif %}>
+                                        {{ category_name }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="difficulty" class="form-label">Độ khó:</label>
+                            <select name="difficulty" id="difficulty" class="form-select">
+                                <option value="">Tất cả độ khó</option>
+                                {% for difficulty_code, difficulty_name in difficulties %}
+                                    <option value="{{ difficulty_code }}" {% if difficulty_code == selected_difficulty %}selected{% endif %}>
+                                        {{ difficulty_name }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-4 d-flex align-items-end">
+                            <button type="submit" class="btn btn-primary me-2">
+                                <i class="fas fa-search me-2"></i>Lọc
+                            </button>
+                            <a href="{% url 'all_theory_sections' %}" class="btn btn-outline-secondary">
+                                <i class="fas fa-times me-2"></i>Xóa bộ lọc
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Theory Sections Grid -->
+    {% if theory_sections %}
+        <div class="row">
+            {% for section in theory_sections %}
+                <div class="col-lg-6 col-xl-4 mb-4">
+                    <div class="theory-section-card h-100">
+                        <div class="card border-primary">
+                            <div class="card-header bg-primary text-white">
+                                <h5 class="mb-0">
+                                    <i class="fas fa-lightbulb me-2"></i>{{ section.title }}
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="lesson-info mb-3">
+                                    <span class="badge bg-secondary me-2">{{ section.lesson.get_category_display }}</span>
+                                    <span class="badge bg-{% if section.lesson.difficulty == 'beginner' %}success{% elif section.lesson.difficulty == 'intermediate' %}warning{% else %}danger{% endif %}">
+                                        {{ section.lesson.get_difficulty_display }}
+                                    </span>
+                                </div>
+                                
+                                <p class="card-text">{{ section.description }}</p>
+                                
+                                <div class="theory-preview mb-3">
+                                    <h6 class="text-primary mb-2">
+                                        <i class="fas fa-star me-2"></i>Câu nói nổi bật:
+                                    </h6>
+                                    {% for phrase in section.phrases.all|slice:":2" %}
+                                        <div class="phrase-preview mb-2 p-2 bg-light rounded">
+                                            <div class="row">
+                                                <div class="col-12 text-end">
+                                                    <small class="text-muted">{{ phrase.japanese_translation }}</small>
+                                                    <span class="text-muted ms-2">/ {{ phrase.english_translation }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                    
+                                    {% if section.phrases.count > 2 %}
+                                        <div class="text-center">
+                                            <small class="text-muted">
+                                                Và {{ section.phrases.count|add:"-2" }} câu nói khác...
+                                            </small>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                
+                                <div class="stats mb-3">
+                                    <div class="row text-center">
+                                        <div class="col-6">
+                                            <small class="text-muted">
+                                                <i class="fas fa-language me-1"></i>{{ section.phrases.count }} câu
+                                            </small>
+                                        </div>
+                                        <div class="col-6">
+                                            <small class="text-muted">
+                                                <i class="fas fa-comments me-1"></i>{{ section.conversations.count }} hội thoại
+                                            </small>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="d-grid">
+                                    <a href="{% url 'theory_section_detail' section.lesson.id section.id %}" class="btn btn-primary">
+                                        <i class="fas fa-arrow-right me-2"></i>Xem chi tiết
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        
+        <!-- Summary Stats -->
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <h4 class="mb-3">
+                            <i class="fas fa-chart-bar text-primary me-2"></i>Tổng quan
+                        </h4>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="summary-stat">
+                                    <h3 class="text-primary">{{ theory_sections|length }}</h3>
+                                    <p class="text-muted">Phần lý thuyết</p>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="summary-stat">
+                                    <h3 class="text-success">
+                                        {% with total_phrases=0 %}
+                                            {% for section in theory_sections %}
+                                                {% for phrase in section.phrases.all %}
+                                                    {% with total_phrases=total_phrases|add:1 %}{% endwith %}
+                                                {% endfor %}
+                                            {% endfor %}
+                                            {{ total_phrases }}
+                                        {% endwith %}
+                                    </h3>
+                                    <p class="text-muted">Câu nói cơ bản</p>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="summary-stat">
+                                    <h3 class="text-info">
+                                        {% with total_conversations=0 %}
+                                            {% for section in theory_sections %}
+                                                {% for conversation in section.conversations.all %}
+                                                    {% with total_conversations=total_conversations|add:1 %}{% endwith %}
+                                                {% endfor %}
+                                            {% endfor %}
+                                            {{ total_conversations }}
+                                        {% endwith %}
+                                    </h3>
+                                    <p class="text-muted">Ví dụ hội thoại</p>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="summary-stat">
+                                    <h3 class="text-warning">{{ total_lessons }}</h3>
+                                    <p class="text-muted">Bài học</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body text-center py-5">
+                        <i class="fas fa-book-open fa-4x text-muted mb-3"></i>
+                        <h4>Chưa có phần lý thuyết nào</h4>
+                        <p class="text-muted">Các phần lý thuyết sẽ được thêm vào sớm!</p>
+                        <a href="{% url 'lessons' %}" class="btn btn-primary">
+                            <i class="fas fa-arrow-left me-2"></i>Quay lại bài học
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>
+
+<style>
+.feature-card {
+    padding: 20px;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+}
+
+.theory-section-card {
+    transition: all 0.3s ease;
+}
+
+.theory-section-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+}
+
+.theory-section-card .card {
+    border: 2px solid #e9ecef;
+    transition: all 0.3s ease;
+}
+
+.theory-section-card:hover .card {
+    border-color: #007bff;
+    box-shadow: 0 20px 50px rgba(0, 123, 255, 0.2);
+}
+
+.phrase-preview {
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    border-left: 3px solid #007bff;
+    transition: all 0.3s ease;
+}
+
+.phrase-preview:hover {
+    background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+    transform: translateX(5px);
+}
+
+.summary-stat {
+    padding: 20px;
+    transition: all 0.3s ease;
+}
+
+.summary-stat:hover {
+    transform: translateY(-3px);
+}
+
+.summary-stat h3 {
+    font-weight: bold;
+    margin-bottom: 0;
+}
+
+.card {
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+}
+
+.card-header {
+    border-radius: 15px 15px 0 0 !important;
+}
+</style>
+{% endblock %}

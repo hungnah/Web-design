@@ -151,14 +151,16 @@ def __str__(self):
 class Lesson(models.Model):
     """Model for Vietnamese language lessons"""
     CATEGORY_CHOICES = [
-        ('greetings', '挨拶'),
-        ('food', '料理'),
-        ('shopping', '買い物'),
-        ('transport', '交通'),
-        ('daily', '日常生活'),
-        ('business', '仕事'),
-        ('travel', '旅行'),
-        ('emergency', '緊急'),
+        ('greetings', 'Chào hỏi (挨拶)'),
+        ('self_introduction', 'Giới thiệu bản thân (自己紹介)'),
+        ('asking_directions', 'Hỏi đường (道を尋ねる)'),
+        ('shopping', 'Mua sắm (買い物)'),
+        ('restaurant', 'Nhà hàng / gọi món (レストラン)'),
+        ('transportation', 'Giao thông / đi lại (交通)'),
+        ('weather', 'Thời tiết (天気)'),
+        ('family', 'Gia đình (家族)'),
+        ('health_emergency', 'Sức khỏe / trường hợp khẩn cấp (健康・緊急)'),
+        ('time_schedule', 'Thời gian / lịch trình (時間・予定)'),
     ]
     
     DIFFICULTY_CHOICES = [
@@ -169,7 +171,7 @@ class Lesson(models.Model):
     
     title = models.CharField(max_length=200)
     description = models.TextField()
-    category = models.CharField(max_length=20, choices=CATEGORY_CHOICES)
+    category = models.CharField(max_length=25, choices=CATEGORY_CHOICES)
     difficulty = models.CharField(max_length=15, choices=DIFFICULTY_CHOICES)
     image = models.ImageField(upload_to='lesson_images/', null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -179,7 +181,7 @@ class Lesson(models.Model):
         ordering = ['difficulty', 'category', 'title']
     
     def __str__(self):
-        return f"{self.title} - {self.get_category_display()}"
+        return f"{self.get_category_display()} - {self.title}"
 
 
 class LessonPhrase(models.Model):
@@ -198,3 +200,94 @@ class LessonPhrase(models.Model):
     
     def __str__(self):
         return f"{self.lesson.title} - {self.vietnamese_text}"
+
+class QuizQuestion(models.Model):
+    """Model for quiz questions in Vietnamese lessons"""
+    lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, related_name='quiz_questions')
+    question = models.TextField(help_text="Câu hỏi trắc nghiệm")
+    option_a = models.CharField(max_length=100, help_text="Lựa chọn A")
+    option_b = models.CharField(max_length=100, help_text="Lựa chọn B")
+    option_c = models.CharField(max_length=100, help_text="Lựa chọn C")
+    option_d = models.CharField(max_length=100, help_text="Lựa chọn D")
+    correct_answer = models.CharField(max_length=1, choices=[
+        ('A', 'A'),
+        ('B', 'B'),
+        ('C', 'C'),
+        ('D', 'D'),
+    ], help_text="Đáp án đúng")
+    explanation = models.TextField(blank=True, help_text="Giải thích đáp án")
+    order = models.PositiveIntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        ordering = ['lesson', 'order']
+    
+    def __str__(self):
+        return f"{self.lesson.title} - Question {self.order}"
+
+class TheorySection(models.Model):
+    """Model for theory sections with basic conversation phrases"""
+    lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, related_name='theory_sections')
+    title = models.CharField(max_length=200, help_text="Tiêu đề phần lý thuyết")
+    description = models.TextField(help_text="Mô tả phần lý thuyết")
+    order = models.PositiveIntegerField(default=0, help_text="Thứ tự hiển thị")
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        ordering = ['lesson', 'order']
+    
+    def __str__(self):
+        return f"{self.lesson.title} - {self.title}"
+
+class TheoryPhrase(models.Model):
+    """Model for phrases in theory sections"""
+    theory_section = models.ForeignKey(TheorySection, on_delete=models.CASCADE, related_name='phrases')
+    vietnamese_text = models.CharField(max_length=200, help_text="Câu tiếng Việt")
+    japanese_translation = models.CharField(max_length=200, help_text="Bản dịch tiếng Nhật")
+    english_translation = models.CharField(max_length=200, help_text="Bản dịch tiếng Anh")
+    pronunciation_guide = models.CharField(max_length=200, blank=True, help_text="Hướng dẫn phát âm")
+    usage_note = models.TextField(blank=True, help_text="Ghi chú cách sử dụng")
+    is_essential = models.BooleanField(default=False, help_text="Câu nói cần thiết")
+    order = models.PositiveIntegerField(default=0, help_text="Thứ tự hiển thị")
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        ordering = ['theory_section', 'order']
+    
+    def __str__(self):
+        return f"{self.theory_section.title} - {self.vietnamese_text}"
+
+class ConversationExample(models.Model):
+    """Model for conversation examples in theory sections"""
+    theory_section = models.ForeignKey(TheorySection, on_delete=models.CASCADE, related_name='conversations')
+    title = models.CharField(max_length=200, help_text="Tiêu đề đoạn hội thoại")
+    description = models.TextField(help_text="Mô tả tình huống")
+    order = models.PositiveIntegerField(default=0, help_text="Thứ tự hiển thị")
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        ordering = ['theory_section', 'order']
+    
+    def __str__(self):
+        return f"{self.theory_section.title} - {self.title}"
+
+class ConversationLine(models.Model):
+    """Model for individual lines in conversation examples"""
+    conversation = models.ForeignKey(ConversationExample, on_delete=models.CASCADE, related_name='lines')
+    speaker = models.CharField(max_length=50, choices=[
+        ('tutor', 'TUTOR'),
+        ('student', 'STUDENT'),
+        ('person_a', 'PERSON A'),
+        ('person_b', 'PERSON B'),
+    ], help_text="Người nói")
+    vietnamese_text = models.CharField(max_length=300, help_text="Nội dung tiếng Việt")
+    japanese_translation = models.CharField(max_length=300, help_text="Bản dịch tiếng Nhật")
+    english_translation = models.CharField(max_length=300, help_text="Bản dịch tiếng Anh")
+    order = models.PositiveIntegerField(default=0, help_text="Thứ tự trong hội thoại")
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        ordering = ['conversation', 'order']
+    
+    def __str__(self):
+        return f"{self.conversation.title} - {self.speaker} - Line {self.order}"

@@ -9,7 +9,7 @@ Provides Django admin interface for managing language exchange content:
 """
 
 from django.contrib import admin
-from .models import VietnamesePhrase, CafeLocation, LanguageExchangePost, PartnerRequest, Lesson, LessonPhrase
+from .models import VietnamesePhrase, CafeLocation, LanguageExchangePost, PartnerRequest, Lesson, LessonPhrase, QuizQuestion, TheorySection, TheoryPhrase, ConversationExample, ConversationLine
 
 @admin.register(VietnamesePhrase)
 class VietnamesePhraseAdmin(admin.ModelAdmin):
@@ -60,3 +60,82 @@ class LessonPhraseAdmin(admin.ModelAdmin):
     search_fields = ['vietnamese_text', 'japanese_translation', 'english_translation']
     ordering = ['lesson', 'order']
     list_select_related = ['lesson']  # Optimize database queries
+
+@admin.register(QuizQuestion)
+class QuizQuestionAdmin(admin.ModelAdmin):
+    """Admin interface for managing quiz questions"""
+    list_display = ['lesson', 'question', 'correct_answer', 'order', 'created_at']
+    list_filter = ['lesson__category', 'lesson__difficulty', 'lesson']
+    search_fields = ['question', 'option_a', 'option_b', 'option_c', 'option_d']
+    ordering = ['lesson', 'order']
+    list_select_related = ['lesson']
+    fieldsets = (
+        ('Question Information', {
+            'fields': ('lesson', 'question', 'order')
+        }),
+        ('Answer Options', {
+            'fields': ('option_a', 'option_b', 'option_c', 'option_d', 'correct_answer')
+        }),
+        ('Learning Support', {
+            'fields': ('explanation',)
+        }),
+    )
+
+@admin.register(TheorySection)
+class TheorySectionAdmin(admin.ModelAdmin):
+    """Admin interface for managing theory sections"""
+    list_display = ['lesson', 'title', 'order', 'created_at']
+    list_filter = ['lesson__category', 'lesson__difficulty', 'lesson']
+    search_fields = ['title', 'description']
+    ordering = ['lesson', 'order']
+    list_select_related = ['lesson']
+    fieldsets = (
+        ('Basic Information', {
+            'fields': ('lesson', 'title', 'description', 'order')
+        }),
+    )
+
+@admin.register(TheoryPhrase)
+class TheoryPhraseAdmin(admin.ModelAdmin):
+    """Admin interface for managing theory phrases"""
+    list_display = ['theory_section', 'vietnamese_text', 'is_essential', 'order', 'created_at']
+    list_filter = ['theory_section__lesson__category', 'is_essential', 'theory_section']
+    search_fields = ['vietnamese_text', 'japanese_translation', 'english_translation']
+    ordering = ['theory_section', 'order']
+    list_select_related = ['theory_section']
+    fieldsets = (
+        ('Phrase Information', {
+            'fields': ('theory_section', 'vietnamese_text', 'japanese_translation', 'english_translation', 'order')
+        }),
+        ('Learning Support', {
+            'fields': ('pronunciation_guide', 'usage_note', 'is_essential')
+        }),
+    )
+
+@admin.register(ConversationExample)
+class ConversationExampleAdmin(admin.ModelAdmin):
+    """Admin interface for managing conversation examples"""
+    list_display = ['theory_section', 'title', 'order', 'created_at']
+    list_filter = ['theory_section__lesson__category', 'theory_section']
+    search_fields = ['title', 'description']
+    ordering = ['theory_section', 'order']
+    list_select_related = ['theory_section']
+    fieldsets = (
+        ('Conversation Information', {
+            'fields': ('theory_section', 'title', 'description', 'order')
+        }),
+    )
+
+@admin.register(ConversationLine)
+class ConversationLineAdmin(admin.ModelAdmin):
+    """Admin interface for managing conversation lines"""
+    list_display = ['conversation', 'speaker', 'vietnamese_text', 'order', 'created_at']
+    list_filter = ['speaker', 'conversation__theory_section__lesson__category']
+    search_fields = ['vietnamese_text', 'japanese_translation', 'english_translation']
+    ordering = ['conversation', 'order']
+    list_select_related = ['conversation']
+    fieldsets = (
+        ('Line Information', {
+            'fields': ('conversation', 'speaker', 'vietnamese_text', 'japanese_translation', 'english_translation', 'order')
+        }),
+    )
