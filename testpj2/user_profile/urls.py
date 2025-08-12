@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 from django.contrib.auth import views as auth_views
 from . import views
 
@@ -11,4 +11,5 @@ urlpatterns = [
     path('profile/', views.profile, name='profile'),
     path('profile/change-password/', views.change_password_ajax, name='change_password_ajax'),
     path('guide/', views.guide, name='guide'),
+    path('i18n/', include('django.conf.urls.i18n')),
 ]
