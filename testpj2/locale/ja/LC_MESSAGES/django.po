@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-12 15:24+0700\n"
+"POT-Creation-Date: 2025-08-12 16:35+0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -73,13 +73,13 @@ msgid "Nền tảng kết nối giao lưu ngôn ngữ và văn hóa giữa Việ
 msgstr "ベトナムと日本の言語と文化をつなぐ交流プラットフォーム"
 
 #: .\templates\home.html:586 .\templates\home.html:770
-#: .\templates\user_profile\login.html:286
-#: .\templates\user_profile\login.html:342
+#: .\templates\user_profile\login.html:330
+#: .\templates\user_profile\login.html:375
 msgid "Đăng Nhập"
 msgstr "ログイン"
 
 #: .\templates\home.html:591 .\templates\home.html:773
-#: .\templates\user_profile\register.html:369
+#: .\templates\user_profile\register.html:413
 msgid "Đăng Ký"
 msgstr "サインアップ"
 
@@ -314,54 +314,58 @@ msgstr "さらに詳しく"
 msgid "Đăng Nhập - Vietnam-Japan Connect"
 msgstr "ログイン - Vietnam-Japan Connect"
 
-#: .\templates\user_profile\login.html:287
+#: .\templates\user_profile\login.html:331
 msgid "Chào mừng trở lại với Vietnam-Japan Connect"
 msgstr "Vietnam-Japan Connectへお帰りなさい"
 
-#: .\templates\user_profile\login.html:307
+#: .\templates\user_profile\login.html:340
 msgid "Đăng nhập thất bại."
 msgstr "ログインに失敗しました"
 
-#: .\templates\user_profile\login.html:307
-#: .\templates\user_profile\register.html:390
+#: .\templates\user_profile\login.html:340
+#: .\templates\user_profile\register.html:423
 msgid "Vui lòng kiểm tra lại thông tin."
 msgstr "情報をもう一度ご確認ください"
 
-#: .\templates\user_profile\login.html:313
-#: .\templates\user_profile\register.html:398
-#: .\templates\user_profile\register.html:404
+#: .\templates\user_profile\login.html:346
+#: .\templates\user_profile\register.html:431
+#: .\templates\user_profile\register.html:437
 msgid "Tên đăng nhập"
 msgstr "ユーザー名"
 
-#: .\templates\user_profile\login.html:319
+#: .\templates\user_profile\login.html:352
 msgid "Nhập tên đăng nhập"
 msgstr "ユーザー名を入力してください"
 
-#: .\templates\user_profile\login.html:328
-#: .\templates\user_profile\register.html:430
-#: .\templates\user_profile\register.html:436
+#: .\templates\user_profile\login.html:361
+#: .\templates\user_profile\register.html:465
+#: .\templates\user_profile\register.html:471
 msgid "Mật khẩu"
 msgstr "パスワード"
 
-#: .\templates\user_profile\login.html:334
+#: .\templates\user_profile\login.html:367
 msgid "Nhập mật khẩu"
 msgstr "パスワードを入力してください"
 
-#: .\templates\user_profile\login.html:347
-#: .\templates\user_profile\register.html:550
+#: .\templates\user_profile\login.html:380
+#: .\templates\user_profile\register.html:593
 msgid "hoặc"
 msgstr "または"
 
-#: .\templates\user_profile\login.html:352
+#: .\templates\user_profile\login.html:393
+msgid "Đăng nhập bằng Google"
+msgstr "Googleでログイン"
+
+#: .\templates\user_profile\login.html:398
 msgid "Chưa có tài khoản?"
 msgstr "アカウントをお持ちでないですか?"
 
-#: .\templates\user_profile\login.html:353
+#: .\templates\user_profile\login.html:399
 msgid "Đăng ký ngay"
 msgstr "今すぐ登録"
 
-#: .\templates\user_profile\login.html:357
-#: .\templates\user_profile\register.html:560
+#: .\templates\user_profile\login.html:403
+#: .\templates\user_profile\register.html:616
 msgid "Về trang chủ"
 msgstr "ホームに戻る"
 
@@ -369,96 +373,101 @@ msgstr "ホームに戻る"
 msgid "Đăng Ký - Vietnam-Japan Connect"
 msgstr "サインアップ - Vietnam-Japan Connect"
 
-#: .\templates\user_profile\register.html:370
+#: .\templates\user_profile\register.html:414
 msgid "Tham gia cộng đồng Vietnam-Japan Connect"
 msgstr "Vietnam-Japan Connectのコミュニティに参加しよう"
 
-#: .\templates\user_profile\register.html:390
+#: .\templates\user_profile\register.html:423
 msgid "Đăng ký thất bại."
 msgstr "サインアップに失敗しました。"
 
-#: .\templates\user_profile\register.html:413
+#: .\templates\user_profile\register.html:447
 msgid "Email"
 msgstr "Eメール"
 
-#: .\templates\user_profile\register.html:445
-#: .\templates\user_profile\register.html:451
+#: .\templates\user_profile\register.html:480
+#: .\templates\user_profile\register.html:486
 msgid "Xác nhận mật khẩu"
 msgstr "パスワードの確認"
 
-#: .\templates\user_profile\register.html:463
+#: .\templates\user_profile\register.html:498
 msgid "Họ và tên"
 msgstr "氏名"
 
-#: .\templates\user_profile\register.html:469
+#: .\templates\user_profile\register.html:504
 msgid "Họ và tên đầy đủ"
 msgstr "氏名(フルネーム)"
 
-#: .\templates\user_profile\register.html:478
+#: .\templates\user_profile\register.html:514
 msgid "Ngày sinh"
 msgstr "生年月日"
 
-#: .\templates\user_profile\register.html:494
+#: .\templates\user_profile\register.html:531
 msgid "Giới tính"
 msgstr "性別"
 
-#: .\templates\user_profile\register.html:500
+#: .\templates\user_profile\register.html:537
 msgid "Chọn giới tính"
 msgstr "性別を選択"
 
-#: .\templates\user_profile\register.html:501
+#: .\templates\user_profile\register.html:538
 msgid "Nam"
 msgstr "男性"
 
-#: .\templates\user_profile\register.html:502
+#: .\templates\user_profile\register.html:539
 msgid "Nữ"
 msgstr "女性"
 
-#: .\templates\user_profile\register.html:503
+#: .\templates\user_profile\register.html:540
 msgid "Khác"
 msgstr "その他の性別"
 
-#: .\templates\user_profile\register.html:512
+#: .\templates\user_profile\register.html:549
 msgid "Quốc tịch"
 msgstr "国籍"
 
-#: .\templates\user_profile\register.html:518
+#: .\templates\user_profile\register.html:555
 msgid "Chọn quốc tịch"
 msgstr "国籍を選択"
 
-#: .\templates\user_profile\register.html:519
+#: .\templates\user_profile\register.html:556
 msgid "Việt Nam"
 msgstr "ベトナム"
 
-#: .\templates\user_profile\register.html:520
+#: .\templates\user_profile\register.html:557
 msgid "Nhật Bản"
 msgstr "日本"
 
-#: .\templates\user_profile\register.html:530
+#: .\templates\user_profile\register.html:567
+#: .\templates\user_profile\register.html:573
 msgid "Thành phố"
 msgstr "都市"
 
-#: .\templates\user_profile\register.html:540
+#: .\templates\user_profile\register.html:583
 msgid "Lưu ý:"
 msgstr "注意:"
 
-#: .\templates\user_profile\register.html:540
+#: .\templates\user_profile\register.html:583
 msgid "Bạn phải từ 18 tuổi trở lên để đăng ký."
 msgstr "登録するには18歳以上である必要があります。"
 
-#: .\templates\user_profile\register.html:541
+#: .\templates\user_profile\register.html:584
 msgid "Quốc tịch sẽ quyết định giao diện ngôn ngữ và tính năng có sẵn."
 msgstr "国籍によって言語インタフェースや利用可能な機能が決まります。"
 
-#: .\templates\user_profile\register.html:545
+#: .\templates\user_profile\register.html:588
 msgid "Tạo Tài Khoản"
 msgstr "アカウント作成"
 
-#: .\templates\user_profile\register.html:555
+#: .\templates\user_profile\register.html:606
+msgid "Đăng ký bằng Google"
+msgstr "Googleアカウントで登録"
+
+#: .\templates\user_profile\register.html:611
 msgid "Đã có tài khoản?"
 msgstr "すでにアカウントをお持ちですか?"
 
-#: .\templates\user_profile\register.html:556
+#: .\templates\user_profile\register.html:612
 msgid "Đăng nhập ngay"
 msgstr "今すぐログイン"
 
