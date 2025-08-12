@@ -11,7 +11,9 @@ from django.contrib.auth.views import LoginView
 from django.contrib import messages
 from django.urls import reverse, reverse_lazy
 from django.db.models import Q
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth import update_session_auth_hash
 from .forms import CustomUserCreationForm, ProfileUpdateForm
 from .decorators import prevent_back_button
 from event_creation.models import LanguageExchangePost, PartnerRequest
@@ -207,3 +209,20 @@ def home(request):
     response['Pragma'] = 'no-cache'
     response['Expires'] = '0'
     return response
+
+
+@login_required
+def change_password_ajax(request):
+    """Handle password change via AJAX modal on profile page."""
+    if request.method != 'POST':
+        return JsonResponse({'success': False, 'message': 'Invalid request method'}, status=405)
+
+    form = PasswordChangeForm(user=request.user, data=request.POST)
+    if form.is_valid():
+        user = form.save()
+        update_session_auth_hash(request, user)
+        return JsonResponse({'success': True, 'message': 'Đổi mật khẩu thành công'})
+
+    # Collect field errors
+    errors = {field: msgs for field, msgs in form.errors.items()}
+    return JsonResponse({'success': False, 'errors': errors}, status=400)

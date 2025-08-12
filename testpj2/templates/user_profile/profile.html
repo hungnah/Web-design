@@ -11,6 +11,7 @@
 
 {% block content %}
 <div class="container my-5">
+    <div id="inline-messages"></div>
     <div class="row">
         <div class="col-md-4">
             <!-- Profile Card -->
@@ -180,9 +181,109 @@
                             <p><strong>Lần đăng nhập cuối:</strong> {{ user.last_login|date:"d/m/Y H:i" }}</p>
                         </div>
                     </div>
+                    <div class="mt-3 text-end">
+                        <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#changePasswordModal">
+                            <i class="fas fa-key"></i> Đổi mật khẩu
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    (function() {
+        function setFieldErrors(errors) {
+            const fields = ['old_password', 'new_password1', 'new_password2'];
+            fields.forEach(function(name) {
+                const group = document.querySelector('#changePasswordForm [name="' + name + '"]').closest('.mb-3');
+                const feedback = group.querySelector('.invalid-feedback');
+                const input = group.querySelector('input');
+                input.classList.remove('is-invalid');
+                feedback.textContent = '';
+                if (errors && errors[name]) {
+                    input.classList.add('is-invalid');
+                    feedback.textContent = Array.isArray(errors[name]) ? errors[name].join(' ') : String(errors[name]);
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('changePasswordForm');
+            if (!form) return;
+
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                setFieldErrors(null);
+
+                const formData = new FormData(form);
+                fetch('{% url "change_password_ajax" %}', {
+                    method: 'POST',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    body: formData
+                })
+                .then(function(res) { return res.json().then(function(data){ return { ok: res.ok, data: data }; }); })
+                .then(function(result) {
+                    if (result.ok && result.data && result.data.success) {
+                        const modalEl = document.getElementById('changePasswordModal');
+                        const modal = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
+                        modal.hide();
+                        form.reset();
+
+                        const msgContainer = document.getElementById('inline-messages');
+                        msgContainer.innerHTML = '<div class="container mt-3"><div class="alert alert-success alert-dismissible fade show" role="alert">Đổi mật khẩu thành công<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div></div>';
+                    } else {
+                        const errors = (result.data && result.data.errors) ? result.data.errors : {__all__: ['Đã có lỗi xảy ra']};
+                        setFieldErrors(errors);
+                    }
+                })
+                .catch(function() {
+                    const msgContainer = document.getElementById('inline-messages');
+                    msgContainer.innerHTML = '<div class="container mt-3"><div class="alert alert-danger alert-dismissible fade show" role="alert">Không thể đổi mật khẩu. Vui lòng thử lại.<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div></div>';
+                });
+            });
+        });
+    })();
+</script>
+
+<!-- Change Password Modal -->
+<div class="modal fade" id="changePasswordModal" tabindex="-1" aria-labelledby="changePasswordModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="changePasswordModalLabel"><i class="fas fa-key"></i> Đổi mật khẩu</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="changePasswordForm">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="id_old_password" class="form-label">Mật khẩu hiện tại</label>
+                <input type="password" name="old_password" class="form-control" id="id_old_password" required>
+                <div class="invalid-feedback"></div>
+            </div>
+            <div class="mb-3">
+                <label for="id_new_password1" class="form-label">Mật khẩu mới</label>
+                <input type="password" name="new_password1" class="form-control" id="id_new_password1" required>
+                <div class="invalid-feedback"></div>
+            </div>
+            <div class="mb-3">
+                <label for="id_new_password2" class="form-label">Xác nhận mật khẩu mới</label>
+                <input type="password" name="new_password2" class="form-control" id="id_new_password2" required>
+                <div class="invalid-feedback"></div>
+            </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+        <button type="submit" form="changePasswordForm" class="btn btn-primary">Cập nhật</button>
+      </div>
+    </div>
+  </div>
 </div>
 {% endblock %}
