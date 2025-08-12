@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>{% block title %}My App{% endblock %}</title>
+
+  <!-- 子テンプレートで使えるstyleブロック -->
+  <style>
+    {% block style %}{% endblock %}
+  </style>
+
+  {% block head_extra %}{% endblock %}
+</head>
+
+<body class="{% block body_class %}{% endblock %}">
+
+  {% block content %}{% endblock %}
+
+  <!-- タイマー表示用 -->
+   {% if timer_flag %}
+  <div id="timer-container" style="position: fixed; top: 10px; right: 10px; background:#007BFF; color: white; padding: 8px 12px; border-radius: 5px; font-weight: bold; font-size: 16px; display: none;">
+    残り時間: <span id="timer">30:00</span>
+  </div>
+  {% endif %}
+
+  {% block scripts %}
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      console.log('body classList:', document.body.classList);
+      if (document.body.classList.contains('enable-timer')) {
+        const timerContainer = document.getElementById('timer-container');
+        timerContainer.style.display = 'block';
+
+        {% if timer_flag %}
+        let timeLeft = 1800; // 30分（秒）
+
+        function updateTimer() {
+          const minutes = Math.floor(timeLeft / 60);
+          const seconds = timeLeft % 60;
+          document.getElementById('timer').textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+
+          if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            alert('30分が経過しました。セッションを終了します。');
+          } else {
+            timeLeft--;
+          }
+        }
+
+        updateTimer();
+        const timerInterval = setInterval(updateTimer, 1000);
+        {% endif %}
+      }
+    });
+  </script>
+  {% endblock %}
+</body>
+</html>

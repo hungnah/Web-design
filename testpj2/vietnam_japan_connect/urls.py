@@ -34,6 +34,7 @@ urlpatterns = [
     path('chat/', include('chat_system.urls')),      # Real-time messaging system
     path('create/', include('event_creation.urls')), # Creating posts, lessons, requests
     path('search/', include('event_search.urls')),   # Finding & browsing opportunities
+    path('session/', include('session.urls')), # Session management
     path('i18n/setlang/', set_language, name='set_language'),  # Language setting endpoint
 ]
 

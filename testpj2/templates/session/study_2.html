@@ -1,0 +1,126 @@
+{% extends 'base_timer.html' %}
+
+{% block title %}Lesson2: Asking about nationality - 国籍を尋ねる{% endblock %}
+
+{% block body_class %}enable-timer{% endblock %}
+
+{% block style %}
+  .conversation {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  }
+  .message {
+    display: flex;
+    max-width: 70%;
+    padding: 15px 20px;
+    border-radius: 20px;
+    line-height: 1.5;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+    font-size: 1rem;
+    align-items: center;
+  }
+  /* 先生の発言は右寄せで背景色は緑系 */
+  .teacher {
+    margin-left: auto;
+    background-color: #d1e7dd;
+    color: #0f5132;
+    flex-direction: row-reverse;
+  }
+  /* 生徒の発言は左寄せで背景色は水色系 */
+  .student {
+    margin-right: auto;
+    background-color: #cff4fc;
+    color: #055160;
+  }
+  .icon {
+    font-size: 2.2rem;
+    margin: 0 15px;
+    flex-shrink: 0;
+    color: inherit;
+  }
+  .text {
+    white-space: pre-line;
+  }
+{% endblock %}
+
+{% block content %}
+  <h1>Lesson2: Asking about nationality<br>国籍を尋ねる</h1>
+
+  <div class="conversation">
+    <div class="message teacher">
+      <i class="fas fa-chalkboard-teacher icon" title="Teacher"></i>
+      <div class="text">
+        Hôm nay chúng ta sẽ học cách hỏi về quốc tịch nhé.<br>
+        (今日は国籍を尋ねる表現を学びましょう。)
+      </div>
+    </div>
+
+    <div class="message student">
+      <i class="fas fa-user icon" title="Student"></i>
+      <div class="text">
+        How do you say "Where are you from?" in Vietnamese?<br>
+        (「あなたはどこの出身ですか？」をベトナム語でどう言いますか？)
+      </div>
+    </div>
+
+    <div class="message teacher">
+      <i class="fas fa-chalkboard-teacher icon"></i>
+      <div class="text">
+        Bạn đến từ đâu?<br>
+        (バン ゼン トゥ ダウ？)
+      </div>
+    </div>
+
+    <div class="message student">
+      <i class="fas fa-user icon"></i>
+      <div class="text">
+        Bạn đến từ đâu?<br>
+        (Bạn đến từ đâu?)<br>
+        What does it mean?<br>
+        (どういう意味ですか？)
+      </div>
+    </div>
+
+    <div class="message teacher">
+      <i class="fas fa-chalkboard-teacher icon"></i>
+      <div class="text">
+        It means "Where are you from?"<br>
+        (「あなたはどこの出身ですか？」という意味です。)
+      </div>
+    </div>
+
+    <div class="message student">
+      <i class="fas fa-user icon"></i>
+      <div class="text">
+        I’m from Japan.<br>
+        (私は日本出身です。)
+      </div>
+    </div>
+
+    <div class="message teacher">
+      <i class="fas fa-chalkboard-teacher icon"></i>
+      <div class="text">
+        Tôi đến từ Nhật Bản.<br>
+        (私は日本から来ました。)
+      </div>
+    </div>
+
+    <div class="message student">
+      <i class="fas fa-user icon"></i>
+      <div class="text">
+        Great! Let’s practice this together.<br>
+        (すごい！一緒に練習しましょう。)
+      </div>
+    </div>
+
+    <div class="message teacher">
+      <i class="fas fa-chalkboard-teacher icon"></i>
+      <div class="text">
+        Ok, bạn hỏi tôi nhé!<br>
+        (さあ、私に聞いてみてください！)
+      </div>
+    </div>
+  </div>
+{% endblock %}

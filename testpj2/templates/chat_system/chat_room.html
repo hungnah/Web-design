@@ -152,6 +152,10 @@
                             </div>
                             <div class="col-md-6">
                                 <p><strong>Thời gian:</strong> {{ chat_room.post.meeting_date|date:"d/m/Y H:i" }}</p>
+                                <p>学習するフレーズ: {{ chat_room.post.phrase }}</p>
+                                <a href="{% url 'study' chat_room.post.id chat_room.post.phrase.id %}?timer=1" style="display:inline-block; padding:10px 20px; background-color:#007BFF; color:white; text-decoration:none; border-radius:5px;">
+                                セッション開始
+                                </a>
                                 <p><strong>Trạng thái:</strong> 
                                     <span class="badge bg-success">{{ chat_room.post.get_status_display }}</span>
                                 </p>

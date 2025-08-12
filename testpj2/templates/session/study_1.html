@@ -1,0 +1,124 @@
+{% extends 'base_timer.html' %}
+
+{% block title %}Lesson1: Asking about names - 名前を尋ねる{% endblock %}
+
+{% block body_class %}enable-timer{% endblock %}
+
+{% block style %}
+  .conversation {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  }
+  .message {
+    display: flex;
+    max-width: 70%;
+    padding: 15px 20px;
+    border-radius: 20px;
+    line-height: 1.5;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+    font-size: 1rem;
+    align-items: center;
+  }
+  .teacher {
+    margin-left: auto;
+    background-color: #d1e7dd;
+    color: #0f5132;
+    flex-direction: row-reverse;
+  }
+  .student {
+    margin-right: auto;
+    background-color: #cff4fc;
+    color: #055160;
+  }
+  .icon {
+    font-size: 2.2rem;
+    margin: 0 15px;
+    flex-shrink: 0;
+    color: inherit;
+  }
+  .text {
+    white-space: pre-line;
+  }
+{% endblock %}
+
+{% block content %}
+  <h1>Lesson1: Asking about names<br>名前を尋ねる</h1>
+
+  <div class="conversation">
+    <div class="message teacher">
+      <i class="fas fa-chalkboard-teacher icon" title="Teacher"></i>
+      <div class="text">
+        Hôm nay chúng ta sẽ học cách hỏi tên nhé.<br>
+        (今日は名前を尋ねる表現を学びましょう。)
+      </div>
+    </div>
+
+    <div class="message student">
+      <i class="fas fa-user icon" title="Student"></i>
+      <div class="text">
+        How do you say "What is your name?" in Vietnamese?<br>
+        (「あなたの名前は何ですか？」をベトナム語でどう言いますか？)
+      </div>
+    </div>
+
+    <div class="message teacher">
+      <i class="fas fa-chalkboard-teacher icon"></i>
+      <div class="text">
+        Tên bạn là gì?<br>
+        (テン バン ラー ジー？)
+      </div>
+    </div>
+
+    <div class="message student">
+      <i class="fas fa-user icon"></i>
+      <div class="text">
+        Tên bạn là gì?<br>
+        (Tên bạn là gì?)<br>
+        What does it mean?<br>
+        (どういう意味ですか？)
+      </div>
+    </div>
+
+    <div class="message teacher">
+      <i class="fas fa-chalkboard-teacher icon"></i>
+      <div class="text">
+        It means "What is your name?"<br>
+        (「あなたの名前は何ですか？」という意味です。)
+      </div>
+    </div>
+
+    <div class="message student">
+      <i class="fas fa-user icon"></i>
+      <div class="text">
+        My name is Satoshi.<br>
+        (私の名前はサトシです。)
+      </div>
+    </div>
+
+    <div class="message teacher">
+      <i class="fas fa-chalkboard-teacher icon"></i>
+      <div class="text">
+        Tôi tên là Satoshi.<br>
+        (私の名前はサトシです。)
+      </div>
+    </div>
+
+    <div class="message student">
+      <i class="fas fa-user icon"></i>
+      <div class="text">
+        Nice! Let’s practice this together.<br>
+        (いいですね！一緒に練習しましょう。)
+      </div>
+    </div>
+
+    <div class="message teacher">
+      <i class="fas fa-chalkboard-teacher icon"></i>
+      <div class="text">
+        Ok, bạn hỏi tôi nhé!<br>
+        (さあ、私に聞いてみてください！)
+      </div>
+    </div>
+  </div>
+{% endblock %}
