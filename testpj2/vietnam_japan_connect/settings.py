@@ -192,12 +192,54 @@ SECURE_CONTENT_TYPE_NOSNIFF = True
 X_FRAME_OPTIONS = 'DENY'
 
 CSRF_TRUSTED_ORIGINS = [
-    'https://9ab46c64aca8.ngrok-free.app',
+    'https://a77c5dc83549.ngrok-free.app',
 ]
 
 
 ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
-    '9ab46c64aca8.ngrok-free.app'  # domain ngrok của bạn
+    'a77c5dc83549.ngrok-free.app'  # domain ngrok của bạn
 ] 
+
+# Google OAuth Settings
+GOOGLE_OAUTH2_CLIENT_ID = '566554554772-21ftbvjdlhim06422ee4ou3qu4b8iuq6.apps.googleusercontent.com'  # Thay thế bằng Client ID thực tế
+GOOGLE_OAUTH2_CLIENT_SECRET = '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'  # Thay thế bằng Client Secret thực tế
+GOOGLE_OAUTH2_REDIRECT_URI = 'http://localhost:8000/auth/google/callback/'
+
+# OAuth URLs
+GOOGLE_OAUTH2_AUTH_URL = 'https://accounts.google.com/o/oauth2/auth'
+GOOGLE_OAUTH2_TOKEN_URL = 'https://oauth2.googleapis.com/token'
+GOOGLE_OAUTH2_USERINFO_URL = 'https://www.googleapis.com/oauth2/v2/userinfo'
+
+# Logging for OAuth
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs', 'oauth.log'),
+            'formatter': 'verbose',
+        },
+        'console': {
+            'level': 'INFO',
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose',
+        },
+    },
+    'loggers': {
+        'user_profile.oauth_views': {
+            'handlers': ['file', 'console'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+    },
+} 
