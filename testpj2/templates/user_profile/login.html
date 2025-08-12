@@ -1,9 +1,10 @@
+{% load i18n %}
 <!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Đăng Nhập - Vietnam-Japan Connect</title>
+    <title>{% trans "Đăng Nhập - Vietnam-Japan Connect" %}</title>
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <!-- Google Fonts -->
@@ -75,6 +76,7 @@ body::before {
     background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
     transform: skewX(45deg);
     transition: 0.5s;
+    pointer-events: none;
 }
 
 .login-form:hover::before {
@@ -216,6 +218,34 @@ body::before {
     color: #999;
 }
 
+.language-switcher {
+  display: flex;
+  gap: 12px;
+  margin: 10px 0;
+}
+
+.language-switcher .btn {
+  background-color: transparent;
+  border: 2px solid #7543a0; /* 紫色のアクセントカラー */
+  border-radius: 6px;
+  padding: 6px 18px;
+  font-weight: 600;
+  color: #7543a0;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.language-switcher .btn:hover {
+  background-color: #7543a0;
+  color: white;
+}
+
+.language-switcher .btn.active {
+  background-color: #7543a0;
+  color: white;
+  cursor: default;
+}
+
 /* Responsive */
 @media (max-width: 480px) {
     .login-wrapper {
@@ -254,10 +284,20 @@ body::before {
     <div class="login-form">
         <!-- Header -->
         <div class="login-header">
-            <h2><i class="fas fa-sign-in-alt me-2"></i>Đăng Nhập</h2>
-            <p>Chào mừng trở lại với Vietnam-Japan Connect</p>
+            <h2><i class="fas fa-sign-in-alt me-2"></i>{% trans "Đăng Nhập" %}</h2>
+            <p>{% trans "Chào mừng trở lại với Vietnam-Japan Connect" %}</p>
         </div>
-
+        <!-- Language selection -->
+        <form action="{% url 'set_language' %}" method="post" class="language-switcher">
+            {% csrf_token %}
+            <input name="next" type="hidden" value="{{ request.get_full_path }}">
+            <button type="submit" name="language" value="ja" class="btn {% if LANGUAGE_CODE == 'ja' %}active{% endif %}">
+                日本語
+            </button>
+            <button type="submit" name="language" value="vi" class="btn {% if LANGUAGE_CODE == 'vi' %}active{% endif %}">
+                Tiếng Việt
+            </button>
+        </form>
         <!-- Form -->
         <form method="post">
             {% csrf_token %}
@@ -265,19 +305,19 @@ body::before {
             {% if form.errors %}
                 <div class="alert alert-danger">
                     <i class="fas fa-exclamation-triangle"></i>
-                    <strong>Đăng nhập thất bại.</strong> Vui lòng kiểm tra lại thông tin.
+                    <strong>{% trans "Đăng nhập thất bại." %}</strong> {% trans "Vui lòng kiểm tra lại thông tin." %}
                 </div>
             {% endif %}
             
             <div class="form-group">
                 <label for="{{ form.username.id_for_label }}">
-                    <i class="fas fa-user"></i> Tên đăng nhập
+                    <i class="fas fa-user"></i> {% trans "Tên đăng nhập" %}
                 </label>
                 <input type="text" 
                        class="form-control" 
                        name="{{ form.username.name }}" 
                        id="{{ form.username.id_for_label }}"
-                       placeholder="Nhập tên đăng nhập"
+                       placeholder="{% trans 'Nhập tên đăng nhập' %}"
                        required>
                 {% if form.username.errors %}
                     <div class="text-danger mt-1">{{ form.username.errors }}</div>
@@ -286,13 +326,13 @@ body::before {
             
             <div class="form-group">
                 <label for="{{ form.password.id_for_label }}">
-                    <i class="fas fa-lock"></i> Mật khẩu
+                    <i class="fas fa-lock"></i> {% trans "Mật khẩu" %}
                 </label>
                 <input type="password" 
                        class="form-control" 
                        name="{{ form.password.name }}" 
                        id="{{ form.password.id_for_label }}"
-                       placeholder="Nhập mật khẩu"
+                       placeholder="{% trans 'Nhập mật khẩu' %}"
                        required>
                 {% if form.password.errors %}
                     <div class="text-danger mt-1">{{ form.password.errors }}</div>
@@ -300,22 +340,22 @@ body::before {
             </div>
             
             <button type="submit" class="btn-login">
-                <i class="fas fa-sign-in-alt me-2"></i>Đăng Nhập
+                <i class="fas fa-sign-in-alt me-2"></i>{% trans "Đăng Nhập" %}
             </button>
         </form>
         
         <div class="divider">
-            <span>hoặc</span>
+            <span>{% trans "hoặc" %}</span>
         </div>
         
         <div class="login-links">
             <p style="color: #666; margin-bottom: 1rem;">
-                Chưa có tài khoản? 
-                <a href="{% url 'register' %}">Đăng ký ngay</a>
+                {% trans "Chưa có tài khoản?" %} 
+                <a href="{% url 'register' %}">{% trans "Đăng ký ngay" %}</a>
             </p>
             
             <a href="{% url 'home' %}">
-                <i class="fas fa-arrow-left me-1"></i>Về trang chủ
+                <i class="fas fa-arrow-left me-1"></i>{% trans "Về trang chủ" %}
             </a>
         </div>
     </div>
