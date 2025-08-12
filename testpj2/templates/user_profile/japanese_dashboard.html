@@ -10,7 +10,7 @@
             <div class="card mb-4">
                 <div class="card-body text-center">
                     {% if user.profile_picture %}
-                        <img src="{{ user.profile_picture.url }}" alt="Profile Picture" class="rounded-circle mb-3" style="width: 100px; height: 100px; object-fit: cover;">
+                        <img src="{{ user.profile_picture.url }}" alt="プロフィール画像" class="rounded-circle mb-3" style="width: 100px; height: 100px; object-fit: cover;">
                     {% else %}
                         <div class="bg-secondary rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 100px; height: 100px;">
                             <i class="fas fa-user fa-3x text-white"></i>
@@ -70,12 +70,12 @@
             <!-- Lesson Plan Section -->
             <div class="card mb-4">
                 <div class="card-header">
-                    <h5 class="mb-0"><i class="fas fa-chalkboard-teacher"></i> Bộ Lesson Plan Sẵn</h5>
+                    <h5 class="mb-0"><i class="fas fa-chalkboard-teacher"></i> レッスンプラン一覧</h5>
                 </div>
                 <div class="card-body">
                     <p class="card-text mb-4">
-                        Tạo bộ lesson plan sẵn cho mỗi bài học: mỗi bài có mục tiêu, từ vựng, ngữ pháp, mẫu câu, hoạt động. 
-                        Cung cấp ví dụ hội thoại song ngữ Việt – Nhật để người dạy dựa vào.
+                        各レッスンのための事前レッスンプランを作成します：各レッスンには目標、語彙、文法、例文、活動があります。
+                        ベトナム語-日本語のバイリンガル会話例を提供し、教師が参考にできます。
                     </p>
                     
                     <div class="row">
@@ -83,12 +83,12 @@
                             <div class="card border-primary">
                                 <div class="card-body">
                                     <h6 class="card-title text-primary">
-                                        <i class="fas fa-target"></i> Mục tiêu học tập
+                                        <i class="fas fa-target"></i> 学習目標
                                     </h6>
                                     <ul class="list-unstyled">
-                                        <li><i class="fas fa-check text-success me-2"></i>Xác định mục tiêu rõ ràng cho mỗi bài học</li>
-                                        <li><i class="fas fa-check text-success me-2"></i>Đo lường tiến độ học tập</li>
-                                        <li><i class="fas fa-check text-success me-2"></i>Đánh giá kết quả cuối bài</li>
+                                        <li><i class="fas fa-check text-success me-2"></i>各レッスンの明確な目標を設定</li>
+                                        <li><i class="fas fa-check text-success me-2"></i>学習進捗を測定</li>
+                                        <li><i class="fas fa-check text-success me-2"></i>レッスン終了時に成果を評価</li>
                                     </ul>
                                 </div>
                             </div>
@@ -98,12 +98,12 @@
                             <div class="card border-success">
                                 <div class="card-body">
                                     <h6 class="card-title text-success">
-                                        <i class="fas fa-book"></i> Từ vựng & Ngữ pháp
+                                        <i class="fas fa-book"></i> 語彙 & 文法
                                     </h6>
                                     <ul class="list-unstyled">
-                                        <li><i class="fas fa-check text-success me-2"></i>Danh sách từ vựng theo chủ đề</li>
-                                        <li><i class="fas fa-check text-success me-2"></i>Giải thích ngữ pháp đơn giản</li>
-                                        <li><i class="fas fa-check text-success me-2"></i>Ví dụ minh họa thực tế</li>
+                                        <li><i class="fas fa-check text-success me-2"></i>テーマ別語彙リスト</li>
+                                        <li><i class="fas fa-check text-success me-2"></i>簡単な文法解説</li>
+                                        <li><i class="fas fa-check text-success me-2"></i>実用的な例文</li>
                                     </ul>
                                 </div>
                             </div>
@@ -113,12 +113,12 @@
                             <div class="card border-warning">
                                 <div class="card-body">
                                     <h6 class="card-title text-warning">
-                                        <i class="fas fa-comments"></i> Mẫu câu & Hội thoại
+                                        <i class="fas fa-comments"></i> 例文 & 会話
                                     </h6>
                                     <ul class="list-unstyled">
-                                        <li><i class="fas fa-check text-success me-2"></i>Hội thoại song ngữ Việt-Nhật</li>
-                                        <li><i class="fas fa-check text-success me-2"></i>Mẫu câu thực dụng</li>
-                                        <li><i class="fas fa-check text-success me-2"></i>Phát âm và ngữ điệu</li>
+                                        <li><i class="fas fa-check text-success me-2"></i>ベトナム語-日本語のバイリンガル会話</li>
+                                        <li><i class="fas fa-check text-success me-2"></i>実用的な例文</li>
+                                        <li><i class="fas fa-check text-success me-2"></i>発音とイントネーション</li>
                                     </ul>
                                 </div>
                             </div>
@@ -128,12 +128,12 @@
                             <div class="card border-info">
                                 <div class="card-body">
                                     <h6 class="card-title text-info">
-                                        <i class="fas fa-gamepad"></i> Hoạt động & Thực hành
+                                        <i class="fas fa-gamepad"></i> アクティビティ & 実践
                                     </h6>
                                     <ul class="list-unstyled">
-                                        <li><i class="fas fa-check text-success me-2"></i>Bài tập tương tác</li>
-                                        <li><i class="fas fa-check text-success me-2"></i>Trò chơi học tập</li>
-                                        <li><i class="fas fa-check text-success me-2"></i>Thực hành giao tiếp</li>
+                                        <li><i class="fas fa-check text-success me-2"></i>インタラクティブな練習問題</li>
+                                        <li><i class="fas fa-check text-success me-2"></i>学習ゲーム</li>
+                                        <li><i class="fas fa-check text-success me-2"></i>コミュニケーション実践</li>
                                     </ul>
                                 </div>
                             </div>
@@ -142,10 +142,10 @@
                     
                     <div class="text-center mt-3">
                         <a href="/create/lessons/" class="btn btn-primary me-2">
-                            <i class="fas fa-list"></i> Xem Lessons
+                            <i class="fas fa-list"></i> レッスンを見る
                         </a>
                         <a href="/create/phrases/" class="btn btn-outline-primary">
-                            <i class="fas fa-plus"></i> Học từ vựng
+                            <i class="fas fa-plus"></i> 語彙を学ぶ
                         </a>
                     </div>
                 </div>

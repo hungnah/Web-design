@@ -1,18 +1,18 @@
 {% extends 'base.html' %}
 
-{% block title %}Tìm người Nhật - Vietnam-Japan Connect{% endblock %}
+{% block title %}日本人を探す - Vietnam-Japan Connect{% endblock %}
 
 {% block content %}
 <!-- Debug Information -->
 {% if user.is_authenticated %}
 <div class="container mt-3">
     <div class="alert alert-info">
-        <strong>Debug Info:</strong> 
-        User: {{ user.username }} | 
-        Nationality: {{ user.nationality }} | 
-        City: {{ user.city }} |
-        <a href="{% url 'dashboard' %}">Dashboard</a> |
-        <a href="{% url 'my_chats' %}">My Chats</a>
+        <strong>デバッグ情報:</strong> 
+        ユーザー: {{ user.username }} | 
+        国籍: {{ user.nationality }} | 
+        都市: {{ user.city }} |
+        <a href="{% url 'dashboard' %}">ダッシュボード</a> |
+        <a href="{% url 'my_chats' %}">チャット一覧</a>
     </div>
 </div>
 {% endif %}
@@ -24,7 +24,7 @@
             <h1 class="text-center mb-3">
                 <i class="fas fa-search"></i> パートナーを探す
             </h1>
-            <p class="text-center text-muted">ベトナム人のパートナーと交流し、言語学習しながら文化交流しよう</p>
+            <p class="text-center text-muted">ベトナム人パートナーと交流し、言語学習と文化交流を楽しみましょう</p>
         </div>
     </div>
 
@@ -51,7 +51,7 @@
     <div class="row mb-3">
         <div class="col-12">
             <div class="alert alert-success">
-                <strong>{{ selected_city }}</strong> に <strong>{{ posts|length }}</strong> 件の募集があります
+                <strong>{{ selected_city }}</strong> には <strong>{{ posts|length }}</strong> 件の募集があります
             </div>
         </div>
     </div>
@@ -70,7 +70,7 @@
                         </div>
                         <div class="text-end">
                             <span class="badge bg-info">{{ post.phrase.get_category_display }}</span>
-                            <span class="badge bg-warning ms-1">Chờ chấp nhận</span>
+                            <span class="badge bg-warning ms-1">承認待ち</span>
                         </div>
                     </div>
                     <div class="card-body">
@@ -85,16 +85,16 @@
                         </div>
                         
                         <div class="mb-3">
-                            <small class="text-muted">時間:</small>
+                            <small class="text-muted">日時:</small>
                             <p class="mb-1">
                                 <i class="fas fa-calendar"></i> 
-                                {{ post.meeting_date|date:"d/m/Y H:i" }}
+                                {{ post.meeting_date|date:"Y年m月d日 H:i" }}
                             </p>
                         </div>
                         
                         {% if post.notes %}
                             <div class="mb-3">
-                                <small class="text-muted">Ghi chú:</small>
+                                <small class="text-muted">メモ:</small>
                                 <p class="mb-1">{{ post.notes }}</p>
                             </div>
                         {% endif %}
@@ -112,14 +112,14 @@
             <div class="col-12">
                 <div class="text-center">
                     <i class="fas fa-search fa-3x text-muted mb-3"></i>
-                    <h4>Không có bài đăng nào</h4>
+                    <h4>投稿がありません</h4>
                     <p class="text-muted">
-                        Hiện tại không có bài đăng nào trong khu vực {{ selected_city }}. 
-                        Hãy thử chọn thành phố khác hoặc quay lại sau.
+                        現在、{{ selected_city }} の地域には投稿がありません。<br>
+                        他の都市を選択するか、後でもう一度お試しください。
                     </p>
                     <div class="mt-3">
                         <a href="{% url 'dashboard' %}" class="btn btn-primary">
-                            <i class="fas fa-home"></i> Về Dashboard
+                            <i class="fas fa-home"></i> ダッシュボードへ戻る
                         </a>
                     </div>
                 </div>
@@ -132,21 +132,21 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <h5 class="mb-0"><i class="fas fa-info-circle"></i> Hướng dẫn</h5>
+                    <h5 class="mb-0"><i class="fas fa-info-circle"></i> ご利用ガイド</h5>
                 </div>
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-4 mb-3">
-                            <h6><i class="fas fa-search text-primary"></i> Tìm kiếm</h6>
-                            <small class="text-muted">Chọn thành phố để xem các bài đăng trong khu vực</small>
+                            <h6><i class="fas fa-search text-primary"></i> 検索</h6>
+                            <small class="text-muted">都市を選択して、その地域の投稿を表示します</small>
                         </div>
                         <div class="col-md-4 mb-3">
-                            <h6><i class="fas fa-check text-success"></i> Chấp nhận</h6>
-                            <small class="text-muted">Nhấn "Chấp nhận" để bắt đầu kết nối với người Nhật</small>
+                            <h6><i class="fas fa-check text-success"></i> 応募</h6>
+                            <small class="text-muted">「応募する」を押して日本人とつながりましょう</small>
                         </div>
                         <div class="col-md-4 mb-3">
-                            <h6><i class="fas fa-comments text-info"></i> Trò chuyện</h6>
-                            <small class="text-muted">Sau khi chấp nhận, bạn có thể chat trực tiếp</small>
+                            <h6><i class="fas fa-comments text-info"></i> チャット</h6>
+                            <small class="text-muted">応募後、直接チャットができます</small>
                         </div>
                     </div>
                 </div>
