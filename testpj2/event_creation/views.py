@@ -246,13 +246,16 @@ def my_posts(request):
     return render(request, 'event_creation/my_posts.html', context)
 
 @login_required
-def accept_post(request, post_id):
+def accept_post(request, post_id, phrase_id):
     """Accept a language exchange post"""
     if request.user.nationality != 'japanese':
         return redirect('dashboard')
     
+    phrase = get_object_or_404(VietnamesePhrase, id=phrase_id)
+    
     post = get_object_or_404(LanguageExchangePost, id=post_id, status='active')
     post.japanese_user = request.user
+    post.phrase = phrase
     post.status = 'matched'
     post.save()
     

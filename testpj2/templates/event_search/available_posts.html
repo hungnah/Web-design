@@ -100,7 +100,7 @@
                         {% endif %}
                     </div>
                     <div class="card-footer text-center">
-                        <a href="{% url 'accept_post' post.id %}phrases/" 
+                        <a href="{% url 'phrase_list' post.id %}" 
                            class="btn btn-success w-100"
                            onclick="return acceptPost({{ post.id }}, '{{ post.phrase.vietnamese_text }}')">
                             <i class="fas fa-check"></i> 応募する

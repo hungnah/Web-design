@@ -13,7 +13,7 @@ urlpatterns = [
     path('edit-post/<int:post_id>/', views.edit_post, name='edit_post'),
     path('my-posts/', views.my_posts, name='my_posts'),
     path('accept-post/<int:post_id>/phrases/', views.phrase_list, name='phrase_list'),
-    path('accept-post/<int:post_id>/', views.accept_post, name='accept_post'),
+    path('accept-post/<int:post_id>/<int:phrase_id>/', views.accept_post, name='accept_post'),
     path('cancel-accept-post/<int:post_id>/', views.cancel_accept_post, name='cancel_accept_post'),
     
     # Partner request URLs
