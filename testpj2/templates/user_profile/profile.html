@@ -2,11 +2,7 @@
 {% load crispy_forms_tags %}
 
 {% block title %}
-{% if user.nationality == 'japanese' %}
-    プロフィール - Vietnam-Japan Connect
-{% else %}
-    Hồ sơ - Vietnam-Japan Connect
-{% endif %}
+プロフィール - Vietnam-Japan Connect
 {% endblock %}
 
 {% block content %}
@@ -18,7 +14,7 @@
             <div class="card mb-4">
                 <div class="card-body text-center">
                     {% if user.profile_picture %}
-                        <img src="{{ user.profile_picture.url }}" alt="Profile Picture" class="rounded-circle mb-3" style="width: 150px; height: 150px; object-fit: cover;">
+                        <img src="{{ user.profile_picture.url }}" alt="プロフィール画像" class="rounded-circle mb-3" style="width: 150px; height: 150px; object-fit: cover;">
                     {% else %}
                         <div class="bg-secondary rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 150px; height: 150px;">
                             <i class="fas fa-user fa-4x text-white"></i>
@@ -26,18 +22,14 @@
                     {% endif %}
                     <h4>{{ user.full_name|default:user.username }}</h4>
                     <p class="text-muted">{{ user.email }}</p>
-                    <span class="badge bg-{% if user.nationality == 'japanese' %}primary{% else %}success{% endif %} language-badge">
-                        {% if user.nationality == 'japanese' %}
-                            日本人
-                        {% else %}
-                            Người Việt
-                        {% endif %}
+                    <span class="badge bg-primary language-badge">
+                        日本人
                     </span>
                     <p class="mt-2">
                         <i class="fas fa-map-marker-alt"></i> {{ user.get_city_display }}
                     </p>
                     {% if user.get_age %}
-                        <p><i class="fas fa-birthday-cake"></i> {{ user.get_age }} tuổi</p>
+                        <p><i class="fas fa-birthday-cake"></i> {{ user.get_age }}歳</p>
                     {% endif %}
                 </div>
             </div>
@@ -46,46 +38,25 @@
             <div class="card">
                 <div class="card-header">
                     <h5 class="mb-0">
-                        <i class="fas fa-chart-bar"></i> 
-                        {% if user.nationality == 'japanese' %}
-                            統計
-                        {% else %}
-                            Thống kê
-                        {% endif %}
+                        <i class="fas fa-chart-bar"></i> 統計
                     </h5>
                 </div>
                 <div class="card-body">
                     <div class="row text-center">
                         <div class="col-6">
                             <h4 class="text-primary">
-                                {% if user.nationality == 'japanese' %}
-                                    {{ user.japanese_posts.count }}
-                                {% else %}
-                                    {{ user.vietnamese_posts.count }}
-                                {% endif %}
+                                {{ user.japanese_posts.count }}
                             </h4>
                             <small class="text-muted">
-                                {% if user.nationality == 'japanese' %}
-                                    投稿数
-                                {% else %}
-                                    Bài đăng
-                                {% endif %}
+                                投稿数
                             </small>
                         </div>
                         <div class="col-6">
                             <h4 class="text-success">
-                                {% if user.nationality == 'japanese' %}
-                                    {{ user.japanese_posts.all|length }}
-                                {% else %}
-                                    {{ user.vietnamese_posts.all|length }}
-                                {% endif %}
+                                {{ user.japanese_posts.all|length }}
                             </h4>
                             <small class="text-muted">
-                                {% if user.nationality == 'japanese' %}
-                                    マッチング
-                                {% else %}
-                                    Kết nối
-                                {% endif %}
+                                マッチング
                             </small>
                         </div>
                     </div>
@@ -98,12 +69,7 @@
             <div class="card">
                 <div class="card-header">
                     <h3 class="mb-0">
-                        <i class="fas fa-edit"></i> 
-                        {% if user.nationality == 'japanese' %}
-                            プロフィール編集
-                        {% else %}
-                            Chỉnh sửa hồ sơ
-                        {% endif %}
+                        <i class="fas fa-edit"></i> プロフィール編集
                     </h3>
                 </div>
                 <div class="card-body">
@@ -130,28 +96,13 @@
                         
                         <div class="alert alert-info">
                             <i class="fas fa-info-circle"></i>
-                            <strong>
-                                {% if user.nationality == 'japanese' %}
-                                    注意:
-                                {% else %}
-                                    Lưu ý:
-                                {% endif %}
-                            </strong>
-                            {% if user.nationality == 'japanese' %}
-                                プロフィール情報を更新すると、ベトナム人のパートナーがあなたについてより詳しく知ることができます。
-                            {% else %}
-                                Cập nhật thông tin hồ sơ sẽ giúp người Nhật hiểu rõ hơn về bạn.
-                            {% endif %}
+                            <strong>注意:</strong>
+                            プロフィール情報を更新すると、ベトナム人のパートナーがあなたについてより詳しく知ることができます。
                         </div>
                         
                         <div class="d-grid gap-2">
                             <button type="submit" class="btn btn-primary btn-lg">
-                                <i class="fas fa-save"></i> 
-                                {% if user.nationality == 'japanese' %}
-                                    保存
-                                {% else %}
-                                    Lưu thay đổi
-                                {% endif %}
+                                <i class="fas fa-save"></i> 保存
                             </button>
                         </div>
                     </form>
@@ -162,28 +113,23 @@
             <div class="card mt-4">
                 <div class="card-header">
                     <h5 class="mb-0">
-                        <i class="fas fa-user-cog"></i> 
-                        {% if user.nationality == 'japanese' %}
-                            アカウント情報
-                        {% else %}
-                            Thông tin tài khoản
-                        {% endif %}
+                        <i class="fas fa-user-cog"></i> アカウント情報
                     </h5>
                 </div>
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-6">
-                            <p><strong>Username:</strong> {{ user.username }}</p>
-                            <p><strong>Email:</strong> {{ user.email }}</p>
+                            <p><strong>ユーザー名:</strong> {{ user.username }}</p>
+                            <p><strong>メール:</strong> {{ user.email }}</p>
                         </div>
                         <div class="col-md-6">
-                            <p><strong>Ngày tham gia:</strong> {{ user.date_joined|date:"d/m/Y" }}</p>
-                            <p><strong>Lần đăng nhập cuối:</strong> {{ user.last_login|date:"d/m/Y H:i" }}</p>
+                            <p><strong>登録日:</strong> {{ user.date_joined|date:"Y年m月d日" }}</p>
+                            <p><strong>最終ログイン:</strong> {{ user.last_login|date:"Y年m月d日 H:i" }}</p>
                         </div>
                     </div>
                     <div class="mt-3 text-end">
                         <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#changePasswordModal">
-                            <i class="fas fa-key"></i> Đổi mật khẩu
+                            <i class="fas fa-key"></i> パスワード変更
                         </button>
                     </div>
                 </div>
@@ -236,15 +182,15 @@
                         form.reset();
 
                         const msgContainer = document.getElementById('inline-messages');
-                        msgContainer.innerHTML = '<div class="container mt-3"><div class="alert alert-success alert-dismissible fade show" role="alert">Đổi mật khẩu thành công<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div></div>';
+                        msgContainer.innerHTML = '<div class="container mt-3"><div class="alert alert-success alert-dismissible fade show" role="alert">パスワードが正常に変更されました<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div></div>';
                     } else {
-                        const errors = (result.data && result.data.errors) ? result.data.errors : {__all__: ['Đã có lỗi xảy ra']};
+                        const errors = (result.data && result.data.errors) ? result.data.errors : {__all__: ['エラーが発生しました']};
                         setFieldErrors(errors);
                     }
                 })
                 .catch(function() {
                     const msgContainer = document.getElementById('inline-messages');
-                    msgContainer.innerHTML = '<div class="container mt-3"><div class="alert alert-danger alert-dismissible fade show" role="alert">Không thể đổi mật khẩu. Vui lòng thử lại.<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div></div>';
+                    msgContainer.innerHTML = '<div class="container mt-3"><div class="alert alert-danger alert-dismissible fade show" role="alert">パスワードを変更できませんでした。もう一度お試しください。<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div></div>';
                 });
             });
         });
@@ -256,32 +202,32 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="changePasswordModalLabel"><i class="fas fa-key"></i> Đổi mật khẩu</h5>
+        <h5 class="modal-title" id="changePasswordModalLabel"><i class="fas fa-key"></i> パスワード変更</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <form id="changePasswordForm">
             {% csrf_token %}
             <div class="mb-3">
-                <label for="id_old_password" class="form-label">Mật khẩu hiện tại</label>
+                <label for="id_old_password" class="form-label">現在のパスワード</label>
                 <input type="password" name="old_password" class="form-control" id="id_old_password" required>
                 <div class="invalid-feedback"></div>
             </div>
             <div class="mb-3">
-                <label for="id_new_password1" class="form-label">Mật khẩu mới</label>
+                <label for="id_new_password1" class="form-label">新しいパスワード</label>
                 <input type="password" name="new_password1" class="form-control" id="id_new_password1" required>
                 <div class="invalid-feedback"></div>
             </div>
             <div class="mb-3">
-                <label for="id_new_password2" class="form-label">Xác nhận mật khẩu mới</label>
+                <label for="id_new_password2" class="form-label">新しいパスワード（確認）</label>
                 <input type="password" name="new_password2" class="form-control" id="id_new_password2" required>
                 <div class="invalid-feedback"></div>
             </div>
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-        <button type="submit" form="changePasswordForm" class="btn btn-primary">Cập nhật</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">キャンセル</button>
+        <button type="submit" form="changePasswordForm" class="btn btn-primary">更新</button>
       </div>
     </div>
   </div>
