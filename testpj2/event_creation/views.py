@@ -97,16 +97,33 @@ def lesson_detail(request, lesson_id):
     return render(request, 'event_creation/lesson_detail.html', context)
 
 @login_required
-def create_post(request, phrase_id):
-    """Create a language exchange post"""
+def theory_section_detail(request, lesson_id, section_id):
+    """Display theory section detail with phrases and conversation examples"""
+    if request.user.nationality != 'japanese':
+        return redirect('dashboard')
+    
+    lesson = get_object_or_404(Lesson, id=lesson_id)
+    theory_section = get_object_or_404(TheorySection, id=section_id, lesson=lesson)
+    phrases = theory_section.phrases.all()
+    conversations = theory_section.conversations.all()
+    
+    context = {
+        'lesson': lesson,
+        'theory_section': theory_section,
+        'phrases': phrases,
+        'conversations': conversations,
+    }
+    
+    return render(request, 'event_creation/theory_section_detail.html', context)
+
+@login_required
+def lesson_quiz(request, lesson_id):
+    """Display quiz for a specific lesson"""
     if request.user.nationality != 'japanese':
         return redirect('dashboard')
     
     lesson = get_object_or_404(Lesson, id=lesson_id)
     quiz_questions = lesson.quiz_questions.all()
-
-    if phrase_id:
-        phrase = get_object_or_404(VietnamesePhrase, id=phrase_id) 
     
     if request.method == 'POST':
         # Handle quiz submission
@@ -144,51 +161,6 @@ def create_post(request, phrase_id):
     
     return render(request, 'event_creation/lesson_quiz.html', context)
 
-@login_required
-def create_post(request, phrase_id):
-    """Create a language exchange post"""
-    # if request.user.nationality != 'japanese':
-    #     return redirect('dashboard')
-    phrase = None
-    
-    lesson = get_object_or_404(Lesson, id=lesson_id)
-    quiz_questions = lesson.quiz_questions.all()
-    
-    if request.method == 'POST':
-        # Handle quiz submission
-        score = 0
-        total_questions = quiz_questions.count()
-        user_answers = {}
-        
-        for question in quiz_questions:
-            answer_key = f'question_{question.id}'
-            user_answer = request.POST.get(answer_key)
-            user_answers[question.id] = user_answer
-            
-            if user_answer == question.correct_answer:
-                score += 1
-        
-        percentage = (score / total_questions) * 100 if total_questions > 0 else 0
-        
-        context = {
-            'lesson': lesson,
-            'quiz_questions': quiz_questions,
-            'user_answers': user_answers,
-            'score': score,
-            'total_questions': total_questions,
-            'percentage': percentage,
-            'show_results': True,
-        }
-        
-        return render(request, 'event_creation/lesson_quiz.html', context)
-    
-    context = {
-        'lesson': lesson,
-        'quiz_questions': quiz_questions,
-        'show_results': False,
-    }
-    
-    return render(request, 'event_creation/lesson_quiz.html', context)
 
 @login_required
 def create_post(request, phrase_id=None):
