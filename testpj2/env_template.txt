@@ -1,0 +1,16 @@
+# Google OAuth 2.0 Credentials
+# Thay thế các giá trị này bằng credentials thực tế từ Google Cloud Console
+# Sau đó đổi tên file thành .env
+
+GOOGLE_OAUTH2_CLIENT_ID=your-client-id.apps.googleusercontent.com
+GOOGLE_OAUTH2_CLIENT_SECRET=your-client-secret
+GOOGLE_OAUTH2_REDIRECT_URI=http://localhost:8000/auth/google/callback/
+
+# Django Secret Key (nếu cần)
+# SECRET_KEY=your-django-secret-key
+
+# Database (nếu cần)
+# DATABASE_URL=sqlite:///db.sqlite3
+
+# Debug mode
+DEBUG=True
