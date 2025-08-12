@@ -9,6 +9,7 @@ urlpatterns = [
     path('logout/', views.custom_logout, name='logout'),  # Custom logout view
     path('dashboard/', views.dashboard, name='dashboard'),
     path('profile/', views.profile, name='profile'),
+    path('profile/change-password/', views.change_password_ajax, name='change_password_ajax'),
     path('guide/', views.guide, name='guide'),
     path('i18n/', include('django.conf.urls.i18n')),
 ]

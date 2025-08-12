@@ -30,6 +30,7 @@ urlpatterns = [
     
     # Main application modules
     path('auth/', include('user_profile.urls')),     # User management & authentication
+    path('auth/', include('user_profile.oauth_urls')), # Google OAuth endpoints
     path('chat/', include('chat_system.urls')),      # Real-time messaging system
     path('create/', include('event_creation.urls')), # Creating posts, lessons, requests
     path('search/', include('event_search.urls')),   # Finding & browsing opportunities

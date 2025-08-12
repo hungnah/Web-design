@@ -18,13 +18,13 @@ from .forms import LanguageExchangePostForm, PartnerRequestForm
 from chat_system.models import ChatRoom, Message
 
 @login_required
-def phrase_list(request):
+def phrase_list(request, post_id=None):
     """
     Display Vietnamese phrases with filtering options for Japanese users
     Allows filtering by category and difficulty level
     """
-    if request.user.nationality != 'japanese':
-        return redirect('dashboard')
+    # if request.user.nationality != 'japanese':
+    #     return redirect('dashboard')
     
     category = request.GET.get('category', '')
     difficulty = request.GET.get('difficulty', '')
@@ -37,6 +37,7 @@ def phrase_list(request):
         phrases = phrases.filter(difficulty=difficulty)
     
     context = {
+        'post_id': post_id,
         'phrases': phrases,
         'categories': VietnamesePhrase.CATEGORY_CHOICES,
         'difficulties': VietnamesePhrase.DIFFICULTY_CHOICES,
@@ -49,8 +50,8 @@ def phrase_list(request):
 @login_required
 def lessons(request):
     """Display Vietnamese language lessons"""
-    if request.user.nationality != 'japanese':
-        return redirect('dashboard')
+    # if request.user.nationality != 'japanese':
+    #     return redirect('dashboard')
     
     category = request.GET.get('category', '')
     difficulty = request.GET.get('difficulty', '')
@@ -77,6 +78,9 @@ def lesson_detail(request, lesson_id):
     """Display lesson detail with phrases, theory sections, and quiz questions"""
     if request.user.nationality != 'japanese':
         return redirect('dashboard')
+    """Display lesson detail with phrases"""
+    # if request.user.nationality != 'japanese':
+    #     return redirect('dashboard')
     
     lesson = get_object_or_404(Lesson, id=lesson_id)
     phrases = lesson.phrases.all()
@@ -157,19 +161,23 @@ def lesson_quiz(request, lesson_id):
     
     return render(request, 'event_creation/lesson_quiz.html', context)
 
+
 @login_required
-def create_post(request, phrase_id):
+def create_post(request, phrase_id=None):
     """Create a language exchange post"""
-    if request.user.nationality != 'japanese':
-        return redirect('dashboard')
+    # if request.user.nationality != 'japanese':
+    #     return redirect('dashboard')
+    phrase = None
     
-    phrase = get_object_or_404(VietnamesePhrase, id=phrase_id)
+    if phrase_id:
+        phrase = get_object_or_404(VietnamesePhrase, id=phrase_id)
     
     if request.method == 'POST':
         form = LanguageExchangePostForm(request.POST)
         if form.is_valid():
             post = form.save(commit=False)
-            post.japanese_user = request.user
+            post.vietnamese_user = request.user
+            post.japanese_user_id = None
             post.phrase = phrase
             post.save()
             messages.success(request, 'Post created successfully!')
@@ -187,10 +195,10 @@ def create_post(request, phrase_id):
 @login_required
 def edit_post(request, post_id):
     """Edit a language exchange post"""
-    if request.user.nationality != 'japanese':
-        return redirect('dashboard')
+    # if request.user.nationality != 'japanese':
+    #     return redirect('dashboard')
     
-    post = get_object_or_404(LanguageExchangePost, id=post_id, japanese_user=request.user)
+    post = get_object_or_404(LanguageExchangePost, id=post_id, vietnamese_user=request.user)
     
     # Only allow editing active posts (not matched ones)
     if post.status != 'active':
@@ -216,10 +224,10 @@ def edit_post(request, post_id):
 @login_required
 def my_posts(request):
     """Display user's own posts"""
-    if request.user.nationality == 'japanese':
-        posts = LanguageExchangePost.objects.filter(japanese_user=request.user)
-    else:
+    if request.user.nationality == 'vietnamese':
         posts = LanguageExchangePost.objects.filter(vietnamese_user=request.user)
+    else:
+        posts = LanguageExchangePost.objects.filter(japanese_user=request.user)
     
     # Calculate counts for statistics
     matched_posts_count = posts.filter(status='matched').count()
@@ -238,13 +246,16 @@ def my_posts(request):
     return render(request, 'event_creation/my_posts.html', context)
 
 @login_required
-def accept_post(request, post_id):
+def accept_post(request, post_id, phrase_id):
     """Accept a language exchange post"""
-    if request.user.nationality != 'vietnamese':
+    if request.user.nationality != 'japanese':
         return redirect('dashboard')
     
+    phrase = get_object_or_404(VietnamesePhrase, id=phrase_id)
+    
     post = get_object_or_404(LanguageExchangePost, id=post_id, status='active')
-    post.vietnamese_user = request.user
+    post.japanese_user = request.user
+    post.phrase = phrase
     post.status = 'matched'
     post.save()
     

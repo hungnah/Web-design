@@ -11,7 +11,9 @@ from django.contrib.auth.views import LoginView
 from django.contrib import messages
 from django.urls import reverse, reverse_lazy
 from django.db.models import Q
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth import update_session_auth_hash
 from .forms import CustomUserCreationForm, ProfileUpdateForm
 from .decorators import prevent_back_button
 from event_creation.models import LanguageExchangePost, PartnerRequest
@@ -117,7 +119,10 @@ def dashboard(request):
         user.save()
         
         # Get user's recent language exchange posts
-        recent_posts = user.japanese_posts.all().select_related('phrase', 'cafe_location')[:5]
+        recent_posts = LanguageExchangePost.objects.filter(
+            vietnamese_user__nationality='vietnamese',
+            status='active'
+        ).select_related('phrase', 'cafe_location', 'vietnamese_user').order_by('-created_at')[:5]
         
         context = {
             'user': user,
@@ -137,6 +142,9 @@ def dashboard(request):
         
         # Only show active posts (not accepted ones)
         available_posts = available_posts.filter(status='active')
+
+        # Get user's recent language exchange posts
+        recent_posts = user.vietnamese_posts.all().select_related('phrase', 'cafe_location')[:5]
         
         # Calculate statistics
         accepted_posts_count = user.vietnamese_posts.filter(status='matched').count()
@@ -147,6 +155,7 @@ def dashboard(request):
             'available_posts': available_posts[:6],  # Show first 6 posts
             'accepted_posts_count': accepted_posts_count,
             'available_posts_count': available_posts_count,
+            'recent_posts' : recent_posts,
         }
         response = render(request, 'user_profile/vietnamese_dashboard.html', context)
     
@@ -207,3 +216,20 @@ def home(request):
     response['Pragma'] = 'no-cache'
     response['Expires'] = '0'
     return response
+
+
+@login_required
+def change_password_ajax(request):
+    """Handle password change via AJAX modal on profile page."""
+    if request.method != 'POST':
+        return JsonResponse({'success': False, 'message': 'Invalid request method'}, status=405)
+
+    form = PasswordChangeForm(user=request.user, data=request.POST)
+    if form.is_valid():
+        user = form.save()
+        update_session_auth_hash(request, user)
+        return JsonResponse({'success': True, 'message': 'Đổi mật khẩu thành công'})
+
+    # Collect field errors
+    errors = {field: msgs for field, msgs in form.errors.items()}
+    return JsonResponse({'success': False, 'errors': errors}, status=400)
