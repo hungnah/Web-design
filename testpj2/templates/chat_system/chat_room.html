@@ -153,9 +153,15 @@
                             <div class="col-md-6">
                                 <p><strong>Thời gian:</strong> {{ chat_room.post.meeting_date|date:"d/m/Y H:i" }}</p>
                                 <p>学習するフレーズ: {{ chat_room.post.phrase }}</p>
-                                <a href="{% url 'study' chat_room.post.id chat_room.post.phrase.id %}?timer=1" style="display:inline-block; padding:10px 20px; background-color:#007BFF; color:white; text-decoration:none; border-radius:5px;">
-                                セッション開始
-                                </a>
+                                {% if user == chat_room.post.japanese_user %}
+                                    <a href="{% url 'study' chat_room.post.vietnamese_user.id chat_room.post.id chat_room.post.phrase.id %}?timer=1" style="display:inline-block; padding:10px 20px; background-color:#007BFF; color:white; text-decoration:none; border-radius:5px;">
+                                    セッション開始
+                                    </a>
+                                {% else %}
+                                    <a href="{% url 'study' chat_room.post.japanese_user.id chat_room.post.id chat_room.post.phrase.id %}?timer=1" style="display:inline-block; padding:10px 20px; background-color:#007BFF; color:white; text-decoration:none; border-radius:5px;">
+                                    セッション開始
+                                    </a>
+                                {% endif %}
                                 <p><strong>Trạng thái:</strong> 
                                     <span class="badge bg-success">{{ chat_room.post.get_status_display }}</span>
                                 </p>
@@ -164,19 +170,21 @@
                         {% if chat_room.post.notes %}
                             <p><strong>Ghi chú:</strong> {{ chat_room.post.notes }}</p>
                         {% endif %}
-                    {% elif chat_room.partner_request %}
-                        <h6><i class="fas fa-info-circle"></i> Thông tin partner</h6>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <p><strong>Yêu cầu:</strong> {{ chat_room.partner_request.title }}</p>
-                                <p><strong>Thành phố:</strong> {{ chat_room.partner_request.get_preferred_city_display }}</p>
+                    {% else %}
+                        {% if chat_room.partner_request %}
+                            <h6><i class="fas fa-info-circle"></i> Thông tin partner</h6>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <p><strong>Yêu cầu:</strong> {{ chat_room.partner_request.title }}</p>
+                                    <p><strong>Thành phố:</strong> {{ chat_room.partner_request.get_preferred_city_display }}</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p><strong>Gặp mặt:</strong> {{ chat_room.partner_request.get_meeting_preference_display }}</p>
+                                    <p><strong>Tần suất:</strong> {{ chat_room.partner_request.get_frequency_display }}</p>
+                                </div>
                             </div>
-                            <div class="col-md-6">
-                                <p><strong>Gặp mặt:</strong> {{ chat_room.partner_request.get_meeting_preference_display }}</p>
-                                <p><strong>Tần suất:</strong> {{ chat_room.partner_request.get_frequency_display }}</p>
-                            </div>
-                        </div>
-                        <p><strong>Mô tả:</strong> {{ chat_room.partner_request.description }}</p>
+                            <p><strong>Mô tả:</strong> {{ chat_room.partner_request.description }}</p>
+                        {% endif %}
                     {% endif %}
                 </div>
             </div>
