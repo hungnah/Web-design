@@ -65,6 +65,7 @@ INSTALLED_APPS = [
     'chat_system',       # Chat rooms and messaging
     'event_creation',    # Creating posts, lessons, partner requests
     'event_search',      # Searching and browsing events
+    'session',           # Session management and evaluations
     
     # Third-party apps for UI enhancement
     'crispy_forms',      # Better form rendering

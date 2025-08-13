@@ -44,6 +44,7 @@ class CustomUser(AbstractUser):
     profile_picture = models.ImageField(upload_to='profile_pics/', null=True, blank=True)
     
     # Additional profile information
+    point = models.IntegerField(default=0, help_text="User's current point")
     bio = models.TextField(max_length=500, blank=True, help_text="Tell others about yourself")
     interests = models.TextField(max_length=300, blank=True, help_text="Your hobbies and interests")
     
