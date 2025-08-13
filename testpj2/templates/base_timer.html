@@ -1,3 +1,4 @@
+{% load i18n %}
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -19,13 +20,13 @@
   <!-- タイマー表示用 -->
    {% if timer_flag %}
   <div id="timer-container" style="position: fixed; top: 10px; right: 10px; background:#007BFF; color: white; padding: 8px 12px; border-radius: 5px; font-weight: bold; font-size: 16px; display: none;">
-    残り時間: <span id="timer">30:00</span>
+    {% trans "残り時間:" %} <span id="timer">60:00</span>
   </div>
   {% endif %}
 
   <div style="position: fixed; top: 60px; right: 10px;">
     <button id="end-session-btn" style="padding: 8px 16px; font-size: 14px; cursor: pointer;">
-      セッションを終了
+      {% trans "セッションを終了" %}
     </button>
   </div>
 
@@ -38,7 +39,7 @@
         timerContainer.style.display = 'block';
 
         {% if timer_flag %}
-        let timeLeft = 1800; // 30分（秒）
+        let timeLeft = 3600; // 60分
 
         function updateTimer() {
           const minutes = Math.floor(timeLeft / 60);
@@ -47,7 +48,7 @@
 
           if (timeLeft <= 0) {
             clearInterval(timerInterval);
-            alert('30分が経過しました。');
+            alert("{% trans '60分が経過しました。' %}");
           } else {
             timeLeft--;
           }
