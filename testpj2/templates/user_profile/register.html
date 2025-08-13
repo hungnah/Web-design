@@ -566,13 +566,17 @@ select.form-control option {
                 <label for="{{ form.city.id_for_label }}">
                     <i class="fas fa-map-marker-alt"></i> {% trans "Thành phố" %}
                 </label>
-                <input type="text" 
-                       class="form-control" 
-                       name="{{ form.city.name }}" 
-                       id="{{ form.city.id_for_label }}"
-                       placeholder="{% trans 'Thành phố' %}"
-                       value="{{ form.city.value|default:'' }}"
-                       required>
+                <select class="form-control" 
+                        name="{{ form.city.name }}" 
+                        id="{{ form.city.id_for_label }}"
+                        required>
+                    <option value="">{% trans "Chọn thành phố" %}</option>
+                    <option value="hanoi" {% if form.city.value == 'hanoi' %}selected{% endif %}>{% trans "Hà Nội" %}</option>
+                    <option value="hochiminh" {% if form.city.value == 'hochiminh' %}selected{% endif %}>{% trans "Hồ Chí Minh" %}</option>
+                    <option value="haiphong" {% if form.city.value == 'haiphong' %}selected{% endif %}>{% trans "Hải Phòng" %}</option>
+                    <option value="danang" {% if form.city.value == 'danang' %}selected{% endif %}>{% trans "Đà Nẵng" %}</option>
+                    <option value="cantho" {% if form.city.value == 'cantho' %}selected{% endif %}>{% trans "Cần Thơ" %}</option>
+                </select>
                 {% if form.city.errors %}
                     <div class="text-danger mt-1">{{ form.city.errors }}</div>
                 {% endif %}
