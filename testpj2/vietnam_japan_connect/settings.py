@@ -198,9 +198,8 @@ CSRF_TRUSTED_ORIGINS = [
 
 
 
-ALLOWED_HOSTS = [
-    'web-design-7.onrender.com',
-]
+ALLOWED_HOSTS = ["*"]
+
  
 
 # Google OAuth Settings
