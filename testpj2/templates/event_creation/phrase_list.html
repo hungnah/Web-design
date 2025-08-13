@@ -89,11 +89,9 @@
                         {% endif %}
                     </div>
                     <div class="card-footer text-center">
-                        <a href="{% url 'study_phrase' phrase.id %}" class="btn btn-success">
-                            <i class="fas fa-coffee"></i> テキストの内容を見る
-                        </a>
+                        <button class="btn btn-secondary" disabled title="準備中">準備中</button>
                     </div>
-                    {% if post_id != 0 %}
+                    {% if post_id %}
                         <div class="card-footer text-center">
                             <a href="{% url 'accept_post' post_id phrase.id %}" class="btn btn-success">
                                 <i class="fas fa-coffee"></i> このテキストで応募
