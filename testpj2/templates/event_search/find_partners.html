@@ -6,7 +6,7 @@
 <style>
     .priority-request {
         border: 2px solid #28a745 !important;
-        box-shadow: 0 4px 8px rgba(40, 167, 69, 0.15) !important;
+        box-shadow: 0 6px 12px rgba(40, 167, 69, 0.2) !important;
     }
     
     .priority-request .card-header {
@@ -23,118 +23,6 @@
         background-color: #17a2b8 !important;
         color: white !important;
     }
-    
-    .compact-card {
-        transition: all 0.3s ease;
-        border-radius: 12px;
-        overflow: hidden;
-    }
-    
-    .compact-card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 8px 16px rgba(0,0,0,0.1);
-    }
-    
-    .user-avatar {
-        width: 48px;
-        height: 48px;
-        border: 2px solid #e9ecef;
-        transition: all 0.3s ease;
-    }
-    
-    .user-avatar:hover {
-        border-color: #28a745;
-        transform: scale(1.1);
-    }
-    
-    .user-info-compact {
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-        padding: 0.75rem;
-        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-        border-radius: 8px;
-        margin-bottom: 1rem;
-    }
-    
-    .user-stats {
-        display: flex;
-        gap: 1rem;
-        flex-wrap: wrap;
-    }
-    
-    .stat-item {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        padding: 0.5rem 0.75rem;
-        background: white;
-        border-radius: 6px;
-        border: 1px solid #e9ecef;
-        font-size: 0.875rem;
-    }
-    
-    .stat-item .icon {
-        color: #6c757d;
-        width: 16px;
-    }
-    
-    .stat-item .value {
-        font-weight: 600;
-        color: #495057;
-    }
-    
-    .request-details {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 0.75rem;
-        margin-bottom: 1rem;
-    }
-    
-    .detail-item {
-        text-align: center;
-        padding: 0.5rem;
-        background: #f8f9fa;
-        border-radius: 6px;
-        font-size: 0.875rem;
-    }
-    
-    .detail-item .label {
-        font-size: 0.75rem;
-        color: #6c757d;
-        margin-bottom: 0.25rem;
-    }
-    
-    .detail-item .value {
-        font-weight: 600;
-        color: #495057;
-    }
-    
-    .compact-badges {
-        display: flex;
-        gap: 0.5rem;
-        flex-wrap: wrap;
-    }
-    
-    .compact-badge {
-        font-size: 0.75rem;
-        padding: 0.25rem 0.5rem;
-    }
-    
-    @media (max-width: 768px) {
-        .request-details {
-            grid-template-columns: 1fr;
-        }
-        
-        .user-stats {
-            gap: 0.5rem;
-        }
-        
-        .stat-item {
-            padding: 0.375rem 0.5rem;
-            font-size: 0.8rem;
-        }
-    }
 </style>
 {% endblock %}
 
@@ -143,18 +31,18 @@
     <div class="row">
         <div class="col-md-3">
             <!-- Filter Sidebar -->
-            <div class="card border-0 shadow-sm">
-                <div class="card-header py-2">
-                    <h6 class="mb-0">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
                         <i class="fas fa-filter me-2"></i>
                         Bộ lọc
-                    </h6>
+                    </h5>
                 </div>
-                <div class="card-body py-2">
+                <div class="card-body">
                     <form method="get">
-                        <div class="mb-2">
-                            <label for="city" class="form-label small">Thành phố</label>
-                            <select name="city" id="city" class="form-select form-select-sm">
+                        <div class="mb-3">
+                            <label for="city" class="form-label">Thành phố</label>
+                            <select name="city" id="city" class="form-select">
                                 <option value="">Tất cả thành phố</option>
                                 {% for city_code, city_name in cities %}
                                     <option value="{{ city_code }}" {% if city_code == selected_city %}selected{% endif %}>
@@ -164,9 +52,9 @@
                             </select>
                         </div>
                         
-                        <div class="mb-2">
-                            <label for="request_type" class="form-label small">Loại yêu cầu</label>
-                            <select name="request_type" id="request_type" class="form-select form-select-sm">
+                        <div class="mb-3">
+                            <label for="request_type" class="form-label">Loại yêu cầu</label>
+                            <select name="request_type" id="request_type" class="form-select">
                                 <option value="">Tất cả</option>
                                 {% for type_code, type_name in request_types %}
                                     <option value="{{ type_code }}" {% if type_code == selected_request_type %}selected{% endif %}>
@@ -176,17 +64,17 @@
                             </select>
                         </div>
                         
-                        <button type="submit" class="btn btn-primary btn-sm w-100">
-                            <i class="fas fa-search me-1"></i>
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="fas fa-search me-2"></i>
                             Lọc
                         </button>
                     </form>
                 </div>
             </div>
             
-            <div class="mt-2">
-                <a href="{% url 'create_partner_request' %}" class="btn btn-success btn-sm w-100">
-                    <i class="fas fa-plus me-1"></i>
+            <div class="mt-3">
+                <a href="{% url 'create_partner_request' %}" class="btn btn-success w-100">
+                    <i class="fas fa-plus me-2"></i>
                     Tạo yêu cầu mới
                 </a>
             </div>
@@ -195,16 +83,17 @@
         <div class="col-md-9">
             <!-- Partner Requests List -->
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <h4 class="mb-0">
-                    <i class="fas fa-users text-primary me-2"></i>
+                <h3>
+                    <i class="fas fa-users me-2"></i>
                     Tìm partner học ngôn ngữ
-                </h4>
+                </h3>
                 <span class="badge bg-primary">{{ partner_requests.count }} yêu cầu</span>
             </div>
             
             <!-- Priority Explanation -->
-            <div class="alert alert-info py-2 mb-3">
-                <i class="fas fa-star text-warning"></i> Những người dùng đã từng ghép cặp trước đây sẽ được hiển thị với 
+            <div class="alert alert-info mb-3">
+                <i class="fas fa-info-circle"></i> <strong>Hệ thống ưu tiên:</strong>
+                Những người dùng đã từng ghép cặp trước đây sẽ được hiển thị với 
                 <span class="badge bg-success"><i class="fas fa-star"></i> Đã biết</span> 
                 và được ưu tiên hiển thị ở đầu danh sách.
             </div>
@@ -213,89 +102,47 @@
                 <div class="row">
                     {% for request in partner_requests %}
                         <div class="col-md-6 mb-3">
-                            <div class="card compact-card h-100 {% if request.priority == 1 %}priority-request{% endif %}">
-                                <div class="card-header py-2">
-                                    <div class="d-flex justify-content-between align-items-start">
-                                        <div class="flex-grow-1">
-                                            <h6 class="mb-1 text-truncate">{{ request.title }}</h6>
-                                            <div class="d-flex align-items-center gap-2">
-                                                {% if request.requester.profile_picture %}
-                                                    <img src="{{ request.requester.profile_picture.url }}" 
-                                                         alt="Profile" 
-                                                         class="rounded-circle user-avatar" 
-                                                         style="object-fit: cover;">
-                                                {% else %}
-                                                    <div class="rounded-circle user-avatar bg-secondary d-flex align-items-center justify-content-center">
-                                                        <i class="fas fa-user text-white"></i>
-                                                    </div>
-                                                {% endif %}
-                                                <div class="flex-grow-1">
-                                                    <div class="fw-bold">{{ request.requester.full_name|default:request.requester.username }}</div>
-                                                    <small class="text-muted">@{{ request.requester.username }}</small>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="compact-badges">
-                                            <span class="badge bg-info compact-badge">
-                                                {% if request.request_type == 'japanese_to_vietnamese' %}
-                                                    Nhật → Việt
-                                                {% elif request.request_type == 'vietnamese_to_japanese' %}
-                                                    Việt → Nhật
-                                                {% else %}
-                                                    Cả hai
-                                                {% endif %}
-                                            </span>
-                                            {% if request.priority == 1 %}
-                                            <span class="badge bg-success compact-badge" title="Người dùng đã từng ghép cặp trước đây">
-                                                <i class="fas fa-star"></i> Đã biết
-                                            </span>
+                            <div class="card h-100 {% if request.priority == 1 %}priority-request{% endif %}">
+                                <div class="card-header d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="mb-0">{{ request.title }}</h6>
+                                        <small class="text-muted">
+                                            <i class="fas fa-user me-1"></i>
+                                            {{ request.requester.full_name }}
+                                        </small>
+                                    </div>
+                                    <div>
+                                        <span class="badge bg-info">
+                                            {% if request.request_type == 'japanese_to_vietnamese' %}
+                                                Nhật → Việt
+                                            {% elif request.request_type == 'vietnamese_to_japanese' %}
+                                                Việt → Nhật
+                                            {% else %}
+                                                Cả hai
                                             {% endif %}
-                                        </div>
+                                        </span>
+                                        {% if request.priority == 1 %}
+                                        <span class="badge bg-success ms-1" title="Người dùng đã từng ghép cặp trước đây">
+                                            <i class="fas fa-star"></i> Đã biết
+                                        </span>
+                                        {% endif %}
                                     </div>
                                 </div>
-                                
-                                <div class="card-body py-2">
-                                    <!-- User Info Compact -->
-                                    <div class="user-info-compact">
-                                        <div class="user-stats">
-                                            <div class="stat-item">
-                                                <i class="fas fa-flag icon"></i>
-                                                <span class="value">
-                                                    {% if request.requester.nationality == 'vietnamese' %}
-                                                        Người Việt
-                                                    {% elif request.requester.nationality == 'japanese' %}
-                                                        Người Nhật
-                                                    {% else %}
-                                                        {{ request.requester.get_nationality_display }}
-                                                    {% endif %}
-                                                </span>
-                                            </div>
-                                            <div class="stat-item">
-                                                <i class="fas fa-map-marker-alt icon"></i>
-                                                <span class="value">{{ request.requester.get_city_display }}</span>
-                                            </div>
-                                            <div class="stat-item">
-                                                <i class="fas fa-star icon"></i>
-                                                <span class="value">{{ request.requester.point|default:0 }}</span>
-                                            </div>
-                                        </div>
-                                    </div>
+                                <div class="card-body">
+                                    <p class="card-text">{{ request.description|truncatewords:30 }}</p>
                                     
-                                    <p class="card-text small mb-2">{{ request.description|truncatewords:25 }}</p>
-                                    
-                                    <!-- Request Details -->
-                                    <div class="request-details">
-                                        <div class="detail-item">
-                                            <div class="label">Thành phố</div>
-                                            <div class="value">{{ request.get_preferred_city_display }}</div>
+                                    <div class="row text-center mb-3">
+                                        <div class="col-4">
+                                            <small class="text-muted d-block">Thành phố</small>
+                                            <strong>{{ request.get_preferred_city_display }}</strong>
                                         </div>
-                                        <div class="detail-item">
-                                            <div class="label">Gặp mặt</div>
-                                            <div class="value">{{ request.get_meeting_preference_display }}</div>
+                                        <div class="col-4">
+                                            <small class="text-muted d-block">Gặp mặt</small>
+                                            <strong>{{ request.get_meeting_preference_display }}</strong>
                                         </div>
-                                        <div class="detail-item">
-                                            <div class="label">Tần suất</div>
-                                            <div class="value">{{ request.get_frequency_display }}</div>
+                                        <div class="col-4">
+                                            <small class="text-muted d-block">Tần suất</small>
+                                            <strong>{{ request.get_frequency_display }}</strong>
                                         </div>
                                     </div>
                                     
@@ -317,12 +164,12 @@
                     {% endfor %}
                 </div>
             {% else %}
-                <div class="text-center py-4">
-                    <i class="fas fa-search fa-2x text-muted mb-3"></i>
-                    <h5 class="text-muted">Không tìm thấy yêu cầu nào</h5>
+                <div class="text-center py-5">
+                    <i class="fas fa-search fa-3x text-muted mb-3"></i>
+                    <h4 class="text-muted">Không tìm thấy yêu cầu nào</h4>
                     <p class="text-muted">Hãy thử thay đổi bộ lọc hoặc tạo yêu cầu mới.</p>
-                    <a href="{% url 'create_partner_request' %}" class="btn btn-primary btn-sm">
-                        <i class="fas fa-plus me-1"></i>
+                    <a href="{% url 'create_partner_request' %}" class="btn btn-primary">
+                        <i class="fas fa-plus me-2"></i>
                         Tạo yêu cầu mới
                     </a>
                 </div>
@@ -333,9 +180,33 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    // Add priority request highlighting
     const priorityRequests = document.querySelectorAll('.priority-request');
     console.log('Found', priorityRequests.length, 'priority requests');
+    
+    priorityRequests.forEach(function(request, index) {
+        console.log('Priority request', index, ':', request);
+        
+        // Add subtle animation for priority requests
+        request.style.animation = 'priorityPulse 2s ease-in-out infinite';
+    });
 });
+
+// Add CSS animation for priority requests
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes priorityPulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.02); }
+        100% { transform: scale(1); }
+    }
+    
+    .priority-request:hover {
+        transform: translateY(-8px) !important;
+        transition: transform 0.3s ease;
+    }
+`;
+document.head.appendChild(style);
 </script>
 
 {% endblock %}

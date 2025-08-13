@@ -9,7 +9,7 @@ Provides Django admin interface for managing language exchange content:
 """
 
 from django.contrib import admin
-from .models import VietnamesePhrase, CafeLocation, LanguageExchangePost, PartnerRequest, Lesson, LessonPhrase, QuizQuestion, TheorySection, TheoryPhrase, ConversationExample, ConversationLine
+from .models import VietnamesePhrase, CafeLocation, LanguageExchangePost, PartnerRequest, Lesson, LessonPhrase, QuizQuestion, TheorySection, TheoryPhrase, ConversationExample, ConversationLine, ConnectionHistory
 
 @admin.register(VietnamesePhrase)
 class VietnamesePhraseAdmin(admin.ModelAdmin):
@@ -139,3 +139,59 @@ class ConversationLineAdmin(admin.ModelAdmin):
             'fields': ('conversation', 'speaker', 'vietnamese_text', 'japanese_translation', 'english_translation', 'order')
         }),
     )
+
+@admin.register(ConnectionHistory)
+class ConnectionHistoryAdmin(admin.ModelAdmin):
+    """Admin interface for managing connection history and ratings"""
+    list_display = [
+        'japanese_user', 'vietnamese_user', 'session_date', 'session_duration', 
+        'session_type', 'status', 'japanese_rating', 'vietnamese_rating', 'created_at'
+    ]
+    list_filter = [
+        'status', 'session_type', 'session_date', 'created_at',
+        'japanese_user__city', 'vietnamese_user__city'
+    ]
+    search_fields = [
+        'japanese_user__username', 'japanese_user__full_name',
+        'vietnamese_user__username', 'vietnamese_user__full_name',
+        'japanese_comment', 'vietnamese_comment', 'notes'
+    ]
+    date_hierarchy = 'session_date'
+    readonly_fields = ['created_at', 'updated_at', 'japanese_rating_date', 'vietnamese_rating_date']
+    
+    fieldsets = (
+        ('Connection Information', {
+            'fields': (
+                'japanese_user', 'vietnamese_user', 'language_exchange_post', 'partner_request'
+            )
+        }),
+        ('Session Details', {
+            'fields': (
+                'session_date', 'session_duration', 'session_type', 'status'
+            )
+        }),
+        ('Japanese User Rating', {
+            'fields': (
+                'japanese_rating', 'japanese_comment', 'japanese_rating_date'
+            )
+        }),
+        ('Vietnamese User Rating', {
+            'fields': (
+                'vietnamese_rating', 'vietnamese_comment', 'vietnamese_rating_date'
+            )
+        }),
+        ('Additional Information', {
+            'fields': ('notes',)
+        }),
+        ('Timestamps', {
+            'fields': ('created_at', 'updated_at'),
+            'classes': ('collapse',)
+        }),
+    )
+    
+    list_select_related = ['japanese_user', 'vietnamese_user']
+    
+    def get_queryset(self, request):
+        return super().get_queryset(request).select_related(
+            'japanese_user', 'vietnamese_user', 'language_exchange_post', 'partner_request'
+        )

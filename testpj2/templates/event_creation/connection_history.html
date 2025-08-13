@@ -1,0 +1,432 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <h2 class="mb-4">
+                <i class="fas fa-history text-primary"></i>
+                {{ page_title }}
+            </h2>
+            
+            <!-- Thống kê tổng quan -->
+            <div class="row mb-4">
+                <div class="col-md-3">
+                    <div class="card bg-primary text-white">
+                        <div class="card-body text-center">
+                            <h3 class="card-title">{{ total_connections }}</h3>
+                            <p class="card-text">Tổng số kết nối</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-success text-white">
+                        <div class="card-body text-center">
+                            <h3 class="card-title">{{ completed_connections }}</h3>
+                            <p class="card-text">Đã đánh giá đầy đủ</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-warning text-white">
+                        <div class="card-body text-center">
+                            <h3 class="card-title">{{ waiting_rating }}</h3>
+                            <p class="card-text">Chờ đánh giá</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-info text-white">
+                        <div class="card-body text-center">
+                            <h3 class="card-title">{{ average_rating }}/10.0</h3>
+                            <p class="card-text">Điểm trung bình</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Danh sách kết nối -->
+            {% if connections %}
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            <i class="fas fa-list"></i>
+                            Danh sách kết nối
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        {% for connection in connections %}
+                            <div class="connection-item border-bottom pb-3 mb-3">
+                                <!-- Rating Status Summary -->
+                                <div class="row mb-2">
+                                    <div class="col-12">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div class="d-flex align-items-center">
+                                                <i class="fas fa-info-circle text-info me-2"></i>
+                                                <strong class="text-info">Trạng thái đánh giá:</strong>
+                                            </div>
+                                            <div class="d-flex gap-2">
+                                                {% if connection.japanese_rating and connection.japanese_rating > 0 %}
+                                                    <span class="badge bg-success">
+                                                        <i class="fas fa-star"></i>
+                                                        Nhật: {{ connection.japanese_rating }}/10
+                                                    </span>
+                                                {% else %}
+                                                    <span class="badge bg-warning">
+                                                        <i class="fas fa-clock"></i>
+                                                        Chờ Nhật
+                                                    </span>
+                                                {% endif %}
+                                                
+                                                {% if connection.vietnamese_rating and connection.vietnamese_rating > 0 %}
+                                                    <span class="badge bg-success">
+                                                        <i class="fas fa-star"></i>
+                                                        Việt: {{ connection.vietnamese_rating }}/10
+                                                    </span>
+                                                {% else %}
+                                                    <span class="badge bg-warning">
+                                                        <i class="fas fa-clock"></i>
+                                                        Chờ Việt
+                                                    </span>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="text-muted">
+                                            <small>
+                                                <i class="fas fa-calendar"></i>
+                                                {{ connection.session_date|date:"d/m/Y H:i" }}
+                                            </small>
+                                        </div>
+                                        <div class="mt-1">
+                                            <span class="badge {% if connection.status == 'fully_rated' %}bg-success{% elif connection.status == 'waiting_japanese_rating' or connection.status == 'waiting_vietnamese_rating' %}bg-warning{% elif connection.status == 'cancelled' %}bg-danger{% elif connection.status == 'no_show' %}bg-secondary{% else %}bg-info{% endif %}">
+                                                {{ connection.get_rating_status }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-md-3">
+                                        {% if user_type == 'japanese' %}
+                                            <div class="d-flex align-items-center">
+                                                <div class="avatar-sm me-2">
+                                                    {% if connection.vietnamese_user.profile_picture %}
+                                                        <img src="{{ connection.vietnamese_user.profile_picture.url }}" 
+                                                             alt="{{ connection.vietnamese_user.full_name }}" 
+                                                             class="rounded-circle" width="40" height="40">
+                                                    {% else %}
+                                                        <div class="bg-secondary rounded-circle d-flex align-items-center justify-content-center" 
+                                                             style="width: 40px; height: 40px;">
+                                                            <i class="fas fa-user text-white"></i>
+                                                        </div>
+                                                    {% endif %}
+                                                </div>
+                                                <div>
+                                                    <strong>{{ connection.vietnamese_user.full_name|default:connection.vietnamese_user.username }}</strong>
+                                                    <br>
+                                                    <small class="text-muted">{{ connection.vietnamese_user.city }}</small>
+                                                </div>
+                                            </div>
+                                        {% else %}
+                                            <div class="d-flex align-items-center">
+                                                <div class="avatar-sm me-2">
+                                                    {% if connection.japanese_user.profile_picture %}
+                                                        <img src="{{ connection.japanese_user.profile_picture.url }}" 
+                                                             alt="{{ connection.japanese_user.full_name }}" 
+                                                             class="rounded-circle" width="40" height="40">
+                                                    {% else %}
+                                                        <div class="bg-secondary rounded-circle d-flex align-items-center justify-content-center" 
+                                                             style="width: 40px; height: 40px;">
+                                                            <i class="fas fa-user text-white"></i>
+                                                        </div>
+                                                    {% endif %}
+                                                </div>
+                                                <div>
+                                                    <strong>{{ connection.japanese_user.full_name|default:connection.japanese_user.username }}</strong>
+                                                    <br>
+                                                    <small class="text-muted">{{ connection.japanese_user.city }}</small>
+                                                </div>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    
+                                    <div class="col-md-2">
+                                        <div class="text-center">
+                                            <div class="text-muted">
+                                                <i class="fas fa-clock"></i>
+                                                {{ connection.session_duration }} phút
+                                            </div>
+                                            <div class="mt-1">
+                                                <span class="badge {% if connection.session_type == 'online' %}bg-primary{% else %}bg-secondary{% endif %}">
+                                                    {{ connection.get_session_type_display }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-md-4">
+                                         {% if user_type == 'japanese' %}
+                                             <!-- Chỉ hiển thị thông tin cơ bản cho người Nhật -->
+                                             <div class="text-center">
+                                                 <div class="text-muted">
+                                                     <i class="fas fa-info-circle text-info fa-2x mb-2"></i>
+                                                     <br>
+                                                     <strong>Thông tin kết nối</strong>
+                                                 </div>
+                                             </div>
+                                         {% else %}
+                                             <!-- Chỉ hiển thị thông tin cơ bản cho người Việt -->
+                                             <div class="text-center">
+                                                 <div class="text-muted">
+                                                     <i class="fas fa-info-circle text-info fa-2x mb-2"></i>
+                                                     <br>
+                                                     <strong>Thông tin kết nối</strong>
+                                                 </div>
+                                             </div>
+                                         {% endif %}
+                                     </div>
+                                </div>
+                                
+                                {% if connection.notes %}
+                                    <div class="row mt-2">
+                                        <div class="col-12">
+                                            <div class="bg-light p-2 rounded">
+                                                <small class="text-muted">Ghi chú:</small>
+                                                <p class="mb-0">{{ connection.notes }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                                
+                                <!-- Nút đánh giá -->
+                                <div class="row mt-3">
+                                    <div class="col-12 text-end">
+                                        {% if connection.can_rate_value %}
+                                            <a href="{% url 'rate_connection' connection.id %}" class="btn btn-warning btn-sm">
+                                                <i class="fas fa-star"></i>
+                                                Đánh giá ngay
+                                            </a>
+                                        {% elif connection.status == 'fully_rated' %}
+                                            <div class="text-center">
+                                                <span class="badge bg-success fs-6">
+                                                    <i class="fas fa-check-circle"></i>
+                                                    Đã đánh giá đầy đủ
+                                                </span>
+                                                <div class="mt-2">
+                                                    <small class="text-muted">
+                                                        <i class="fas fa-info-circle"></i>
+                                                        Chat room đã được đóng do cả hai bên đã đánh giá
+                                                    </small>
+                                                </div>
+                                            </div>
+                                        {% else %}
+                                            <div class="text-center">
+                                                {% if connection.status == 'waiting_japanese_rating' %}
+                                                    <span class="badge bg-warning fs-6">
+                                                        <i class="fas fa-clock"></i>
+                                                        Chờ đánh giá từ người Nhật
+                                                    </span>
+                                                    <div class="mt-2">
+                                                        <small class="text-muted">
+                                                            <i class="fas fa-info-circle"></i>
+                                                            Đang chờ {{ connection.japanese_user.full_name|default:connection.japanese_user.username }} đánh giá
+                                                        </small>
+                                                    </div>
+                                                {% elif connection.status == 'waiting_vietnamese_rating' %}
+                                                    <span class="badge bg-warning fs-6">
+                                                        <i class="fas fa-clock"></i>
+                                                        Chờ đánh giá từ người Việt
+                                                    </span>
+                                                    <div class="mt-2">
+                                                        <small class="text-muted">
+                                                            <i class="fas fa-info-circle"></i>
+                                                            Đang chờ {{ connection.vietnamese_user.full_name|default:connection.vietnamese_user.username }} đánh giá
+                                                        </small>
+                                                    </div>
+                                                {% else %}
+                                                    <span class="badge bg-info fs-6">
+                                                        <i class="fas fa-clock"></i>
+                                                        Chờ đánh giá từ đối phương
+                                                    </span>
+                                                    <div class="mt-2">
+                                                        <small class="text-muted">
+                                                            <i class="fas fa-info-circle"></i>
+                                                            Cả hai bên đều chưa đánh giá
+                                                        </small>
+                                                    </div>
+                                                {% endif %}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% else %}
+                <div class="text-center py-5">
+                    <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
+                    <h4 class="text-muted">Chưa có kết nối nào</h4>
+                    <p class="text-muted">Bạn chưa có lịch sử kết nối nào. Hãy bắt đầu tìm kiếm đối tác học tập!</p>
+                    <a href="{% url 'create_post' %}" class="btn btn-primary">
+                        <i class="fas fa-plus"></i>
+                        Tạo bài đăng mới
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<style>
+.connection-item:last-child {
+    border-bottom: none !important;
+}
+
+.avatar-sm img {
+    object-fit: cover;
+}
+
+.stars {
+    font-size: 14px;
+}
+
+.comment-box {
+    font-size: 14px;
+    max-height: 100px;
+    overflow-y: auto;
+}
+
+.rating-display {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-bottom: 10px;
+}
+
+.rating-display.border-primary {
+    border-left-color: #007bff;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e3f2fd 100%);
+}
+
+.rating-display.border-success {
+    border-left-color: #28a745;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e8f5e8 100%);
+}
+
+.rating-display .d-flex.align-items-center {
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+    padding-bottom: 8px;
+    margin-bottom: 12px;
+}
+
+.comment-box.bg-primary.bg-opacity-10 {
+    background-color: rgba(0, 123, 255, 0.1) !important;
+}
+
+.comment-box.bg-success.bg-opacity-10 {
+    background-color: rgba(40, 167, 69, 0.1) !important;
+}
+
+.text-primary {
+    color: #007bff !important;
+}
+
+.text-success {
+    color: #28a745 !important;
+}
+
+.badge {
+    font-size: 0.75rem;
+    padding: 0.375rem 0.75rem;
+}
+
+.badge.fs-6 {
+    font-size: 0.875rem !important;
+    padding: 0.5rem 1rem;
+}
+
+.connection-item {
+    transition: all 0.3s ease;
+}
+
+.connection-item:hover {
+    background-color: rgba(0,0,0,0.02);
+    border-radius: 8px;
+    padding: 15px;
+    margin: 10px 0;
+}
+
+/* Rating Status Summary Styles */
+.connection-item .row.mb-2 {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 15px !important;
+}
+
+.connection-item .row.mb-2 .badge {
+    font-size: 0.75rem;
+    padding: 0.375rem 0.75rem;
+    border-radius: 20px;
+}
+
+.connection-item .row.mb-2 .badge.bg-success {
+    background-color: #28a745 !important;
+    color: white !important;
+}
+
+.connection-item .row.mb-2 .badge.bg-warning {
+    background-color: #ffc107 !important;
+    color: #212529 !important;
+}
+
+.text-info {
+    color: #17a2b8 !important;
+}
+
+/* Hover effects for badges */
+.badge:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    transition: all 0.2s ease;
+}
+
+/* Cải thiện hiển thị cho mobile */
+@media (max-width: 768px) {
+    .col-md-4 {
+        margin-top: 15px;
+    }
+    
+    .rating-display {
+        padding: 10px;
+    }
+    
+    .stars {
+        font-size: 12px;
+    }
+    
+    .badge.fs-6 {
+        font-size: 0.75rem !important;
+        padding: 0.375rem 0.75rem;
+    }
+    
+    .d-flex.gap-2 {
+        gap: 0.25rem !important;
+    }
+    
+    .badge {
+        font-size: 0.7rem;
+        padding: 0.25rem 0.5rem;
+    }
+}
+</style>
+{% endblock %}

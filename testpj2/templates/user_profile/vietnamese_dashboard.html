@@ -39,7 +39,7 @@
                             <small class="text-muted">Điểm Quy Đổi </small>
                         </div>
                         <div class="col-6">
-                            <h4 class="text-success">{{ user.vietnamese_posts.all|length }}</h4>
+                            <h4 class="text-success">{{ user.japanese_posts.all|length }}</h4>
                             <small class="text-muted">Kết Nối</small>
                         </div>
                     </div>
@@ -49,6 +49,9 @@
                         </a>
                         <a href="/auth/my-vouchers/" class="btn btn-info btn-sm">
                             <i class="fas fa-ticket-alt"></i> Voucher
+                        </a>
+                        <a href="{% url 'connection_history' %}" class="btn btn-success btn-sm">
+                            <i class="fas fa-history"></i> Lịch sử kết nối
                         </a>
                     </div>
                 </div>

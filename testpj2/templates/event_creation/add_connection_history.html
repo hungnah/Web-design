@@ -1,0 +1,352 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="mb-0">
+                        <i class="fas fa-plus text-success"></i>
+                        {{ page_title }}
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="japanese_user" class="form-label">
+                                        <i class="fas fa-user text-primary"></i>
+                                        Người dùng Nhật <span class="text-danger">*</span>
+                                    </label>
+                                    <select name="japanese_user" id="japanese_user" class="form-select" required>
+                                        <option value="">Chọn người dùng Nhật</option>
+                                        {% for user in japanese_users %}
+                                            <option value="{{ user.id }}">
+                                                {{ user.full_name|default:user.username }} ({{ user.city }})
+                                            </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="vietnamese_user" class="form-label">
+                                        <i class="fas fa-user text-success"></i>
+                                        Người dùng Việt <span class="text-danger">*</span>
+                                    </label>
+                                    <select name="vietnamese_user" id="vietnamese_user" class="form-select" required>
+                                        <option value="">Chọn người dùng Việt</option>
+                                        {% for user in vietnamese_users %}
+                                            <option value="{{ user.id }}">
+                                                {{ user.full_name|default:user.username }} ({{ user.city }})
+                                            </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="session_date" class="form-label">
+                                        <i class="fas fa-calendar text-info"></i>
+                                        Ngày phiên học <span class="text-danger">*</span>
+                                    </label>
+                                    <input type="datetime-local" 
+                                           class="form-control" 
+                                           id="session_date" 
+                                           name="session_date" 
+                                           required>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="session_duration" class="form-label">
+                                        <i class="fas fa-clock text-warning"></i>
+                                        Thời lượng (phút) <span class="text-danger">*</span>
+                                    </label>
+                                    <input type="number" 
+                                           class="form-control" 
+                                           id="session_duration" 
+                                           name="session_duration" 
+                                           min="15" 
+                                           max="300" 
+                                           value="60" 
+                                           required>
+                                    <div class="form-text">Từ 15 đến 300 phút</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="session_type" class="form-label">
+                                        <i class="fas fa-video text-primary"></i>
+                                        Loại phiên học <span class="text-danger">*</span>
+                                    </label>
+                                    <select name="session_type" id="session_type" class="form-select" required>
+                                        <option value="offline">Trực tiếp</option>
+                                        <option value="online">Trực tuyến</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="status" class="form-label">
+                                        <i class="fas fa-info-circle text-info"></i>
+                                        Trạng thái <span class="text-danger">*</span>
+                                    </label>
+                                    <select name="status" id="status" class="form-select" required>
+                                        <option value="completed">Hoàn thành</option>
+                                        <option value="cancelled">Đã hủy</option>
+                                        <option value="no_show">Không tham gia</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <hr class="my-4">
+                        
+                        <h5 class="text-primary mb-3">
+                            <i class="fas fa-link text-info"></i>
+                            Liên kết với bài đăng hoặc yêu cầu (tùy chọn)
+                        </h5>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="language_exchange_post" class="form-label">
+                                        <i class="fas fa-post text-primary"></i>
+                                        Bài đăng trao đổi ngôn ngữ
+                                    </label>
+                                    <select name="language_exchange_post" id="language_exchange_post" class="form-select">
+                                        <option value="">Không liên kết</option>
+                                        {% for post in language_exchange_posts %}
+                                            <option value="{{ post.id }}">
+                                                {{ post.phrase.vietnamese_text|default:"Không có cụm từ" }} - {{ post.vietnamese_user.full_name|default:post.vietnamese_user.username }}
+                                            </option>
+                                        {% endfor %}
+                                    </select>
+                                    <div class="form-text">Chọn bài đăng nếu kết nối này liên quan</div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="partner_request" class="form-label">
+                                        <i class="fas fa-handshake text-success"></i>
+                                        Yêu cầu tìm partner
+                                    </label>
+                                    <select name="partner_request" id="partner_request" class="form-select">
+                                        <option value="">Không liên kết</option>
+                                        {% for request in partner_requests %}
+                                            <option value="{{ request.id }}">
+                                                {{ request.title }} - {{ request.requester.full_name|default:request.requester.username }}
+                                            </option>
+                                        {% endfor %}
+                                    </select>
+                                    <div class="form-text">Chọn yêu cầu nếu kết nối này liên quan</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <hr class="my-4">
+                        
+                        <h5 class="text-primary mb-3">
+                            <i class="fas fa-star text-warning"></i>
+                            Đánh giá từ người Nhật
+                        </h5>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="japanese_rating" class="form-label">
+                                        <i class="fas fa-star text-warning"></i>
+                                        Điểm đánh giá <span class="text-danger">*</span>
+                                    </label>
+                                    <div class="rating-input">
+                                        <div class="stars-container">
+                                            {% for i in "12345678910" %}
+                                                <input type="radio" 
+                                                       name="japanese_rating" 
+                                                       value="{{ forloop.counter }}" 
+                                                       id="star{{ forloop.counter }}" 
+                                                       class="star-input" 
+                                                       required>
+                                                <label for="star{{ forloop.counter }}" class="star-label">
+                                                    <i class="far fa-star"></i>
+                                                </label>
+                                            {% endfor %}
+                                        </div>
+                                        <div class="rating-text mt-2">
+                                            <small class="text-muted">Chọn điểm từ 1-10</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="japanese_comment" class="form-label">
+                                        <i class="fas fa-comment text-info"></i>
+                                        Nhận xét
+                                    </label>
+                                    <textarea class="form-control" 
+                                              id="japanese_comment" 
+                                              name="japanese_comment" 
+                                              rows="3" 
+                                              placeholder="Nhận xét về phiên học..."></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="notes" class="form-label">
+                                <i class="fas fa-sticky-note text-secondary"></i>
+                                Ghi chú bổ sung
+                            </label>
+                            <textarea class="form-control" 
+                                      id="notes" 
+                                      name="notes" 
+                                      rows="3" 
+                                      placeholder="Ghi chú về phiên học..."></textarea>
+                        </div>
+                        
+                        <div class="d-flex justify-content-between">
+                            <a href="{% url 'connection_history' %}" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left"></i>
+                                Quay lại
+                            </a>
+                            <button type="submit" class="btn btn-success">
+                                <i class="fas fa-save"></i>
+                                Lưu lịch sử kết nối
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.rating-input {
+    text-align: center;
+}
+
+.stars-container {
+    display: inline-block;
+    position: relative;
+}
+
+.star-input {
+    display: none;
+}
+
+.star-label {
+    cursor: pointer;
+    font-size: 24px;
+    color: #ddd;
+    margin: 0 2px;
+    transition: color 0.2s;
+}
+
+.star-label:hover,
+.star-label:hover ~ .star-label,
+.star-input:checked ~ .star-label {
+    color: #ffc107;
+}
+
+.star-input:checked ~ .star-label {
+    color: #ffc107;
+}
+
+.rating-text {
+    font-size: 12px;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Xử lý hiển thị sao khi hover
+    const starLabels = document.querySelectorAll('.star-label');
+    const starInputs = document.querySelectorAll('.star-input');
+    
+    starLabels.forEach((label, index) => {
+        label.addEventListener('mouseenter', function() {
+            // Reset tất cả sao
+            starLabels.forEach(l => l.querySelector('i').className = 'far fa-star');
+            
+            // Đánh dấu sao từ đầu đến vị trí hiện tại
+            for (let i = 0; i <= index; i++) {
+                starLabels[i].querySelector('i').className = 'fas fa-star';
+            }
+        });
+        
+        label.addEventListener('mouseleave', function() {
+            // Reset về trạng thái đã chọn
+            const checkedInput = document.querySelector('input[name="japanese_rating"]:checked');
+            if (checkedInput) {
+                const checkedIndex = parseInt(checkedInput.value) - 1;
+                starLabels.forEach((l, i) => {
+                    l.querySelector('i').className = i <= checkedIndex ? 'fas fa-star' : 'far fa-star';
+                });
+            } else {
+                starLabels.forEach(l => l.querySelector('i').className = 'far fa-star');
+            }
+        });
+        
+        label.addEventListener('click', function() {
+            // Cập nhật trạng thái sao khi click
+            const input = document.getElementById('star' + (index + 1));
+            input.checked = true;
+            
+            starLabels.forEach((l, i) => {
+                l.querySelector('i').className = i <= index ? 'fas fa-star' : 'far fa-star';
+            });
+        });
+    });
+    
+    // Xử lý chọn language_exchange_post hoặc partner_request
+    const languageExchangePostSelect = document.getElementById('language_exchange_post');
+    const partnerRequestSelect = document.getElementById('partner_request');
+    
+    function updatePartnerRequestSelect() {
+        if (languageExchangePostSelect.value) {
+            partnerRequestSelect.value = '';
+            partnerRequestSelect.disabled = true;
+        } else {
+            partnerRequestSelect.disabled = false;
+        }
+    }
+    
+    function updateLanguageExchangePostSelect() {
+        if (partnerRequestSelect.value) {
+            languageExchangePostSelect.value = '';
+            languageExchangePostSelect.disabled = true;
+        } else {
+            languageExchangePostSelect.disabled = false;
+        }
+    }
+    
+    languageExchangePostSelect.addEventListener('change', updatePartnerRequestSelect);
+    partnerRequestSelect.addEventListener('change', updateLanguageExchangePostSelect);
+    
+    // Khởi tạo trạng thái ban đầu
+    updatePartnerRequestSelect();
+    updateLanguageExchangePostSelect();
+});
+</script>
+{% endblock %}

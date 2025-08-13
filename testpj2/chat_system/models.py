@@ -29,6 +29,23 @@ class ChatRoom(models.Model):
         elif self.partner_request:
             return f"Chat for {self.partner_request}"
         return f"Chat Room {self.id}"
+    
+    def deactivate_if_completed(self):
+        """Vô hiệu hóa chat room nếu cả hai bên đã đánh giá"""
+        try:
+            from event_creation.models import ConnectionHistory
+            if self.post:
+                connection = ConnectionHistory.objects.get(language_exchange_post=self.post)
+            elif self.partner_request:
+                connection = ConnectionHistory.objects.get(partner_request=self.partner_request)
+            else:
+                return
+            
+            if connection.status == 'fully_rated':
+                self.is_active = False
+                self.save()
+        except ConnectionHistory.DoesNotExist:
+            pass
 
 class Message(models.Model):
     """

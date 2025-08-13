@@ -91,14 +91,24 @@ def get_messages(request, room_id):
         if request.user != chat_room.partner_request.requester and request.user != chat_room.partner_request.accepted_by:
             return JsonResponse({'success': False, 'error': 'Access denied'})
     
-    # Mark messages as read
+    # Mark messages as read (those not sent by the current user)
     chat_room.messages.filter(is_read=False).exclude(sender=request.user).update(is_read=True)
-    
-    # Get messages with better ordering and prefetch related
-    messages_list = chat_room.messages.select_related('sender').order_by('timestamp')
+
+    # Optional: only return messages newer than the client's last seen ID
+    last_id_param = request.GET.get('last_id')
+    try:
+        last_id = int(last_id_param) if last_id_param is not None else 0
+    except ValueError:
+        last_id = 0
+
+    # Get messages with better ordering and prefetch related; filter by last_id if provided
+    messages_qs = chat_room.messages.select_related('sender').order_by('timestamp')
+    if last_id:
+        messages_qs = messages_qs.filter(id__gt=last_id)
+
     messages_data = []
-    
-    for message in messages_list:
+
+    for message in messages_qs:
         messages_data.append({
             'id': message.id,
             'content': message.content,

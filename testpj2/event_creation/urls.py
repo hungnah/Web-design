@@ -20,4 +20,9 @@ urlpatterns = [
     path('create-partner-request/', views.create_partner_request, name='create_partner_request'),
     path('my-partner-requests/', views.my_partner_requests, name='my_partner_requests'),
     path('accept-partner-request/<int:request_id>/', views.accept_partner_request, name='accept_partner_request'),
+    
+    # Connection history URLs
+    path('connection-history/', views.connection_history, name='connection_history'),
+    path('add-connection-history/', views.add_connection_history, name='add_connection_history'),
+    path('rate-connection/<int:connection_id>/', views.rate_connection, name='rate_connection'),
 ]

@@ -1,114 +1,124 @@
 {% extends 'base_timer.html' %}
-{% load static %}
 
 {% block title %}Lesson1: Asking about names - 名前を尋ねる{% endblock %}
 
 {% block body_class %}enable-timer{% endblock %}
 
 {% block style %}
-<style>
-  body {
-    font-family: Arial, sans-serif;
-    background-color: #e5ddd5;
-    margin: 0;
-    padding: 20px;
-  }
-
-  .chat-container {
-    max-width: 600px;
-    margin: 0 auto;
+  .conversation {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 20px;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   }
-
-  .message-row {
+  .message {
     display: flex;
-    align-items: flex-start;
+    max-width: 70%;
+    padding: 15px 20px;
+    border-radius: 20px;
+    line-height: 1.5;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+    font-size: 1rem;
+    align-items: center;
   }
-
-  .message-row.right {
+  .teacher {
+    margin-left: auto;
+    background-color: #d1e7dd;
+    color: #0f5132;
     flex-direction: row-reverse;
   }
-
+  .student {
+    margin-right: auto;
+    background-color: #cff4fc;
+    color: #055160;
+  }
   .icon {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    background-color: #ccc;
-    overflow: hidden;
-    margin: 0 10px;
+    font-size: 2.2rem;
+    margin: 0 15px;
+    flex-shrink: 0;
+    color: inherit;
   }
-
-  .icon img {
-    width: 90%;
-    height: 100%;
-    object-fit: cover;
+  .text {
+    white-space: pre-line;
   }
-
-  .message-content {
-    max-width: 70%;
-  }
-
-  .name {
-    font-size: 20px;
-    margin-bottom: 5px;
-    color: #555;
-  }
-
-  .bubble {
-    background-color: #d0ebff; /* ← 水色（相手） */
-    font-size: 20px;
-    padding: 10px;
-    border-radius: 10px;
-    position: relative;
-  }
-
-  .message-row.right .bubble {
-    background-color: #ffd59e; /* ← オレンジ（自分） */
-  }
-
-  .message-row.right .message-content {
-    text-align: right;
-  }
-</style>
 {% endblock %}
 
 {% block content %}
-<div class="chat-container">
+  <h1>Lesson1: Asking about names<br>名前を尋ねる</h1>
 
-  <!-- 相手のメッセージ -->
-  <div class="message-row">
-    <div class="icon">
-      <img src="{% static 'images/session/teacher.png' %}" alt="相手アイコン">
+  <div class="conversation">
+    <div class="message teacher">
+      <i class="fas fa-chalkboard-teacher icon" title="Teacher"></i>
+      <div class="text">
+        Hôm nay chúng ta sẽ học cách hỏi tên nhé.<br>
+        (今日は名前を尋ねる表現を学びましょう。)
+      </div>
     </div>
-    <div class="message-content">
-      <div class="name">田中</div>
-      <div class="bubble">こんにちは！元気？</div>
+
+    <div class="message student">
+      <i class="fas fa-user icon" title="Student"></i>
+      <div class="text">
+        How do you say "What is your name?" in Vietnamese?<br>
+        (「あなたの名前は何ですか？」をベトナム語でどう言いますか？)
+      </div>
+    </div>
+
+    <div class="message teacher">
+      <i class="fas fa-chalkboard-teacher icon"></i>
+      <div class="text">
+        Tên bạn là gì?<br>
+        (テン バン ラー ジー？)
+      </div>
+    </div>
+
+    <div class="message student">
+      <i class="fas fa-user icon"></i>
+      <div class="text">
+        Tên bạn là gì?<br>
+        (Tên bạn là gì?)<br>
+        What does it mean?<br>
+        (どういう意味ですか？)
+      </div>
+    </div>
+
+    <div class="message teacher">
+      <i class="fas fa-chalkboard-teacher icon"></i>
+      <div class="text">
+        It means "What is your name?"<br>
+        (「あなたの名前は何ですか？」という意味です。)
+      </div>
+    </div>
+
+    <div class="message student">
+      <i class="fas fa-user icon"></i>
+      <div class="text">
+        My name is Satoshi.<br>
+        (私の名前はサトシです。)
+      </div>
+    </div>
+
+    <div class="message teacher">
+      <i class="fas fa-chalkboard-teacher icon"></i>
+      <div class="text">
+        Tôi tên là Satoshi.<br>
+        (私の名前はサトシです。)
+      </div>
+    </div>
+
+    <div class="message student">
+      <i class="fas fa-user icon"></i>
+      <div class="text">
+        Nice! Let’s practice this together.<br>
+        (いいですね！一緒に練習しましょう。)
+      </div>
+    </div>
+
+    <div class="message teacher">
+      <i class="fas fa-chalkboard-teacher icon"></i>
+      <div class="text">
+        Ok, bạn hỏi tôi nhé!<br>
+        (さあ、私に聞いてみてください！)
+      </div>
     </div>
   </div>
-
-  <!-- 自分のメッセージ -->
-  <div class="message-row right">
-    <div class="icon">
-      <img src="{% static 'images/session/student.png' %}" alt="自分アイコン">
-    </div>
-    <div class="message-content">
-      <div class="name">私</div>
-      <div class="bubble">うん、元気だよ！そっちは？</div>
-    </div>
-  </div>
-
-  <!-- 相手のメッセージ -->
-  <div class="message-row">
-    <div class="icon">
-      <img src="{% static 'images/session/teacher.png' %}" alt="相手アイコン">
-    </div>
-    <div class="message-content">
-      <div class="name">田中</div>
-      <div class="bubble">忙しいけど、なんとかやってるよ。</div>
-    </div>
-  </div>
-
-</div>
 {% endblock %}

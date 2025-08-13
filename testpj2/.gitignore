@@ -147,6 +147,3 @@ staticfiles/
 # OS
 .DS_Store
 Thumbs.db
-
-# Backup files
-backups/

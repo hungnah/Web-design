@@ -7,6 +7,7 @@ Handles Vietnamese phrases, cafe locations, language exchange posts, and lesson 
 from django.db import models
 from django.conf import settings
 from django.utils import timezone
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 class VietnamesePhrase(models.Model):
     """
@@ -144,9 +145,9 @@ class LanguageExchangePost(models.Model):
         except ChatRoom.DoesNotExist:
             return None
     
-def __str__(self):
-    phrase_text = self.phrase.vietnamese_text if self.phrase else "No phrase"
-    return f"{self.japanese_user.username} - {phrase_text}"
+    def __str__(self):
+        phrase_text = self.phrase.vietnamese_text if self.phrase else "No phrase"
+        return f"{self.japanese_user.username} - {phrase_text}"
 
 class Lesson(models.Model):
     """Model for Vietnamese language lessons"""
@@ -291,3 +292,162 @@ class ConversationLine(models.Model):
     
     def __str__(self):
         return f"{self.conversation.title} - {self.speaker} - Line {self.order}"
+
+class ConnectionHistory(models.Model):
+    """
+    Model để lưu trữ lịch sử kết nối và đánh giá giữa người Nhật và người Việt
+    """
+    # Thông tin kết nối
+    japanese_user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='japanese_connections')
+    vietnamese_user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='vietnamese_connections')
+    
+    # Liên kết với post gốc (nếu có)
+    language_exchange_post = models.ForeignKey(LanguageExchangePost, on_delete=models.SET_NULL, null=True, blank=True)
+    partner_request = models.ForeignKey(PartnerRequest, on_delete=models.SET_NULL, null=True, blank=True)
+    
+    # Thông tin phiên học
+    session_date = models.DateTimeField(help_text="Ngày diễn ra phiên học")
+    session_duration = models.PositiveIntegerField(help_text="Thời lượng phiên học (phút)")
+    session_type = models.CharField(max_length=20, choices=[
+        ('online', 'Trực tuyến'),
+        ('offline', 'Trực tiếp'),
+    ], default='offline')
+    
+    # Đánh giá từ người Nhật
+    japanese_rating = models.PositiveIntegerField(
+        validators=[MinValueValidator(1), MaxValueValidator(10)],
+        null=True, blank=True,
+        help_text="Điểm đánh giá từ 1-10"
+    )
+    japanese_comment = models.TextField(null=True, blank=True, help_text="Nhận xét từ người Nhật")
+    japanese_rating_date = models.DateTimeField(auto_now_add=True)
+    
+    # Đánh giá từ người Việt (tùy chọn)
+    vietnamese_rating = models.PositiveIntegerField(
+        validators=[MinValueValidator(1), MaxValueValidator(10)],
+        null=True, blank=True,
+        help_text="Điểm đánh giá từ 1-10"
+    )
+    vietnamese_comment = models.TextField(null=True, blank=True, help_text="Nhận xét từ người Việt")
+    vietnamese_rating_date = models.DateTimeField(null=True, blank=True)
+    
+    # Trạng thái kết nối
+    status = models.CharField(max_length=30, choices=[
+        ('active', 'Đang hoạt động'),
+        ('waiting_japanese_rating', 'Chờ đánh giá từ người Nhật'),
+        ('waiting_vietnamese_rating', 'Chờ đánh giá từ người Việt'),
+        ('fully_rated', 'Đã đánh giá đầy đủ'),
+        ('cancelled', 'Đã hủy'),
+        ('no_show', 'Không tham gia'),
+    ], default='active')
+    
+    # Ghi chú bổ sung
+    notes = models.TextField(null=True, blank=True, help_text="Ghi chú bổ sung về phiên học")
+    
+    # Timestamps
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        verbose_name = 'Lịch sử kết nối'
+        verbose_name_plural = 'Lịch sử kết nối'
+        ordering = ['-session_date']
+        unique_together = ['japanese_user', 'vietnamese_user', 'session_date']
+    
+    def __str__(self):
+        return f"{self.japanese_user.username} - {self.vietnamese_user.username} - {self.session_date.strftime('%Y-%m-%d')}"
+    
+    def get_average_rating(self):
+        """Tính điểm trung bình của cả hai người dùng"""
+        ratings = []
+        if self.japanese_rating:
+            ratings.append(self.japanese_rating)
+        if self.vietnamese_rating:
+            ratings.append(self.vietnamese_rating)
+        
+        if ratings:
+            return sum(ratings) / len(ratings)
+        return None
+    
+    def is_fully_rated(self):
+        """Kiểm tra xem cả hai người dùng đã đánh giá chưa"""
+        return bool(self.japanese_rating and self.vietnamese_rating)
+    
+    def update_status(self):
+        """Cập nhật trạng thái dựa trên đánh giá"""
+        if self.japanese_rating and self.vietnamese_rating:
+            self.status = 'fully_rated'
+            # Tự động cập nhật trạng thái của LanguageExchangePost hoặc PartnerRequest
+            if self.language_exchange_post:
+                self.language_exchange_post.status = 'completed'
+                self.language_exchange_post.save()
+            if self.partner_request:
+                self.partner_request.status = 'completed'
+                self.partner_request.save()
+            
+            # Vô hiệu hóa chat room
+            try:
+                from chat_system.models import ChatRoom
+                if self.language_exchange_post:
+                    chat_room = ChatRoom.objects.get(post=self.language_exchange_post)
+                elif self.partner_request:
+                    chat_room = ChatRoom.objects.get(partner_request=self.partner_request)
+                else:
+                    return
+                
+                chat_room.deactivate_if_completed()
+            except ChatRoom.DoesNotExist:
+                pass
+                
+        elif self.japanese_rating and not self.vietnamese_rating:
+            self.status = 'waiting_vietnamese_rating'
+        elif not self.japanese_rating and self.vietnamese_rating:
+            self.status = 'waiting_japanese_rating'
+        else:
+            self.status = 'active'
+        self.save()
+    
+    def can_rate(self, user):
+        """Kiểm tra xem người dùng có thể đánh giá không"""
+        if user == self.japanese_user:
+            return not self.japanese_rating
+        elif user == self.vietnamese_user:
+            return not self.vietnamese_rating
+        return False
+    
+    def get_partner_rating(self, user):
+        """Lấy điểm đánh giá từ đối phương"""
+        if user == self.japanese_user:
+            return self.vietnamese_rating
+        elif user == self.vietnamese_user:
+            return self.japanese_rating
+        return None
+    
+    def get_partner_comment(self, user):
+        """Lấy nhận xét từ đối phương"""
+        if user == self.japanese_user:
+            return self.vietnamese_comment
+        elif user == self.vietnamese_user:
+            return self.japanese_comment
+        return None
+    
+    def get_rating_status_display(self):
+        """Trả về trạng thái đánh giá hiển thị cho người dùng"""
+        if self.status == 'fully_rated':
+            return 'Đã đánh giá đầy đủ'
+        elif self.status == 'waiting_japanese_rating':
+            return 'Chờ đánh giá từ người Nhật'
+        elif self.status == 'waiting_vietnamese_rating':
+            return 'Chờ đánh giá từ người Việt'
+        elif self.status == 'active':
+            return 'Đang hoạt động'
+        elif self.status == 'cancelled':
+            return 'Đã hủy'
+        elif self.status == 'no_show':
+            return 'Không tham gia'
+        else:
+            return self.status
+    
+    def get_rating_status(self):
+        """Trả về trạng thái đánh giá (tương thích ngược)"""
+        return self.get_rating_status_display()

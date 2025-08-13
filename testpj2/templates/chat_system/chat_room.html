@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load i18n %}
+
 {% block title %}Chat Room - Vietnam-Japan Connect{% endblock %}
 
 {% block extra_css %}
@@ -63,23 +63,18 @@
                             <h5 class="mb-0">
                                 <i class="fas fa-comments"></i> 
                                 {% if chat_room.post %}
-                                    {% trans "Chat với" %} 
-                                    {% if user == chat_room.post.japanese_user %}
-                                        {{ chat_room.post.vietnamese_user.full_name|default:chat_room.post.vietnamese_user.username }}
-                                    {% else %}
-                                        {{ chat_room.post.japanese_user.full_name|default:chat_room.post.japanese_user.username }}
-                                    {% endif %}
+                                    Chat với {{ chat_room.post.japanese_user.full_name|default:chat_room.post.japanese_user.username }}
                                 {% elif chat_room.partner_request %}
                                     {% if user == chat_room.partner_request.requester %}
-                                        {% trans "Chat với" %} {{ chat_room.partner_request.accepted_by.full_name|default:chat_room.partner_request.accepted_by.username }}
+                                        Chat với {{ chat_room.partner_request.accepted_by.full_name|default:chat_room.partner_request.accepted_by.username }}
                                     {% else %}
-                                        {% trans "Chat với" %} {{ chat_room.partner_request.requester.full_name|default:chat_room.partner_request.requester.username }}
+                                        Chat với {{ chat_room.partner_request.requester.full_name|default:chat_room.partner_request.requester.username }}
                                     {% endif %}
                                 {% endif %}
                             </h5>
                             <small class="text-muted">
                                 {% if chat_room.post %}
-                                    {% trans "Học:" %} {{ chat_room.post.phrase.vietnamese_text }}
+                                    Học: {{ chat_room.post.phrase.vietnamese_text }}
                                 {% elif chat_room.partner_request %}
                                     {{ chat_room.partner_request.title }}
                                 {% endif %}
@@ -103,8 +98,8 @@
 
                 <!-- Chat Messages -->
                 <div class="chat-container" id="chat-messages">
-                    {% for message in messages %}
-                        <div class="message {% if message.sender == user %}sent{% else %}received{% endif %}">
+                    {% for message in chat_messages %}
+                        <div class="message {% if message.sender == user %}sent{% else %}received{% endif %}" data-message-id="{{ message.id }}">
                             <div class="message-content">
                                 {{ message.content }}
                             </div>
@@ -118,11 +113,11 @@
                     {% empty %}
                         <div class="text-center text-muted mt-4">
                             <i class="fas fa-comments fa-2x mb-2"></i>
-                            <p>{% trans "Chưa có tin nhắn nào. Hãy bắt đầu cuộc trò chuyện!" %}</p>
+                            <p>Chưa có tin nhắn nào. Hãy bắt đầu cuộc trò chuyện!</p>
                         </div>
                     {% endfor %}
                     <div id="typing-indicator" class="typing-indicator" style="display: none;">
-                        <i class="fas fa-ellipsis-h"></i> {% trans "Đang nhập..." %}
+                        <i class="fas fa-ellipsis-h"></i> Đang nhập...
                     </div>
                 </div>
 
@@ -135,10 +130,10 @@
                                    class="form-control" 
                                    id="message-input" 
                                    name="content" 
-                                   placeholder="{% trans 'Nhập tin nhắn...' %}" 
+                                   placeholder="Nhập tin nhắn..." 
                                    required>
                             <button class="btn btn-primary" type="submit">
-                                <i class="fas fa-paper-plane"></i> {% trans "Gửi" %}
+                                <i class="fas fa-paper-plane"></i> Gửi
                             </button>
                         </div>
                     </form>
@@ -149,31 +144,25 @@
             <div class="card mt-3">
                 <div class="card-body">
                     {% if chat_room.post %}
-                        <h6><i class="fas fa-info-circle"></i> {% trans "Thông tin cuộc gặp mặt" %}</h6>
+                        <h6><i class="fas fa-info-circle"></i> Thông tin cuộc gặp mặt</h6>
                         <div class="row">
                             <div class="col-md-6">
-                                <p><strong>{% trans "Địa điểm:" %}</strong> {{ chat_room.post.cafe_location.name }}</p>
-                                <p><strong>{% trans "Địa chỉ:" %}</strong> {{ chat_room.post.cafe_location.address }}</p>
+                                <p><strong>Địa điểm:</strong> {{ chat_room.post.cafe_location.name }}</p>
+                                <p><strong>Địa chỉ:</strong> {{ chat_room.post.cafe_location.address }}</p>
                             </div>
                             <div class="col-md-6">
-                                <p><strong>{% trans "Thời gian:" %}</strong> {{ chat_room.post.meeting_date|date:"d/m/Y H:i" }}</p>
-                                <p>{% trans "学習するフレーズ:" %} {{ chat_room.post.phrase }}</p>
+                                <p><strong>Thời gian:</strong> {{ chat_room.post.meeting_date|date:"d/m/Y H:i" }}</p>
+                                <p>学習するフレーズ: {{ chat_room.post.phrase }}</p>
                                 {% if user == chat_room.post.japanese_user %}
-                                    {% with session_partner_id=chat_room.post.vietnamese_user.id %}
-                                        <a href="{% url 'study' session_partner_id chat_room.post.id chat_room.post.phrase.id %}?timer=1"
-                                            style="display:inline-block; padding:10px 20px; background-color:#007BFF; color:white; text-decoration:none; border-radius:5px;">
-                                            {% trans "セッション開始!" %}
-                                        </a>
-                                    {% endwith %}
+                                    <a href="{% url 'study' chat_room.post.vietnamese_user.id chat_room.post.id chat_room.post.phrase.id %}?timer=1" style="display:inline-block; padding:10px 20px; background-color:#007BFF; color:white; text-decoration:none; border-radius:5px;">
+                                    セッション開始
+                                    </a>
                                 {% else %}
-                                    {% with session_partner_id=chat_room.post.japanese_user.id %}
-                                        <a href="{% url 'study' session_partner_id chat_room.post.id chat_room.post.phrase.id %}?timer=1"
-                                            style="display:inline-block; padding:10px 20px; background-color:#007BFF; color:white; text-decoration:none; border-radius:5px;">
-                                            {% trans "セッション開始" %}
-                                        </a>
-                                    {% endwith %}
+                                    <a href="{% url 'study' chat_room.post.japanese_user.id chat_room.post.id chat_room.post.phrase.id %}?timer=1" style="display:inline-block; padding:10px 20px; background-color:#007BFF; color:white; text-decoration:none; border-radius:5px;">
+                                    セッション開始
+                                    </a>
                                 {% endif %}
-                                <p><strong>{% trans "Trạng thái:" %}</strong> 
+                                <p><strong>Trạng thái:</strong> 
                                     <span class="badge bg-success">{{ chat_room.post.get_status_display }}</span>
                                 </p>
                             </div>
@@ -186,15 +175,15 @@
                             <h6><i class="fas fa-info-circle"></i> Thông tin partner</h6>
                             <div class="row">
                                 <div class="col-md-6">
-                                    <p><strong>{% trans "Yêu cầu:" %}</strong> {{ chat_room.partner_request.title }}</p>
-                                    <p><strong>{% trans "Thành phố:" %}</strong> {{ chat_room.partner_request.get_preferred_city_display }}</p>
+                                    <p><strong>Yêu cầu:</strong> {{ chat_room.partner_request.title }}</p>
+                                    <p><strong>Thành phố:</strong> {{ chat_room.partner_request.get_preferred_city_display }}</p>
                                 </div>
                                 <div class="col-md-6">
-                                    <p><strong>{% trans "Gặp mặt:" %}</strong> {{ chat_room.partner_request.get_meeting_preference_display }}</p>
-                                    <p><strong>{% trans "Tần suất:" %}</strong> {{ chat_room.partner_request.get_frequency_display }}</p>
+                                    <p><strong>Gặp mặt:</strong> {{ chat_room.partner_request.get_meeting_preference_display }}</p>
+                                    <p><strong>Tần suất:</strong> {{ chat_room.partner_request.get_frequency_display }}</p>
                                 </div>
                             </div>
-                            <p><strong>{% trans "Mô tả:" %}</strong> {{ chat_room.partner_request.description }}</p>
+                            <p><strong>Mô tả:</strong> {{ chat_room.partner_request.description }}</p>
                         {% endif %}
                     {% endif %}
                 </div>
@@ -210,6 +199,7 @@ $(document).ready(function() {
     let lastMessageId = 0;
     let isTyping = false;
     let typingTimer;
+    let sentMessageIds = new Set(); // Track sent message IDs to prevent duplicates
     
     // Scroll to bottom of chat
     function scrollToBottom() {
@@ -220,8 +210,8 @@ $(document).ready(function() {
     scrollToBottom();
     
     // Get last message ID for real-time updates
-    {% if messages %}
-        lastMessageId = {{ messages.last.id|default:0 }};
+    {% if chat_messages %}
+        lastMessageId = {{ chat_messages.last.id|default:0 }};
     {% endif %}
     
     // Handle message form submission
@@ -248,7 +238,7 @@ $(document).ready(function() {
                 if (response.success) {
                     // Add message to chat
                     const messageHtml = `
-                        <div class="message sent">
+                        <div class="message sent" data-message-id="${response.message.id}">
                             <div class="message-content">
                                 ${response.message.content}
                             </div>
@@ -263,6 +253,7 @@ $(document).ready(function() {
                     $('#typing-indicator').hide();
                     scrollToBottom();
                     lastMessageId = response.message.id;
+                    sentMessageIds.add(response.message.id); // Track this sent message
                 }
             },
             error: function() {
@@ -277,25 +268,30 @@ $(document).ready(function() {
         $.ajax({
             url: '{% url "get_messages" chat_room.id %}',
             method: 'GET',
+            data: { last_id: lastMessageId },
             success: function(response) {
                 if (response.success) {
                     let hasNewMessages = false;
                     response.messages.forEach(function(message) {
-                        if (message.id > lastMessageId) {
-                            const messageHtml = `
-                                <div class="message ${message.is_own ? 'sent' : 'received'}">
-                                    <div class="message-content">
-                                        ${message.content}
+                        // Check if message is new and not already displayed
+                        if (message.id > lastMessageId && !sentMessageIds.has(message.id)) {
+                            // Check if message is not already in the DOM
+                            if ($(`[data-message-id="${message.id}"]`).length === 0) {
+                                const messageHtml = `
+                                    <div class="message ${message.is_own ? 'sent' : 'received'}" data-message-id="${message.id}">
+                                        <div class="message-content">
+                                            ${message.content}
+                                        </div>
+                                        <div class="message-time">
+                                            ${message.timestamp}
+                                            ${message.is_own ? (message.is_read ? '<i class="fas fa-check-double text-primary"></i>' : '<i class="fas fa-check"></i>') : ''}
+                                        </div>
                                     </div>
-                                    <div class="message-time">
-                                        ${message.timestamp}
-                                        ${message.is_own ? (message.is_read ? '<i class="fas fa-check-double text-primary"></i>' : '<i class="fas fa-check"></i>') : ''}
-                                    </div>
-                                </div>
-                            `;
-                            $('#chat-messages').append(messageHtml);
-                            lastMessageId = message.id;
-                            hasNewMessages = true;
+                                `;
+                                $('#chat-messages').append(messageHtml);
+                                hasNewMessages = true;
+                            }
+                            lastMessageId = Math.max(lastMessageId, message.id);
                         }
                     });
                     
