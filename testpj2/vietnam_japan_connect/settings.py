@@ -193,14 +193,15 @@ SECURE_CONTENT_TYPE_NOSNIFF = True
 X_FRAME_OPTIONS = 'DENY'
 
 CSRF_TRUSTED_ORIGINS = [
-    'https://a77c5dc83549.ngrok-free.app',
+    "https://98ce0224cd39.ngrok-free.app",
 ]
+
 
 
 ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
-    'a77c5dc83549.ngrok-free.app'  # domain ngrok của bạn
+    '98ce0224cd39.ngrok-free.app'  # domain ngrok của bạn
 ] 
 
 # Google OAuth Settings
