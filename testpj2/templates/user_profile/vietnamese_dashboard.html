@@ -30,24 +30,24 @@
                         <!-- Quick Stats -->
             <div class="card">
                 <div class="card-header">
-                    <h5 class="mb-0"><i class="fas fa-chart-bar"></i> 統計</h5>
+                    <h5 class="mb-0"><i class="fas fa-chart-bar"></i> Thống kê</h5>
                 </div>
                 <div class="card-body">
                     <div class="row text-center">
                         <div class="col-6">
                             <h4 class="text-primary">{{ user.point }}</h4>
-                            <small class="text-muted">がんばりポイント</small>
+                            <small class="text-muted">Điểm Quy Đổi </small>
                         </div>
                         <div class="col-6">
                             <h4 class="text-success">{{ user.japanese_posts.all|length }}</h4>
-                            <small class="text-muted">マッチング</small>
+                            <small class="text-muted">Kết Nối</small>
                         </div>
                     </div>
                     <div class="text-center mt-3">
                         <a href="/auth/point-exchange/" class="btn btn-warning btn-sm">
                             <i class="fas fa-exchange-alt"></i> Đổi điểm
                         </a>
-                        <a href="/auth/my-vouchers/" class="btn btn-outline-info btn-sm">
+                        <a href="/auth/my-vouchers/" class="btn btn-info btn-sm">
                             <i class="fas fa-ticket-alt"></i> Voucher
                         </a>
                     </div>
@@ -59,7 +59,7 @@
             <!-- Recent Posts -->
             <div class="card mb-4">
                 <div class="card-header">
-                    <h5 class="mb-0"><i class="fas fa-list"></i> 最近の投稿</h5>
+                    <h5 class="mb-0"><i class="fas fa-list"></i> Bài đăng gần đây</h5>
                 </div>
                 <div class="card-body">
                     {% if recent_posts %}
@@ -78,21 +78,21 @@
                             </div>
                         {% endfor %}
                         <div class="text-center">
-                            <a href="/create/my-posts/" class="btn btn-outline-primary">すべての投稿を見る</a>
+                            <a href="/create/my-posts/" class="btn btn-outline-primary">Xem tất cả bài đăng</a>
                         </div>
-                        <div class="text-center">
+                        <div class="text-center mt-2">
                         {% if phrase %}
                             <a href="{% url 'create_post' phrase.id %}" class="btn btn-outline-success">
                         {% else %}
                             <a href="{% url 'create_post' %}" class="btn btn-outline-success">
                         {% endif %}
-                            <i class="fas fa-coffee"></i> パートナーを募集する
+                            <i class="fas fa-coffee"></i> Tìm kiếm bạn
                         </a>
                     </div>
                     {% else %}
-                        <p class="text-muted text-center">まだ投稿がありません。</p>
+                        <p class="text-muted text-center">Chưa có bài đăng nào.</p>
                         <div class="text-center">
-                            <a href="/create/create-post/" class="btn btn-primary">最初の投稿を作成</a>
+                            <a href="/create/create-post/" class="btn btn-primary">Tạo bài đăng đầu tiên</a>
                         </div>
                     {% endif %}
                 </div>
