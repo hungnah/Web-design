@@ -50,13 +50,10 @@
         <div class="col-md-8">
             <!-- Welcome Section -->
             <div class="card mb-4">
-                <div class="card-body">
+                <div class="card-body text-center">
                     <h2 class="card-title">ようこそ、{{ user.full_name|default:user.username }}さん！</h2>
                     <p class="card-text">ベトナム語を学び、ベトナム人と交流しましょう。</p>
                     <div class="d-flex justify-content-center gap-3 flex-wrap">
-                        <a href="/create/phrases/" class="btn btn-primary">
-                            <i class="fas fa-language"></i> テキストを見る
-                        </a>
                         <a href="/search/available-posts/" class="btn btn-primary">
                             <i class="fas fa-search"></i> 募集を見る
                         </a>
@@ -141,12 +138,14 @@
                     </div>
                     
                     <div class="text-center mt-3">
-                        <a href="/create/lessons/" class="btn btn-primary me-2">
-                            <i class="fas fa-list"></i> レッスンを見る
-                        </a>
-                        <a href="/create/phrases/" class="btn btn-outline-primary">
-                            <i class="fas fa-plus"></i> 語彙を学ぶ
-                        </a>
+                        <div class="d-flex justify-content-center gap-3 flex-wrap">
+                            <a href="/create/accept-post/0/phrases/" class="btn btn-primary">
+                                <i class="fas fa-language"></i> テキストを見る
+                            </a>
+                            <a href="/create/lessons/" class="btn btn-primary me-2">
+                                <i class="fas fa-list"></i> 語彙を学ぶ
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
