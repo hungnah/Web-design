@@ -2,6 +2,30 @@
 
 {% block title %}Tìm partner - Vietnam-Japan Connect{% endblock %}
 
+{% block extra_css %}
+<style>
+    .priority-request {
+        border: 2px solid #28a745 !important;
+        box-shadow: 0 6px 12px rgba(40, 167, 69, 0.2) !important;
+    }
+    
+    .priority-request .card-header {
+        background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        color: white;
+    }
+    
+    .priority-request .card-header .badge {
+        background-color: white !important;
+        color: #28a745 !important;
+    }
+    
+    .priority-request .card-header .badge.bg-info {
+        background-color: #17a2b8 !important;
+        color: white !important;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 <div class="container mt-4">
     <div class="row">
@@ -66,11 +90,19 @@
                 <span class="badge bg-primary">{{ partner_requests.count }} yêu cầu</span>
             </div>
             
+            <!-- Priority Explanation -->
+            <div class="alert alert-info mb-3">
+                <i class="fas fa-info-circle"></i> <strong>Hệ thống ưu tiên:</strong>
+                Những người dùng đã từng ghép cặp trước đây sẽ được hiển thị với 
+                <span class="badge bg-success"><i class="fas fa-star"></i> Đã biết</span> 
+                và được ưu tiên hiển thị ở đầu danh sách.
+            </div>
+            
             {% if partner_requests %}
                 <div class="row">
                     {% for request in partner_requests %}
                         <div class="col-md-6 mb-3">
-                            <div class="card h-100">
+                            <div class="card h-100 {% if request.priority == 1 %}priority-request{% endif %}">
                                 <div class="card-header d-flex justify-content-between align-items-center">
                                     <div>
                                         <h6 class="mb-0">{{ request.title }}</h6>
@@ -79,15 +111,22 @@
                                             {{ request.requester.full_name }}
                                         </small>
                                     </div>
-                                    <span class="badge bg-info">
-                                        {% if request.request_type == 'japanese_to_vietnamese' %}
-                                            Nhật → Việt
-                                        {% elif request.request_type == 'vietnamese_to_japanese' %}
-                                            Việt → Nhật
-                                        {% else %}
-                                            Cả hai
+                                    <div>
+                                        <span class="badge bg-info">
+                                            {% if request.request_type == 'japanese_to_vietnamese' %}
+                                                Nhật → Việt
+                                            {% elif request.request_type == 'vietnamese_to_japanese' %}
+                                                Việt → Nhật
+                                            {% else %}
+                                                Cả hai
+                                            {% endif %}
+                                        </span>
+                                        {% if request.priority == 1 %}
+                                        <span class="badge bg-success ms-1" title="Người dùng đã từng ghép cặp trước đây">
+                                            <i class="fas fa-star"></i> Đã biết
+                                        </span>
                                         {% endif %}
-                                    </span>
+                                    </div>
                                 </div>
                                 <div class="card-body">
                                     <p class="card-text">{{ request.description|truncatewords:30 }}</p>
@@ -138,4 +177,36 @@
         </div>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Add priority request highlighting
+    const priorityRequests = document.querySelectorAll('.priority-request');
+    console.log('Found', priorityRequests.length, 'priority requests');
+    
+    priorityRequests.forEach(function(request, index) {
+        console.log('Priority request', index, ':', request);
+        
+        // Add subtle animation for priority requests
+        request.style.animation = 'priorityPulse 2s ease-in-out infinite';
+    });
+});
+
+// Add CSS animation for priority requests
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes priorityPulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.02); }
+        100% { transform: scale(1); }
+    }
+    
+    .priority-request:hover {
+        transform: translateY(-8px) !important;
+        transition: transform 0.3s ease;
+    }
+`;
+document.head.appendChild(style);
+</script>
+
 {% endblock %}

@@ -113,10 +113,18 @@
                                 </a>
                             </li>
                         {% else %}
-                            <li class="nav-item">
-                                <a class="nav-link" href="/search/available-posts/">
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     <i class="fas fa-search"></i> {% trans "Search Posts" %}
                                 </a>
+                                <ul class="dropdown-menu" aria-labelledby="searchDropdown">
+                                    <li><a class="dropdown-item" href="/search/available-posts/">
+                                        <i class="fas fa-map-marker-alt"></i> {% trans "Search by City" %}
+                                    </a></li>
+                                    <li><a class="dropdown-item" href="/search/all-posts/">
+                                        <i class="fas fa-globe"></i> {% trans "All Cities" %}
+                                    </a></li>
+                                </ul>
                             </li>
                         {% endif %}
                     {% endif %}

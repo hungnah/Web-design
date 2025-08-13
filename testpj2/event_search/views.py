@@ -9,7 +9,7 @@ Handles searching and browsing of language exchange opportunities:
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.db.models import Q
+from django.db.models import Q, Case, When, IntegerField
 from event_creation.models import LanguageExchangePost, PartnerRequest
 
 @login_required
@@ -17,23 +17,120 @@ def available_posts(request):
     """
     Display available language exchange posts for Vietnamese users
     Allows filtering by city and shows only active (unmatched) posts
+    Prioritizes posts from users who have been matched before
     """
     if request.user.nationality != 'japanese':
         return redirect('dashboard')
     
     city = request.GET.get('city', request.user.city)
+    
+    # Get posts filtered by city
     posts = LanguageExchangePost.objects.filter(
         vietnamese_user__nationality='vietnamese',
-        cafe_location__city=city
+        cafe_location__city=city,
+        status='active'
     ).select_related('vietnamese_user', 'phrase', 'cafe_location')
     
-    # Only show active posts (not accepted ones)
-    posts = posts.filter(status='active')
+    # Get users that current user has chatted with before
+    from chat_system.models import ChatRoom
+    previous_chat_users = set()
+    
+    # Find all chat rooms where current user was involved
+    user_chat_rooms = ChatRoom.objects.filter(
+        Q(post__japanese_user=request.user) | 
+        Q(post__vietnamese_user=request.user) |
+        Q(partner_request__requester=request.user) |
+        Q(partner_request__accepted_by=request.user)
+    )
+    
+    # Extract unique users from previous chats
+    for chat_room in user_chat_rooms:
+        if chat_room.post:
+            if chat_room.post.japanese_user == request.user:
+                previous_chat_users.add(chat_room.post.vietnamese_user.id)
+            else:
+                previous_chat_users.add(chat_room.post.japanese_user.id)
+        elif chat_room.partner_request:
+            if chat_room.partner_request.requester == request.user:
+                if chat_room.partner_request.accepted_by:
+                    previous_chat_users.add(chat_room.partner_request.accepted_by.id)
+            else:
+                previous_chat_users.add(chat_room.partner_request.requester.id)
+    
+    # Annotate posts with priority (previous chat users get higher priority)
+    posts = posts.annotate(
+        priority=Case(
+            When(vietnamese_user__id__in=previous_chat_users, then=1),
+            default=0,
+            output_field=IntegerField(),
+        )
+    ).order_by('-priority', '-created_at')
     
     context = {
         'posts': posts,
         'selected_city': city,
         'cities': request.user.CITY_CHOICES,
+        'view_mode': 'city'
+    }
+    
+    return render(request, 'event_search/available_posts.html', context)
+
+@login_required
+def all_posts(request):
+    """
+    Display all available language exchange posts from all cities
+    Shows only active (unmatched) posts
+    Prioritizes posts from users who have been matched before
+    """
+    if request.user.nationality != 'japanese':
+        return redirect('dashboard')
+    
+    # Get all active posts
+    posts = LanguageExchangePost.objects.filter(
+        vietnamese_user__nationality='vietnamese',
+        status='active'
+    ).select_related('vietnamese_user', 'phrase', 'cafe_location')
+    
+    # Get users that current user has chatted with before
+    from chat_system.models import ChatRoom
+    previous_chat_users = set()
+    
+    # Find all chat rooms where current user was involved
+    user_chat_rooms = ChatRoom.objects.filter(
+        Q(post__japanese_user=request.user) | 
+        Q(post__vietnamese_user=request.user) |
+        Q(partner_request__requester=request.user) |
+        Q(partner_request__accepted_by=request.user)
+    )
+    
+    # Extract unique users from previous chats
+    for chat_room in user_chat_rooms:
+        if chat_room.post:
+            if chat_room.post.japanese_user == request.user:
+                previous_chat_users.add(chat_room.post.vietnamese_user.id)
+            else:
+                previous_chat_users.add(chat_room.post.japanese_user.id)
+        elif chat_room.partner_request:
+            if chat_room.partner_request.requester == request.user:
+                if chat_room.partner_request.accepted_by:
+                    previous_chat_users.add(chat_room.partner_request.accepted_by.id)
+            else:
+                previous_chat_users.add(chat_room.partner_request.requester.id)
+    
+    # Annotate posts with priority (previous chat users get higher priority)
+    posts = posts.annotate(
+        priority=Case(
+            When(vietnamese_user__id__in=previous_chat_users, then=1),
+            default=0,
+            output_field=IntegerField(),
+        )
+    ).order_by('-priority', '-created_at')
+    
+    context = {
+        'posts': posts,
+        'selected_city': 'all',
+        'cities': request.user.CITY_CHOICES,
+        'view_mode': 'all'
     }
     
     return render(request, 'event_search/available_posts.html', context)
@@ -44,6 +141,7 @@ def find_partners(request):
     Find compatible language exchange partners based on user nationality
     Japanese users can help Vietnamese users learn Japanese and vice versa
     Supports filtering by city and request type
+    Prioritizes users who have been matched before
     """
     city = request.GET.get('city', '')
     request_type = request.GET.get('request_type', '')
@@ -73,6 +171,41 @@ def find_partners(request):
     # Filter by request type if specified
     if request_type:
         compatible_requests = compatible_requests.filter(request_type=request_type)
+    
+    # Get users that current user has chatted with before
+    from chat_system.models import ChatRoom
+    previous_chat_users = set()
+    
+    # Find all chat rooms where current user was involved
+    user_chat_rooms = ChatRoom.objects.filter(
+        Q(post__japanese_user=request.user) | 
+        Q(post__vietnamese_user=request.user) |
+        Q(partner_request__requester=request.user) |
+        Q(partner_request__accepted_by=request.user)
+    )
+    
+    # Extract unique users from previous chats
+    for chat_room in user_chat_rooms:
+        if chat_room.post:
+            if chat_room.post.japanese_user == request.user:
+                previous_chat_users.add(chat_room.post.vietnamese_user.id)
+            else:
+                previous_chat_users.add(chat_room.post.japanese_user.id)
+        elif chat_room.partner_request:
+            if chat_room.partner_request.requester == request.user:
+                if chat_room.partner_request.accepted_by:
+                    previous_chat_users.add(chat_room.partner_request.accepted_by.id)
+            else:
+                previous_chat_users.add(chat_room.partner_request.requester.id)
+    
+    # Annotate requests with priority (previous chat users get higher priority)
+    compatible_requests = compatible_requests.annotate(
+        priority=Case(
+            When(requester__id__in=previous_chat_users, then=1),
+            default=0,
+            output_field=IntegerField(),
+        )
+    ).order_by('-priority', '-created_at')
     
     context = {
         'partner_requests': compatible_requests,

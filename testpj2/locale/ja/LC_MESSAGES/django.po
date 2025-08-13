@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-12 16:35+0700\n"
+"POT-Creation-Date: 2025-08-13 10:12+0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -67,6 +67,18 @@ msgstr "ホーム"
 #: .\templates\base.html:177
 msgid "Guide"
 msgstr "ガイド"
+
+#: .\templates\base_timer.html:23
+msgid "残り時間:"
+msgstr "残り時間"
+
+#: .\templates\base_timer.html:29
+msgid "セッションを終了"
+msgstr "セッションを終了"
+
+#: .\templates\base_timer.html:51
+msgid "60分が経過しました。"
+msgstr "60分が経過しました。"
 
 #: .\templates\home.html:580
 msgid "Nền tảng kết nối giao lưu ngôn ngữ và văn hóa giữa Việt Nam và Nhật Bản"
@@ -221,11 +233,11 @@ msgstr "卓越した強み"
 
 #: .\templates\home.html:716
 msgid "Không có rào cản ngôn ngữ:"
-msgstr "言語の壁を感じさせない"
+msgstr "言語の壁を感じさせない:"
 
 #: .\templates\home.html:716
 msgid "Hỗ trợ đa ngôn ngữ hoàn hảo"
-msgstr "日・越・英の三言語による完璧なサポート"
+msgstr "完璧な言語対応"
 
 #: .\templates\home.html:717
 msgid "Học tập có mục tiêu:"
@@ -310,6 +322,22 @@ msgstr ""
 msgid "Tìm Hiểu Thêm"
 msgstr "さらに詳しく"
 
+#: .\templates\session\evaluate.html:7
+msgid "セッション評価"
+msgstr "セッション評価"
+
+#: .\templates\session\evaluate.html:65
+msgid "パートナーに対する満足度を評価してください"
+msgstr "パートナーに対する満足度を評価してください"
+
+#: .\templates\session\evaluate.html:92
+msgid "コメントがあればご記入ください（任意）"
+msgstr "コメントがあればご記入ください（任意）"
+
+#: .\templates\session\evaluate.html:93
+msgid "評価を送信"
+msgstr "評価を送信"
+
 #: .\templates\user_profile\login.html:7
 msgid "Đăng Nhập - Vietnam-Japan Connect"
 msgstr "ログイン - Vietnam-Japan Connect"
@@ -348,7 +376,7 @@ msgid "Nhập mật khẩu"
 msgstr "パスワードを入力してください"
 
 #: .\templates\user_profile\login.html:380
-#: .\templates\user_profile\register.html:593
+#: .\templates\user_profile\register.html:597
 msgid "hoặc"
 msgstr "または"
 
@@ -365,7 +393,7 @@ msgid "Đăng ký ngay"
 msgstr "今すぐ登録"
 
 #: .\templates\user_profile\login.html:403
-#: .\templates\user_profile\register.html:616
+#: .\templates\user_profile\register.html:620
 msgid "Về trang chủ"
 msgstr "ホームに戻る"
 
@@ -439,35 +467,58 @@ msgid "Nhật Bản"
 msgstr "日本"
 
 #: .\templates\user_profile\register.html:567
-#: .\templates\user_profile\register.html:573
 msgid "Thành phố"
 msgstr "都市"
 
-#: .\templates\user_profile\register.html:583
+#: .\templates\user_profile\register.html:573
+msgid "Chọn thành phố"
+msgstr "都市を選択"
+
+#: .\templates\user_profile\register.html:574
+msgid "Hà Nội"
+msgstr "Hà Nội(ハノイ)"
+
+#: .\templates\user_profile\register.html:575
+msgid "Hồ Chí Minh"
+msgstr "Hồ Chí Minh(ホーチミン)"
+
+#: .\templates\user_profile\register.html:576
+msgid "Hải Phòng"
+msgstr "Hải Phòng(ハイフォン)"
+
+#: .\templates\user_profile\register.html:577
+msgid "Đà Nẵng"
+msgstr "Đà Nẵng(ダナン)"
+
+#: .\templates\user_profile\register.html:578
+msgid "Cần Thơ"
+msgstr "Cần Thơ(カントー)"
+
+#: .\templates\user_profile\register.html:587
 msgid "Lưu ý:"
 msgstr "注意:"
 
-#: .\templates\user_profile\register.html:583
+#: .\templates\user_profile\register.html:587
 msgid "Bạn phải từ 18 tuổi trở lên để đăng ký."
 msgstr "登録するには18歳以上である必要があります。"
 
-#: .\templates\user_profile\register.html:584
+#: .\templates\user_profile\register.html:588
 msgid "Quốc tịch sẽ quyết định giao diện ngôn ngữ và tính năng có sẵn."
 msgstr "国籍によって言語インタフェースや利用可能な機能が決まります。"
 
-#: .\templates\user_profile\register.html:588
+#: .\templates\user_profile\register.html:592
 msgid "Tạo Tài Khoản"
 msgstr "アカウント作成"
 
-#: .\templates\user_profile\register.html:606
+#: .\templates\user_profile\register.html:610
 msgid "Đăng ký bằng Google"
 msgstr "Googleアカウントで登録"
 
-#: .\templates\user_profile\register.html:611
+#: .\templates\user_profile\register.html:615
 msgid "Đã có tài khoản?"
 msgstr "すでにアカウントをお持ちですか?"
 
-#: .\templates\user_profile\register.html:612
+#: .\templates\user_profile\register.html:616
 msgid "Đăng nhập ngay"
 msgstr "今すぐログイン"
 
