@@ -6,7 +6,7 @@
 <style>
     .priority-post {
         border: 2px solid #28a745 !important;
-        box-shadow: 0 6px 12px rgba(40, 167, 69, 0.2) !important;
+        box-shadow: 0 4px 8px rgba(40, 167, 69, 0.15) !important;
     }
     
     .priority-post .card-header {
@@ -28,6 +28,114 @@
         background-color: #17a2b8 !important;
         color: white !important;
     }
+    
+    .compact-card {
+        transition: all 0.3s ease;
+        border-radius: 12px;
+        overflow: hidden;
+    }
+    
+    .compact-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+    }
+    
+    .user-avatar {
+        width: 48px;
+        height: 48px;
+        border: 2px solid #e9ecef;
+        transition: all 0.3s ease;
+    }
+    
+    .user-avatar:hover {
+        border-color: #28a745;
+        transform: scale(1.1);
+    }
+    
+    .user-info-compact {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.75rem;
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        border-radius: 8px;
+        margin-bottom: 1rem;
+    }
+    
+    .user-stats {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+    
+    .stat-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 0.75rem;
+        background: white;
+        border-radius: 6px;
+        border: 1px solid #e9ecef;
+        font-size: 0.875rem;
+    }
+    
+    .stat-item .icon {
+        color: #6c757d;
+        width: 16px;
+    }
+    
+    .stat-item .value {
+        font-weight: 600;
+        color: #495057;
+    }
+    
+    .post-details {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+        margin-bottom: 1rem;
+    }
+    
+    .detail-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem;
+        background: #f8f9fa;
+        border-radius: 6px;
+        font-size: 0.875rem;
+    }
+    
+    .detail-item .icon {
+        color: #6c757d;
+        width: 16px;
+    }
+    
+    .compact-badges {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+    }
+    
+    .compact-badge {
+        font-size: 0.75rem;
+        padding: 0.25rem 0.5rem;
+    }
+    
+    @media (max-width: 768px) {
+        .post-details {
+            grid-template-columns: 1fr;
+        }
+        
+        .user-stats {
+            gap: 0.5rem;
+        }
+        
+        .stat-item {
+            padding: 0.375rem 0.5rem;
+            font-size: 0.8rem;
+        }
+    }
 </style>
 {% endblock %}
 
@@ -46,31 +154,30 @@
 </div>
 {% endif %}
 
-<div class="container my-5">
+<div class="container my-4">
     <!-- Header -->
-    <div class="row mb-4">
+    <div class="row mb-3">
         <div class="col-12">
-            <h1 class="text-center mb-3">
-                <i class="fas fa-search"></i> パートナーを探す
-            </h1>
+            <h2 class="text-center mb-2">
+                <i class="fas fa-search text-primary"></i> パートナーを探す
+            </h2>
             <p class="text-center text-muted">ベトナム人パートナーと交流し、言語学習と文化交流を楽しみましょう</p>
         </div>
     </div>
 
     <!-- View Mode Toggle -->
-    <div class="row mb-4">
-        <div class="col-md-8 mx-auto">
-            <div class="card">
-                <div class="card-body text-center">
-                    <h5 class="card-title mb-3">表示モード</h5>
+    <div class="row mb-3">
+        <div class="col-md-6 mx-auto">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body py-2">
                     <div class="btn-group w-100" role="group">
                         <a href="{% url 'available_posts' %}" 
-                           class="btn btn-{% if view_mode == 'city' %}primary{% else %}outline-primary{% endif %}">
-                            <i class="fas fa-map-marker-alt"></i> 都市別表示
+                           class="btn btn-sm {% if view_mode == 'city' %}btn-primary{% else %}btn-outline-primary{% endif %}">
+                            <i class="fas fa-map-marker-alt"></i> 都市別
                         </a>
                         <a href="{% url 'all_posts' %}" 
-                           class="btn btn-{% if view_mode == 'all' %}primary{% else %}outline-primary{% endif %}">
-                            <i class="fas fa-globe"></i> 全都市表示
+                           class="btn btn-sm {% if view_mode == 'all' %}btn-primary{% else %}btn-outline-primary{% endif %}">
+                            <i class="fas fa-globe"></i> 全都市
                         </a>
                     </div>
                 </div>
@@ -80,15 +187,14 @@
 
     <!-- City Filter (only show when in city mode) -->
     {% if view_mode == 'city' %}
-    <div class="row mb-4">
-        <div class="col-md-6 mx-auto">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">都市で検索</h5>
-                    <div class="btn-group w-100" role="group">
+    <div class="row mb-3">
+        <div class="col-md-8 mx-auto">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body py-2">
+                    <div class="d-flex gap-2 flex-wrap justify-content-center">
                         {% for value, label in cities %}
                             <a href="?city={{ value }}" 
-                               class="btn btn-{% if selected_city == value %}primary{% else %}outline-primary{% endif %}">
+                               class="btn btn-sm {% if selected_city == value %}btn-primary{% else %}btn-outline-primary{% endif %}">
                                 {{ label }}
                             </a>
                         {% endfor %}
@@ -103,224 +209,147 @@
     <div class="row mb-3">
         <div class="col-12">
             {% if view_mode == 'city' %}
-            <div class="alert alert-success">
-                <strong>{{ selected_city }}</strong> には <strong>{{ posts|length }}</strong> 件の募集があります
+            <div class="alert alert-success py-2">
+                <i class="fas fa-map-marker-alt"></i> <strong>{{ selected_city }}</strong> には <strong>{{ posts|length }}</strong> 件の募集があります
             </div>
             {% else %}
-            <div class="alert alert-info">
+            <div class="alert alert-info py-2">
                 <i class="fas fa-globe"></i> <strong>全都市</strong> で <strong>{{ posts|length }}</strong> 件の募集があります
             </div>
             {% endif %}
             
             <!-- Priority Explanation -->
-            <div class="alert alert-warning">
-                <i class="fas fa-info-circle"></i> <strong>表示の優先順位:</strong>
-                以前にマッチングしたことがあるユーザーの投稿は <span class="badge bg-success"><i class="fas fa-star"></i> 既知</span> バッジ付きで上部に表示されます。
-                これにより、過去に良い関係を築いたパートナーと再びつながりやすくなります。
+            <div class="alert alert-warning py-2">
+                <i class="fas fa-star text-warning"></i> 以前にマッチングしたユーザーは <span class="badge bg-success"><i class="fas fa-star"></i> 既知</span> バッジ付きで優先表示されます
             </div>
         </div>
     </div>
     
     <div class="row">
         {% for post in posts %}
-            <div class="col-md-6 col-lg-4 mb-4">
-                <div class="card h-100 {% if post.priority == 1 %}priority-post{% endif %}">
-                    <div class="card-header d-flex justify-content-between align-items-center">
-                        <div>
-                            <h5 class="card-title mb-1">{{ post.phrase.vietnamese_text }}</h5>
-                            <small class="text-muted">
-                                <i class="fas fa-user me-1"></i>
-                                {{ post.vietnamese_user.full_name|default:post.vietnamese_user.username }}
-                            </small>
-                        </div>
-                        <div class="text-end">
-                            <span class="badge bg-info">{{ post.phrase.get_category_display }}</span>
-                            <span class="badge bg-warning ms-1">承認待ち</span>
-                            {% if post.priority == 1 %}
-                            <span class="badge bg-success ms-1" title="以前にマッチングしたことがあるユーザーです">
-                                <i class="fas fa-star"></i> 既知
-                            </span>
-                            {% endif %}
+            <div class="col-md-6 col-lg-4 mb-3">
+                <div class="card compact-card h-100 {% if post.priority == 1 %}priority-post{% endif %}">
+                    <div class="card-header py-2">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div class="flex-grow-1">
+                                <h6 class="mb-1 text-truncate">{{ post.phrase.vietnamese_text }}</h6>
+                                <div class="d-flex align-items-center gap-2">
+                                    {% if post.vietnamese_user.profile_picture %}
+                                        <img src="{{ post.vietnamese_user.profile_picture.url }}" 
+                                             alt="Profile" 
+                                             class="rounded-circle user-avatar" 
+                                             style="object-fit: cover;">
+                                    {% else %}
+                                        <div class="rounded-circle user-avatar bg-secondary d-flex align-items-center justify-content-center">
+                                            <i class="fas fa-user text-white"></i>
+                                        </div>
+                                    {% endif %}
+                                    <div class="flex-grow-1">
+                                        <div class="fw-bold">{{ post.vietnamese_user.full_name|default:post.vietnamese_user.username }}</div>
+                                        <small class="text-muted">@{{ post.vietnamese_user.username }}</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="compact-badges">
+                                <span class="badge bg-info compact-badge">{{ post.phrase.get_category_display }}</span>
+                                <span class="badge bg-warning compact-badge">承認待ち</span>
+                                {% if post.priority == 1 %}
+                                <span class="badge bg-success compact-badge" title="以前にマッチングしたことがあるユーザーです">
+                                    <i class="fas fa-star"></i> 既知
+                                </span>
+                                {% endif %}
+                            </div>
                         </div>
                     </div>
-                    <div class="card-body">
-                        
-                        <div class="mb-3">
-                            <small class="text-muted">場所:</small>
-                            <p class="mb-1">
-                                <i class="fas fa-map-marker-alt"></i> 
-                                {{ post.cafe_location.name }}
-                            </p>
-                            <small class="text-muted">{{ post.cafe_location.address }}</small>
-                            {% if view_mode == 'all' %}
-                            <br><small class="text-primary"><i class="fas fa-city"></i> {{ post.cafe_location.get_city_display }}</small>
-                            {% endif %}
+                    
+                    <div class="card-body py-2">
+                        <!-- User Info Compact -->
+                        <div class="user-info-compact">
+                            <div class="user-stats">
+                                <div class="stat-item">
+                                    <i class="fas fa-flag icon"></i>
+                                    <span class="value">
+                                        {% if post.vietnamese_user.nationality == 'vietnamese' %}ベトナム人{% else %}{{ post.vietnamese_user.get_nationality_display }}{% endif %}
+                                    </span>
+                                </div>
+                                <div class="stat-item">
+                                    <i class="fas fa-map-marker-alt icon"></i>
+                                    <span class="value">{{ post.vietnamese_user.get_city_display }}</span>
+                                </div>
+                                <div class="stat-item">
+                                    <i class="fas fa-star icon"></i>
+                                    <span class="value">{{ post.vietnamese_user.point|default:0 }}</span>
+                                </div>
+                            </div>
                         </div>
                         
-                        <div class="mb-3">
-                            <small class="text-muted">日時:</small>
-                            <p class="mb-1">
-                                <i class="fas fa-calendar"></i> 
-                                {{ post.meeting_date|date:"Y年m月d日 H:i" }}
-                            </p>
+                        <!-- Post Details -->
+                        <div class="post-details">
+                            <div class="detail-item">
+                                <i class="fas fa-map-marker-alt icon"></i>
+                                <span>{{ post.cafe_location.name }}</span>
+                            </div>
+                            <div class="detail-item">
+                                <i class="fas fa-calendar icon"></i>
+                                <span>{{ post.meeting_date|date:"m/d H:i" }}</span>
+                            </div>
                         </div>
                         
                         {% if post.notes %}
-                            <div class="mb-3">
-                                <small class="text-muted">メモ:</small>
-                                <p class="mb-1">{{ post.notes }}</p>
+                            <div class="mb-2 p-2 bg-light rounded">
+                                <small class="text-muted">
+                                    <i class="fas fa-comment me-1"></i>{{ post.notes|truncatechars:50 }}
+                                </small>
                             </div>
                         {% endif %}
                     </div>
-                    <div class="card-footer text-center">
+                    
+                    <div class="card-footer py-2 text-center">
                         <a href="{% url 'phrase_list' post.id %}" 
-                           class="btn btn-success w-100"
+                           class="btn btn-success btn-sm w-100"
                            onclick="return acceptPost({{ post.id }}, '{{ post.phrase.vietnamese_text }}')">
-                            <i class="fas fa-check"></i> 応募する
+                            <i class="fas fa-check me-1"></i> 応募する
                         </a>
                     </div>
                 </div>
             </div>
         {% empty %}
             <div class="col-12">
-                <div class="text-center">
-                    <i class="fas fa-search fa-3x text-muted mb-3"></i>
-                    <h4>投稿がありません</h4>
+                <div class="text-center py-4">
+                    <i class="fas fa-search fa-2x text-muted mb-3"></i>
+                    <h5>投稿がありません</h5>
                     <p class="text-muted">
                         {% if view_mode == 'city' %}
-                        現在、{{ selected_city }} の地域には投稿がありません。<br>
-                        他の都市を選択するか、全都市表示に切り替えてみてください。
+                        現在、{{ selected_city }} の地域には投稿がありません。
                         {% else %}
-                        現在、どの都市にも投稿がありません。<br>
-                        後でもう一度お試しください。
+                        現在、どの都市にも投稿がありません。
                         {% endif %}
                     </p>
-                    <div class="mt-3">
+                    <div class="mt-2">
                         {% if view_mode == 'city' %}
-                        <a href="{% url 'all_posts' %}" class="btn btn-info me-2">
-                            <i class="fas fa-globe"></i> 全都市表示に切り替え
+                        <a href="{% url 'all_posts' %}" class="btn btn-info btn-sm me-2">
+                            <i class="fas fa-globe"></i> 全都市表示
                         </a>
                         {% endif %}
-                        <a href="{% url 'dashboard' %}" class="btn btn-primary">
-                            <i class="fas fa-home"></i> ダッシュボードへ戻る
+                        <a href="{% url 'dashboard' %}" class="btn btn-primary btn-sm">
+                            <i class="fas fa-home"></i> ダッシュボード
                         </a>
                     </div>
                 </div>
             </div>
         {% endfor %}
     </div>
-
-    <!-- Info Section -->
-    <div class="row mt-5">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="mb-0"><i class="fas fa-info-circle"></i> ご利用ガイド</h5>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-3 mb-3">
-                            <h6><i class="fas fa-map-marker-alt text-primary"></i> 都市別表示</h6>
-                            <small class="text-muted">特定の都市の投稿のみを表示します</small>
-                        </div>
-                        <div class="col-md-3 mb-3">
-                            <h6><i class="fas fa-globe text-info"></i> 全都市表示</h6>
-                            <small class="text-muted">すべての都市の投稿を表示します</small>
-                        </div>
-                        <div class="col-md-3 mb-3">
-                            <h6><i class="fas fa-star text-success"></i> 優先表示</h6>
-                            <small class="text-muted">以前にマッチングしたユーザーの投稿が優先表示されます</small>
-                        </div>
-                        <div class="col-md-3 mb-3">
-                            <h6><i class="fas fa-check text-success"></i> 応募</h6>
-                            <small class="text-muted">「応募する」を押して日本人とつながりましょう</small>
-                        </div>
-                    </div>
-                    
-                    <!-- Priority System Explanation -->
-                    <div class="mt-4 p-3 bg-light rounded">
-                        <h6><i class="fas fa-star text-success"></i> 優先表示システムについて</h6>
-                        <p class="mb-2 small text-muted">
-                            システムは過去のチャット履歴を分析し、以前にマッチングしたことがあるユーザーの投稿を自動的に上部に表示します。
-                            これにより、信頼できるパートナーと再びつながりやすくなり、より効果的な言語交換が可能になります。
-                        </p>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <small class="text-muted">
-                                    <i class="fas fa-check-circle text-success"></i> 
-                                    <strong>優先表示:</strong> 緑色の枠線と <span class="badge bg-success"><i class="fas fa-star"></i> 既知</span> バッジ
-                                </small>
-                            </div>
-                            <div class="col-md-6">
-                                <small class="text-muted">
-                                    <i class="fas fa-info-circle text-info"></i> 
-                                    <strong>通常表示:</strong> 標準的なカードデザイン
-                                </small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 </div>
 
 <script>
 function acceptPost(postId, phraseText) {
     console.log('Accept button clicked for post:', postId, 'phrase:', phraseText);
-    
-    // Show confirmation dialog
-    // const confirmed = confirm('この投稿を承認してもよろしいですか？日本人とチャットできるチャットルームへリダイレクトされます。');
-    
-    if (confirmed) {
-        console.log('User confirmed, redirecting to accept post...');
-        // The link will handle the redirect
-        return true;
-    } else {
-        console.log('User cancelled');
-        return false;
-    }
+    return true;
 }
 
-// Add click event listener for debugging
 document.addEventListener('DOMContentLoaded', function() {
-    const acceptButtons = document.querySelectorAll('a[href*="accept-post"]');
-    console.log('Found', acceptButtons.length, 'accept buttons');
-    
-    acceptButtons.forEach(function(button, index) {
-        console.log('Accept button', index, ':', button.href);
-        
-        button.addEventListener('click', function(e) {
-            console.log('Accept button clicked via event listener:', this.href);
-        });
-    });
-    
-    // Add priority post highlighting
     const priorityPosts = document.querySelectorAll('.priority-post');
     console.log('Found', priorityPosts.length, 'priority posts');
-    
-    priorityPosts.forEach(function(post, index) {
-        console.log('Priority post', index, ':', post);
-        
-        // Add subtle animation for priority posts
-        post.style.animation = 'priorityPulse 2s ease-in-out infinite';
-    });
 });
-
-// Add CSS animation for priority posts
-const style = document.createElement('style');
-style.textContent = `
-    @keyframes priorityPulse {
-        0% { transform: scale(1); }
-        50% { transform: scale(1.02); }
-        100% { transform: scale(1); }
-    }
-    
-    .priority-post:hover {
-        transform: translateY(-8px) !important;
-        transition: transform 0.3s ease;
-    }
-`;
-document.head.appendChild(style);
 </script>
 {% endblock %}
