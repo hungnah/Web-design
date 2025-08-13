@@ -1,0 +1,109 @@
+{% extends 'base_timer.html' %}
+{% load static %}
+
+{% block style %}
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #e5ddd5;
+    margin: 0;
+    padding: 20px;
+  }
+
+  .chat-container {
+    max-width: 600px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .message-row {
+    display: flex;
+    align-items: flex-start;
+  }
+
+  .message-row.right {
+    flex-direction: row-reverse;
+  }
+
+  .icon {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background-color: #ccc;
+    overflow: hidden;
+    margin: 0 10px;
+  }
+
+  .icon img {
+    width: 90%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .message-content {
+    max-width: 70%;
+  }
+
+  .name {
+    font-size: 20px;
+    margin-bottom: 5px;
+    color: #555;
+  }
+
+  .bubble {
+    background-color: #d0ebff; /* 水色（相手） */
+    font-size: 20px;
+    padding: 10px;
+    border-radius: 10px;
+    position: relative;
+    text-align: left !important;
+  }
+
+  .message-row.right .bubble {
+    background-color: #ffd59e; /* オレンジ（自分） */
+  }
+
+  .message-row.right .message-content {
+    text-align: right;
+  }
+  .system-message {
+    text-align: center;
+    font-weight: bold;
+    margin: 20px 0;
+    color: #cd1f1f;
+    font-size: 30px;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="chat-container">
+    {% for msg in messages %}
+        {% if msg.side == 'system' %}
+            <div class="system-message">{{ msg.text|linebreaksbr }}</div>
+        {% else %}
+            <div class="message-row {% if msg.side == 'right' %}right{% endif %}">
+            <div class="icon">
+                {% if msg.side == 'left' %}
+                <img src="{% static left_icon %}" alt="{{ left_name }}アイコン">
+                {% else %}
+                <img src="{% static right_icon %}" alt="{{ right_name }}アイコン">
+                {% endif %}
+            </div>
+            <div class="message-content">
+                <div class="name">
+                {% if msg.side == 'left' %}
+                    {{ left_name }}
+                {% else %}
+                    {{ right_name }}
+                {% endif %}
+                </div>
+                <div class="bubble">{{ msg.text|linebreaksbr }}</div>
+            </div>
+            </div>
+        {% endif %}
+    {% endfor %}
+</div>
+{% endblock %}
