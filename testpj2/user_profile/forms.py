@@ -64,3 +64,49 @@ class ProfileUpdateForm(forms.ModelForm):
             'interests': forms.Textarea(attrs={'rows': 3}),
             'city': forms.Select(attrs={'class': 'form-control'}, choices=CustomUser.CITY_CHOICES),
         }
+
+class PointExchangeForm(forms.Form):
+    """
+    Form for exchanging ganbari points for discount vouchers
+    """
+    voucher_type = forms.ChoiceField(
+        choices=[
+            ('coffee', 'Coffee Shop Discount - 10 points'),
+            ('restaurant', 'Restaurant Discount - 40 points'),
+            ('shopping', 'Shopping Discount - 40 points'),
+            ('transport', 'Transport Discount - 10 points'),
+            ('entertainment', 'Entertainment Discount - 30 points'),
+        ],
+        label='Chọn loại voucher',
+        widget=forms.Select(attrs={'class': 'form-control'})
+    )
+    
+    def __init__(self, user=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.user = user
+        if user:
+            # Update choices based on user's available points
+            available_points = user.point
+            updated_choices = []
+            
+            point_requirements = {
+                'coffee': 10,
+                'restaurant': 40,
+                'shopping': 40,
+                'transport': 10,
+                'entertainment': 30,
+            }
+            
+            for choice in self.fields['voucher_type'].choices:
+                voucher_type = choice[0]
+                points_needed = point_requirements[voucher_type]
+                
+                if available_points >= points_needed:
+                    updated_choices.append(choice)
+                else:
+                    updated_choices.append((
+                        choice[0], 
+                        f"{choice[1]} - Không đủ điểm (cần {points_needed} điểm)"
+                    ))
+            
+            self.fields['voucher_type'].choices = updated_choices
