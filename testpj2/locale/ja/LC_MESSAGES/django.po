@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-13 16:41+0700\n"
+"POT-Creation-Date: 2025-08-13 22:04+0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -80,7 +80,7 @@ msgstr "ガイド"
 msgid "残り時間:"
 msgstr "残り時間"
 
-#: .\templates\base_timer.html:29
+#: .\templates\base_timer.html:28
 msgid "セッションを終了"
 msgstr "セッションを終了"
 
@@ -182,31 +182,33 @@ msgstr "チャットが"
 msgid "cuộc trò chuyện"
 msgstr "件あります"
 
-#: .\templates\chat_system\my_chats.html:43
+#: .\templates\chat_system\my_chats.html:42
+#, python-format
 msgid "Chat với %(partner_name)s"
 msgstr "チャット相手: %(partner_name)s"
 
-#: .\templates\chat_system\my_chats.html:47
+#: .\templates\chat_system\my_chats.html:45
+#, python-format
 msgid "Học: %(phrase)s"
-msgstr "学習: %(phrase)s"
+msgstr "学習テキスト: %(phrase)s"
 
-#: .\templates\chat_system\my_chats.html:73
+#: .\templates\chat_system\my_chats.html:71
 msgid "trước"
 msgstr "前"
 
-#: .\templates\chat_system\my_chats.html:78
+#: .\templates\chat_system\my_chats.html:76
 msgid "Chưa có tin nhắn nào"
 msgstr "まだメッセージはありません"
 
-#: .\templates\chat_system\my_chats.html:85
+#: .\templates\chat_system\my_chats.html:83
 msgid "Mở Chat"
 msgstr "チャットを開始"
 
-#: .\templates\chat_system\my_chats.html:95
+#: .\templates\chat_system\my_chats.html:93
 msgid "Chưa có cuộc trò chuyện nào"
 msgstr "まだ会話はありません"
 
-#: .\templates\chat_system\my_chats.html:97
+#: .\templates\chat_system\my_chats.html:95
 msgid ""
 "Bạn chưa có cuộc trò chuyện nào. Hãy chấp nhận một bài đăng hoặc tạo yêu cầu "
 "tìm partner để bắt đầu chat."
@@ -214,43 +216,43 @@ msgstr ""
 "まだ会話はありません。投稿を承認するか、リクエストを作成して、チャットを始め"
 "るパートナーを探しましょう。"
 
-#: .\templates\chat_system\my_chats.html:103
+#: .\templates\chat_system\my_chats.html:101
 msgid "Tạo bài đăng mới"
 msgstr "新しい投稿を作成"
 
-#: .\templates\chat_system\my_chats.html:108
+#: .\templates\chat_system\my_chats.html:106
 msgid "Tìm bài đăng"
 msgstr "投稿を検索"
 
-#: .\templates\chat_system\my_chats.html:113
+#: .\templates\chat_system\my_chats.html:111
 msgid "Về Dashboard"
 msgstr "ダッシュボードへ戻る"
 
-#: .\templates\chat_system\my_chats.html:127
+#: .\templates\chat_system\my_chats.html:125
 msgid "Hướng dẫn"
 msgstr "使い方"
 
-#: .\templates\chat_system\my_chats.html:132
+#: .\templates\chat_system\my_chats.html:130
 msgid "Trò chuyện"
 msgstr "チャット"
 
-#: .\templates\chat_system\my_chats.html:133
+#: .\templates\chat_system\my_chats.html:131
 msgid "Nhấn 'Mở Chat' để bắt đầu trò chuyện với partner"
 msgstr "'チャットを開く'を押して、パートナーとの会話を始めましょう"
 
-#: .\templates\chat_system\my_chats.html:136
+#: .\templates\chat_system\my_chats.html:134
 msgid "Thông báo"
 msgstr "通知"
 
-#: .\templates\chat_system\my_chats.html:137
+#: .\templates\chat_system\my_chats.html:135
 msgid "Số đỏ hiển thị số tin nhắn chưa đọc"
 msgstr "赤い数字は未読メッセージの数を表示します"
 
-#: .\templates\chat_system\my_chats.html:140
+#: .\templates\chat_system\my_chats.html:138
 msgid "Thời gian"
 msgstr "並び順"
 
-#: .\templates\chat_system\my_chats.html:141
+#: .\templates\chat_system\my_chats.html:139
 msgid "Tin nhắn được sắp xếp theo thời gian gần nhất"
 msgstr "メッセージは最新のもの順に並べられています"
 
@@ -570,6 +572,88 @@ msgstr "今すぐ登録"
 #: .\templates\user_profile\register.html:620
 msgid "Về trang chủ"
 msgstr "ホームに戻る"
+
+#: .\templates\user_profile\profile.html:40
+#, python-format
+msgid "%(age)s歳"
+msgstr "%(age)s歳"
+
+#: .\templates\user_profile\profile.html:50
+msgid "統計"
+msgstr "統計"
+
+#: .\templates\user_profile\profile.html:60
+msgid "投稿数"
+msgstr "投稿数"
+
+#: .\templates\user_profile\profile.html:68
+msgid "マッチング"
+msgstr "マッチング"
+
+#: .\templates\user_profile\profile.html:81
+msgid "プロフィール編集"
+msgstr "プロフィール編集"
+
+#: .\templates\user_profile\profile.html:108
+msgid "注意:"
+msgstr "注意:"
+
+#: .\templates\user_profile\profile.html:109
+msgid ""
+"プロフィール情報を更新すると、ベトナム人のパートナーがあなたについてより詳し"
+"く知ることができます。"
+msgstr ""
+"プロフィール情報を更新すると、ベトナム人のパートナーがあなたについてより詳し"
+"く知ることができます。"
+
+#: .\templates\user_profile\profile.html:114
+msgid "保存"
+msgstr "保存"
+
+#: .\templates\user_profile\profile.html:125
+msgid "アカウント情報"
+msgstr "アカウント情報"
+
+#: .\templates\user_profile\profile.html:131
+msgid "ユーザー名:"
+msgstr "ユーザー名:"
+
+#: .\templates\user_profile\profile.html:132
+msgid "メール:"
+msgstr "メール:"
+
+#: .\templates\user_profile\profile.html:135
+msgid "登録日:"
+msgstr "登録日:"
+
+#: .\templates\user_profile\profile.html:136
+msgid "最終ログイン:"
+msgstr "最終ログイン:"
+
+#: .\templates\user_profile\profile.html:141
+#: .\templates\user_profile\profile.html:214
+msgid "パスワード変更"
+msgstr "パスワード変更"
+
+#: .\templates\user_profile\profile.html:221
+msgid "現在のパスワード"
+msgstr "現在のパスワード"
+
+#: .\templates\user_profile\profile.html:226
+msgid "新しいパスワード"
+msgstr "新しいパスワード"
+
+#: .\templates\user_profile\profile.html:231
+msgid "新しいパスワード（確認）"
+msgstr "新しいパスワード（確認）"
+
+#: .\templates\user_profile\profile.html:238
+msgid "キャンセル"
+msgstr "キャンセル"
+
+#: .\templates\user_profile\profile.html:239
+msgid "更新"
+msgstr "更新"
 
 #: .\templates\user_profile\register.html:7
 msgid "Đăng Ký - Vietnam-Japan Connect"

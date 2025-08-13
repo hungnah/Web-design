@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
+{% load i18n tz %}
 
 {% block title %}
 プロフィール - Vietnam-Japan Connect
@@ -22,14 +23,22 @@
                     {% endif %}
                     <h4>{{ user.full_name|default:user.username }}</h4>
                     <p class="text-muted">{{ user.email }}</p>
+                    <!-- 国籍表示 -->
                     <span class="badge bg-primary language-badge">
-                        日本人
+                        {% if user.nationality == 'japanese' %}
+                            日本人
+                        {% else %}
+                            Người Việt
+                        {% endif %}
                     </span>
                     <p class="mt-2">
                         <i class="fas fa-map-marker-alt"></i> {{ user.get_city_display }}
                     </p>
                     {% if user.get_age %}
-                        <p><i class="fas fa-birthday-cake"></i> {{ user.get_age }}歳</p>
+                    <p>
+                        <i class="fas fa-birthday-cake"></i>
+                        {% blocktrans with age=user.get_age %}{{ age }}歳{% endblocktrans %}
+                    </p>
                     {% endif %}
                 </div>
             </div>
@@ -38,7 +47,7 @@
             <div class="card">
                 <div class="card-header">
                     <h5 class="mb-0">
-                        <i class="fas fa-chart-bar"></i> 統計
+                        <i class="fas fa-chart-bar"></i> {% trans "統計" %}
                     </h5>
                 </div>
                 <div class="card-body">
@@ -48,7 +57,7 @@
                                 {{ user.japanese_posts.count }}
                             </h4>
                             <small class="text-muted">
-                                投稿数
+                                {% trans "投稿数" %}
                             </small>
                         </div>
                         <div class="col-6">
@@ -56,7 +65,7 @@
                                 {{ user.japanese_posts.all|length }}
                             </h4>
                             <small class="text-muted">
-                                マッチング
+                                {% trans "マッチング" %}
                             </small>
                         </div>
                     </div>
@@ -69,7 +78,7 @@
             <div class="card">
                 <div class="card-header">
                     <h3 class="mb-0">
-                        <i class="fas fa-edit"></i> プロフィール編集
+                        <i class="fas fa-edit"></i> {% trans "プロフィール編集" %}
                     </h3>
                 </div>
                 <div class="card-body">
@@ -96,13 +105,13 @@
                         
                         <div class="alert alert-info">
                             <i class="fas fa-info-circle"></i>
-                            <strong>注意:</strong>
-                            プロフィール情報を更新すると、ベトナム人のパートナーがあなたについてより詳しく知ることができます。
+                            <strong>{% trans "注意:" %}</strong>
+                            {% trans "プロフィール情報を更新すると、ベトナム人のパートナーがあなたについてより詳しく知ることができます。" %}
                         </div>
                         
                         <div class="d-grid gap-2">
                             <button type="submit" class="btn btn-primary btn-lg">
-                                <i class="fas fa-save"></i> 保存
+                                <i class="fas fa-save"></i> {% trans "保存" %}
                             </button>
                         </div>
                     </form>
@@ -113,23 +122,23 @@
             <div class="card mt-4">
                 <div class="card-header">
                     <h5 class="mb-0">
-                        <i class="fas fa-user-cog"></i> アカウント情報
+                        <i class="fas fa-user-cog"></i> {% trans "アカウント情報" %}
                     </h5>
                 </div>
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-6">
-                            <p><strong>ユーザー名:</strong> {{ user.username }}</p>
-                            <p><strong>メール:</strong> {{ user.email }}</p>
+                            <p><strong>{% trans "ユーザー名:" %}</strong> {{ user.username }}</p>
+                            <p><strong>{% trans "メール:" %}</strong> {{ user.email }}</p>
                         </div>
                         <div class="col-md-6">
-                            <p><strong>登録日:</strong> {{ user.date_joined|date:"Y年m月d日" }}</p>
-                            <p><strong>最終ログイン:</strong> {{ user.last_login|date:"Y年m月d日 H:i" }}</p>
+                            <p><strong>{% trans "登録日:" %}</strong> {{ user.date_joined|date:"DATETIME_FORMAT" }}</p>
+                            <p><strong>{% trans "最終ログイン:" %}</strong> {{ user.last_login|date:"DATETIME_FORMAT" }}</p>
                         </div>
                     </div>
                     <div class="mt-3 text-end">
                         <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#changePasswordModal">
-                            <i class="fas fa-key"></i> パスワード変更
+                            <i class="fas fa-key"></i> {% trans "パスワード変更" %}
                         </button>
                     </div>
                 </div>
@@ -202,32 +211,32 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="changePasswordModalLabel"><i class="fas fa-key"></i> パスワード変更</h5>
+        <h5 class="modal-title" id="changePasswordModalLabel"><i class="fas fa-key"></i> {% trans "パスワード変更" %}</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <form id="changePasswordForm">
             {% csrf_token %}
             <div class="mb-3">
-                <label for="id_old_password" class="form-label">現在のパスワード</label>
+                <label for="id_old_password" class="form-label">{% trans "現在のパスワード" %}</label>
                 <input type="password" name="old_password" class="form-control" id="id_old_password" required>
                 <div class="invalid-feedback"></div>
             </div>
             <div class="mb-3">
-                <label for="id_new_password1" class="form-label">新しいパスワード</label>
+                <label for="id_new_password1" class="form-label">{% trans "新しいパスワード" %}</label>
                 <input type="password" name="new_password1" class="form-control" id="id_new_password1" required>
                 <div class="invalid-feedback"></div>
             </div>
             <div class="mb-3">
-                <label for="id_new_password2" class="form-label">新しいパスワード（確認）</label>
+                <label for="id_new_password2" class="form-label">{% trans "新しいパスワード（確認）" %}</label>
                 <input type="password" name="new_password2" class="form-control" id="id_new_password2" required>
                 <div class="invalid-feedback"></div>
             </div>
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">キャンセル</button>
-        <button type="submit" form="changePasswordForm" class="btn btn-primary">更新</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans "キャンセル" %}</button>
+        <button type="submit" form="changePasswordForm" class="btn btn-primary">{% trans "更新" %}</button>
       </div>
     </div>
   </div>
