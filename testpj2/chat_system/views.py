@@ -39,7 +39,7 @@ def chat_room(request, room_id):
     
     context = {
         'chat_room': chat_room,
-        'messages': messages_list,
+        'chat_messages': messages_list,
     }
     
     return render(request, 'chat_system/chat_room.html', context)

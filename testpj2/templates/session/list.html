@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Study List{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">Study Files</h2>
+    <div class="list-group">
+        {% for filename in study_files %}
+            <a href="{% url 'study_detail' filename=filename %}" class="list-group-item list-group-item-action">
+                {{ filename }}
+            </a>
+        {% empty %}
+            <p>No study files found.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

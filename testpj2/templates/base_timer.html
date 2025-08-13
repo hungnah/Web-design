@@ -18,17 +18,17 @@
   {% block content %}{% endblock %}
 
   <!-- タイマー表示用 -->
-   {% if timer_flag %}
+  {% if timer_flag %}
   <div id="timer-container" style="position: fixed; top: 10px; right: 10px; background:#007BFF; color: white; padding: 8px 12px; border-radius: 5px; font-weight: bold; font-size: 16px; display: none;">
     {% trans "残り時間:" %} <span id="timer">60:00</span>
   </div>
-  {% endif %}
 
   <div style="position: fixed; top: 60px; right: 10px;">
     <button id="end-session-btn" style="padding: 8px 16px; font-size: 14px; cursor: pointer;">
       {% trans "セッションを終了" %}
     </button>
   </div>
+  {% endif %}
 
   {% block scripts %}
   <script>
