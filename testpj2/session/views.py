@@ -1,3 +1,6 @@
+import os
+import re
+from django.conf import settings
 from django.shortcuts import get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
@@ -57,3 +60,22 @@ def submit_evaluation(request):
 
     # 評価後のリダイレクト先（例：ダッシュボード）
     return redirect('/auth/dashboard/')
+
+def list(request):
+    template_dir = os.path.join(settings.BASE_DIR, 'templates', 'session')
+
+    pattern = re.compile(r'^study_(\d+)\.html$')
+    study_files = []
+
+    for fname in os.listdir(template_dir):
+        if pattern.match(fname):
+            study_files.append(fname)
+
+    study_files.sort(key=lambda x: int(pattern.match(x).group(1)))
+
+    context = {'study_files': study_files}
+    return render(request, 'session/list.html', context)
+
+def study_detail(request, phrase_id):
+    template_name = f'session/study_{phrase_id}.html'
+    return render(request, template_name)
