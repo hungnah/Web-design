@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-13 10:12+0700\n"
+"POT-Creation-Date: 2025-08-13 15:42+0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: .\templates\base.html:86 .\templates\base.html:179
+#: .\templates\base.html:86 .\templates\base.html:187
 msgid "Dashboard"
 msgstr ""
 
@@ -42,29 +42,37 @@ msgstr ""
 msgid "Search Posts"
 msgstr ""
 
-#: .\templates\base.html:134 .\templates\base.html:180
+#: .\templates\base.html:122
+msgid "Search by City"
+msgstr ""
+
+#: .\templates\base.html:125
+msgid "All Cities"
+msgstr ""
+
+#: .\templates\base.html:142 .\templates\base.html:188
 msgid "Profile"
 msgstr ""
 
-#: .\templates\base.html:138
+#: .\templates\base.html:146
 msgid "Logout"
 msgstr ""
 
-#: .\templates\base.html:171
+#: .\templates\base.html:179
 msgid ""
 "Connecting Vietnamese and Japanese people for language exchange and cultural "
 "understanding."
 msgstr ""
 
-#: .\templates\base.html:174
+#: .\templates\base.html:182
 msgid "Quick Links"
 msgstr ""
 
-#: .\templates\base.html:176
+#: .\templates\base.html:184
 msgid "Home"
 msgstr ""
 
-#: .\templates\base.html:177
+#: .\templates\base.html:185
 msgid "Guide"
 msgstr ""
 
@@ -79,6 +87,158 @@ msgstr "Kết thúc phiên làm việc"
 #: .\templates\base_timer.html:51
 msgid "60分が経過しました。"
 msgstr "Đã trôi qua 60 phút."
+
+#: .\templates\chat_system\chat_room.html:66
+#: .\templates\chat_system\chat_room.html:69
+#: .\templates\chat_system\chat_room.html:71
+msgid "Chat với"
+msgstr ""
+
+#: .\templates\chat_system\chat_room.html:77
+msgid "Học:"
+msgstr ""
+
+#: .\templates\chat_system\chat_room.html:116
+msgid "Chưa có tin nhắn nào. Hãy bắt đầu cuộc trò chuyện!"
+msgstr ""
+
+#: .\templates\chat_system\chat_room.html:120
+msgid "Đang nhập..."
+msgstr ""
+
+#: .\templates\chat_system\chat_room.html:133
+msgid "Nhập tin nhắn..."
+msgstr ""
+
+#: .\templates\chat_system\chat_room.html:136
+msgid "Gửi"
+msgstr ""
+
+#: .\templates\chat_system\chat_room.html:147
+msgid "Thông tin cuộc gặp mặt"
+msgstr ""
+
+#: .\templates\chat_system\chat_room.html:150
+msgid "Địa điểm:"
+msgstr ""
+
+#: .\templates\chat_system\chat_room.html:151
+msgid "Địa chỉ:"
+msgstr ""
+
+#: .\templates\chat_system\chat_room.html:155
+msgid "学習するフレーズ:"
+msgstr "Cụm từ để học:"
+
+#: .\templates\chat_system\chat_room.html:160
+msgid "セッション開始!"
+msgstr "Bắt đầu phiên làm việc!"
+
+#: .\templates\chat_system\chat_room.html:167
+msgid "セッション開始"
+msgstr "Bắt đầu phiên làm việc"
+
+#: .\templates\chat_system\chat_room.html:171
+msgid "Trạng thái:"
+msgstr ""
+
+#: .\templates\chat_system\chat_room.html:184
+msgid "Yêu cầu:"
+msgstr ""
+
+#: .\templates\chat_system\chat_room.html:185
+msgid "Thành phố:"
+msgstr ""
+
+#: .\templates\chat_system\chat_room.html:188
+msgid "Gặp mặt:"
+msgstr ""
+
+#: .\templates\chat_system\chat_room.html:189
+msgid "Tần suất:"
+msgstr ""
+
+#: .\templates\chat_system\chat_room.html:192
+msgid "Mô tả:"
+msgstr ""
+
+#: .\templates\chat_system\my_chats.html:11
+msgid "Chat của tôi"
+msgstr ""
+
+#: .\templates\chat_system\my_chats.html:13
+msgid "Danh sách các cuộc trò chuyện với partner của bạn"
+msgstr ""
+
+#: .\templates\chat_system\my_chats.html:23
+msgid "Tìm thấy"
+msgstr ""
+
+#: .\templates\chat_system\my_chats.html:23
+msgid "cuộc trò chuyện"
+msgstr ""
+
+#: .\templates\chat_system\my_chats.html:67
+msgid "trước"
+msgstr ""
+
+#: .\templates\chat_system\my_chats.html:72
+msgid "Chưa có tin nhắn nào"
+msgstr ""
+
+#: .\templates\chat_system\my_chats.html:79
+msgid "Mở Chat"
+msgstr ""
+
+#: .\templates\chat_system\my_chats.html:89
+msgid "Chưa có cuộc trò chuyện nào"
+msgstr ""
+
+#: .\templates\chat_system\my_chats.html:91
+msgid ""
+"Bạn chưa có cuộc trò chuyện nào. Hãy chấp nhận một bài đăng hoặc tạo yêu cầu "
+"tìm partner để bắt đầu chat."
+msgstr ""
+
+#: .\templates\chat_system\my_chats.html:97
+msgid "Tạo bài đăng mới"
+msgstr ""
+
+#: .\templates\chat_system\my_chats.html:102
+msgid "Tìm bài đăng"
+msgstr ""
+
+#: .\templates\chat_system\my_chats.html:107
+msgid "Về Dashboard"
+msgstr ""
+
+#: .\templates\chat_system\my_chats.html:121
+msgid "Hướng dẫn"
+msgstr ""
+
+#: .\templates\chat_system\my_chats.html:126
+msgid "Trò chuyện"
+msgstr ""
+
+#: .\templates\chat_system\my_chats.html:127
+msgid "Nhấn 'Mở Chat' để bắt đầu trò chuyện với partner"
+msgstr ""
+
+#: .\templates\chat_system\my_chats.html:130
+msgid "Thông báo"
+msgstr ""
+
+#: .\templates\chat_system\my_chats.html:131
+msgid "Số đỏ hiển thị số tin nhắn chưa đọc"
+msgstr ""
+
+#: .\templates\chat_system\my_chats.html:134
+msgid "Thời gian"
+msgstr ""
+
+#: .\templates\chat_system\my_chats.html:135
+msgid "Tin nhắn được sắp xếp theo thời gian gần nhất"
+msgstr ""
 
 #: .\templates\home.html:580
 msgid "Nền tảng kết nối giao lưu ngôn ngữ và văn hóa giữa Việt Nam và Nhật Bản"
@@ -325,11 +485,11 @@ msgstr "Đánh giá phiên làm việc"
 msgid "パートナーに対する満足度を評価してください"
 msgstr "Vui lòng đánh giá mức độ hài lòng đối với đối tác."
 
-#: .\templates\session\evaluate.html:92
+#: .\templates\session\evaluate.html:93
 msgid "コメントがあればご記入ください（任意）"
 msgstr "Nếu có nhận xét, vui lòng ghi lại (không bắt buộc)."
 
-#: .\templates\session\evaluate.html:93
+#: .\templates\session\evaluate.html:94
 msgid "評価を送信"
 msgstr "Gửi đánh giá"
 

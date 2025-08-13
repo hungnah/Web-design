@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-13 10:12+0700\n"
+"POT-Creation-Date: 2025-08-13 16:41+0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: .\templates\base.html:86 .\templates\base.html:179
+#: .\templates\base.html:86 .\templates\base.html:187
 msgid "Dashboard"
 msgstr "ダッシュボード"
 
@@ -42,29 +42,37 @@ msgstr "応募一覧"
 msgid "Search Posts"
 msgstr "募集を探す"
 
-#: .\templates\base.html:134 .\templates\base.html:180
+#: .\templates\base.html:122
+msgid "Search by City"
+msgstr "都市ごとに探す"
+
+#: .\templates\base.html:125
+msgid "All Cities"
+msgstr "全ての都市"
+
+#: .\templates\base.html:142 .\templates\base.html:188
 msgid "Profile"
 msgstr "プロフィール"
 
-#: .\templates\base.html:138
+#: .\templates\base.html:146
 msgid "Logout"
 msgstr "ログアウト"
 
-#: .\templates\base.html:171
+#: .\templates\base.html:179
 msgid ""
 "Connecting Vietnamese and Japanese people for language exchange and cultural "
 "understanding."
 msgstr "相互の言語交換と文化理解により、ベトナム人と日本人を繋ぐ"
 
-#: .\templates\base.html:174
+#: .\templates\base.html:182
 msgid "Quick Links"
 msgstr "クイックリンク"
 
-#: .\templates\base.html:176
+#: .\templates\base.html:184
 msgid "Home"
 msgstr "ホーム"
 
-#: .\templates\base.html:177
+#: .\templates\base.html:185
 msgid "Guide"
 msgstr "ガイド"
 
@@ -79,6 +87,172 @@ msgstr "セッションを終了"
 #: .\templates\base_timer.html:51
 msgid "60分が経過しました。"
 msgstr "60分が経過しました。"
+
+#: .\templates\chat_system\chat_room.html:66
+#: .\templates\chat_system\chat_room.html:74
+#: .\templates\chat_system\chat_room.html:76
+msgid "Chat với"
+msgstr "チャット相手:"
+
+#: .\templates\chat_system\chat_room.html:82
+msgid "Học:"
+msgstr "学習:"
+
+#: .\templates\chat_system\chat_room.html:121
+msgid "Chưa có tin nhắn nào. Hãy bắt đầu cuộc trò chuyện!"
+msgstr "まだメッセージはありません。会話を始めましょう!"
+
+#: .\templates\chat_system\chat_room.html:125
+msgid "Đang nhập..."
+msgstr "入力中..."
+
+#: .\templates\chat_system\chat_room.html:138
+msgid "Nhập tin nhắn..."
+msgstr "メッセージを入力..."
+
+#: .\templates\chat_system\chat_room.html:141
+msgid "Gửi"
+msgstr "送信"
+
+#: .\templates\chat_system\chat_room.html:152
+msgid "Thông tin cuộc gặp mặt"
+msgstr "ミーティング情報"
+
+#: .\templates\chat_system\chat_room.html:155
+msgid "Địa điểm:"
+msgstr "場所:"
+
+#: .\templates\chat_system\chat_room.html:156
+msgid "Địa chỉ:"
+msgstr "住所:"
+
+#: .\templates\chat_system\chat_room.html:159
+msgid "Thời gian:"
+msgstr "時間:"
+
+#: .\templates\chat_system\chat_room.html:160
+msgid "学習するフレーズ:"
+msgstr "学習するフレーズ:"
+
+#: .\templates\chat_system\chat_room.html:165
+msgid "セッション開始!"
+msgstr "セッション開始!"
+
+#: .\templates\chat_system\chat_room.html:172
+msgid "セッション開始"
+msgstr "セッション開始"
+
+#: .\templates\chat_system\chat_room.html:176
+msgid "Trạng thái:"
+msgstr "状態:"
+
+#: .\templates\chat_system\chat_room.html:189
+msgid "Yêu cầu:"
+msgstr "要望:"
+
+#: .\templates\chat_system\chat_room.html:190
+msgid "Thành phố:"
+msgstr "都市:"
+
+#: .\templates\chat_system\chat_room.html:193
+msgid "Gặp mặt:"
+msgstr "日付:"
+
+#: .\templates\chat_system\chat_room.html:194
+msgid "Tần suất:"
+msgstr "回数:"
+
+#: .\templates\chat_system\chat_room.html:197
+msgid "Mô tả:"
+msgstr "内容:"
+
+#: .\templates\chat_system\my_chats.html:11
+msgid "Chat của tôi"
+msgstr "マイチャット"
+
+#: .\templates\chat_system\my_chats.html:13
+msgid "Danh sách các cuộc trò chuyện với partner của bạn"
+msgstr "パートナーとのチャット一覧"
+
+#: .\templates\chat_system\my_chats.html:23
+msgid "Tìm thấy"
+msgstr "チャットが"
+
+#: .\templates\chat_system\my_chats.html:23
+msgid "cuộc trò chuyện"
+msgstr "件あります"
+
+#: .\templates\chat_system\my_chats.html:43
+msgid "Chat với %(partner_name)s"
+msgstr "チャット相手: %(partner_name)s"
+
+#: .\templates\chat_system\my_chats.html:47
+msgid "Học: %(phrase)s"
+msgstr "学習: %(phrase)s"
+
+#: .\templates\chat_system\my_chats.html:73
+msgid "trước"
+msgstr "前"
+
+#: .\templates\chat_system\my_chats.html:78
+msgid "Chưa có tin nhắn nào"
+msgstr "まだメッセージはありません"
+
+#: .\templates\chat_system\my_chats.html:85
+msgid "Mở Chat"
+msgstr "チャットを開始"
+
+#: .\templates\chat_system\my_chats.html:95
+msgid "Chưa có cuộc trò chuyện nào"
+msgstr "まだ会話はありません"
+
+#: .\templates\chat_system\my_chats.html:97
+msgid ""
+"Bạn chưa có cuộc trò chuyện nào. Hãy chấp nhận một bài đăng hoặc tạo yêu cầu "
+"tìm partner để bắt đầu chat."
+msgstr ""
+"まだ会話はありません。投稿を承認するか、リクエストを作成して、チャットを始め"
+"るパートナーを探しましょう。"
+
+#: .\templates\chat_system\my_chats.html:103
+msgid "Tạo bài đăng mới"
+msgstr "新しい投稿を作成"
+
+#: .\templates\chat_system\my_chats.html:108
+msgid "Tìm bài đăng"
+msgstr "投稿を検索"
+
+#: .\templates\chat_system\my_chats.html:113
+msgid "Về Dashboard"
+msgstr "ダッシュボードへ戻る"
+
+#: .\templates\chat_system\my_chats.html:127
+msgid "Hướng dẫn"
+msgstr "使い方"
+
+#: .\templates\chat_system\my_chats.html:132
+msgid "Trò chuyện"
+msgstr "チャット"
+
+#: .\templates\chat_system\my_chats.html:133
+msgid "Nhấn 'Mở Chat' để bắt đầu trò chuyện với partner"
+msgstr "'チャットを開く'を押して、パートナーとの会話を始めましょう"
+
+#: .\templates\chat_system\my_chats.html:136
+msgid "Thông báo"
+msgstr "通知"
+
+#: .\templates\chat_system\my_chats.html:137
+msgid "Số đỏ hiển thị số tin nhắn chưa đọc"
+msgstr "赤い数字は未読メッセージの数を表示します"
+
+#: .\templates\chat_system\my_chats.html:140
+msgid "Thời gian"
+msgstr "並び順"
+
+#: .\templates\chat_system\my_chats.html:141
+msgid "Tin nhắn được sắp xếp theo thời gian gần nhất"
+msgstr "メッセージは最新のもの順に並べられています"
 
 #: .\templates\home.html:580
 msgid "Nền tảng kết nối giao lưu ngôn ngữ và văn hóa giữa Việt Nam và Nhật Bản"
@@ -330,11 +504,11 @@ msgstr "セッション評価"
 msgid "パートナーに対する満足度を評価してください"
 msgstr "パートナーに対する満足度を評価してください"
 
-#: .\templates\session\evaluate.html:92
+#: .\templates\session\evaluate.html:93
 msgid "コメントがあればご記入ください（任意）"
 msgstr "コメントがあればご記入ください（任意）"
 
-#: .\templates\session\evaluate.html:93
+#: .\templates\session\evaluate.html:94
 msgid "評価を送信"
 msgstr "評価を送信"
 
@@ -529,3 +703,6 @@ msgstr ""
 #: .\vietnam_japan_connect\settings.py:25
 msgid "Japanese"
 msgstr ""
+
+#~ msgid "Nhấn "
+#~ msgstr "クリック"

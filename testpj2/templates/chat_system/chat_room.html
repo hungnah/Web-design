@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load i18n %}
 {% block title %}Chat Room - Vietnam-Japan Connect{% endblock %}
 
 {% block extra_css %}
@@ -63,18 +63,23 @@
                             <h5 class="mb-0">
                                 <i class="fas fa-comments"></i> 
                                 {% if chat_room.post %}
-                                    Chat với {{ chat_room.post.japanese_user.full_name|default:chat_room.post.japanese_user.username }}
+                                    {% trans "Chat với" %} 
+                                    {% if user == chat_room.post.japanese_user %}
+                                        {{ chat_room.post.vietnamese_user.full_name|default:chat_room.post.vietnamese_user.username }}
+                                    {% else %}
+                                        {{ chat_room.post.japanese_user.full_name|default:chat_room.post.japanese_user.username }}
+                                    {% endif %}
                                 {% elif chat_room.partner_request %}
                                     {% if user == chat_room.partner_request.requester %}
-                                        Chat với {{ chat_room.partner_request.accepted_by.full_name|default:chat_room.partner_request.accepted_by.username }}
+                                        {% trans "Chat với" %} {{ chat_room.partner_request.accepted_by.full_name|default:chat_room.partner_request.accepted_by.username }}
                                     {% else %}
-                                        Chat với {{ chat_room.partner_request.requester.full_name|default:chat_room.partner_request.requester.username }}
+                                        {% trans "Chat với" %} {{ chat_room.partner_request.requester.full_name|default:chat_room.partner_request.requester.username }}
                                     {% endif %}
                                 {% endif %}
                             </h5>
                             <small class="text-muted">
                                 {% if chat_room.post %}
-                                    Học: {{ chat_room.post.phrase.vietnamese_text }}
+                                    {% trans "Học:" %} {{ chat_room.post.phrase.vietnamese_text }}
                                 {% elif chat_room.partner_request %}
                                     {{ chat_room.partner_request.title }}
                                 {% endif %}
@@ -113,11 +118,11 @@
                     {% empty %}
                         <div class="text-center text-muted mt-4">
                             <i class="fas fa-comments fa-2x mb-2"></i>
-                            <p>Chưa có tin nhắn nào. Hãy bắt đầu cuộc trò chuyện!</p>
+                            <p>{% trans "Chưa có tin nhắn nào. Hãy bắt đầu cuộc trò chuyện!" %}</p>
                         </div>
                     {% endfor %}
                     <div id="typing-indicator" class="typing-indicator" style="display: none;">
-                        <i class="fas fa-ellipsis-h"></i> Đang nhập...
+                        <i class="fas fa-ellipsis-h"></i> {% trans "Đang nhập..." %}
                     </div>
                 </div>
 
@@ -130,10 +135,10 @@
                                    class="form-control" 
                                    id="message-input" 
                                    name="content" 
-                                   placeholder="Nhập tin nhắn..." 
+                                   placeholder="{% trans 'Nhập tin nhắn...' %}" 
                                    required>
                             <button class="btn btn-primary" type="submit">
-                                <i class="fas fa-paper-plane"></i> Gửi
+                                <i class="fas fa-paper-plane"></i> {% trans "Gửi" %}
                             </button>
                         </div>
                     </form>
@@ -144,25 +149,31 @@
             <div class="card mt-3">
                 <div class="card-body">
                     {% if chat_room.post %}
-                        <h6><i class="fas fa-info-circle"></i> Thông tin cuộc gặp mặt</h6>
+                        <h6><i class="fas fa-info-circle"></i> {% trans "Thông tin cuộc gặp mặt" %}</h6>
                         <div class="row">
                             <div class="col-md-6">
-                                <p><strong>Địa điểm:</strong> {{ chat_room.post.cafe_location.name }}</p>
-                                <p><strong>Địa chỉ:</strong> {{ chat_room.post.cafe_location.address }}</p>
+                                <p><strong>{% trans "Địa điểm:" %}</strong> {{ chat_room.post.cafe_location.name }}</p>
+                                <p><strong>{% trans "Địa chỉ:" %}</strong> {{ chat_room.post.cafe_location.address }}</p>
                             </div>
                             <div class="col-md-6">
-                                <p><strong>Thời gian:</strong> {{ chat_room.post.meeting_date|date:"d/m/Y H:i" }}</p>
-                                <p>学習するフレーズ: {{ chat_room.post.phrase }}</p>
+                                <p><strong>{% trans "Thời gian:" %}</strong> {{ chat_room.post.meeting_date|date:"d/m/Y H:i" }}</p>
+                                <p>{% trans "学習するフレーズ:" %} {{ chat_room.post.phrase }}</p>
                                 {% if user == chat_room.post.japanese_user %}
-                                    <a href="{% url 'study' chat_room.post.vietnamese_user.id chat_room.post.id chat_room.post.phrase.id %}?timer=1" style="display:inline-block; padding:10px 20px; background-color:#007BFF; color:white; text-decoration:none; border-radius:5px;">
-                                    セッション開始
-                                    </a>
+                                    {% with session_partner_id=chat_room.post.vietnamese_user.id %}
+                                        <a href="{% url 'study' session_partner_id chat_room.post.id chat_room.post.phrase.id %}?timer=1"
+                                            style="display:inline-block; padding:10px 20px; background-color:#007BFF; color:white; text-decoration:none; border-radius:5px;">
+                                            {% trans "セッション開始!" %}
+                                        </a>
+                                    {% endwith %}
                                 {% else %}
-                                    <a href="{% url 'study' chat_room.post.japanese_user.id chat_room.post.id chat_room.post.phrase.id %}?timer=1" style="display:inline-block; padding:10px 20px; background-color:#007BFF; color:white; text-decoration:none; border-radius:5px;">
-                                    セッション開始
-                                    </a>
+                                    {% with session_partner_id=chat_room.post.japanese_user.id %}
+                                        <a href="{% url 'study' session_partner_id chat_room.post.id chat_room.post.phrase.id %}?timer=1"
+                                            style="display:inline-block; padding:10px 20px; background-color:#007BFF; color:white; text-decoration:none; border-radius:5px;">
+                                            {% trans "セッション開始" %}
+                                        </a>
+                                    {% endwith %}
                                 {% endif %}
-                                <p><strong>Trạng thái:</strong> 
+                                <p><strong>{% trans "Trạng thái:" %}</strong> 
                                     <span class="badge bg-success">{{ chat_room.post.get_status_display }}</span>
                                 </p>
                             </div>
@@ -175,15 +186,15 @@
                             <h6><i class="fas fa-info-circle"></i> Thông tin partner</h6>
                             <div class="row">
                                 <div class="col-md-6">
-                                    <p><strong>Yêu cầu:</strong> {{ chat_room.partner_request.title }}</p>
-                                    <p><strong>Thành phố:</strong> {{ chat_room.partner_request.get_preferred_city_display }}</p>
+                                    <p><strong>{% trans "Yêu cầu:" %}</strong> {{ chat_room.partner_request.title }}</p>
+                                    <p><strong>{% trans "Thành phố:" %}</strong> {{ chat_room.partner_request.get_preferred_city_display }}</p>
                                 </div>
                                 <div class="col-md-6">
-                                    <p><strong>Gặp mặt:</strong> {{ chat_room.partner_request.get_meeting_preference_display }}</p>
-                                    <p><strong>Tần suất:</strong> {{ chat_room.partner_request.get_frequency_display }}</p>
+                                    <p><strong>{% trans "Gặp mặt:" %}</strong> {{ chat_room.partner_request.get_meeting_preference_display }}</p>
+                                    <p><strong>{% trans "Tần suất:" %}</strong> {{ chat_room.partner_request.get_frequency_display }}</p>
                                 </div>
                             </div>
-                            <p><strong>Mô tả:</strong> {{ chat_room.partner_request.description }}</p>
+                            <p><strong>{% trans "Mô tả:" %}</strong> {{ chat_room.partner_request.description }}</p>
                         {% endif %}
                     {% endif %}
                 </div>
