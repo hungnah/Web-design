@@ -2,6 +2,7 @@ from django.shortcuts import get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from user_profile.models import CustomUser
+from event_creation.models import LanguageExchangePost
 from django.shortcuts import render
 
 def study(request, partner_id, post_id, phrase_id):
@@ -43,12 +44,16 @@ def submit_evaluation(request):
         return redirect('/some-error-page/')
 
     partner = get_object_or_404(CustomUser, id=partner_id)
+    post_id = request.POST.get("post_id")
+    post = get_object_or_404(LanguageExchangePost, id=post_id)
 
     # ポイント加算
     partner.point += score
     partner.save()
 
-    # コメント保存など別途処理するならここで
+    # セッションを完了
+    post.status = 'completed'
+    post.save()
 
     # 評価後のリダイレクト先（例：ダッシュボード）
     return redirect('/auth/dashboard/')
