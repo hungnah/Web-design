@@ -89,7 +89,7 @@
                         {% endif %}
                     </div>
                     <div class="card-footer text-center">
-                        <button class="btn btn-secondary" disabled title="準備中">準備中</button>
+                        <a href="{% url 'study_phrase' phrase.id %}" class="btn btn-primary">テキストを見る</a>
                     </div>
                     {% if post_id %}
                         <div class="card-footer text-center">
