@@ -1,0 +1,200 @@
+{% extends 'base_timer.html' %}
+
+{% block title %}Lesson5: Shopping and Bargaining - 買い物と値引き交渉{% endblock %}
+
+{% block body_class %}enable-timer{% endblock %}
+
+{% block style %}
+  .conversation {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  }
+  .message {
+    display: flex;
+    max-width: 70%;
+    padding: 15px 20px;
+    border-radius: 20px;
+    line-height: 1.5;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+    font-size: 1rem;
+    align-items: center;
+  }
+  .teacher {
+    margin-left: auto;
+    background-color: #d1e7dd;
+    color: #0f5132;
+    flex-direction: row-reverse;
+  }
+  .student {
+    margin-right: auto;
+    background-color: #cff4fc;
+    color: #055160;
+  }
+  .icon {
+    font-size: 2.2rem;
+    margin: 0 15px;
+    flex-shrink: 0;
+    color: inherit;
+  }
+  .text {
+    white-space: pre-line;
+  }
+{% endblock %}
+
+{% block content %}
+  <h1>Lesson5: Shopping and Bargaining<br>買い物と値引き交渉</h1>
+
+  <div class="conversation">
+    <div class="message teacher">
+      <i class="fas fa-chalkboard-teacher icon" title="Teacher"></i>
+      <div class="text">
+        Hôm nay chúng ta sẽ học cách mua sắm và trả giá nhé.<br>
+        (今日は買い物と値引き交渉の表現を学びましょう。)
+      </div>
+    </div>
+
+    <div class="message student">
+      <i class="fas fa-user icon" title="Student"></i>
+      <div class="text">
+        How do you say "How much is this?" in Vietnamese?<br>
+        (「これはいくらですか？」をベトナム語でどう言いますか？)
+      </div>
+    </div>
+
+    <div class="message teacher">
+      <i class="fas fa-chalkboard-teacher icon"></i>
+      <div class="text">
+        Cái này bao nhiêu tiền?<br>
+        (カイ ナイ バオ ニエウ ティエン？)
+      </div>
+    </div>
+
+    <div class="message student">
+      <i class="fas fa-user icon"></i>
+      <div class="text">
+        Cái này bao nhiêu tiền?<br>
+        (Cái này bao nhiêu tiền?)<br>
+        What does it mean?<br>
+        (どういう意味ですか？)
+      </div>
+    </div>
+
+    <div class="message teacher">
+      <i class="fas fa-chalkboard-teacher icon"></i>
+      <div class="text">
+        It means "How much is this?"<br>
+        (「これはいくらですか？」という意味です。)
+      </div>
+    </div>
+
+    <div class="message student">
+      <i class="fas fa-user icon"></i>
+      <div class="text">
+        How do you say "Can you give me a discount?"<br>
+        (「値引きしてもらえますか？」をベトナム語でどう言いますか？)
+      </div>
+    </div>
+
+    <div class="message teacher">
+      <i class="fas fa-chalkboard-teacher icon"></i>
+      <div class="text">
+        Bạn có thể giảm giá cho tôi không?<br>
+        (バン コ テ ザム ザ チョ トイ コーン？)
+      </div>
+    </div>
+
+    <div class="message student">
+      <i class="fas fa-user icon"></i>
+      <div class="text">
+        Bạn có thể giảm giá cho tôi không?<br>
+        (Bạn có thể giảm giá cho tôi không?)<br>
+        What does it mean?<br>
+        (どういう意味ですか？)
+      </div>
+    </div>
+
+    <div class="message teacher">
+      <i class="fas fa-chalkboard-teacher icon"></i>
+      <div class="text">
+        It means "Can you give me a discount?"<br>
+        (「値引きしてもらえますか？」という意味です。)
+      </div>
+    </div>
+
+    <div class="message student">
+      <i class="fas fa-user icon"></i>
+      <div class="text">
+        How do you say "It's too expensive"<br>
+        (「高すぎます」をベトナム語でどう言いますか？)
+      </div>
+    </div>
+
+    <div class="message teacher">
+      <i class="fas fa-chalkboard-teacher icon"></i>
+      <div class="text">
+        Đắt quá!<br>
+        (ダット クア！)
+      </div>
+    </div>
+
+    <div class="message student">
+      <i class="fas fa-user icon"></i>
+      <div class="text">
+        Đắt quá!<br>
+        (Đắt quá!)<br>
+        What does it mean?<br>
+        (どういう意味ですか？)
+      </div>
+    </div>
+
+    <div class="message teacher">
+      <i class="fas fa-chalkboard-teacher icon"></i>
+      <div class="text">
+        It means "It's too expensive!"<br>
+        (「高すぎます！」という意味です。)
+      </div>
+    </div>
+
+    <div class="message student">
+      <i class="fas fa-user icon"></i>
+      <div class="text">
+        How do you say "I'll take it"<br>
+        (「買います」をベトナム語でどう言いますか？)
+      </div>
+    </div>
+
+    <div class="message teacher">
+      <i class="fas fa-chalkboard-teacher icon"></i>
+      <div class="text">
+        Tôi sẽ mua cái này.<br>
+        (トイ セ ムア カイ ナイ。)
+      </div>
+    </div>
+
+    <div class="message student">
+      <i class="fas fa-user icon"></i>
+      <div class="text">
+        Tôi sẽ mua cái này.<br>
+        (Tôi sẽ mua cái này.)<br>
+        What does it mean?<br>
+        (どういう意味ですか？)
+      </div>
+    </div>
+
+    <div class="message teacher">
+      <i class="fas fa-chalkboard-teacher icon"></i>
+      <div class="text">
+        It means "I'll take this" or "I'll buy this"<br>
+        (「これを買います」という意味です。)
+      </div>
+    </div>
+  </div>
+
+  <div class="text-center mt-4">
+    <a href="{% url 'evaluate' partner_id post_id phrase_id %}" class="btn btn-primary btn-lg">
+      <i class="fas fa-star"></i> Đánh giá bài học
+    </a>
+  </div>
+{% endblock %}
