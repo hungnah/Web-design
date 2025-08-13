@@ -9,7 +9,7 @@ Provides Django admin interface for managing users:
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from .forms import CustomUserCreationForm, CustomUserChangeForm
-from .models import CustomUser
+from .models import CustomUser, DiscountVoucher
 
 class CustomUserAdmin(UserAdmin):
     """
@@ -47,3 +47,34 @@ class CustomUserAdmin(UserAdmin):
 
 # Register the custom user admin
 admin.site.register(CustomUser, CustomUserAdmin)
+
+@admin.register(DiscountVoucher)
+class DiscountVoucherAdmin(admin.ModelAdmin):
+    list_display = ['user', 'voucher_type', 'discount_percentage', 'points_required', 'status', 'created_at', 'valid_until']
+    list_filter = ['voucher_type', 'status', 'created_at', 'valid_until']
+    search_fields = ['user__username', 'user__full_name', 'voucher_type']
+    readonly_fields = ['created_at', 'used_at']
+    date_hierarchy = 'created_at'
+    
+    fieldsets = (
+        ('User Information', {
+            'fields': ('user', 'voucher_type')
+        }),
+        ('Voucher Details', {
+            'fields': ('discount_percentage', 'points_required', 'description')
+        }),
+        ('Validity', {
+            'fields': ('valid_from', 'valid_until', 'status')
+        }),
+        ('Usage', {
+            'fields': ('used_at',),
+            'classes': ('collapse',)
+        }),
+        ('Timestamps', {
+            'fields': ('created_at',),
+            'classes': ('collapse',)
+        }),
+    )
+    
+    def get_queryset(self, request):
+        return super().get_queryset(request).select_related('user')
