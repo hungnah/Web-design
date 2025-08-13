@@ -17,6 +17,8 @@ from django.contrib.auth import update_session_auth_hash
 from .forms import CustomUserCreationForm, ProfileUpdateForm
 from .decorators import prevent_back_button
 from event_creation.models import LanguageExchangePost, PartnerRequest
+from .forms import PointExchangeForm
+from .models import DiscountVoucher
 
 class CustomLoginView(LoginView):
     """
@@ -233,3 +235,211 @@ def change_password_ajax(request):
     # Collect field errors
     errors = {field: msgs for field, msgs in form.errors.items()}
     return JsonResponse({'success': False, 'errors': errors}, status=400)
+
+@login_required
+def point_exchange(request):
+    """
+    View for exchanging ganbari points for discount vouchers
+    """
+    if request.method == 'POST':
+        form = PointExchangeForm(request.user, request.POST)
+        if form.is_valid():
+            voucher_type = form.cleaned_data['voucher_type']
+            
+            # Define point requirements for each voucher type
+            point_requirements = {
+                'coffee': 10,
+                'restaurant': 40,
+                'shopping': 40,
+                'transport': 10,
+                'entertainment': 30,
+            }
+            
+            points_needed = point_requirements[voucher_type]
+            
+            # Check if user has enough points
+            if request.user.point >= points_needed:
+                # Create discount voucher
+                from django.utils import timezone
+                from datetime import timedelta
+                
+                voucher = DiscountVoucher.objects.create(
+                    user=request.user,
+                    voucher_type=voucher_type,
+                    discount_percentage=10,  # Default 10% discount
+                    points_required=points_needed,
+                    description=f"Giảm giá {voucher_type} - {points_needed} điểm",
+                    valid_until=timezone.now() + timedelta(days=30)  # Valid for 30 days
+                )
+                
+                # Deduct points from user
+                request.user.point -= points_needed
+                request.user.save()
+                
+                messages.success(
+                    request, 
+                    f'Đổi điểm thành công! Bạn đã nhận được voucher giảm giá {voucher.get_voucher_type_display()}. '
+                    f'Điểm còn lại: {request.user.point}'
+                )
+                return redirect('/auth/my-vouchers/')
+            else:
+                messages.error(request, 'Bạn không đủ điểm để đổi voucher này.')
+    else:
+        form = PointExchangeForm(request.user)
+    
+    context = {
+        'form': form,
+        'user_points': request.user.point,
+    }
+    return render(request, 'user_profile/point_exchange.html', context)
+
+@login_required
+def my_vouchers(request):
+    """
+    View to display user's discount vouchers
+    Only show active vouchers (not used or expired)
+    """
+    try:
+        print(f"Debug: Getting vouchers for user: {request.user.username}")
+        # Only show active vouchers that are still valid
+        from django.utils import timezone
+        now = timezone.now()
+        
+        active_vouchers = DiscountVoucher.objects.filter(
+            user=request.user,
+            status='active',
+            valid_until__gt=now
+        ).order_by('-created_at')
+        
+        # Also get used vouchers for statistics (but don't display them)
+        used_vouchers = DiscountVoucher.objects.filter(
+            user=request.user,
+            status='used'
+        )
+        
+        expired_vouchers = DiscountVoucher.objects.filter(
+            user=request.user,
+            status='active',
+            valid_until__lte=now
+        )
+        
+        print(f"Debug: Found {active_vouchers.count()} active vouchers")
+        
+        context = {
+            'vouchers': active_vouchers,  # Only show active vouchers
+            'user_points': request.user.point,
+            'total_vouchers': active_vouchers.count() + used_vouchers.count() + expired_vouchers.count(),
+            'active_vouchers_count': active_vouchers.count(),
+            'used_vouchers_count': used_vouchers.count(),
+            'expired_vouchers_count': expired_vouchers.count(),
+        }
+        return render(request, 'user_profile/my_vouchers.html', context)
+    except Exception as e:
+        print(f"Debug: Error in my_vouchers: {str(e)}")
+        messages.error(request, f'Có lỗi xảy ra: {str(e)}')
+        return redirect('/auth/dashboard/')
+
+@login_required
+def use_voucher(request, voucher_id):
+    """
+    View to mark a voucher as used
+    Supports both GET (redirect) and POST (AJAX) requests
+    """
+    try:
+        voucher = DiscountVoucher.objects.get(id=voucher_id, user=request.user)
+        print(f"Debug: Voucher found: {voucher.id}, status: {voucher.status}")
+        
+        # Check if voucher can be used
+        from django.utils import timezone
+        now = timezone.now()
+        
+        if voucher.status == 'active' and now <= voucher.valid_until:
+            print(f"Debug: Voucher is valid")
+            # Mark voucher as used
+            voucher.status = 'used'
+            voucher.used_at = now
+            voucher.save()
+            print(f"Debug: Voucher marked as used successfully")
+            
+            # Update user points (optional: you can add points back or keep them deducted)
+            # For now, we'll keep the points deducted as per the original design
+            
+            if request.method == 'POST':
+                # Return JSON response for AJAX requests
+                return JsonResponse({
+                    'success': True,
+                    'message': 'Voucher đã được sử dụng thành công!',
+                    'voucher_id': voucher_id
+                })
+            else:
+                # Return redirect for GET requests (fallback)
+                messages.success(request, 'Voucher đã được sử dụng thành công!')
+        else:
+            print(f"Debug: Voucher is not valid")
+            error_msg = 'Voucher đã hết hạn hoặc đã được sử dụng.'
+            
+            if request.method == 'POST':
+                return JsonResponse({
+                    'success': False,
+                    'message': error_msg
+                }, status=400)
+            else:
+                messages.error(request, error_msg)
+                
+    except DiscountVoucher.DoesNotExist:
+        print(f"Debug: Voucher not found with id: {voucher_id}")
+        error_msg = 'Voucher không tồn tại.'
+        
+        if request.method == 'POST':
+            return JsonResponse({
+                'success': False,
+                'message': error_msg
+            }, status=404)
+        else:
+            messages.error(request, error_msg)
+            
+    except Exception as e:
+        print(f"Debug: Error in use_voucher: {str(e)}")
+        error_msg = f'Có lỗi xảy ra: {str(e)}'
+        
+        if request.method == 'POST':
+            return JsonResponse({
+                'success': False,
+                'message': error_msg
+            }, status=500)
+        else:
+            messages.error(request, error_msg)
+    
+    # For GET requests, redirect back to vouchers page
+    return redirect('/auth/my-vouchers/')
+
+@login_required
+def voucher_history(request):
+    """
+    View to display all vouchers including used and expired ones
+    """
+    try:
+        print(f"Debug: Getting voucher history for user: {request.user.username}")
+        
+        # Get all vouchers for the user
+        from django.utils import timezone
+        all_vouchers = DiscountVoucher.objects.filter(user=request.user).order_by('-created_at')
+        
+        # Separate vouchers by status
+        now = timezone.now()
+        active_vouchers = [v for v in all_vouchers if v.status == 'active' and v.valid_until > now]
+        used_vouchers = [v for v in all_vouchers if v.status == 'used']
+        expired_vouchers = [v for v in all_vouchers if v.status == 'active' and v.valid_until <= now]
+        
+        context = {
+            'all_vouchers': all_vouchers,
+            'active_vouchers': active_vouchers,
+            'used_vouchers': used_vouchers,
+            'expired_vouchers': expired_vouchers,
+            'user_points': request.user.point,
+        }
+        return render(request, 'user_profile/voucher_history.html', context)
+    except Exception as e:
+        print(f"Debug: Error in voucher_history: {str(e)}")
+        messages.error(request, f'Có lỗi xảy ra: {str(e)}')
+        return redirect('/auth/my-vouchers/')

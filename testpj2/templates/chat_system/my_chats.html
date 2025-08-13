@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load i18n %}
 {% block title %}Chat của tôi - Vietnam-Japan Connect{% endblock %}
 
 {% block content %}
@@ -8,9 +8,9 @@
     <div class="row mb-4">
         <div class="col-12">
             <h1 class="text-center mb-3">
-                <i class="fas fa-comments"></i> Chat của tôi
+                <i class="fas fa-comments"></i> {% trans "Chat của tôi" %}
             </h1>
-            <p class="text-center text-muted">Danh sách các cuộc trò chuyện với partner của bạn</p>
+            <p class="text-center text-muted">{% trans "Danh sách các cuộc trò chuyện với partner của bạn" %}</p>
         </div>
     </div>
 
@@ -20,7 +20,7 @@
             <div class="col-12 mb-3">
                 <div class="alert alert-info">
                     <i class="fas fa-info-circle"></i> 
-                    Tìm thấy {{ chat_rooms|length }} cuộc trò chuyện
+                    {% trans "Tìm thấy" %} {{ chat_rooms|length }} {% trans "cuộc trò chuyện" %}
                 </div>
             </div>
             {% for chat_info in chat_rooms %}
@@ -38,8 +38,14 @@
                                     {% endif %}
                                 </div>
                                 <div>
-                                    <h6 class="mb-0">{{ chat_info.title }}</h6>
-                                    <small class="text-muted">{{ chat_info.subtitle }}</small>
+                                    <!-- <h6 class="mb-0">{{ chat_info.title }}</h6> -->
+                                     <h6 class="mb-0">
+                                        {% blocktrans with partner_name=chat_info.partner.full_name|default:chat_info.partner.username %}Chat với {{ partner_name }}{% endblocktrans %}
+                                    </h6>
+                                    <!-- <small class="text-muted">{{ chat_info.subtitle }}</small> -->
+                                     <small class="text-muted">
+                                        {% blocktrans with phrase=chat_info.subtitle %}Học: {{ phrase }}{% endblocktrans %}
+                                    </small>
                                 </div>
                             </div>
                             {% if chat_info.unread_count > 0 %}
@@ -64,19 +70,19 @@
                                     <br>
                                     <small class="text-muted">
                                         <i class="fas fa-clock me-1"></i>
-                                        {{ chat_info.last_message.timestamp|timesince }} trước
+                                        {{ chat_info.last_message.timestamp|timesince }} {% trans "trước" %}
                                     </small>
                                 </div>
                             {% else %}
                                 <div class="text-center text-muted">
-                                    <small>Chưa có tin nhắn nào</small>
+                                    <small>{% trans "Chưa có tin nhắn nào" %}</small>
                                 </div>
                             {% endif %}
                         </div>
                         <div class="card-footer text-center">
                             <a href="{% url 'chat_room' chat_info.chat_room.id %}" class="btn btn-primary w-100">
                                 <i class="fas fa-comments me-2"></i>
-                                Mở Chat
+                                {% trans "Mở Chat" %}
                             </a>
                         </div>
                     </div>
@@ -86,25 +92,25 @@
             <div class="col-12">
                 <div class="text-center py-5">
                     <i class="fas fa-comments fa-3x text-muted mb-3"></i>
-                    <h4 class="text-muted">Chưa có cuộc trò chuyện nào</h4>
+                    <h4 class="text-muted">{% trans "Chưa có cuộc trò chuyện nào" %}</h4>
                     <p class="text-muted">
-                        Bạn chưa có cuộc trò chuyện nào. Hãy chấp nhận một bài đăng hoặc tạo yêu cầu tìm partner để bắt đầu chat.
+                        {% trans "Bạn chưa có cuộc trò chuyện nào. Hãy chấp nhận một bài đăng hoặc tạo yêu cầu tìm partner để bắt đầu chat." %}
                     </p>
                     <div class="mt-3">
                         {% if user.nationality == 'japanese' %}
                             <a href="{% url 'phrase_list' %}" class="btn btn-primary me-2">
                                 <i class="fas fa-plus me-2"></i>
-                                Tạo bài đăng mới
+                                {% trans "Tạo bài đăng mới" %}
                             </a>
                         {% else %}
                             <a href="{% url 'available_posts' %}" class="btn btn-primary me-2">
                                 <i class="fas fa-search me-2"></i>
-                                Tìm bài đăng
+                                {% trans "Tìm bài đăng" %}
                             </a>
                         {% endif %}
                         <a href="{% url 'dashboard' %}" class="btn btn-outline-secondary">
                             <i class="fas fa-home me-2"></i>
-                            Về Dashboard
+                            {% trans "Về Dashboard" %}
                         </a>
                     </div>
                 </div>
@@ -118,21 +124,21 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h5 class="mb-0"><i class="fas fa-info-circle"></i> Hướng dẫn</h5>
+                        <h5 class="mb-0"><i class="fas fa-info-circle"></i> {% trans "Hướng dẫn" %}</h5>
                     </div>
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-4 mb-3">
-                                <h6><i class="fas fa-comments text-primary"></i> Trò chuyện</h6>
-                                <small class="text-muted">Nhấn "Mở Chat" để bắt đầu trò chuyện với partner</small>
+                                <h6><i class="fas fa-comments text-primary"></i> {% trans "Trò chuyện" %}</h6>
+                                <small class="text-muted">{% trans "Nhấn 'Mở Chat' để bắt đầu trò chuyện với partner" %}</small>
                             </div>
                             <div class="col-md-4 mb-3">
-                                <h6><i class="fas fa-bell text-warning"></i> Thông báo</h6>
-                                <small class="text-muted">Số đỏ hiển thị số tin nhắn chưa đọc</small>
+                                <h6><i class="fas fa-bell text-warning"></i> {% trans "Thông báo" %}</h6>
+                                <small class="text-muted">{% trans "Số đỏ hiển thị số tin nhắn chưa đọc" %}</small>
                             </div>
                             <div class="col-md-4 mb-3">
-                                <h6><i class="fas fa-clock text-info"></i> Thời gian</h6>
-                                <small class="text-muted">Tin nhắn được sắp xếp theo thời gian gần nhất</small>
+                                <h6><i class="fas fa-clock text-info"></i> {% trans "Thời gian" %}</h6>
+                                <small class="text-muted">{% trans "Tin nhắn được sắp xếp theo thời gian gần nhất" %}</small>
                             </div>
                         </div>
                     </div>

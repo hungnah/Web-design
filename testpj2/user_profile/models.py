@@ -6,6 +6,7 @@ This module contains the custom user model for the Vietnam-Japan language exchan
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.core.validators import MinValueValidator
+from django.utils import timezone
 from datetime import date
 
 class CustomUser(AbstractUser):
@@ -79,3 +80,55 @@ class CustomUser(AbstractUser):
     class Meta:
         verbose_name = 'User'
         verbose_name_plural = 'Users'
+
+class DiscountVoucher(models.Model):
+    """
+    Discount Voucher model for exchanging ganbari points
+    Users can exchange their points for various types of discount vouchers
+    """
+    VOUCHER_TYPE_CHOICES = [
+        ('coffee', 'Coffee Shop Discount'),
+        ('restaurant', 'Restaurant Discount'),
+        ('shopping', 'Shopping Discount'),
+        ('transport', 'Transport Discount'),
+        ('entertainment', 'Entertainment Discount'),
+    ]
+    
+    STATUS_CHOICES = [
+        ('active', 'Active'),
+        ('used', 'Used'),
+        ('expired', 'Expired'),
+    ]
+    
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='discount_vouchers')
+    voucher_type = models.CharField(max_length=20, choices=VOUCHER_TYPE_CHOICES)
+    discount_percentage = models.IntegerField(help_text="Discount percentage (e.g., 10 for 10%)")
+    points_required = models.IntegerField(help_text="Points required to exchange for this voucher")
+    description = models.TextField(help_text="Description of the discount offer")
+    valid_from = models.DateTimeField(auto_now_add=True)
+    valid_until = models.DateTimeField(help_text="Expiry date of the voucher")
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='active')
+    used_at = models.DateTimeField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+        return f"{self.user.username} - {self.get_voucher_type_display()} ({self.discount_percentage}% off)"
+    
+    def is_valid(self):
+        """Check if voucher is still valid and not used"""
+        now = timezone.now()
+        return self.status == 'active' and now <= self.valid_until
+    
+    def use_voucher(self):
+        """Mark voucher as used"""
+        if self.is_valid():
+            self.status = 'used'
+            self.used_at = timezone.now()
+            self.save()
+            return True
+        return False
+    
+    class Meta:
+        verbose_name = 'Discount Voucher'
+        verbose_name_plural = 'Discount Vouchers'
+        ordering = ['-created_at']
