@@ -198,11 +198,9 @@ CSRF_TRUSTED_ORIGINS = [
 
 
 
-ALLOWED_HOSTS = [
-    'localhost',
-    '127.0.0.1',
-    '98ce0224cd39.ngrok-free.app'  # domain ngrok của bạn
-] 
+ALLOWED_HOSTS = ["*"]
+
+ 
 
 # Google OAuth Settings
 GOOGLE_OAUTH2_CLIENT_ID = '566554554772-21ftbvjdlhim06422ee4ou3qu4b8iuq6.apps.googleusercontent.com'  # Thay thế bằng Client ID thực tế
