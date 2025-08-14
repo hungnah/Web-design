@@ -79,6 +79,28 @@
 {% endblock %}
 
 {% block content %}
+{% if poster_gender %}
+<div class="poster-info" style="text-align: center; margin-bottom: 20px; padding: 10px; background-color: #f8f9fa; border-radius: 8px;">
+  <small style="color: #6c757d;">
+    {% if poster_gender == 'male' %}
+      👨 男性
+    {% elif poster_gender == 'female' %}
+      👩 女性
+    {% else %}
+      👤 その他
+    {% endif %}
+    
+    {% if poster.get_age %}
+      🎂 {{ poster.get_age }}{% if poster.nationality == 'japanese' %}歳{% else %} tuổi{% endif %}
+    {% endif %}
+    
+    {% if poster_city %}
+      📍 {{ poster_city }}
+    {% endif %}
+  </small>
+</div>
+{% endif %}
+
 <div class="chat-container">
     {% for msg in messages %}
         {% if msg.side == 'system' %}

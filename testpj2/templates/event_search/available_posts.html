@@ -267,10 +267,18 @@
                         <div class="user-info-compact">
                             <div class="user-stats">
                                 <div class="stat-item">
-                                    <i class="fas fa-flag icon"></i>
+                                    {% if post.vietnamese_user.get_age %}
+                                    <i class="fas fa-birthday-cake icon"></i>
+                                    <span class="value">{{ post.vietnamese_user.get_age }}歳</span>
+                                    {% endif %}
+                                </div>
+                                <div class="stat-item">
+                                    {% if post.vietnamese_user.gender %}
+                                    <i class="fas {% if post.vietnamese_user.gender == 'male' %}fa-mars text-primary{% elif post.vietnamese_user.gender == 'female' %}fa-venus text-danger{% else %}fa-user text-secondary{% endif %} icon"></i>
                                     <span class="value">
-                                        {% if post.vietnamese_user.nationality == 'vietnamese' %}ベトナム人{% else %}{{ post.vietnamese_user.get_nationality_display }}{% endif %}
+                                        {% if post.vietnamese_user.gender == 'male' %}男性{% elif post.vietnamese_user.gender == 'female' %}女性{% else %}その他{% endif %}
                                     </span>
+                                    {% endif %}
                                 </div>
                                 <div class="stat-item">
                                     <i class="fas fa-map-marker-alt icon"></i>
