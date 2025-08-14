@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-13 22:04+0700\n"
+"POT-Creation-Date: 2025-08-14 13:47+0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -217,44 +217,125 @@ msgstr ""
 "るパートナーを探しましょう。"
 
 #: .\templates\chat_system\my_chats.html:101
-msgid "Tạo bài đăng mới"
-msgstr "新しい投稿を作成"
-
-#: .\templates\chat_system\my_chats.html:106
 msgid "Tìm bài đăng"
 msgstr "投稿を検索"
 
-#: .\templates\chat_system\my_chats.html:111
+#: .\templates\chat_system\my_chats.html:106
 msgid "Về Dashboard"
 msgstr "ダッシュボードへ戻る"
 
-#: .\templates\chat_system\my_chats.html:125
+#: .\templates\chat_system\my_chats.html:120
 msgid "Hướng dẫn"
 msgstr "使い方"
 
-#: .\templates\chat_system\my_chats.html:130
+#: .\templates\chat_system\my_chats.html:125
 msgid "Trò chuyện"
 msgstr "チャット"
 
-#: .\templates\chat_system\my_chats.html:131
+#: .\templates\chat_system\my_chats.html:126
 msgid "Nhấn 'Mở Chat' để bắt đầu trò chuyện với partner"
 msgstr "'チャットを開く'を押して、パートナーとの会話を始めましょう"
 
-#: .\templates\chat_system\my_chats.html:134
+#: .\templates\chat_system\my_chats.html:129
 msgid "Thông báo"
 msgstr "通知"
 
-#: .\templates\chat_system\my_chats.html:135
+#: .\templates\chat_system\my_chats.html:130
 msgid "Số đỏ hiển thị số tin nhắn chưa đọc"
 msgstr "赤い数字は未読メッセージの数を表示します"
 
-#: .\templates\chat_system\my_chats.html:138
+#: .\templates\chat_system\my_chats.html:133
 msgid "Thời gian"
 msgstr "並び順"
 
-#: .\templates\chat_system\my_chats.html:139
+#: .\templates\chat_system\my_chats.html:134
 msgid "Tin nhắn được sắp xếp theo thời gian gần nhất"
 msgstr "メッセージは最新のもの順に並べられています"
+
+#: .\templates\event_creation\phrase_list.html:12
+msgid "ベトナム語フレーズ"
+msgstr "ベトナム語フレーズ"
+
+#: .\templates\event_creation\phrase_list.html:14
+msgid "日常生活でよく使うベトナム語のフレーズを学びましょう"
+msgstr "日常生活でよく使うベトナム語のフレーズを学びましょう"
+
+#: .\templates\event_creation\phrase_list.html:23
+msgid "フィルター"
+msgstr "フィルター"
+
+#: .\templates\event_creation\phrase_list.html:26
+msgid "カテゴリー"
+msgstr "カテゴリー"
+
+#: .\templates\event_creation\phrase_list.html:28
+#: .\templates\event_creation\phrase_list.html:39
+msgid "すべて"
+msgstr "すべて"
+
+#: .\templates\event_creation\phrase_list.html:37
+msgid "難易度"
+msgstr "難易度"
+
+#: .\templates\event_creation\phrase_list.html:49
+msgid "フィルター適用"
+msgstr "フィルター適用"
+
+#: .\templates\event_creation\phrase_list.html:52
+msgid "リセット"
+msgstr "リセット"
+
+#: .\templates\event_creation\phrase_list.html:87
+msgid "お使いのブラウザは音声再生をサポートしていません。"
+msgstr "お使いのブラウザは音声再生をサポートしていません。"
+
+#: .\templates\event_creation\phrase_list.html:93
+msgid "テキストを見る"
+msgstr "テキストを見る"
+
+#: .\templates\event_creation\phrase_list.html:108
+msgid "フレーズが見つかりません"
+msgstr "フレーズが見つかりません"
+
+#: .\templates\event_creation\phrase_list.html:109
+msgid "フィルターを変更して再度お試しください。"
+msgstr "フィルターを変更して再度お試しください。"
+
+#: .\templates\event_creation\phrase_list.html:120
+msgid "カテゴリーガイド"
+msgstr "カテゴリーガイド"
+
+#: .\templates\event_creation\phrase_list.html:125
+msgid "挨拶"
+msgstr "挨拶"
+
+#: .\templates\event_creation\phrase_list.html:126
+msgid "基本的な挨拶や自己紹介"
+msgstr "基本的な挨拶や自己紹介"
+
+#: .\templates\event_creation\phrase_list.html:129
+msgid "食事"
+msgstr "食事"
+
+#: .\templates\event_creation\phrase_list.html:130
+msgid "レストランや食事に関する表現"
+msgstr "レストランや食事に関する表現"
+
+#: .\templates\event_creation\phrase_list.html:133
+msgid "買い物"
+msgstr "買い物"
+
+#: .\templates\event_creation\phrase_list.html:134
+msgid "ショッピングや価格交渉"
+msgstr "ショッピングや価格交渉"
+
+#: .\templates\event_creation\phrase_list.html:137
+msgid "交通"
+msgstr "交通"
+
+#: .\templates\event_creation\phrase_list.html:138
+msgid "交通機関や道案内"
+msgstr "交通機関や道案内"
 
 #: .\templates\home.html:580
 msgid "Nền tảng kết nối giao lưu ngôn ngữ và văn hóa giữa Việt Nam và Nhật Bản"
@@ -784,6 +865,9 @@ msgstr ""
 #: .\vietnam_japan_connect\settings.py:25
 msgid "Japanese"
 msgstr ""
+
+#~ msgid "Tạo bài đăng mới"
+#~ msgstr "新しい投稿を作成"
 
 #~ msgid "Nhấn "
 #~ msgstr "クリック"

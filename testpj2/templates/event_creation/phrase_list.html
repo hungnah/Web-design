@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load i18n %}
 
 {% block title %}ベトナム語フレーズ - Vietnam-Japan Connect{% endblock %}
 
@@ -8,9 +9,9 @@
     <div class="row mb-4">
         <div class="col-12">
             <h1 class="text-center mb-3">
-                <i class="fas fa-language"></i> ベトナム語フレーズ
+                <i class="fas fa-language"></i> {% trans "ベトナム語フレーズ" %}
             </h1>
-            <p class="text-center text-muted">日常生活でよく使うベトナム語のフレーズを学びましょう</p>
+            <p class="text-center text-muted">{% trans "日常生活でよく使うベトナム語のフレーズを学びましょう" %}</p>
         </div>
     </div>
 
@@ -19,12 +20,12 @@
         <div class="col-md-6">
             <form method="get" class="card">
                 <div class="card-body">
-                    <h5 class="card-title">フィルター</h5>
+                    <h5 class="card-title">{% trans "フィルター" %}</h5>
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label for="category" class="form-label">カテゴリー</label>
+                            <label for="category" class="form-label">{% trans "カテゴリー" %}</label>
                             <select name="category" id="category" class="form-select">
-                                <option value="">すべて</option>
+                                <option value="">{% trans "すべて" %}</option>
                                 {% for value, label in categories %}
                                     <option value="{{ value }}" {% if selected_category == value %}selected{% endif %}>
                                         {{ label }}
@@ -33,9 +34,9 @@
                             </select>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label for="difficulty" class="form-label">難易度</label>
+                            <label for="difficulty" class="form-label">{% trans "難易度" %}</label>
                             <select name="difficulty" id="difficulty" class="form-select">
-                                <option value="">すべて</option>
+                                <option value="">{% trans "すべて" %}</option>
                                 {% for value, label in difficulties %}
                                     <option value="{{ value }}" {% if selected_difficulty == value %}selected{% endif %}>
                                         {{ label }}
@@ -45,10 +46,10 @@
                         </div>
                     </div>
                     <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-filter"></i> フィルター適用
+                        <i class="fas fa-filter"></i> {% trans "フィルター適用" %}
                     </button>
                     <a href="{% url 'phrase_list' %}" class="btn btn-outline-secondary">
-                        <i class="fas fa-times"></i> リセット
+                        <i class="fas fa-times"></i> {% trans "リセット" %}
                     </a>
                 </div>
             </form>
@@ -83,15 +84,15 @@
                             <div class="text-center mb-3">
                                 <audio controls class="w-100">
                                     <source src="{{ phrase.audio_file.url }}" type="audio/mpeg">
-                                    お使いのブラウザは音声再生をサポートしていません。
+                                    {% trans "お使いのブラウザは音声再生をサポートしていません。" %}
                                 </audio>
                             </div>
                         {% endif %}
                     </div>
                     <div class="card-footer text-center">
-                        <a href="{% url 'study_phrase' phrase.id %}" class="btn btn-primary">テキストを見る</a>
+                        <a href="{% url 'study_phrase' phrase.id %}" class="btn btn-primary">{% trans "テキストを見る" %}</a>
                     </div>
-                    {% if post_id %}
+                    {% if post_id and form.nationality.value == 'japanese' %}
                         <div class="card-footer text-center">
                             <a href="{% url 'accept_post' post_id phrase.id %}" class="btn btn-success">
                                 <i class="fas fa-coffee"></i> このテキストで応募
@@ -104,8 +105,8 @@
             <div class="col-12">
                 <div class="text-center">
                     <i class="fas fa-search fa-3x text-muted mb-3"></i>
-                    <h4>フレーズが見つかりません</h4>
-                    <p class="text-muted">フィルターを変更して再度お試しください。</p>
+                    <h4>{% trans "フレーズが見つかりません" %}</h4>
+                    <p class="text-muted">{% trans "フィルターを変更して再度お試しください。" %}</p>
                 </div>
             </div>
         {% endfor %}
@@ -116,25 +117,25 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <h5 class="mb-0"><i class="fas fa-info-circle"></i> カテゴリーガイド</h5>
+                    <h5 class="mb-0"><i class="fas fa-info-circle"></i> {% trans "カテゴリーガイド" %}</h5>
                 </div>
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-3 mb-3">
-                            <h6><i class="fas fa-handshake text-primary"></i> 挨拶</h6>
-                            <small class="text-muted">基本的な挨拶や自己紹介</small>
+                            <h6><i class="fas fa-handshake text-primary"></i> {% trans "挨拶" %}</h6>
+                            <small class="text-muted">{% trans "基本的な挨拶や自己紹介" %}</small>
                         </div>
                         <div class="col-md-3 mb-3">
-                            <h6><i class="fas fa-utensils text-success"></i> 食事</h6>
-                            <small class="text-muted">レストランや食事に関する表現</small>
+                            <h6><i class="fas fa-utensils text-success"></i> {% trans "食事" %}</h6>
+                            <small class="text-muted">{% trans "レストランや食事に関する表現" %}</small>
                         </div>
                         <div class="col-md-3 mb-3">
-                            <h6><i class="fas fa-shopping-cart text-warning"></i> 買い物</h6>
-                            <small class="text-muted">ショッピングや価格交渉</small>
+                            <h6><i class="fas fa-shopping-cart text-warning"></i> {% trans "買い物" %}</h6>
+                            <small class="text-muted">{% trans "ショッピングや価格交渉" %}</small>
                         </div>
                         <div class="col-md-3 mb-3">
-                            <h6><i class="fas fa-bus text-info"></i> 交通</h6>
-                            <small class="text-muted">交通機関や道案内</small>
+                            <h6><i class="fas fa-bus text-info"></i> {% trans "交通" %}</h6>
+                            <small class="text-muted">{% trans "交通機関や道案内" %}</small>
                         </div>
                     </div>
                 </div>

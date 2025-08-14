@@ -95,12 +95,7 @@
                         {% trans "Bạn chưa có cuộc trò chuyện nào. Hãy chấp nhận một bài đăng hoặc tạo yêu cầu tìm partner để bắt đầu chat." %}
                     </p>
                     <div class="mt-3">
-                        {% if user.nationality == 'japanese' %}
-                            <a href="{% url 'phrase_list' %}" class="btn btn-primary me-2">
-                                <i class="fas fa-plus me-2"></i>
-                                {% trans "Tạo bài đăng mới" %}
-                            </a>
-                        {% else %}
+                        {% if user.nationality == 'vietnamese' %}
                             <a href="{% url 'available_posts' %}" class="btn btn-primary me-2">
                                 <i class="fas fa-search me-2"></i>
                                 {% trans "Tìm bài đăng" %}
