@@ -1,0 +1,318 @@
+{% extends 'base_timer.html' %}
+{% load static %}
+
+{% block title %}
+    {% if phrase %}
+        {{ phrase.vietnamese_text }} - {{ phrase.japanese_translation }}
+    {% else %}
+        Học tập - Vietnam-Japan Connect
+    {% endif %}
+{% endblock %}
+
+{% block body_class %}enable-timer{% endblock %}
+
+{% block style %}
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #e5ddd5;
+        margin: 0;
+        padding: 20px;
+    }
+
+    .chat-container {
+        max-width: 800px;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .message-row {
+        display: flex;
+        align-items: flex-start;
+    }
+
+    .message-row.right {
+        flex-direction: row-reverse;
+    }
+
+    .icon {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background-color: #ccc;
+        overflow: hidden;
+        margin: 0 10px;
+        flex-shrink: 0;
+    }
+
+    .icon img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .message-content {
+        max-width: 70%;
+    }
+
+    .name {
+        font-size: 18px;
+        margin-bottom: 5px;
+        color: #555;
+        font-weight: bold;
+    }
+
+    .bubble {
+        background-color: #d0ebff;
+        font-size: 18px;
+        padding: 15px;
+        border-radius: 15px;
+        position: relative;
+        text-align: left !important;
+        line-height: 1.5;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .message-row.right .bubble {
+        background-color: #ffd59e;
+    }
+
+    .message-row.right .message-content {
+        text-align: right;
+    }
+
+    .system-message {
+        text-align: center;
+        font-weight: bold;
+        margin: 30px 0;
+        color: #cd1f1f;
+        font-size: 24px;
+        background-color: #fff3cd;
+        padding: 15px;
+        border-radius: 10px;
+        border: 2px solid #ffc107;
+    }
+
+    .session-header {
+        background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+        color: white;
+        padding: 20px;
+        border-radius: 15px;
+        margin-bottom: 30px;
+        text-align: center;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+
+    .session-header h1 {
+        margin: 0;
+        font-size: 28px;
+        font-weight: 600;
+    }
+
+    .session-header p {
+        margin: 10px 0 0 0;
+        opacity: 0.9;
+        font-size: 16px;
+    }
+
+    .partner-info {
+        background: rgba(255, 255, 255, 0.1);
+        padding: 15px;
+        border-radius: 10px;
+        margin-top: 15px;
+        display: inline-block;
+    }
+
+    .partner-info small {
+        display: block;
+        margin-bottom: 5px;
+        opacity: 0.8;
+    }
+
+    .action-buttons {
+        text-align: center;
+        margin-top: 30px;
+        padding: 20px;
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    .btn {
+        display: inline-block;
+        padding: 12px 24px;
+        margin: 0 10px;
+        border-radius: 25px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        border: none;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+        color: white;
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0,123,255,0.4);
+        color: white;
+    }
+
+    .btn-success {
+        background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        color: white;
+    }
+
+    .btn-success:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(40,167,69,0.4);
+        color: white;
+    }
+
+    .btn-outline-secondary {
+        background: transparent;
+        color: #6c757d;
+        border: 2px solid #6c757d;
+    }
+
+    .btn-outline-secondary:hover {
+        background: #6c757d;
+        color: white;
+        transform: translateY(-2px);
+    }
+
+    .timer-info {
+        background: rgba(0, 123, 255, 0.1);
+        padding: 10px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        text-align: center;
+        border: 1px solid rgba(0, 123, 255, 0.3);
+    }
+
+    .timer-info small {
+        color: #007bff;
+        font-weight: 600;
+    }
+
+    @media (max-width: 768px) {
+        .chat-container {
+            max-width: 100%;
+            padding: 10px;
+        }
+        
+        .bubble {
+            font-size: 16px;
+            padding: 12px;
+        }
+        
+        .icon {
+            width: 60px;
+            height: 60px;
+        }
+        
+        .session-header h1 {
+            font-size: 24px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="chat-container">
+    <!-- Session Header -->
+    <div class="session-header">
+        <h1>
+            {% if phrase %}
+                {{ phrase.vietnamese_text }}
+            {% else %}
+                Học tập
+            {% endif %}
+        </h1>
+        <p>
+            {% if phrase %}
+                「{{ phrase.japanese_translation }}」を学ぼう
+            {% else %}
+                「学習セッション」を始めましょう
+            {% endif %}
+        </p>
+        
+        {% if poster %}
+        <div class="partner-info">
+            <small>
+                {% if poster.gender == 'male' %}
+                    👨 男性
+                {% elif poster.gender == 'female' %}
+                    👩 女性
+                {% else %}
+                    👤 その他
+                {% endif %}
+                
+                {% if poster.get_age %}
+                    🎂 {{ poster.get_age }}{% if poster.nationality == 'japanese' %}歳{% else %} tuổi{% endif %}
+                {% endif %}
+                
+                {% if poster_city %}
+                    📍 {{ poster_city }}
+                {% endif %}
+            </small>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Timer Info -->
+    <div class="timer-info">
+        <small>⏰ Phiên học có timer 60 phút - Hãy tập trung học tập!</small>
+    </div>
+
+    <!-- Conversation Messages -->
+    {% for message in messages %}
+        {% if message.side == 'system' %}
+            <div class="system-message">
+                {{ message.text|linebreaksbr }}
+            </div>
+        {% else %}
+            <div class="message-row {% if message.side == 'right' %}right{% endif %}">
+                <div class="icon">
+                    {% if message.side == 'left' %}
+                        <img src="{% static left_icon %}" alt="{{ left_name }}">
+                    {% else %}
+                        <img src="{% static right_icon %}" alt="{{ right_name }}">
+                    {% endif %}
+                </div>
+                <div class="message-content">
+                    <div class="name">
+                        {% if message.side == 'left' %}
+                            {{ left_name }}
+                        {% else %}
+                            {{ right_name }}
+                        {% endif %}
+                    </div>
+                    <div class="bubble">
+                        {{ message.text|linebreaksbr }}
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    {% endfor %}
+
+    <!-- Action Buttons -->
+    <div class="action-buttons">
+        <a href="{% url 'evaluate' partner_id post_id phrase_id %}" class="btn btn-success">
+            <i class="fas fa-star"></i> Đánh giá phiên học
+        </a>
+        <a href="{% url 'start_chat_session' post_id %}" class="btn btn-primary">
+            <i class="fas fa-comments"></i> Quay lại chat
+        </a>
+        <a href="/auth/dashboard/" class="btn btn-outline-secondary">
+            <i class="fas fa-home"></i> Về Dashboard
+        </a>
+    </div>
+</div>
+{% endblock %}

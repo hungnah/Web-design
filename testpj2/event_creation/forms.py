@@ -31,8 +31,8 @@ class LanguageExchangePostForm(forms.ModelForm):
         fields = ['cultural_location', 'meeting_date', 'japanese_learning_phrases', 'vietnamese_learning_phrases', 'notes']
         widgets = {
             'cultural_location': forms.Select(attrs={'class': 'form-control', 'id': 'id_cultural_location'}),
-            'japanese_learning_phrases': forms.SelectMultiple(attrs={'class': 'form-control', 'size': '4'}),
-            'vietnamese_learning_phrases': forms.SelectMultiple(attrs={'class': 'form-control', 'size': '4'}),
+            'japanese_learning_phrases': forms.SelectMultiple(attrs={'class': 'form-control select2-multiple', 'data-placeholder': 'Chọn các câu nói...'}),
+            'vietnamese_learning_phrases': forms.SelectMultiple(attrs={'class': 'form-control select2-multiple', 'data-placeholder': 'Chọn các câu nói...'}),
             'notes': forms.Textarea(attrs={'rows': 3, 'placeholder': 'Add any additional notes about your meeting...'}),
         }
     
