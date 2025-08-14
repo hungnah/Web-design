@@ -13,5 +13,5 @@ urlpatterns = [
     path('study_phrase/<int:phrase_id>/', views.study_detail, name='study_phrase'),
     path('text-session/<int:post_id>', views.text_session, name='text_session'),
     path('start-chat/<int:post_id>/', views.start_chat_session, name='start_chat_session'),
-    path('start-working-session/<int:post_id>/', views.start_working_session, name='start_working_session'),
+
 ]

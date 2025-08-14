@@ -23,8 +23,9 @@ Features:
 - Includes error handling and logging for debugging
 """
 
-def study(request, partner_id, post_id, phrase_id=None):
+def study(request, partner_id, post_id, phrase_id):
     timer_flag = request.GET.get('timer') == '1'
+    template_name = f'session/study_{phrase_id}.html'
     
     # Get the language exchange post to access user information
     poster = None
@@ -43,13 +44,6 @@ def study(request, partner_id, post_id, phrase_id=None):
     except Exception as e:
         print(f"Error in study view: {e}")
     
-    # Determine which template to use based on learning phrases
-    if phrase_id:
-        template_name = f'session/study_{phrase_id}.html'
-    else:
-        # Use default template if no specific phrase_id
-        template_name = 'session/study.html'
-    
     context = {
         'partner_id': partner_id,
         'post_id': post_id,
@@ -59,11 +53,10 @@ def study(request, partner_id, post_id, phrase_id=None):
         'poster_nationality': poster.nationality if poster else None,
         'poster_city': poster.city if poster else None,
         'poster': poster,
-        'post': post,  # Add post to context for template access
     }
     return render(request, template_name, context)
 
-def evaluate(request, partner_id, post_id, phrase_id=None):
+def evaluate(request, partner_id, post_id, phrase_id):
     score_range = range(1, 11)  # 1〜10
     
     # Get the language exchange post to access user information
@@ -92,7 +85,6 @@ def evaluate(request, partner_id, post_id, phrase_id=None):
         'poster_nationality': poster.nationality if poster else None,
         'poster_city': poster.city if poster else None,
         'poster': poster,
-        'post': post,  # Add post to context for template access
     }
     return render(request, 'session/evaluate.html', context)
 
@@ -179,54 +171,104 @@ def study_detail(request, phrase_id):
             {'side': 'right', 'text': 'Bạn là Minh.\n(あなたはMinhです。)'},
             {'side': 'left', 'text': 'Bạn là Hayato.\n(あなたはHayatoです。)'},
             {'side': 'right', 'text': 'Bạn là Hayato.\n(あなたはHayatoです。)'},
-            {'side': 'left', 'text': 'Bạn là giáo viên.\n(あなたは先生です。)'},
-            {'side': 'right', 'text': 'Bạn là giáo viên.\n(あなたは先生です。)'},
-            {'side': 'left', 'text': 'Bạn là học sinh.\n(あなたは学生です。)'},
-            {'side': 'right', 'text': 'Bạn là học sinh.\n(あなたは学生です。)'},
-            {'side': 'left', 'text': 'Bạn là người Việt Nam.\n(あなたはベトナム人です。)'},
-            {'side': 'right', 'text': 'Bạn là người Việt Nam.\n(あなたはベトナム人です。)'},
-            {'side': 'left', 'text': 'Bạn là người Nhật.\n(あなたは日本人です。)'},
-            {'side': 'right', 'text': 'Bạn là người Nhật.\n(あなたは日本人です。)'},
+            {'side': 'left', 'text': 'Bạn là giáo viên.\n(あなたは先生ですか？)'},
+            {'side': 'right', 'text': 'Bạn là giáo viên.\n(あなたは先生ですか？)'},
+            {'side': 'left', 'text': 'Bạn là học sinh.\n(あなたは学生ですか？)'},
+            {'side': 'right', 'text': 'Bạn là học sinh.\n(あなたは学生ですか？)'},
+            {'side': 'left', 'text': 'Bạn là người Việt Nam.\n(あなたはベトナム人ですか？)'},
+            {'side': 'right', 'text': 'Bạn là người Việt Nam.\n(あなたはベトナム人ですか？)'},
+            {'side': 'left', 'text': 'Bạn là người Nhật.\n(あなたは日本人ですか？)'},
+            {'side': 'right', 'text': 'Bạn là người Nhật.\n(あなたは日本人ですか？)'},
+            {'side': 'system', 'text': '＜４＞Bạn có phải\n「あなたは～ですか？」を学ぼう'},
+            {'side': 'left', 'text': 'Lặp lại theo tôi.\n(私が読んだ後に繰り返してください)'},
+            {'side': 'left', 'text': 'Bạn có phải là Minh？\n(あなたはMinhですか？)'},
+            {'side': 'right', 'text': 'Bạn có phải là Minh？\n(あなたはMinhですか？)'},
+            {'side': 'left', 'text': 'Bạn có phải là Hayato？\n(あなたはHayatoですか？)'},
+            {'side': 'right', 'text': 'Bạn có phải là Hayato？\n(あなたはHayatoですか？)'},
+            {'side': 'left', 'text': 'Bạn có phải là giáo viên？\n(あなたは先生ですか？)'},
+            {'side': 'right', 'text': 'Bạn có phải là giáo viên？\n(あなたは先生ですか？)'},
+            {'side': 'left', 'text': 'Bạn có phải là học sinh？\n(あなたは学生ですか？)'},
+            {'side': 'right', 'text': 'Bạn có phải là học sinh？\n(あなたは学生ですか？)'},
+            {'side': 'left', 'text': 'Bạn có phải là người Việt Nam？\n(あなたはベトナム人ですか？)'},
+            {'side': 'right', 'text': 'Bạn có phải là người Việt Nam？\n(あなたはベトナム人ですか？)'},
+            {'side': 'left', 'text': 'Bạn có phải là người Nhật？\n(あなたは日本人ですか？)'},
+            {'side': 'right', 'text': 'Bạn có phải là người Nhật？\n(あなたは日本人ですか？)'},
+            {'side': 'system', 'text': '＜５＞Vâng・Không\n「はい・いいえ」を学ぼう'},
+            {'side': 'left', 'text': 'Bạn có phải là Hayato？\n(あなたはHayatoですか？)'},
+            {'side': 'right', 'text': 'Bạn có phải là Hayato？\n(あなたはHayatoですか？)'},
+            {'side': 'left', 'text': 'Vâng, tôi là Hayato.\n(はい、私はHayatoです。)'},
+            {'side': 'right', 'text': 'Vâng, tôi là Hayato.\n(はい、私はHayatoです。)'},
+            {'side': 'left', 'text': 'Không, tôi là Minh.\n(いいえ、私はMinhです。)'},
+            {'side': 'right', 'text': 'Không, tôi là Minh.\n(いいえ、私はMinhです。)'},
+            {'side': 'left', 'text': 'Bạn có phải là học sinh？\n(あなたは学生ですか？)'},
+            {'side': 'right', 'text': 'Bạn có phải là học sinh？\n(あなたは学生ですか？)'},
+            {'side': 'left', 'text': 'Vâng, tôi là học sinh.\n(はい、私は学生です。)'},
+            {'side': 'right', 'text': 'Vâng, tôi là học sinh.\n(はい、私は学生です。)'},
+            {'side': 'left', 'text': 'Không, tôi là giáo viên.\n(いいえ、私は先生です。)'},
+            {'side': 'right', 'text': 'Không, tôi là giáo viên.\n(いいえ、私は先生です。)'},
+            {'side': 'left', 'text': 'Bạn có phải là người Nhật？\n(あなたは日本人ですか？)'},
+            {'side': 'right', 'text': 'Bạn có phải là người Nhật？\n(あなたは日本人ですか？)'},
+            {'side': 'left', 'text': 'Vâng, tôi là người Nhật.\n(はい、私は日本人です。)'},
+            {'side': 'right', 'text': 'Vâng, tôi là người Nhật.\n(はい、私は日本人です。)'},
+            {'side': 'left', 'text': 'Không, tôi là người Việt Nam.\n(いいえ、私はベトナム人です。)'},
+            {'side': 'right', 'text': 'Không, tôi là người Việt Nam.\n(いいえ、私はベトナム人です。)'},
+            {'side': 'system', 'text': '＜６＞trò chuyện①\n学んだ表現を使って会話しよう①'},
+            {'side': 'left', 'text': 'Xin chào! Tôi là Minh.\n(こんにちは！私はMinhです。)'},
+            {'side': 'right', 'text': 'Xin chào! Tôi là Hayato.\n(こんにちは！私はHayatoです。)'},
+            {'side': 'left', 'text': 'Bạn có phải là học sinh？\n(あなたは学生ですか？)'},
+            {'side': 'right', 'text': 'Vâng, tôi là học sinh. Bạn có phải là giáo viên？\n(はい、私は学生です。あなたは先生ですか？)'},
+            {'side': 'left', 'text': 'Vâng, tôi là giáo viên. Bạn có phải là người Việt Nam？\n(はい、私は先生です。あなたはベトナム人ですか？)'},
+            {'side': 'right', 'text': 'Không, tôi là người Nhật. Bạn có phải là người Nhật？\n(いいえ、私は日本人です。あなたは日本人ですか？)'},
+            {'side': 'left', 'text': 'Không, tôi là người Việt Nam.\n(いいえ、私はベトナム人です。)'},
+            {'side': 'system', 'text': '＜６＞trò chuyện②\n学んだ表現を使って会話しよう②'},
+            {'side': 'right', 'text': 'Xin chào! Tôi là Minh.\n(こんにちは！私はMinhです。)'},
+            {'side': 'left', 'text': 'Xin chào! Tôi là Hayato.\n(こんにちは！私はHayatoです。)'},
+            {'side': 'right', 'text': 'Bạn có phải là học sinh？\n(あなたは学生ですか？)'},
+            {'side': 'left', 'text': 'Vâng, tôi là học sinh. Bạn có phải là giáo viên？\n(はい、私は学生です。あなたは先生ですか？)'},
+            {'side': 'right', 'text': 'Vâng, tôi là giáo viên. Bạn có phải là người Việt Nam？\n(はい、私は先生です。あなたはベトナム人ですか？)'},
+            {'side': 'left', 'text': 'Không, tôi là người Nhật. Bạn có phải là người Nhật？\n(いいえ、私は日本人です。あなたは日本人ですか？)'},
+            {'side': 'right', 'text': 'Không, tôi là người Việt Nam.\n(いいえ、私はベトナム人です。)'},
         ]
     elif phrase_id == 2:
+        # Chủ đề: Chào buổi sáng
         messages = [
-            {'side': 'system', 'text': '＜2＞Chào buổi sáng 「おはよう」を学ぼう'},
-            {'side': 'left', 'text': 'Chào buổi sáng. (おはようございます。)'},
-            {'side': 'right', 'text': 'Chào buổi sáng. (おはようございます。)'},
-            {'side': 'left', 'text': 'Chào nhé! (thân mật) (おはよう。)'},
-            {'side': 'right', 'text': 'Chào nhé! (thân mật) (おはよう。)'},
-            {'side': 'left', 'text': 'Chào buổi sáng, bạn có khỏe không? (おはよう、お元気ですか？)'},
-            {'side': 'right', 'text': 'Chào buổi sáng, bạn có khỏe không? (おはよう、お元気ですか？)'},
-            {'side': 'left', 'text': 'Vâng, tôi khỏe. Cảm ơn bạn. (はい、元気です。ありがとう。)'},
-            {'side': 'right', 'text': 'Vâng, tôi khỏe. Cảm ơn bạn. (はい、元気です。ありがとう。)'},
+            {'side': 'system', 'text': '＜２＞Chào buổi sáng\n「おはよう」を学ぼう'},
+            {'side': 'left', 'text': 'Chào buổi sáng.\n(おはようございます。)'},
+            {'side': 'right', 'text': 'Chào buổi sáng.\n(おはようございます。)'},
+            {'side': 'left', 'text': 'Chào nhé! (thân mật)\n(おはよう。)'},
+            {'side': 'right', 'text': 'Chào nhé! (thân mật)\n(おはよう。)'},
+            {'side': 'left', 'text': 'Chúc bạn một ngày tốt lành.\n(良い一日を。)'},
+            {'side': 'right', 'text': 'Cảm ơn. Bạn cũng vậy nhé.\n(ありがとうございます。あなたも良い一日を。)'},
+            {'side': 'system', 'text': '＜練習＞　Lặp lại và đối thoại ngắn'},
+            {'side': 'left', 'text': 'おはようございます。私はMinhです。\n(Chào buổi sáng. Tôi là Minh.)'},
+            {'side': 'right', 'text': 'おはようございます。私はHayatoです。\n(Chào buổi sáng. Tôi là Hayato.)'},
         ]
     elif phrase_id == 3:
+        # Chủ đề: Chào buổi trưa
         messages = [
-            {'side': 'system', 'text': '＜3＞Chào buổi trưa 「こんにちは」を学ぼう'},
-            {'side': 'left', 'text': 'Chào buổi trưa. (こんにちは。)'},
-            {'side': 'right', 'text': 'Chào buổi trưa. (こんにちは。)'},
-            {'side': 'left', 'text': 'Chào bạn! (thân mật) (こんにちは！)'},
-            {'side': 'right', 'text': 'Chào bạn! (thân mật) (こんにちは！)'},
-            {'side': 'left', 'text': 'Bạn đã ăn trưa chưa? (お昼ご飯は食べましたか？)'},
-            {'side': 'right', 'text': 'Bạn đã ăn trưa chưa? (お昼ご飯は食べましたか？)'},
-            {'side': 'left', 'text': 'Rồi, tôi đã ăn rồi. (はい、食べました。)'},
-            {'side': 'right', 'text': 'Rồi, tôi đã ăn rồi. (はい、食べました。)'},
+            {'side': 'system', 'text': '＜３＞Chào buổi trưa\n「こんにちは」を学ぼう'},
+            {'side': 'left', 'text': 'Chào buổi trưa.\n(こんにちは。)'},
+            {'side': 'right', 'text': 'Chào buổi trưa.\n(こんにちは。)'},
+            {'side': 'left', 'text': 'Bạn đã ăn trưa chưa？\n(もうお昼ご飯を食べましたか？)'},
+            {'side': 'right', 'text': 'Chưa, mình định đi ăn bây giờ.\n(まだです。これから食べに行く予定です。)'},
+            {'side': 'left', 'text': 'Chúc bữa trưa vui vẻ.\n(良いお昼を。)'},
+            {'side': 'right', 'text': 'Cảm ơn bạn.\n(ありがとうございます。)'},
         ]
     elif phrase_id == 4:
+        # Chủ đề: Chào buổi tối
         messages = [
-            {'side': 'system', 'text': '＜4＞Chào buổi tối 「こんばんは」を学ぼう'},
-            {'side': 'left', 'text': 'Chào buổi tối. (こんばんは。)'},
-            {'side': 'right', 'text': 'Chào buổi tối. (こんばんは。)'},
-            {'side': 'left', 'text': 'Chào bạn! (thân mật) (こんばんは！)'},
-            {'side': 'right', 'text': 'Chào bạn! (thân mật) (こんばんは！)'},
-            {'side': 'left', 'text': 'Bạn có khỏe không? (お元気ですか？)'},
-            {'side': 'right', 'text': 'Bạn có khỏe không? (お元気ですか？)'},
-            {'side': 'left', 'text': 'Vâng, tôi khỏe. Cảm ơn bạn. (はい、元気です。ありがとう。)'},
-            {'side': 'right', 'text': 'Vâng, tôi khỏe. Cảm ơn bạn. (はい、元気です。ありがとう。)'},
+            {'side': 'system', 'text': '＜４＞Chào buổi tối\n「こんばんは」を学ぼう'},
+            {'side': 'left', 'text': 'Chào buổi tối.\n(こんばんは。)'},
+            {'side': 'right', 'text': 'Chào buổi tối.\n(こんばんは。)'},
+            {'side': 'left', 'text': 'Bạn đã ăn tối chưa？\n(もう夕食を食べましたか？)'},
+            {'side': 'right', 'text': 'Rồi, mình đã ăn rồi.\n(はい、もう食べました。)'},
+            {'side': 'left', 'text': 'Chúc ngủ ngon sau nhé.\n(おやすみなさい。)'},
+            {'side': 'right', 'text': 'Ngủ ngon nhé.\n(おやすみなさい。)'},
         ]
     elif phrase_id == 5:
+        # Chủ đề: Bạn khỏe không?
         messages = [
-            {'side': 'system', 'text': '＜5＞Bạn khỏe không\n「お元気ですか？」を学ぼう'},
+            {'side': 'system', 'text': '＜５＞Bạn khỏe không\n「お元気ですか？」を学ぼう'},
             {'side': 'left', 'text': 'Bạn khỏe không?\n(お元気ですか？)'},
             {'side': 'right', 'text': 'Bạn khỏe không?\n(お元気ですか？)'},
             {'side': 'left', 'text': 'Hôm nay bạn có khỏe không?\n(今日はお元気ですか？)'},
@@ -235,183 +277,17 @@ def study_detail(request, phrase_id):
             {'side': 'right', 'text': 'Không, cảm ơn. Tôi ổn.\n(いいえ、大丈夫です。ありがとう。)'},
         ]
     elif phrase_id == 6:
+        # Chủ đề: Tôi khỏe, cảm ơn
         messages = [
-            {'side': 'system', 'text': '＜6＞Tôi khỏe, cảm ơn\n「元気です、ありがとう」を学ぼう'},
+            {'side': 'system', 'text': '＜６＞Tôi khỏe, cảm ơn\n「元気です、ありがとう」を学ぼう'},
             {'side': 'left', 'text': 'Tôi khỏe, cảm ơn.\n(元気です、ありがとう。)'},
             {'side': 'right', 'text': 'Tôi khỏe, cảm ơn.\n(元気です、ありがとう。)'},
             {'side': 'left', 'text': 'Rất vui khi nghe vậy.\n(それは良かったです。)'},
             {'side': 'right', 'text': 'Cảm ơn bạn.\n(ありがとうございます。)'},
             {'side': 'left', 'text': 'Nếu mệt thì hãy nghỉ nhé.\n(疲れたら休んでくださいね。)'},
-        ]
-    elif phrase_id == 7:
-        messages = [
-            {'side': 'system', 'text': '＜7＞Chào buổi sáng 「おはよう」を学ぼう'},
-            {'side': 'left', 'text': 'Chào buổi sáng. (おはようございます。)'},
-            {'side': 'right', 'text': 'Chào buổi sáng. (おはようございます。)'},
-            {'side': 'left', 'text': 'Chào nhé! (thân mật) (おはよう。)'},
-            {'side': 'right', 'text': 'Chào nhé! (thân mật) (おはよう。)'},
-            {'side': 'left', 'text': 'Chào buổi sáng, bạn có khỏe không? (おはよう、お元気ですか？)'},
-            {'side': 'right', 'text': 'Chào buổi sáng, bạn có khỏe không? (おはよう、お元気ですか？)'},
-            {'side': 'left', 'text': 'Vâng, tôi khỏe. Cảm ơn bạn. (はい、元気です。ありがとう。)'},
-            {'side': 'right', 'text': 'Vâng, tôi khỏe. Cảm ơn bạn. (はい、元気です。ありがとう。)'},
-        ]
-    elif phrase_id == 8:
-        messages = [
-            {'side': 'system', 'text': '＜8＞Chào buổi trưa 「こんにちは」を学ぼう'},
-            {'side': 'left', 'text': 'Chào buổi trưa. (こんにちは。)'},
-            {'side': 'right', 'text': 'Chào buổi trưa. (こんにちは。)'},
-            {'side': 'left', 'text': 'Chào bạn! (thân mật) (こんにちは！)'},
-            {'side': 'right', 'text': 'Chào bạn! (thân mật) (こんにちは！)'},
-            {'side': 'left', 'text': 'Bạn đã ăn trưa chưa? (お昼ご飯は食べましたか？)'},
-            {'side': 'right', 'text': 'Bạn đã ăn trưa chưa? (お昼ご飯は食べましたか？)'},
-            {'side': 'left', 'text': 'Rồi, tôi đã ăn rồi. (はい、食べました。)'},
-            {'side': 'right', 'text': 'Rồi, tôi đã ăn rồi. (はい、食べました。)'},
-        ]
-    elif phrase_id == 9:
-        messages = [
-            {'side': 'system', 'text': '＜9＞Chào buổi tối 「こんばんは」を学ぼう'},
-            {'side': 'left', 'text': 'Chào buổi tối. (こんばんは。)'},
-            {'side': 'right', 'text': 'Chào buổi tối. (こんばんは。)'},
-            {'side': 'left', 'text': 'Chào bạn! (thân mật) (こんばんは！)'},
-            {'side': 'right', 'text': 'Chào bạn! (thân mật) (こんばんは！)'},
-            {'side': 'left', 'text': 'Bạn có khỏe không? (お元気ですか？)'},
-            {'side': 'right', 'text': 'Bạn có khỏe không? (お元気ですか？)'},
-            {'side': 'left', 'text': 'Vâng, tôi khỏe. Cảm ơn bạn. (はい、元気です。ありがとう。)'},
-            {'side': 'right', 'text': 'Vâng, tôi khỏe. Cảm ơn bạn. (はい、元気です。ありがとう。)'},
-        ]
-    elif phrase_id == 10:
-        messages = [
-            {'side': 'system', 'text': '＜10＞Bạn khỏe không\n「お元気ですか？」を学ぼう'},
-            {'side': 'left', 'text': 'Bạn khỏe không?\n(お元気ですか？)'},
-            {'side': 'right', 'text': 'Bạn khỏe không?\n(お元気ですか？)'},
-            {'side': 'left', 'text': 'Hôm nay bạn có khỏe không?\n(今日はお元気ですか？)'},
-            {'side': 'right', 'text': 'Tôi hơi mệt nhưng ổn.\n(少し疲れていますが、大丈夫です。)'},
-            {'side': 'left', 'text': 'Bạn có cần nghỉ không?\n(休んだ方がいいですか？)'},
-            {'side': 'right', 'text': 'Không, cảm ơn. Tôi ổn.\n(いいえ、大丈夫です。ありがとう。)'},
-        ]
-    elif phrase_id == 11:
-        messages = [
-            {'side': 'system', 'text': '＜11＞Tôi khỏe, cảm ơn\n「元気です、ありがとう」を学ぼう'},
-            {'side': 'left', 'text': 'Tôi khỏe, cảm ơn.\n(元気です、ありがとう。)'},
-            {'side': 'right', 'text': 'Tôi khỏe, cảm ơn.\n(元気です、ありがとう。)'},
-            {'side': 'left', 'text': 'Rất vui khi nghe vậy.\n(それは良かったです。)'},
-            {'side': 'right', 'text': 'Cảm ơn bạn.\n(ありがとうございます。)'},
-            {'side': 'left', 'text': 'Nếu mệt thì hãy nghỉ nhé.\n(疲れたら休んでくださいね。)'},
-        ]
-    elif phrase_id == 12:
-        messages = [
-            {'side': 'system', 'text': '＜12＞Chào buổi sáng 「おはよう」を学ぼう'},
-            {'side': 'left', 'text': 'Chào buổi sáng. (おはようございます。)'},
-            {'side': 'right', 'text': 'Chào buổi sáng. (おはようございます。)'},
-            {'side': 'left', 'text': 'Chào nhé! (thân mật) (おはよう。)'},
-            {'side': 'right', 'text': 'Chào nhé! (thân mật) (おはよう。)'},
-            {'side': 'left', 'text': 'Chào buổi sáng, bạn có khỏe không? (おはよう、お元気ですか？)'},
-            {'side': 'right', 'text': 'Chào buổi sáng, bạn có khỏe không? (おはよう、お元気ですか？)'},
-            {'side': 'left', 'text': 'Vâng, tôi khỏe. Cảm ơn bạn. (はい、元気です。ありがとう。)'},
-            {'side': 'right', 'text': 'Vâng, tôi khỏe. Cảm ơn bạn. (はい、元気です。ありがとう。)'},
-        ]
-    elif phrase_id == 13:
-        messages = [
-            {'side': 'system', 'text': '＜13＞Chào buổi trưa 「こんにちは」を学ぼう'},
-            {'side': 'left', 'text': 'Chào buổi trưa. (こんにちは。)'},
-            {'side': 'right', 'text': 'Chào buổi trưa. (こんにちは。)'},
-            {'side': 'left', 'text': 'Chào bạn! (thân mật) (こんにちは！)'},
-            {'side': 'right', 'text': 'Chào bạn! (thân mật) (こんにちは！)'},
-            {'side': 'left', 'text': 'Bạn đã ăn trưa chưa? (お昼ご飯は食べましたか？)'},
-            {'side': 'right', 'text': 'Bạn đã ăn trưa chưa? (お昼ご飯は食べましたか？)'},
-            {'side': 'left', 'text': 'Rồi, tôi đã ăn rồi. (はい、食べました。)'},
-            {'side': 'right', 'text': 'Rồi, tôi đã ăn rồi. (はい、食べました。)'},
-        ]
-    elif phrase_id == 14:
-        messages = [
-            {'side': 'system', 'text': '＜14＞Chào buổi tối 「こんばんは」を学ぼう'},
-            {'side': 'left', 'text': 'Chào buổi tối. (こんばんは。)'},
-            {'side': 'right', 'text': 'Chào buổi tối. (こんばんは。)'},
-            {'side': 'left', 'text': 'Chào bạn! (thân mật) (こんばんは！)'},
-            {'side': 'right', 'text': 'Chào bạn! (thân mật) (こんばんは！)'},
-            {'side': 'left', 'text': 'Bạn có khỏe không? (お元気ですか？)'},
-            {'side': 'right', 'text': 'Bạn có khỏe không? (お元気ですか？)'},
-            {'side': 'left', 'text': 'Vâng, tôi khỏe. Cảm ơn bạn. (はい、元気です。ありがとう。)'},
-            {'side': 'right', 'text': 'Vâng, tôi khỏe. Cảm ơn bạn. (はい、元気です。ありがとう。)'},
-        ]
-    elif phrase_id == 15:
-        messages = [
-            {'side': 'system', 'text': '＜15＞Bạn khỏe không\n「お元気ですか？」を学ぼう'},
-            {'side': 'left', 'text': 'Bạn khỏe không?\n(お元気ですか？)'},
-            {'side': 'right', 'text': 'Bạn khỏe không?\n(お元気ですか？)'},
-            {'side': 'left', 'text': 'Hôm nay bạn có khỏe không?\n(今日はお元気ですか？)'},
-            {'side': 'right', 'text': 'Tôi hơi mệt nhưng ổn.\n(少し疲れていますが、大丈夫です。)'},
-            {'side': 'left', 'text': 'Bạn có cần nghỉ không?\n(休んだ方がいいですか？)'},
-            {'side': 'right', 'text': 'Không, cảm ơn. Tôi ổn.\n(いいえ、大丈夫です。ありがとう。)'},
-        ]
-    elif phrase_id == 16:
-        messages = [
-            {'side': 'system', 'text': '＜16＞Tôi khỏe, cảm ơn\n「元気です、ありがとう」を学ぼう'},
-            {'side': 'left', 'text': 'Tôi khỏe, cảm ơn.\n(元気です、ありがとう。)'},
-            {'side': 'right', 'text': 'Tôi khỏe, cảm ơn.\n(元気です、ありがとう。)'},
-            {'side': 'left', 'text': 'Rất vui khi nghe vậy.\n(それは良かったです。)'},
-            {'side': 'right', 'text': 'Cảm ơn bạn.\n(ありがとうございます。)'},
-            {'side': 'left', 'text': 'Nếu mệt thì hãy nghỉ nhé.\n(疲れたら休んでくださいね。)'},
-        ]
-    elif phrase_id == 17:
-        messages = [
-            {'side': 'system', 'text': '＜17＞Chào buổi sáng 「おはよう」を学ぼう'},
-            {'side': 'left', 'text': 'Chào buổi sáng. (おはようございます。)'},
-            {'side': 'right', 'text': 'Chào buổi sáng. (おはようございます。)'},
-            {'side': 'left', 'text': 'Chào nhé! (thân mật) (おはよう。)'},
-            {'side': 'right', 'text': 'Chào nhé! (thân mật) (おはよう。)'},
-            {'side': 'left', 'text': 'Chào buổi sáng, bạn có khỏe không? (おはよう、お元気ですか？)'},
-            {'side': 'right', 'text': 'Chào buổi sáng, bạn có khỏe không? (おはよう、お元気ですか？)'},
-            {'side': 'left', 'text': 'Vâng, tôi khỏe. Cảm ơn bạn. (はい、元気です。ありがとう。)'},
-            {'side': 'right', 'text': 'Vâng, tôi khỏe. Cảm ơn bạn. (はい、元気です。ありがとう。)'},
-        ]
-    elif phrase_id == 18:
-        messages = [
-            {'side': 'system', 'text': '＜18＞Chào buổi trưa 「こんにちは」を学ぼう'},
-            {'side': 'left', 'text': 'Chào buổi trưa. (こんにちは。)'},
-            {'side': 'right', 'text': 'Chào buổi trưa. (こんにちは。)'},
-            {'side': 'left', 'text': 'Chào bạn! (thân mật) (こんにちは！)'},
-            {'side': 'right', 'text': 'Chào bạn! (thân mật) (こんにちは！)'},
-            {'side': 'left', 'text': 'Bạn đã ăn trưa chưa? (お昼ご飯は食べましたか？)'},
-            {'side': 'right', 'text': 'Bạn đã ăn trưa chưa? (お昼ご飯は食べましたか？)'},
-            {'side': 'left', 'text': 'Rồi, tôi đã ăn rồi. (はい、食べました。)'},
-            {'side': 'right', 'text': 'Rồi, tôi đã ăn rồi. (はい、食べました。)'},
-        ]
-    elif phrase_id == 19:
-        messages = [
-            {'side': 'system', 'text': '＜19＞Chào buổi tối 「こんばんは」を学ぼう'},
-            {'side': 'left', 'text': 'Chào buổi tối. (こんばんは。)'},
-            {'side': 'right', 'text': 'Chào buổi tối. (こんばんは。)'},
-            {'side': 'left', 'text': 'Chào bạn! (thân mật) (こんばんは！)'},
-            {'side': 'right', 'text': 'Chào bạn! (thân mật) (こんばんは！)'},
-            {'side': 'left', 'text': 'Bạn có khỏe không? (お元気ですか？)'},
-            {'side': 'right', 'text': 'Bạn có khỏe không? (お元気ですか？)'},
-            {'side': 'left', 'text': 'Vâng, tôi khỏe. Cảm ơn bạn. (はい、元気です。ありがとう。)'},
-            {'side': 'right', 'text': 'Vâng, tôi khỏe. Cảm ơn bạn. (はい、元気です。ありがとう。)'},
-        ]
-    elif phrase_id == 20:
-        messages = [
-            {'side': 'system', 'text': '＜20＞Bạn khỏe không\n「お元気ですか？」を学ぼう'},
-            {'side': 'left', 'text': 'Bạn khỏe không?\n(お元気ですか？)'},
-            {'side': 'right', 'text': 'Bạn khỏe không?\n(お元気ですか？)'},
-            {'side': 'left', 'text': 'Hôm nay bạn có khỏe không?\n(今日はお元気ですか？)'},
-            {'side': 'right', 'text': 'Tôi hơi mệt nhưng ổn.\n(少し疲れていますが、大丈夫です。)'},
-            {'side': 'left', 'text': 'Bạn có cần nghỉ không?\n(休んだ方がいいですか？)'},
-            {'side': 'right', 'text': 'Không, cảm ơn. Tôi ổn.\n(いいえ、大丈夫です。ありがとう。)'},
         ]
     else:
-        # For any other phrase_id, create a generic dialogue format
-        messages = [
-            {'side': 'system', 'text': f'＜{phrase_id}＞Bài học tiếng Việt 「ベトナム語レッスン」を学ぼう'},
-            {'side': 'left', 'text': 'Xin chào! (こんにちは！)'},
-            {'side': 'right', 'text': 'Xin chào! (こんにちは！)'},
-            {'side': 'left', 'text': 'Hôm nay chúng ta sẽ học tiếng Việt. (今日はベトナム語を学びましょう。)'},
-            {'side': 'right', 'text': 'Vâng, tôi rất thích. (はい、とても楽しみです。)'},
-            {'side': 'left', 'text': 'Hãy lặp lại theo tôi. (私の後に繰り返してください。)'},
-            {'side': 'right', 'text': 'Vâng, tôi sẽ lặp lại. (はい、繰り返します。)'},
-            {'side': 'left', 'text': 'Rất tốt! (とても良いです！)'},
-            {'side': 'right', 'text': 'Cảm ơn bạn! (ありがとうございます！)'},
-        ]
+        messages = []
 
     context = {
         'messages': messages,
@@ -426,8 +302,8 @@ def study_detail(request, phrase_id):
 def text_session(request, post_id):
     """
     Simple two-step text session flow:
-    step=1: show the original learning phrases from the post creator
-    step=2: show the learning phrases from the person who accepted the post
+    step=1: show Japanese Learning phrases
+    step=2: show Vietnamese Learning phrases
     """
     step_param = request.GET.get('step', '1')
     try:
@@ -437,45 +313,25 @@ def text_session(request, post_id):
 
     post = get_object_or_404(LanguageExchangePost, id=post_id)
 
-    # Determine content based on learning phrases and who created/accepted the post
+    # Determine content based on learning phrases
     if step == 1:
-        # Step 1: Show what the original post creator wanted to learn
-        if post.vietnamese_user and post.japanese_user is None:
-            # Vietnamese user created the post, show what they want to learn
-            content_title = 'Các câu nói tiếng Nhật muốn học (Vietnamese Learning)'
-            if post.vietnamese_learning_phrases.exists():
-                phrases = post.vietnamese_learning_phrases.all()
-                content_text = '\n'.join([f"• {phrase.vietnamese_text} ({phrase.get_category_display()})" for phrase in phrases])
-            else:
-                content_text = 'Không có câu nói nào được chọn'
+        content_title = 'Các câu nói muốn học (Japanese Learning)'
+        if post.japanese_learning_phrases.exists():
+            phrases = post.japanese_learning_phrases.all()
+            content_text = '\n'.join([f"• {phrase.vietnamese_text} ({phrase.get_category_display()})" for phrase in phrases])
         else:
-            # Japanese user created the post, show what they want to learn
-            content_title = 'Các câu nói tiếng Việt muốn học (Japanese Learning)'
-            if post.japanese_learning_phrases.exists():
-                phrases = post.japanese_learning_phrases.all()
-                content_text = '\n'.join([f"• {phrase.vietnamese_text} ({phrase.get_category_display()})" for phrase in phrases])
-            else:
-                content_text = 'Không có câu nói nào được chọn'
-        
+            content_text = 'Không có câu nói nào được chọn'
         # Chuyển thẳng sang chat room thay vì bước 2
         next_url = f"/session/start-chat/{post.id}/"
         next_label = 'Bắt đầu chat'
         is_final = False
     else:
-        # Step 2: Show what the person who accepted the post wants to learn
-        if post.vietnamese_user and post.japanese_user:
-            # Post is matched, show what the Japanese user wants to learn
-            content_title = 'Các câu nói tiếng Việt muốn học (Japanese Learning)'
-            if post.japanese_learning_phrases.exists():
-                phrases = post.japanese_learning_phrases.all()
-                content_text = '\n'.join([f"• {phrase.vietnamese_text} ({phrase.get_category_display()})" for phrase in phrases])
-            else:
-                content_text = 'Không có câu nói nào được chọn'
+        content_title = 'Các câu nói muốn học (Vietnamese Learning)'
+        if post.vietnamese_learning_phrases.exists():
+            phrases = post.vietnamese_learning_phrases.all()
+            content_text = '\n'.join([f"• {phrase.vietnamese_text} ({phrase.get_category_display()})" for phrase in phrases])
         else:
-            # Post is not matched yet, show default message
-            content_title = 'Các câu nói muốn học'
-            content_text = 'Bài đăng chưa được chấp nhận'
-        
+            content_text = 'Không có câu nói nào được chọn'
         next_url = '/auth/dashboard/'
         next_label = 'Kết thúc phiên học'
         is_final = True
@@ -516,159 +372,3 @@ def start_chat_session(request, post_id):
     
     # Redirect to chat room
     return redirect(f'/chat/chat/{chat_room.id}/')
-
-@login_required
-def start_working_session(request, post_id):
-    """
-    Start working session and show appropriate learning content for each user:
-    - Poster learns what they chose in their post
-    - Accepter learns what they chose when applying
-    """
-    post = get_object_or_404(LanguageExchangePost, id=post_id)
-    
-    # Check if user has access to this post
-    if request.user not in [post.japanese_user, post.vietnamese_user]:
-        messages.error(request, 'Bạn không có quyền truy cập vào phiên học này.')
-        return redirect('/auth/dashboard/')
-    
-    # Check if post is matched
-    if post.status != 'matched':
-        messages.error(request, 'Bài đăng chưa được kết nối hoàn toàn.')
-        return redirect('/auth/dashboard/')
-    
-    # Determine what content to show based on user role and their chosen phrases
-    if request.user == post.japanese_user:
-        # Japanese user - check if they are the poster or accepter
-        if post.japanese_user == request.user and post.vietnamese_user != request.user:
-            # Japanese user is the poster - show what they chose to learn
-            if post.japanese_learning_phrases.exists():
-                chosen_phrase = post.japanese_learning_phrases.first()
-                lesson_title = f"Bài học tiếng Việt: {chosen_phrase.vietnamese_text}"
-                lesson_content = f"""
-                <h4>Bạn đã chọn học: {chosen_phrase.vietnamese_text}</h4>
-                <p><strong>Phát âm:</strong> {chosen_phrase.vietnamese_text}</p>
-                <p><strong>Ý nghĩa tiếng Nhật:</strong> {chosen_phrase.japanese_translation}</p>
-                <p><strong>Ý nghĩa tiếng Anh:</strong> {chosen_phrase.english_translation}</p>
-                
-                <h5>Thông tin chi tiết:</h5>
-                <ul>
-                    <li><strong>Danh mục:</strong> {chosen_phrase.get_category_display()}</li>
-                    <li><strong>Độ khó:</strong> {chosen_phrase.get_difficulty_display()}</li>
-                    <li><strong>Dịch tiếng Nhật:</strong> {chosen_phrase.japanese_translation}</li>
-                    <li><strong>Dịch tiếng Anh:</strong> {chosen_phrase.english_translation}</li>
-                </ul>
-                
-                <h5>Hướng dẫn học tập:</h5>
-                <p>Đây là câu nói tiếng Việt mà bạn đã chọn để học. Hãy luyện tập phát âm và hiểu ý nghĩa để có thể sử dụng trong giao tiếp thực tế với partner.</p>
-                """
-            else:
-                lesson_title = "Bài học tiếng Việt"
-                lesson_content = """
-                <h4>Bạn chưa chọn câu nói cụ thể để học</h4>
-                <p>Để có trải nghiệm học tập tốt nhất, hãy chọn các câu nói tiếng Việt mà bạn muốn học.</p>
-                """
-        else:
-            # Japanese user is the accepter - show what they chose when applying
-            if post.accepted_phrase:
-                chosen_phrase = post.accepted_phrase
-                lesson_title = f"Bài học tiếng Việt: {chosen_phrase.vietnamese_text}"
-                lesson_content = f"""
-                <h4>Bạn đã chọn học: {chosen_phrase.vietnamese_text}</h4>
-                <p><strong>Phát âm:</strong> {chosen_phrase.vietnamese_text}</p>
-                <p><strong>Ý nghĩa tiếng Nhật:</strong> {chosen_phrase.japanese_translation}</p>
-                <p><strong>Ý nghĩa tiếng Anh:</strong> {chosen_phrase.english_translation}</p>
-                
-                <h5>Thông tin chi tiết:</h5>
-                <ul>
-                    <li><strong>Danh mục:</strong> {chosen_phrase.get_category_display()}</li>
-                    <li><strong>Độ khó:</strong> {chosen_phrase.get_difficulty_display()}</li>
-                    <li><strong>Dịch tiếng Nhật:</strong> {chosen_phrase.japanese_translation}</li>
-                    <li><strong>Dịch tiếng Anh:</strong> {chosen_phrase.english_translation}</li>
-                </ul>
-                
-                <h5>Hướng dẫn học tập:</h5>
-                <p>Đây là câu nói tiếng Việt mà bạn đã chọn khi ứng tuyển. Hãy luyện tập phát âm và hiểu ý nghĩa để có thể sử dụng trong giao tiếp thực tế với partner.</p>
-                """
-            else:
-                lesson_title = "Bài học tiếng Việt"
-                lesson_content = """
-                <h4>Bạn chưa chọn câu nói cụ thể để học</h4>
-                <p>Để có trải nghiệm học tập tốt nhất, hãy chọn các câu nói tiếng Việt mà bạn muốn học.</p>
-                """
-        lesson_type = "japanese_learning"
-        
-    elif request.user == post.vietnamese_user:
-        # Vietnamese user - check if they are the poster or accepter
-        if post.vietnamese_user == request.user and post.japanese_user != request.user:
-            # Vietnamese user is the poster - show what they chose to learn
-            if post.vietnamese_learning_phrases.exists():
-                chosen_phrase = post.vietnamese_learning_phrases.first()
-                lesson_title = f"Bài học tiếng Nhật: {chosen_phrase.vietnamese_text}"
-                lesson_content = f"""
-                <h4>Bạn đã chọn học: {chosen_phrase.vietnamese_text}</h4>
-                <p><strong>Phát âm:</strong> {chosen_phrase.vietnamese_text}</p>
-                <p><strong>Ý nghĩa tiếng Nhật:</strong> {chosen_phrase.japanese_translation}</p>
-                <p><strong>Ý nghĩa tiếng Anh:</strong> {chosen_phrase.english_translation}</p>
-                
-                <h5>Thông tin chi tiết:</h5>
-                <ul>
-                    <li><strong>Danh mục:</strong> {chosen_phrase.get_category_display()}</li>
-                    <li><strong>Độ khó:</strong> {chosen_phrase.get_difficulty_display()}</li>
-                    <li><strong>Dịch tiếng Nhật:</strong> {chosen_phrase.japanese_translation}</li>
-                    <li><strong>Dịch tiếng Anh:</strong> {chosen_phrase.english_translation}</li>
-                </ul>
-                
-                <h5>Hướng dẫn học tập:</h5>
-                <p>Đây là câu nói tiếng Nhật mà bạn đã chọn để học. Hãy luyện tập phát âm và hiểu ý nghĩa để có thể sử dụng trong giao tiếp thực tế với partner.</p>
-                """
-            else:
-                lesson_title = "Bài học tiếng Nhật"
-                lesson_content = """
-                <h4>Bạn chưa chọn câu nói cụ thể để học</h4>
-                <p>Để có trải nghiệm học tập tốt nhất, hãy chọn các câu nói tiếng Nhật mà bạn muốn học.</p>
-                """
-        else:
-            # Vietnamese user is the accepter - show what they chose when applying
-            if post.accepted_phrase:
-                chosen_phrase = post.accepted_phrase
-                lesson_title = f"Bài học tiếng Nhật: {chosen_phrase.vietnamese_text}"
-                lesson_content = f"""
-                <h4>Bạn đã chọn học: {chosen_phrase.vietnamese_text}</h4>
-                <p><strong>Phát âm:</strong> {chosen_phrase.vietnamese_text}</p>
-                <p><strong>Ý nghĩa tiếng Nhật:</strong> {chosen_phrase.japanese_translation}</p>
-                <p><strong>Ý nghĩa tiếng Anh:</strong> {chosen_phrase.english_translation}</p>
-                
-                <h5>Thông tin chi tiết:</h5>
-                <ul>
-                    <li><strong>Danh mục:</strong> {chosen_phrase.get_category_display()}</li>
-                    <li><strong>Độ khó:</strong> {chosen_phrase.get_difficulty_display()}</li>
-                    <li><strong>Dịch tiếng Nhật:</strong> {chosen_phrase.japanese_translation}</li>
-                    <li><strong>Dịch tiếng Anh:</strong> {chosen_phrase.english_translation}</li>
-                </ul>
-                
-                <h5>Hướng dẫn học tập:</h5>
-                <p>Đây là câu nói tiếng Nhật mà bạn đã chọn khi ứng tuyển. Hãy luyện tập phát âm và hiểu ý nghĩa để có thể sử dụng trong giao tiếp thực tế với partner.</p>
-                """
-            else:
-                lesson_title = "Bài học tiếng Nhật"
-                lesson_content = """
-                <h4>Bạn chưa chọn câu nói cụ thể để học</h4>
-                <p>Để có trải nghiệm học tập tốt nhất, hãy chọn các câu nói tiếng Nhật mà bạn muốn học.</p>
-                """
-        lesson_type = "vietnamese_learning"
-        
-    else:
-        # Fallback case
-        lesson_title = "Bài học ngôn ngữ"
-        lesson_content = "<p>Không thể xác định nội dung bài học.</p>"
-        lesson_type = "unknown"
-    
-    context = {
-        'post': post,
-        'lesson_title': lesson_title,
-        'lesson_content': lesson_content,
-        'lesson_type': lesson_type,
-        'partner': post.vietnamese_user if request.user == post.japanese_user else post.japanese_user,
-    }
-    
-    return render(request, 'session/working_session.html', context)

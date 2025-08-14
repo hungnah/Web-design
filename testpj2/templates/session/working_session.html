@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}Phiên làm việc - Vietnam-Japan Connect{% endblock %}
 
@@ -116,6 +117,83 @@
         font-size: 0.9rem;
         font-weight: 600;
         margin-bottom: 1rem;
+    }
+    
+    /* Conversation Styles */
+    .conversation-container {
+        background: white;
+        padding: 2rem;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        margin-bottom: 2rem;
+    }
+    
+    .conversation-header {
+        text-align: center;
+        margin-bottom: 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 2px solid #e9ecef;
+    }
+    
+    .chat-container {
+        max-width: 600px;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .message-row {
+        display: flex;
+        align-items: flex-start;
+    }
+    
+    .message-row.right {
+        flex-direction: row-reverse;
+    }
+    
+    .icon {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background-color: #ccc;
+        overflow: hidden;
+        margin: 0 10px;
+        flex-shrink: 0;
+    }
+    
+    .icon img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    
+    .message-content {
+        max-width: 70%;
+    }
+    
+    .name {
+        font-size: 16px;
+        margin-bottom: 5px;
+        color: #555;
+        font-weight: 600;
+    }
+    
+    .bubble {
+        background-color: #d0ebff;
+        font-size: 18px;
+        padding: 15px;
+        border-radius: 15px;
+        position: relative;
+        line-height: 1.4;
+    }
+    
+    .message-row.right .bubble {
+        background-color: #ffd59e;
+    }
+    
+    .message-row.right .message-content {
+        text-align: right;
     }
 </style>
 {% endblock %}
@@ -254,9 +332,91 @@
             </p>
         </div>
         
+        {% if conversation_example %}
+        <!-- Conversation Display -->
+        <div class="conversation-container">
+            <div class="conversation-header">
+                <h4 class="text-center mb-4">
+                    <span class="badge bg-primary">{{ conversation_example.vietnamese_title }}</span>
+                    <br>
+                    <small class="text-muted">{{ conversation_example.japanese_title }}</small>
+                </h4>
+            </div>
+            
+            <div class="chat-container">
+                <!-- Teacher's first message -->
+                <div class="message-row">
+                    <div class="icon">
+                        <img src="{% static 'images/session/teacher.png' %}" alt="Teacher Icon">
+                    </div>
+                    <div class="message-content">
+                        <div class="name">先生/giáo viên</div>
+                        <div class="bubble">{{ conversation_example.line_1_teacher }}</div>
+                    </div>
+                </div>
+
+                <!-- Student's first message -->
+                <div class="message-row right">
+                    <div class="icon">
+                        <img src="{% static 'images/session/student.png' %}" alt="Student Icon">
+                    </div>
+                    <div class="message-content">
+                        <div class="name">生徒/học sinh</div>
+                        <div class="bubble">{{ conversation_example.line_1_student }}</div>
+                    </div>
+                </div>
+
+                <!-- Teacher's second message -->
+                <div class="message-row">
+                    <div class="icon">
+                        <img src="{% static 'images/session/teacher.png' %}" alt="Teacher Icon">
+                    </div>
+                    <div class="message-content">
+                        <div class="name">先生/giáo viên</div>
+                        <div class="bubble">{{ conversation_example.line_2_teacher }}</div>
+                    </div>
+                </div>
+
+                <!-- Student's second message -->
+                <div class="message-row right">
+                    <div class="icon">
+                        <img src="{% static 'images/session/student.png' %}" alt="Student Icon">
+                    </div>
+                    <div class="message-content">
+                        <div class="name">生徒/học sinh</div>
+                        <div class="bubble">{{ conversation_example.line_2_student }}</div>
+                    </div>
+                </div>
+
+                <!-- Teacher's third message -->
+                <div class="message-row">
+                    <div class="icon">
+                        <img src="{% static 'images/session/teacher.png' %}" alt="Teacher Icon">
+                    </div>
+                    <div class="message-content">
+                        <div class="name">先生/giáo viên</div>
+                        <div class="bubble">{{ conversation_example.line_3_teacher }}</div>
+                    </div>
+                </div>
+
+                <!-- Student's third message -->
+                <div class="message-row right">
+                    <div class="icon">
+                        <img src="{% static 'images/session/student.png' %}" alt="Student Icon">
+                    </div>
+                    <div class="message-content">
+                        <div class="name">生徒/học sinh</div>
+                        <div class="bubble">{{ conversation_example.line_3_student }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <!-- Fallback to original lesson content -->
         <div class="lesson-content">
             {{ lesson_content|safe }}
         </div>
+        {% endif %}
         
         <!-- Action Buttons -->
         <div class="action-buttons">

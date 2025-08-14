@@ -34,44 +34,6 @@
                                 Phrase đã chọn:
                             {% endif %}
                         </h5>
-                        
-                        <!-- Display learning phrases based on post creator -->
-                        {% if post.japanese_learning_phrases.exists %}
-                        <div class="mb-3">
-                            <strong>
-                                {% if user.nationality == 'japanese' %}
-                                    学習したいベトナム語のフレーズ:
-                                {% else %}
-                                    Các câu nói tiếng Việt muốn học:
-                                {% endif %}
-                            </strong>
-                            <div class="mt-2">
-                                {% for phrase in post.japanese_learning_phrases.all %}
-                                    <span class="badge bg-info me-1">{{ phrase.vietnamese_text }}</span>
-                                {% endfor %}
-                            </div>
-                        </div>
-                        {% endif %}
-                        
-                        {% if post.vietnamese_learning_phrases.exists %}
-                        <div class="mb-3">
-                            <strong>
-                                {% if user.nationality == 'japanese' %}
-                                    学習したい日本語のフレーズ:
-                                {% else %}
-                                    Các câu nói tiếng Nhật muốn học:
-                                {% endif %}
-                            </strong>
-                            <div class="mt-2">
-                                {% for phrase in post.vietnamese_learning_phrases.all %}
-                                    <span class="badge bg-success me-1">{{ phrase.vietnamese_text }}</span>
-                                {% endfor %}
-                            </div>
-                        </div>
-                        {% endif %}
-                        
-                        <!-- Fallback to phrase field if no learning phrases -->
-                        {% if not post.japanese_learning_phrases.exists and not post.vietnamese_learning_phrases.exists and post.phrase %}
                         <div class="row">
                             <div class="col-md-4">
                                 <strong>
@@ -110,7 +72,6 @@
                                 {{ post.phrase.get_difficulty_display }}
                             </span>
                         </div>
-                        {% endif %}
                     </div>
 
                     <!-- Edit Post Form -->

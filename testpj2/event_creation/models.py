@@ -282,6 +282,40 @@ class LanguageExchangePost(models.Model):
         owner = self.japanese_user.username if self.japanese_user else (self.vietnamese_user.username if self.vietnamese_user else 'unknown')
         return f"{owner} - {phrase_text}"
 
+class ConversationExample(models.Model):
+    """
+    Conversation examples for language learning
+    Provides structured dialogues for different phrases and topics
+    """
+    phrase = models.ForeignKey(VietnamesePhrase, on_delete=models.CASCADE, related_name='conversation_examples')
+    title = models.CharField(max_length=200, help_text="Title of the conversation")
+    vietnamese_title = models.CharField(max_length=200, help_text="Vietnamese title")
+    japanese_title = models.CharField(max_length=200, help_text="Japanese title")
+    
+    # Conversation lines
+    line_1_teacher = models.CharField(max_length=500, help_text="First line from teacher")
+    line_1_student = models.CharField(max_length=500, help_text="First line from student")
+    line_2_teacher = models.CharField(max_length=500, help_text="Second line from teacher")
+    line_2_student = models.CharField(max_length=500, help_text="Second line from student")
+    line_3_teacher = models.CharField(max_length=500, help_text="Third line from teacher")
+    line_3_student = models.CharField(max_length=500, help_text="Third line from student")
+    
+    # Translations
+    line_1_teacher_jp = models.CharField(max_length=500, help_text="Japanese translation of first teacher line")
+    line_1_student_jp = models.CharField(max_length=500, help_text="Japanese translation of first student line")
+    line_2_teacher_jp = models.CharField(max_length=500, help_text="Japanese translation of second teacher line")
+    line_2_student_jp = models.CharField(max_length=500, help_text="Japanese translation of second student line")
+    line_3_teacher_jp = models.CharField(max_length=500, help_text="Japanese translation of third teacher line")
+    line_3_student_jp = models.CharField(max_length=500, help_text="Japanese translation of third student line")
+    
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        ordering = ['-created_at']
+    
+    def __str__(self):
+        return f"{self.title} - {self.phrase.vietnamese_text}"
+
 
 
 

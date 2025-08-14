@@ -157,47 +157,17 @@
                             </div>
                             <div class="col-md-6">
                                 <p><strong>{% trans "Thời gian:" %}</strong> {{ chat_room.post.meeting_date|date:"d/m/Y H:i" }}</p>
-                                
-                                <!-- Display learning phrases based on post creator and acceptor -->
-                                {% if chat_room.post.vietnamese_user and chat_room.post.japanese_user %}
-                                    <!-- Post is matched, show both sides' learning goals -->
-                                    <div class="mb-2">
-                                        <p><strong>{% trans "Cụm từ để học:" %}</strong></p>
-                                        {% if chat_room.post.japanese_learning_phrases.exists %}
-                                            <div class="mb-1">
-                                                <small class="text-muted">Người Nhật muốn học:</small><br>
-                                                <span class="badge bg-info">{{ chat_room.post.japanese_learning_phrases.first.vietnamese_text }}</span>
-                                            </div>
-                                        {% endif %}
-                                        {% if chat_room.post.vietnamese_learning_phrases.exists %}
-                                            <div class="mb-1">
-                                                <small class="text-muted">Người Việt muốn học:</small><br>
-                                                <span class="badge bg-success">{{ chat_room.post.vietnamese_learning_phrases.first.vietnamese_text }}</span>
-                                            </div>
-                                        {% endif %}
-                                    </div>
-                                {% else %}
-                                    <!-- Post is not matched yet, show the phrase field -->
-                                    <p>{% trans "学習するフレーズ:" %} 
-                                        {% if chat_room.post.japanese_learning_phrases.exists %}
-                                            {{ chat_room.post.japanese_learning_phrases.first.vietnamese_text }}
-                                        {% elif chat_room.post.vietnamese_learning_phrases.exists %}
-                                            {{ chat_room.post.vietnamese_learning_phrases.first.vietnamese_text }}
-                                        {% else %}
-                                            {{ chat_room.post.phrase.vietnamese_text|default:"Không có nội dung" }}
-                                        {% endif %}
-                                    </p>
-                                {% endif %}
+                                <p>{% trans "学習するフレーズ:" %} {{ chat_room.post.phrase }}</p>
                                 {% if user == chat_room.post.japanese_user %}
                                     {% with session_partner_id=chat_room.post.vietnamese_user.id %}
-                                        <a href="{% url 'study_no_phrase' session_partner_id chat_room.post.id %}"
+                                        <a href="{% url 'study' session_partner_id chat_room.post.id chat_room.post.phrase.id %}?timer=1"
                                             style="display:inline-block; padding:10px 20px; background-color:#007BFF; color:white; text-decoration:none; border-radius:5px;">
                                             {% trans "セッション開始!" %}
                                         </a>
                                     {% endwith %}
                                 {% else %}
                                     {% with session_partner_id=chat_room.post.japanese_user.id %}
-                                        <a href="{% url 'study_no_phrase' session_partner_id chat_room.post.id %}"
+                                        <a href="{% url 'study' session_partner_id chat_room.post.id chat_room.post.phrase.id %}?timer=1"
                                             style="display:inline-block; padding:10px 20px; background-color:#007BFF; color:white; text-decoration:none; border-radius:5px;">
                                             {% trans "セッション開始" %}
                                         </a>

@@ -282,17 +282,9 @@
                             <div class="flex-grow-1">
                                 <h6 class="mb-1 text-truncate">
                                     {% if user.nationality == 'japanese' %}
-                                        {% if post.japanese_learning_phrases.exists %}
-                                            {{ post.japanese_learning_phrases.first.vietnamese_text }}
-                                        {% else %}
-                                            {{ post.phrase.vietnamese_text|default:"Không có nội dung" }}
-                                        {% endif %}
+                                        {{ post.phrase.vietnamese_text }}
                                     {% else %}
-                                        {% if post.vietnamese_learning_phrases.exists %}
-                                            {{ post.vietnamese_learning_phrases.first.vietnamese_text }}
-                                        {% else %}
-                                            {{ post.phrase.vietnamese_text|default:"Không có nội dung" }}
-                                        {% endif %}
+                                        {{ post.phrase.japanese_text }}
                                     {% endif %}
                                 </h6>
                                 <div class="d-flex align-items-center gap-2">
@@ -443,75 +435,36 @@
                             </div>
                         </div>
                         
-                    <!-- Learning Phrases Section -->
-                    {% if post.japanese_learning_phrases.exists %}
-                        <div class="mb-3">
-                            <small class="text-muted">
-                                {% if user.nationality == 'japanese' %}学習したいフレーズ{% else %}Các câu nói muốn học{% endif %}
-                            </small>
-                            <div>
-                                {% for phrase in post.japanese_learning_phrases.all|slice:":2" %}
-                                    <span class="badge bg-info me-1">{{ phrase.vietnamese_text }}</span>
-                                {% endfor %}
-                                {% if post.japanese_learning_phrases.count > 2 %}
-                                    <small class="text-muted">+{{ post.japanese_learning_phrases.count|add:"-2" }} more</small>
-                                {% endif %}
-                            </div>
-                        </div>
-                    {% endif %}
-                    
-                    <!-- Poster's Learning Goals -->
-                    {% if post.japanese_user and post.japanese_user.nationality == 'japanese' %}
-                        <div class="mb-3">
-                            <small class="text-muted">
-                                <i class="fas fa-user-edit"></i> Người đăng bài muốn học:
-                            </small>
-                            <div>
-                                {% if post.japanese_learning_phrases.exists %}
+                        {% if post.japanese_learning_phrases.exists %}
+                            <div class="mb-2 p-2 bg-light rounded">
+                                <small class="text-muted">
+                                    <i class="fas fa-graduation-cap me-1"></i>
+                                    {% if user.nationality == 'japanese' %}学習したいフレーズ{% else %}Các câu nói muốn học{% endif %}
+                                </small>
+                                <div>
                                     {% for phrase in post.japanese_learning_phrases.all|slice:":2" %}
-                                        <span class="badge bg-success me-1">{{ phrase.vietnamese_text }}</span>
+                                        <span class="badge bg-info me-1">{{ phrase.vietnamese_text }}</span>
                                     {% endfor %}
-                                {% else %}
-                                    <span class="badge bg-secondary">Chưa chọn</span>
-                                {% endif %}
+                                    {% if post.japanese_learning_phrases.count > 2 %}
+                                        <small class="text-muted">+{{ post.japanese_learning_phrases.count|add:"-2" }} more</small>
+                                    {% endif %}
+                                </div>
                             </div>
-                        </div>
-                    {% elif post.vietnamese_user and post.vietnamese_user.nationality == 'vietnamese' %}
-                        <div class="mb-3">
-                            <small class="text-muted">
-                                <i class="fas fa-user-edit"></i> Người đăng bài muốn học:
-                            </small>
-                            <div>
-                                {% if post.vietnamese_learning_phrases.exists %}
-                                    {% for phrase in post.vietnamese_learning_phrases.all|slice:":2" %}
-                                        <span class="badge bg-success me-1">{{ phrase.vietnamese_text }}</span>
-                                    {% endfor %}
-                                {% else %}
-                                    <span class="badge bg-secondary">Chưa chọn</span>
-                                {% endif %}
-                            </div>
-                        </div>
-                    {% endif %}
+                        {% endif %}
                     </div>
                     
                     <div class="card-footer py-2 text-center">
                         {% if post.status == 'active' %}
                             <a href="{% url 'phrase_list' post.id %}" 
                                class="btn btn-success btn-sm w-100"
-                               onclick="return acceptPost({{ post.id }}, '{% if user.nationality == 'japanese' %}{% if post.japanese_learning_phrases.exists %}{{ post.japanese_learning_phrases.first.vietnamese_text }}{% else %}{{ post.phrase.vietnamese_text|default:'Không có nội dung' }}{% endif %}{% else %}{% if post.vietnamese_learning_phrases.exists %}{{ post.vietnamese_learning_phrases.first.vietnamese_text }}{% else %}{{ post.phrase.vietnamese_text|default:'Không có nội dung' }}{% endif %}{% endif %}')">
+                               onclick="return acceptPost({{ post.id }}, '{% if user.nationality == 'japanese' %}{{ post.phrase.vietnamese_text }}{% else %}{{ post.phrase.japanese_text }}{% endif %}')">
                                 <i class="fas fa-check me-1"></i> 
                                 {% if user.nationality == 'japanese' %}応募する{% else %}Ứng tuyển{% endif %}
                             </a>
                         {% elif post.status == 'matched' %}
-                            <div class="d-grid gap-2">
-                                <div class="text-warning mb-2">
-                                    <i class="fas fa-user-check me-1"></i> 
-                                    {% if user.nationality == 'japanese' %}既に応募済み{% else %}Đã ứng tuyển{% endif %}
-                                </div>
-                                <a href="{% url 'start_working_session' post.id %}" class="btn btn-primary btn-sm w-100">
-                                    <i class="fas fa-play me-1"></i> 
-                                    {% if user.nationality == 'japanese' %}作業セッションを開始{% else %}Bắt đầu phiên làm việc{% endif %}
-                                </a>
+                            <div class="text-warning">
+                                <i class="fas fa-user-check me-1"></i> 
+                                {% if user.nationality == 'japanese' %}既に応募済み{% else %}Đã ứng tuyển{% endif %}
                             </div>
                         {% elif post.status == 'completed' %}
                             <div class="text-success">
