@@ -92,7 +92,7 @@
                     <div class="card-footer text-center">
                         <a href="{% url 'study_phrase' phrase.id %}" class="btn btn-primary">{% trans "テキストを見る" %}</a>
                     </div>
-                    {% if post_id and form.nationality.value == 'japanese' %}
+                    {% if post_id and user.nationality == 'japanese' %}
                         <div class="card-footer text-center">
                             <a href="{% url 'accept_post' post_id phrase.id %}" class="btn btn-success">
                                 <i class="fas fa-coffee"></i> このテキストで応募
