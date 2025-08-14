@@ -1,7 +1,13 @@
 {% extends 'base.html' %}
 {% load i18n %}
 
-{% block title %}ベトナム語フレーズ - Vietnam-Japan Connect{% endblock %}
+{% block title %}
+    {% if user.nationality == 'japanese' %}
+        ベトナム語フレーズ - Vietnam-Japan Connect
+    {% else %}
+        Cụm từ tiếng Việt - Vietnam-Japan Connect
+    {% endif %}
+{% endblock %}
 
 {% block content %}
 <div class="container my-5">
@@ -9,9 +15,20 @@
     <div class="row mb-4">
         <div class="col-12">
             <h1 class="text-center mb-3">
-                <i class="fas fa-language"></i> {% trans "ベトナム語フレーズ" %}
+                <i class="fas fa-language"></i> 
+                {% if user.nationality == 'japanese' %}
+                    {% trans "ベトナム語フレーズ" %}
+                {% else %}
+                    Cụm từ tiếng Việt
+                {% endif %}
             </h1>
-            <p class="text-center text-muted">{% trans "日常生活でよく使うベトナム語のフレーズを学びましょう" %}</p>
+            <p class="text-center text-muted">
+                {% if user.nationality == 'japanese' %}
+                    {% trans "日常生活でよく使うベトナム語のフレーズを学びましょう" %}
+                {% else %}
+                    Học các cụm từ tiếng Việt thường dùng trong cuộc sống hàng ngày
+                {% endif %}
+            </p>
         </div>
     </div>
 
@@ -20,36 +37,97 @@
         <div class="col-md-6">
             <form method="get" class="card">
                 <div class="card-body">
-                    <h5 class="card-title">{% trans "フィルター" %}</h5>
+                    <h5 class="card-title">
+                        {% if user.nationality == 'japanese' %}
+                            {% trans "フィルター" %}
+                        {% else %}
+                            Bộ lọc
+                        {% endif %}
+                    </h5>
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label for="category" class="form-label">{% trans "カテゴリー" %}</label>
+                            <label for="category" class="form-label">
+                                {% if user.nationality == 'japanese' %}
+                                    {% trans "カテゴリー" %}
+                                {% else %}
+                                    Danh mục
+                                {% endif %}
+                            </label>
                             <select name="category" id="category" class="form-select">
-                                <option value="">{% trans "すべて" %}</option>
+                                <option value="">
+                                    {% if user.nationality == 'japanese' %}
+                                        {% trans "すべて" %}
+                                    {% else %}
+                                        Tất cả
+                                    {% endif %}
+                                </option>
                                 {% for value, label in categories %}
                                     <option value="{{ value }}" {% if selected_category == value %}selected{% endif %}>
-                                        {{ label }}
+                                        {% if user.nationality == 'japanese' %}
+                                            {{ label }}
+                                        {% else %}
+                                            {% if value == 'greetings' %}Chào hỏi
+                                            {% elif value == 'food' %}Ẩm thực
+                                            {% elif value == 'shopping' %}Mua sắm
+                                            {% elif value == 'transport' %}Giao thông
+                                            {% elif value == 'family' %}Gia đình
+                                            {% elif value == 'health' %}Sức khỏe
+                                            {% elif value == 'time' %}Thời gian
+                                            {% elif value == 'weather' %}Thời tiết
+                                            {% elif value == 'directions' %}Chỉ đường
+                                            {% elif value == 'self_intro' %}Tự giới thiệu
+                                            {% else %}{{ label }}{% endif %}
+                                        {% endif %}
                                     </option>
                                 {% endfor %}
                             </select>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label for="difficulty" class="form-label">{% trans "難易度" %}</label>
+                            <label for="difficulty" class="form-label">
+                                {% if user.nationality == 'japanese' %}
+                                    {% trans "難易度" %}
+                                {% else %}
+                                    Độ khó
+                                {% endif %}
+                            </label>
                             <select name="difficulty" id="difficulty" class="form-select">
-                                <option value="">{% trans "すべて" %}</option>
+                                <option value="">
+                                    {% if user.nationality == 'japanese' %}
+                                        {% trans "すべて" %}
+                                    {% else %}
+                                        Tất cả
+                                    {% endif %}
+                                </option>
                                 {% for value, label in difficulties %}
                                     <option value="{{ value }}" {% if selected_difficulty == value %}selected{% endif %}>
-                                        {{ label }}
+                                        {% if user.nationality == 'japanese' %}
+                                            {{ label }}
+                                        {% else %}
+                                            {% if value == 'beginner' %}Sơ cấp
+                                            {% elif value == 'intermediate' %}Trung cấp
+                                            {% elif value == 'advanced' %}Cao cấp
+                                            {% else %}{{ label }}{% endif %}
+                                        {% endif %}
                                     </option>
                                 {% endfor %}
                             </select>
                         </div>
                     </div>
                     <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-filter"></i> {% trans "フィルター適用" %}
+                        <i class="fas fa-filter"></i> 
+                        {% if user.nationality == 'japanese' %}
+                            {% trans "フィルター適用" %}
+                        {% else %}
+                            Áp dụng bộ lọc
+                        {% endif %}
                     </button>
                     <a href="{% url 'phrase_list' %}" class="btn btn-outline-secondary">
-                        <i class="fas fa-times"></i> {% trans "リセット" %}
+                        <i class="fas fa-times"></i> 
+                        {% if user.nationality == 'japanese' %}
+                            {% trans "リセット" %}
+                        {% else %}
+                            Đặt lại
+                        {% endif %}
                     </a>
                 </div>
             </form>
@@ -62,21 +140,62 @@
             <div class="col-md-6 col-lg-4 mb-4">
                 <div class="card h-100">
                     <div class="card-header d-flex justify-content-between align-items-center">
-                        <span class="badge bg-primary">{{ phrase.get_category_display }}</span>
+                        <span class="badge bg-primary">
+                            {% if user.nationality == 'japanese' %}
+                                {{ phrase.get_category_display }}
+                            {% else %}
+                                {% if phrase.category == 'greetings' %}Chào hỏi
+                                {% elif phrase.category == 'food' %}Ẩm thực
+                                {% elif phrase.category == 'shopping' %}Mua sắm
+                                {% elif phrase.category == 'transport' %}Giao thông
+                                {% elif phrase.category == 'family' %}Gia đình
+                                {% elif phrase.category == 'health' %}Sức khỏe
+                                {% elif phrase.category == 'time' %}Thời gian
+                                {% elif phrase.category == 'weather' %}Thời tiết
+                                {% elif phrase.category == 'directions' %}Chỉ đường
+                                {% elif phrase.category == 'self_intro' %}Tự giới thiệu
+                                {% else %}{{ phrase.get_category_display }}{% endif %}
+                            {% endif %}
+                        </span>
                         <span class="badge bg-{% if phrase.difficulty == 'beginner' %}success{% elif phrase.difficulty == 'intermediate' %}warning{% else %}danger{% endif %}">
-                            {{ phrase.get_difficulty_display }}
+                            {% if user.nationality == 'japanese' %}
+                                {{ phrase.get_difficulty_display }}
+                            {% else %}
+                                {% if phrase.difficulty == 'beginner' %}Sơ cấp
+                                {% elif phrase.difficulty == 'intermediate' %}Trung cấp
+                                {% elif phrase.difficulty == 'advanced' %}Cao cấp
+                                {% else %}{{ phrase.get_difficulty_display }}{% endif %}
+                            {% endif %}
                         </span>
                     </div>
                     <div class="card-body">
-                        <h5 class="card-title text-center mb-3">{{ phrase.vietnamese_text }}</h5>
+                        <h5 class="card-title text-center mb-3">
+                            {% if user.nationality == 'japanese' %}
+                                {{ phrase.vietnamese_text }}
+                            {% else %}
+                                {{ phrase.vietnamese_text }}
+                            {% endif %}
+                        </h5>
                         
                         <div class="mb-3">
-                            <small class="text-muted">日本語訳:</small>
+                            <small class="text-muted">
+                                {% if user.nationality == 'japanese' %}
+                                    日本語訳:
+                                {% else %}
+                                    Bản dịch tiếng Nhật:
+                                {% endif %}
+                            </small>
                             <p class="mb-1">{{ phrase.japanese_translation }}</p>
                         </div>
                         
                         <div class="mb-3">
-                            <small class="text-muted">英語訳:</small>
+                            <small class="text-muted">
+                                {% if user.nationality == 'japanese' %}
+                                    英語訳:
+                                {% else %}
+                                    Bản dịch tiếng Anh:
+                                {% endif %}
+                            </small>
                             <p class="mb-1">{{ phrase.english_translation }}</p>
                         </div>
                         
@@ -84,18 +203,33 @@
                             <div class="text-center mb-3">
                                 <audio controls class="w-100">
                                     <source src="{{ phrase.audio_file.url }}" type="audio/mpeg">
-                                    {% trans "お使いのブラウザは音声再生をサポートしていません。" %}
+                                    {% if user.nationality == 'japanese' %}
+                                        {% trans "お使いのブラウザは音声再生をサポートしていません。" %}
+                                    {% else %}
+                                        Trình duyệt của bạn không hỗ trợ phát âm thanh.
+                                    {% endif %}
                                 </audio>
                             </div>
                         {% endif %}
                     </div>
                     <div class="card-footer text-center">
-                        <a href="{% url 'study_phrase' phrase.id %}" class="btn btn-primary">{% trans "テキストを見る" %}</a>
+                        <a href="{% url 'study_phrase' phrase.id %}" class="btn btn-primary">
+                            {% if user.nationality == 'japanese' %}
+                                {% trans "テキストを見る" %}
+                            {% else %}
+                                Xem văn bản
+                            {% endif %}
+                        </a>
                     </div>
-                    {% if post_id and user.nationality == 'japanese' %}
+                    {% if post_id %}
                         <div class="card-footer text-center">
                             <a href="{% url 'accept_post' post_id phrase.id %}" class="btn btn-success">
-                                <i class="fas fa-coffee"></i> このテキストで応募
+                                <i class="fas fa-coffee"></i> 
+                                {% if user.nationality == 'japanese' %}
+                                    このテキストで応募
+                                {% else %}
+                                    Ứng tuyển với cụm từ này
+                                {% endif %}
                             </a>
                         </div>
                     {% endif %}
@@ -105,8 +239,20 @@
             <div class="col-12">
                 <div class="text-center">
                     <i class="fas fa-search fa-3x text-muted mb-3"></i>
-                    <h4>{% trans "フレーズが見つかりません" %}</h4>
-                    <p class="text-muted">{% trans "フィルターを変更して再度お試しください。" %}</p>
+                    <h4>
+                        {% if user.nationality == 'japanese' %}
+                            {% trans "フレーズが見つかりません" %}
+                        {% else %}
+                            Không tìm thấy cụm từ nào
+                        {% endif %}
+                    </h4>
+                    <p class="text-muted">
+                        {% if user.nationality == 'japanese' %}
+                            {% trans "フィルターを変更して再度お試しください。" %}
+                        {% else %}
+                            Vui lòng thay đổi bộ lọc và thử lại.
+                        {% endif %}
+                    </p>
                 </div>
             </div>
         {% endfor %}
@@ -117,25 +263,80 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <h5 class="mb-0"><i class="fas fa-info-circle"></i> {% trans "カテゴリーガイド" %}</h5>
+                    <h5 class="mb-0">
+                        <i class="fas fa-info-circle"></i> 
+                        {% if user.nationality == 'japanese' %}
+                            {% trans "カテゴリーガイド" %}
+                        {% else %}
+                            Hướng dẫn danh mục
+                        {% endif %}
+                    </h5>
                 </div>
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-3 mb-3">
-                            <h6><i class="fas fa-handshake text-primary"></i> {% trans "挨拶" %}</h6>
-                            <small class="text-muted">{% trans "基本的な挨拶や自己紹介" %}</small>
+                            <h6><i class="fas fa-handshake text-primary"></i> 
+                                {% if user.nationality == 'japanese' %}
+                                    {% trans "挨拶" %}
+                                {% else %}
+                                    Chào hỏi
+                                {% endif %}
+                            </h6>
+                            <small class="text-muted">
+                                {% if user.nationality == 'japanese' %}
+                                    {% trans "基本的な挨拶や自己紹介" %}
+                                {% else %}
+                                    Chào hỏi cơ bản và tự giới thiệu
+                                {% endif %}
+                            </small>
                         </div>
                         <div class="col-md-3 mb-3">
-                            <h6><i class="fas fa-utensils text-success"></i> {% trans "食事" %}</h6>
-                            <small class="text-muted">{% trans "レストランや食事に関する表現" %}</small>
+                            <h6><i class="fas fa-utensils text-success"></i> 
+                                {% if user.nationality == 'japanese' %}
+                                    {% trans "食事" %}
+                                {% else %}
+                                    Ẩm thực
+                                {% endif %}
+                            </h6>
+                            <small class="text-muted">
+                                {% if user.nationality == 'japanese' %}
+                                    {% trans "レストランや食事に関する表現" %}
+                                {% else %}
+                                    Biểu đạt về nhà hàng và ăn uống
+                                {% endif %}
+                            </small>
                         </div>
                         <div class="col-md-3 mb-3">
-                            <h6><i class="fas fa-shopping-cart text-warning"></i> {% trans "買い物" %}</h6>
-                            <small class="text-muted">{% trans "ショッピングや価格交渉" %}</small>
+                            <h6><i class="fas fa-shopping-cart text-warning"></i> 
+                                {% if user.nationality == 'japanese' %}
+                                    {% trans "買い物" %}
+                                {% else %}
+                                    Mua sắm
+                                {% endif %}
+                            </h6>
+                            <small class="text-muted">
+                                {% if user.nationality == 'japanese' %}
+                                    {% trans "ショッピングや価格交渉" %}
+                                {% else %}
+                                    Mua sắm và mặc cả giá
+                                {% endif %}
+                            </small>
                         </div>
                         <div class="col-md-3 mb-3">
-                            <h6><i class="fas fa-bus text-info"></i> {% trans "交通" %}</h6>
-                            <small class="text-muted">{% trans "交通機関や道案内" %}</small>
+                            <h6><i class="fas fa-bus text-info"></i> 
+                                {% if user.nationality == 'japanese' %}
+                                    {% trans "交通" %}
+                                {% else %}
+                                    Giao thông
+                                {% endif %}
+                            </h6>
+                            <small class="text-muted">
+                                {% if user.nationality == 'japanese' %}
+                                    {% trans "交通機関や道案内" %}
+                                {% else %}
+                                    Phương tiện giao thông và chỉ đường
+                                {% endif %}
+                            </small>
                         </div>
                     </div>
                 </div>

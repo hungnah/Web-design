@@ -112,8 +112,8 @@ def custom_logout(request):
 def dashboard(request):
     """
     Main dashboard view with different experiences for Vietnamese and Japanese users
-    Japanese users: See their posts and learning materials
-    Vietnamese users: See available posts and statistics
+    Japanese users: See their posts and available posts from Vietnamese users
+    Vietnamese users: See available posts from Japanese users and their own posts
     """
     user = request.user
     
@@ -122,14 +122,29 @@ def dashboard(request):
         user.preferred_language = 'ja'
         user.save()
         
-        # Get user's recent language exchange posts
-        recent_posts = LanguageExchangePost.objects.filter(
+        # For Japanese users, get available posts from Vietnamese users in their city
+        available_posts = LanguageExchangePost.objects.filter(
             vietnamese_user__nationality='vietnamese',
+            user_type='vietnamese',
             status='active'
-        ).select_related('phrase', 'cafe_location', 'vietnamese_user').order_by('-created_at')[:5]
+        ).select_related('vietnamese_user', 'phrase', 'cafe_location')
+        
+        # Filter by user's city if specified
+        if user.city and user.city != 'any':
+            available_posts = available_posts.filter(cafe_location__city=user.city)
+        
+        # Get user's recent language exchange posts
+        recent_posts = user.japanese_posts.filter(user_type='japanese').select_related('phrase', 'cafe_location')[:5]
+        
+        # Calculate statistics
+        accepted_posts_count = user.japanese_posts.filter(user_type='japanese', status='matched').count()
+        available_posts_count = available_posts.filter(status='active').count()
         
         context = {
             'user': user,
+            'available_posts': available_posts[:6],  # Show first 6 posts
+            'accepted_posts_count': accepted_posts_count,
+            'available_posts_count': available_posts_count,
             'recent_posts': recent_posts,
         }
         response = render(request, 'user_profile/japanese_dashboard.html', context)
@@ -137,7 +152,9 @@ def dashboard(request):
         # Vietnamese user dashboard
         # For Vietnamese users, get available posts from Japanese users in their city
         available_posts = LanguageExchangePost.objects.filter(
-            japanese_user__nationality='japanese'
+            japanese_user__nationality='japanese',
+            user_type='japanese',
+            status='active'
         ).select_related('japanese_user', 'phrase', 'cafe_location')
         
         # Filter by user's city if specified
@@ -148,10 +165,10 @@ def dashboard(request):
         available_posts = available_posts.filter(status='active')
 
         # Get user's recent language exchange posts
-        recent_posts = user.vietnamese_posts.all().select_related('phrase', 'cafe_location')[:5]
+        recent_posts = user.vietnamese_posts.filter(user_type='vietnamese').select_related('phrase', 'cafe_location')[:5]
         
         # Calculate statistics
-        accepted_posts_count = user.vietnamese_posts.filter(status='matched').count()
+        accepted_posts_count = user.vietnamese_posts.filter(user_type='vietnamese', status='matched').count()
         available_posts_count = available_posts.filter(status='active').count()
         
         context = {

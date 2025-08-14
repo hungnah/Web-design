@@ -15,7 +15,17 @@ class LanguageExchangePostForm(forms.ModelForm):
     """
     Form for creating language exchange posts
     Validates meeting dates and provides datetime picker interface
+    Supports both Vietnamese and Japanese users
     """
+    user_type = forms.ChoiceField(
+        choices=[
+            ('vietnamese', 'Vietnamese User'),
+            ('japanese', 'Japanese User'),
+        ],
+        widget=forms.HiddenInput(),
+        required=True
+    )
+    
     meeting_date = forms.DateTimeField(
         widget=forms.DateTimeInput(
             attrs={'type': 'datetime-local'},
@@ -30,6 +40,27 @@ class LanguageExchangePostForm(forms.ModelForm):
         widgets = {
             'notes': forms.Textarea(attrs={'rows': 4, 'placeholder': 'Add any additional notes about your meeting...'}),
         }
+    
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
+        super().__init__(*args, **kwargs)
+        
+        if user:
+            # Set user_type based on user nationality
+            if user.nationality == 'vietnamese':
+                self.fields['user_type'].initial = 'vietnamese'
+            elif user.nationality == 'japanese':
+                self.fields['user_type'].initial = 'japanese'
+    
+    def clean(self):
+        """Custom validation to ensure user_type is set"""
+        cleaned_data = super().clean()
+        user_type = cleaned_data.get('user_type')
+        
+        if not user_type:
+            raise forms.ValidationError('User type is required.')
+        
+        return cleaned_data
     
     def clean_meeting_date(self):
         meeting_date = self.cleaned_data.get('meeting_date')

@@ -1,7 +1,13 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
 
-{% block title %}投稿作成 - Vietnam-Japan Connect{% endblock %}
+{% block title %}
+    {% if user.nationality == 'japanese' %}
+        投稿作成 - Vietnam-Japan Connect
+    {% else %}
+        Tạo bài đăng - Vietnam-Japan Connect
+    {% endif %}
+{% endblock %}
 
 {% block content %}
 <div class="container my-5">
@@ -10,24 +16,53 @@
             <div class="card">
                 <div class="card-header bg-success text-white">
                     <h3 class="mb-0">
-                        <i class="fas fa-plus"></i> Tạo bài đăng mới
+                        <i class="fas fa-plus"></i> 
+                        {% if user.nationality == 'japanese' %}
+                            新しい投稿を作成
+                        {% else %}
+                            Tạo bài đăng mới
+                        {% endif %}
                     </h3>
                 </div>
                 <div class="card-body">
-                    <!-- Selected Phrase
+                    {% if phrase %}
                     <div class="alert alert-info">
-                        <h5>選択されたフレーズ:</h5>
+                        <h5>
+                            {% if user.nationality == 'japanese' %}
+                                選択されたフレーズ:
+                            {% else %}
+                                Cụm từ đã chọn:
+                            {% endif %}
+                        </h5>
                         <div class="row">
                             <div class="col-md-4">
-                                <strong>ベトナム語:</strong><br>
+                                <strong>
+                                    {% if user.nationality == 'japanese' %}
+                                        ベトナム語:
+                                    {% else %}
+                                        Tiếng Việt:
+                                    {% endif %}
+                                </strong><br>
                                 {{ phrase.vietnamese_text }}
                             </div>
                             <div class="col-md-4">
-                                <strong>日本語訳:</strong><br>
+                                <strong>
+                                    {% if user.nationality == 'japanese' %}
+                                        日本語訳:
+                                    {% else %}
+                                        Bản dịch tiếng Nhật:
+                                    {% endif %}
+                                </strong><br>
                                 {{ phrase.japanese_translation }}
                             </div>
                             <div class="col-md-4">
-                                <strong>英語訳:</strong><br>
+                                <strong>
+                                    {% if user.nationality == 'japanese' %}
+                                        英語訳:
+                                    {% else %}
+                                        Bản dịch tiếng Anh:
+                                    {% endif %}
+                                </strong><br>
                                 {{ phrase.english_translation }}
                             </div>
                         </div>
@@ -37,11 +72,26 @@
                                 {{ phrase.get_difficulty_display }}
                             </span>
                         </div>
-                    </div> -->
+                    </div>
+                    {% endif %}
 
                     <!-- Create Post Form -->
                     <form method="post">
                         {% csrf_token %}
+                        
+                        <!-- Debug information -->
+                        {% if debug %}
+                        <div class="alert alert-info">
+                            <strong>Debug Info:</strong><br>
+                            User: {{ user.username }}<br>
+                            Nationality: {{ user.nationality }}<br>
+                            Form fields: {{ form.fields.keys|join:", " }}<br>
+                            User type initial: {{ form.user_type.initial }}
+                        </div>
+                        {% endif %}
+                        
+                        <!-- Hidden user_type field -->
+                        {{ form.user_type }}
                         
                         <div class="row">
                             <div class="col-md-6">
@@ -56,17 +106,41 @@
                         
                         <div class="alert alert-warning">
                             <i class="fas fa-info-circle"></i>
-                            <strong>Chú ý:</strong> Khi tạo bài đăng, người dùng người Nhật sẽ có thể xem được.
-                            Khi việc ghép đôi thành công, phòng chat sẽ được tạo.
+                            <strong>
+                                {% if user.nationality == 'japanese' %}
+                                    注意:
+                                {% else %}
+                                    Chú ý:
+                                {% endif %}
+                            </strong> 
+                            {% if user.nationality == 'japanese' %}
+                                投稿を作成すると、ベトナムのユーザーが閲覧できるようになります。
+                                マッチングが成功すると、チャットルームが作成されます。
+                            {% else %}
+                                Khi tạo bài đăng, người dùng người Nhật sẽ có thể xem được.
+                                Khi việc ghép đôi thành công, phòng chat sẽ được tạo.
+                            {% endif %}
                         </div>
                         
                         <div class="d-grid gap-2">
                             <button type="submit" class="btn btn-success btn-lg">
-                                <i class="fas fa-paper-plane"></i> Tạo bài đăng
+                                <i class="fas fa-paper-plane"></i> 
+                                {% if user.nationality == 'japanese' %}
+                                    投稿を作成
+                                {% else %}
+                                    Tạo bài đăng
+                                {% endif %}
                             </button>
-                            <!-- <a href="{% url 'phrase_list' %}" class="btn btn-outline-secondary">
-                                <i class="fas fa-arrow-left"></i> フレーズ一覧に戻る
-                            </a> -->
+                            {% if phrase %}
+                            <a href="{% url 'phrase_list' %}" class="btn btn-outline-secondary">
+                                <i class="fas fa-arrow-left"></i> 
+                                {% if user.nationality == 'japanese' %}
+                                    フレーズ一覧に戻る
+                                {% else %}
+                                    Quay lại danh sách cụm từ
+                                {% endif %}
+                            </a>
+                            {% endif %}
                         </div>
                     </form>
                 </div>

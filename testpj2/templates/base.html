@@ -112,7 +112,11 @@
                                     <i class="fas fa-list"></i> {% trans "My Posts" %}
                                 </a>
                             </li>
-                        {% else %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="/create/create-post/">
+                                    <i class="fas fa-plus"></i> {% trans "Create Post" %}
+                                </a>
+                            </li>
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     <i class="fas fa-search"></i> {% trans "Search Posts" %}
@@ -121,8 +125,26 @@
                                     <li><a class="dropdown-item" href="/search/available-posts/">
                                         <i class="fas fa-map-marker-alt"></i> {% trans "Search by City" %}
                                     </a></li>
-                                    <li><a class="dropdown-item" href="/search/all-posts/">
-                                        <i class="fas fa-globe"></i> {% trans "All Cities" %}
+                                </ul>
+                            </li>
+                        {% else %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="/create/my-posts/">
+                                    <i class="fas fa-list"></i> {% trans "My Posts" %}
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/create/create-post/">
+                                    <i class="fas fa-plus"></i> {% trans "Create Post" %}
+                                </a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="fas fa-search"></i> {% trans "Search Posts" %}
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="searchDropdown">
+                                    <li><a class="dropdown-item" href="/search/available-posts/">
+                                        <i class="fas fa-map-marker-alt"></i> {% trans "Search by City" %}
                                     </a></li>
                                 </ul>
                             </li>

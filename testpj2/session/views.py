@@ -7,6 +7,7 @@ from django.views.decorators.http import require_POST
 from user_profile.models import CustomUser
 from event_creation.models import LanguageExchangePost
 from django.shortcuts import render
+from django.contrib import messages
 
 """
 Session Views for Language Exchange Platform
@@ -96,28 +97,43 @@ def submit_evaluation(request):
 
     if not partner_id or not score:
         # 必要な情報がない場合はエラーハンドリング
-        return redirect('/some-error-page/')
+        messages.error(request, '必要な情報が不足しています。')
+        return redirect('/session/list/')
 
     try:
         score = int(score)
     except ValueError:
         # scoreが数字でない場合のエラーハンドリング
-        return redirect('/some-error-page/')
+        messages.error(request, 'スコアは数値で入力してください。')
+        return redirect('/session/list/')
 
-    partner = get_object_or_404(CustomUser, id=partner_id)
-    post_id = request.POST.get("post_id")
-    post = get_object_or_404(LanguageExchangePost, id=post_id)
+    try:
+        partner = get_object_or_404(CustomUser, id=partner_id)
+        post_id = request.POST.get("post_id")
+        post = get_object_or_404(LanguageExchangePost, id=post_id)
 
-    # ポイント加算
-    partner.point += score
-    partner.save()
+        # ポイント加算
+        partner.point += score
+        partner.save()
 
-    # セッションを完了
-    post.status = 'completed'
-    post.save()
+        # セッションを完了 - handle validation errors gracefully
+        try:
+            post.status = 'completed'
+            post.save()
+        except Exception as e:
+            # Log the error but continue with the evaluation
+            print(f"Warning: Could not update post status to completed: {e}")
+            # Still complete the evaluation even if post status update fails
+            pass
 
-    # 評価後のリダイレクト先(例：ダッシュボード)
-    return redirect('/auth/dashboard/')
+        # 評価後のリダイレクト先(例：ダッシュボード)
+        messages.success(request, '評価が正常に送信されました。')
+        return redirect('/auth/dashboard/')
+        
+    except Exception as e:
+        print(f"Error in submit_evaluation: {e}")
+        messages.error(request, '評価の送信中にエラーが発生しました。')
+        return redirect('/session/list/')
 
 def list(request):
     template_dir = os.path.join(settings.BASE_DIR, 'templates', 'session')

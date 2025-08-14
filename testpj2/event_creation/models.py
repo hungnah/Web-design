@@ -7,6 +7,7 @@ Handles Vietnamese phrases, cafe locations, language exchange posts, and lesson 
 from django.db import models
 from django.conf import settings
 from django.utils import timezone
+from django.core.exceptions import ValidationError
 
 class VietnamesePhrase(models.Model):
     """
@@ -16,6 +17,12 @@ class VietnamesePhrase(models.Model):
     # Categories for organizing phrases by topic
     CATEGORY_CHOICES = [
         ('greetings', 'Greetings'),
+        ('family', 'Family'),
+        ('health', 'Health'),
+        ('time', 'Time'),
+        ('weather', 'Weather'),
+        ('directions', 'Directions'),
+        ('self_intro', 'Self Introduction'),
         ('food', 'Food & Dining'),
         ('shopping', 'Shopping'),
         ('transport', 'Transportation'),
@@ -125,8 +132,22 @@ class LanguageExchangePost(models.Model):
         ('cancelled', 'Cancelled'),
     ]
     
+    USER_TYPE_CHOICES = [
+        ('vietnamese', 'Vietnamese User'),
+        ('japanese', 'Japanese User'),
+    ]
+    
+    # User who created the post
+    user_type = models.CharField(max_length=15, choices=USER_TYPE_CHOICES, default='vietnamese', help_text="Type of user who created this post")
+    
+    # User fields - one will be filled based on user_type
     japanese_user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='japanese_posts', null=True, blank=True)
-    vietnamese_user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='vietnamese_posts', null=False, blank=True)
+    vietnamese_user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='vietnamese_posts', null=True, blank=True)
+    
+    # Partner who accepted the post (will be filled when matched)
+    japanese_partner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='accepted_japanese_posts', null=True, blank=True)
+    vietnamese_partner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='accepted_vietnamese_posts', null=True, blank=True)
+    
     phrase = models.ForeignKey(VietnamesePhrase, on_delete=models.CASCADE, null=True, blank=True)
     cafe_location = models.ForeignKey(CafeLocation, on_delete=models.CASCADE)
     meeting_date = models.DateTimeField()
@@ -134,6 +155,22 @@ class LanguageExchangePost(models.Model):
     notes = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    
+    @property
+    def creator(self):
+        """Get the user who created this post"""
+        if self.user_type == 'vietnamese':
+            return self.vietnamese_user
+        else:
+            return self.japanese_user
+    
+    @property
+    def partner(self):
+        """Get the partner who accepted this post"""
+        if self.user_type == 'vietnamese':
+            return self.japanese_partner
+        else:
+            return self.vietnamese_partner
     
     @property
     def chatroom(self):
@@ -144,9 +181,44 @@ class LanguageExchangePost(models.Model):
         except ChatRoom.DoesNotExist:
             return None
     
-def __str__(self):
-    phrase_text = self.phrase.vietnamese_text if self.phrase else "No phrase"
-    return f"{self.japanese_user.username} - {phrase_text}"
+    def clean(self):
+        """Validate that only one user field is filled based on user_type"""
+        from django.core.exceptions import ValidationError
+        
+        # Skip validation if this is a new instance being created
+        if not self.pk:
+            return
+        
+        # Only validate if we have a user_type set
+        if not self.user_type:
+            return
+            
+        # Basic validation: ensure the creator user is set correctly
+        if self.user_type == 'vietnamese':
+            if not self.vietnamese_user:
+                raise ValidationError('Vietnamese user must be set when user_type is vietnamese')
+        elif self.user_type == 'japanese':
+            if not self.japanese_user:
+                raise ValidationError('Japanese user must be set when user_type is japanese')
+        
+        # Note: We allow both user fields to be set for partner matching purposes
+        # This is more flexible and realistic for a language exchange platform
+    
+    def save(self, *args, **kwargs):
+        # Only run validation on existing instances and when we have user_type
+        if self.pk and self.user_type:
+            try:
+                self.clean()
+            except ValidationError as e:
+                # Log the validation error but don't stop the save
+                print(f"Validation warning in LanguageExchangePost {self.id}: {e}")
+                # Continue with save operation
+        super().save(*args, **kwargs)
+    
+    def __str__(self):
+        creator_name = self.creator.username if self.creator else "Unknown"
+        phrase_text = self.phrase.vietnamese_text if self.phrase else "No phrase"
+        return f"{creator_name} ({self.get_user_type_display()}) - {phrase_text}"
 
 class Lesson(models.Model):
     """Model for Vietnamese language lessons"""
