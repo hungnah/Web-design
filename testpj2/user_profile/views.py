@@ -15,10 +15,12 @@ from django.http import HttpResponse, JsonResponse
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
 from .forms import CustomUserCreationForm, ProfileUpdateForm
-from .decorators import prevent_back_button
+
 from event_creation.models import LanguageExchangePost, PartnerRequest
 from .forms import PointExchangeForm
 from .models import DiscountVoucher
+
+from .decorators import complete_profile_required
 
 class CustomLoginView(LoginView):
     """
@@ -106,7 +108,7 @@ def custom_logout(request):
     return redirect('home')
 
 @login_required
-@prevent_back_button
+@complete_profile_required
 def dashboard(request):
     """
     Main dashboard view with different experiences for Vietnamese and Japanese users
@@ -170,7 +172,7 @@ def dashboard(request):
     return response
 
 @login_required
-@prevent_back_button
+@complete_profile_required
 def profile(request):
     if request.method == 'POST':
         form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user)
@@ -443,3 +445,4 @@ def voucher_history(request):
         print(f"Debug: Error in voucher_history: {str(e)}")
         messages.error(request, f'Có lỗi xảy ra: {str(e)}')
         return redirect('/auth/my-vouchers/')
+

@@ -18,7 +18,18 @@
                     {% endif %}
                     <h4>{{ user.full_name|default:user.username }}</h4>
                     <p class="text-muted">{{ user.city }}</p>
+                    {% if user.get_age %}
+                    <p class="mt-2">
+                        <i class="fas fa-birthday-cake text-warning"></i> {{ user.get_age }} tuổi
+                    </p>
+                    {% endif %}
                     <span class="badge bg-success language-badge">Người Việt</span>
+                    {% if user.gender %}
+                    <p class="mt-2">
+                        <i class="fas {% if user.gender == 'male' %}fa-mars text-primary{% elif user.gender == 'female' %}fa-venus text-danger{% else %}fa-user text-secondary{% endif %}"></i>
+                        {% if user.gender == 'male' %}Nam{% elif user.gender == 'female' %}Nữ{% else %}Khác{% endif %}
+                    </p>
+                    {% endif %}
                     <div class="mt-3">
                         <a href="{% url 'profile' %}" class="btn btn-outline-primary btn-sm">
                             <i class="fas fa-edit"></i> Chỉnh sửa hồ sơ

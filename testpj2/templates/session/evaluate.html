@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{% trans "セッション評価" %}</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
     body {
       background: #f0f2f5;
@@ -62,6 +63,28 @@
 <body>
 
 <div class="rating-container">
+  {% if poster_gender %}
+  <div class="poster-info mb-3">
+    <small class="text-muted">
+      {% if poster_gender == 'male' %}
+        <i class="fas fa-mars text-primary"></i> 男性
+      {% elif poster_gender == 'female' %}
+        <i class="fas fa-venus text-danger"></i> 女性
+      {% else %}
+        <i class="fas fa-user text-secondary"></i> その他
+      {% endif %}
+      
+      {% if poster.get_age %}
+        <i class="fas fa-birthday-cake text-warning"></i> {{ poster.get_age }}{% if poster.nationality == 'japanese' %}歳{% else %} tuổi{% endif %}
+      {% endif %}
+      
+      {% if poster_city %}
+        <i class="fas fa-map-marker-alt text-info"></i> {{ poster_city }}
+      {% endif %}
+    </small>
+  </div>
+  {% endif %}
+  
   <div class="rating-title">{% trans "パートナーに対する満足度を評価してください" %}</div>
   
   <form method="post" action="/session/submit_evaluation/">

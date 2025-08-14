@@ -1,32 +1,44 @@
 """
-Custom middleware for user_profile app
+Session Security Middleware
 Handles session management and prevents back button issues after login
 """
 
 from django.shortcuts import redirect
 from django.urls import reverse
-from django.contrib.auth import get_user
+from django.contrib import messages
 
 class SessionSecurityMiddleware:
     """
-    Middleware to prevent users from accessing certain pages after login
-    and handle session security
+    Middleware to handle session security
+    and handle session management
     """
     
     def __init__(self, get_response):
         self.get_response = get_response
     
     def __call__(self, request):
-        # Process request
+        # Check if user is authenticated and needs to complete profile
+        if request.user.is_authenticated:
+            # Skip check for admin users
+            if request.user.is_staff:
+                return self.get_response(request)
+            
+            # Check if user needs to complete profile
+            if not request.user.gender or not request.user.date_of_birth or not request.user.city:
+                # Allow access to profile page and logout
+                allowed_paths = [
+                    '/auth/profile/',
+                    '/auth/logout/',
+                    '/admin/',
+                ]
+                
+                current_path = request.path
+                if not any(current_path.startswith(path) for path in allowed_paths):
+                    # Redirect to profile
+                    messages.warning(request, 'Vui lòng hoàn thiện thông tin cá nhân để tiếp tục sử dụng hệ thống.')
+                    return redirect('profile')
+        
         response = self.get_response(request)
-        
-        # Add security headers to all responses
-        response['Cache-Control'] = 'no-cache, no-store, must-revalidate'
-        response['Pragma'] = 'no-cache'
-        response['Expires'] = '0'
-        response['X-Frame-Options'] = 'DENY'
-        response['X-Content-Type-Options'] = 'nosniff'
-        
         return response
     
     def process_view(self, request, view_func, view_args, view_kwargs):

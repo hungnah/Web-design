@@ -17,5 +17,6 @@ urlpatterns = [
     path('point-exchange/', views.point_exchange, name='point_exchange'),
     path('my-vouchers/', views.my_vouchers, name='my_vouchers'),
     path('voucher-history/', views.voucher_history, name='voucher_history'),
+
     path('use-voucher/<int:voucher_id>/', views.use_voucher, name='use_voucher'),
 ]
