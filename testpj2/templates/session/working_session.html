@@ -1,0 +1,306 @@
+{% extends 'base.html' %}
+
+{% block title %}Phiên làm việc - Vietnam-Japan Connect{% endblock %}
+
+{% block extra_css %}
+<style>
+    .lesson-container {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        border-radius: 15px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    
+    .lesson-header {
+        text-align: center;
+        margin-bottom: 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 2px solid #007bff;
+    }
+    
+    .lesson-title {
+        color: #2c3e50;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+    
+    .lesson-subtitle {
+        color: #6c757d;
+        font-size: 1.1rem;
+    }
+    
+    .lesson-content {
+        background: white;
+        padding: 2rem;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        line-height: 1.8;
+    }
+    
+    .lesson-content h4 {
+        color: #007bff;
+        border-bottom: 2px solid #e9ecef;
+        padding-bottom: 0.5rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .lesson-content h5 {
+        color: #495057;
+        margin-top: 1.5rem;
+        margin-bottom: 1rem;
+    }
+    
+    .lesson-content ul {
+        padding-left: 1.5rem;
+    }
+    
+    .lesson-content li {
+        margin-bottom: 0.5rem;
+    }
+    
+    .partner-info {
+        background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        color: white;
+        padding: 1.5rem;
+        border-radius: 10px;
+        margin-bottom: 2rem;
+        text-align: center;
+    }
+    
+    .action-buttons {
+        text-align: center;
+        margin-top: 2rem;
+    }
+    
+    .btn-start-chat {
+        background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+        border: none;
+        color: white;
+        padding: 1rem 2rem;
+        font-size: 1.1rem;
+        border-radius: 25px;
+        transition: all 0.3s ease;
+        margin: 0 0.5rem;
+    }
+    
+    .btn-start-chat:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(0,123,255,0.4);
+        color: white;
+    }
+    
+    .btn-back {
+        background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+        border: none;
+        color: white;
+        padding: 1rem 2rem;
+        font-size: 1.1rem;
+        border-radius: 25px;
+        transition: all 0.3s ease;
+        margin: 0 0.5rem;
+    }
+    
+    .btn-back:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(108,117,125,0.4);
+        color: white;
+    }
+    
+    .status-badge {
+        display: inline-block;
+        background: #28a745;
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <!-- Status Badge -->
+    <div class="text-center">
+        <span class="status-badge">
+            <i class="fas fa-check-circle"></i> Phiên học đã sẵn sàng
+        </span>
+    </div>
+    
+    <!-- Partner Information -->
+    <div class="partner-info">
+        <h4><i class="fas fa-user-friends"></i> Thông tin đối tác</h4>
+        <p class="mb-2">
+            <strong>Đối tác:</strong> 
+            {{ partner.full_name|default:partner.username }}
+            {% if partner.nationality == 'japanese' %}
+                <span class="badge bg-light text-dark ms-2">Người Nhật</span>
+            {% else %}
+                <span class="badge bg-light text-dark ms-2">Người Việt</span>
+            {% endif %}
+        </p>
+        <p class="mb-0">
+            <strong>Địa điểm:</strong> {{ post.cultural_location.name }} - 
+            <strong>Thời gian:</strong> {{ post.meeting_date|date:"d/m/Y H:i" }}
+        </p>
+    </div>
+    
+    <!-- Learning Summary -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="card border-primary">
+                <div class="card-header bg-primary text-white">
+                    <h6 class="mb-0"><i class="fas fa-user-edit"></i> 
+                        {% if user == post.japanese_user %}
+                            Bạn (Người đăng bài) sẽ học:
+                        {% else %}
+                            {{ post.japanese_user.full_name|default:post.japanese_user.username }} (Người đăng bài) sẽ học:
+                        {% endif %}
+                    </h6>
+                </div>
+                <div class="card-body">
+                    {% if post.japanese_learning_phrases.exists %}
+                        {% for phrase in post.japanese_learning_phrases.all|slice:":3" %}
+                            <span class="badge bg-primary me-1 mb-1">{{ phrase.vietnamese_text }}</span>
+                        {% endfor %}
+                        {% if post.japanese_learning_phrases.count > 3 %}
+                            <small class="text-muted">+{{ post.japanese_learning_phrases.count|add:"-3" }} câu nói khác</small>
+                        {% endif %}
+                    {% else %}
+                        <span class="text-muted">Chưa chọn câu nói cụ thể</span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card border-success">
+                <div class="card-header bg-success text-white">
+                    <h6 class="mb-0"><i class="fas fa-user-check"></i> 
+                        {% if user == post.vietnamese_user %}
+                            Bạn (Người chấp nhận) sẽ học:
+                        {% else %}
+                            {{ post.vietnamese_user.full_name|default:post.vietnamese_user.username }} (Người chấp nhận) sẽ học:
+                        {% endif %}
+                    </h6>
+                </div>
+                <div class="card-body">
+                    {% if post.accepted_phrase %}
+                        <span class="badge bg-success me-1 mb-1">{{ post.accepted_phrase.vietnamese_text }}</span>
+                        <small class="text-muted d-block mt-1">Đã chọn khi ứng tuyển</small>
+                    {% elif post.vietnamese_learning_phrases.exists %}
+                        {% for phrase in post.vietnamese_learning_phrases.all|slice:":3" %}
+                            <span class="badge bg-success me-1 mb-1">{{ phrase.vietnamese_text }}</span>
+                        {% endfor %}
+                        {% if post.vietnamese_learning_phrases.count > 3 %}
+                            <small class="text-muted">+{{ post.vietnamese_learning_phrases.count|add:"-3" }} câu nói khác</small>
+                        {% endif %}
+                    {% else %}
+                        <span class="text-muted">Chưa chọn câu nói cụ thể</span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Learning Path Explanation -->
+    <div class="alert alert-info mb-4">
+        <h6><i class="fas fa-info-circle"></i> Cách thức học tập:</h6>
+        <div class="row">
+            <div class="col-md-6">
+                <strong>Người đăng bài:</strong> Học theo bài học đã chọn khi tạo bài đăng
+            </div>
+            <div class="col-md-6">
+                <strong>Người chấp nhận:</strong> Học theo bài học đã chọn khi ứng tuyển
+            </div>
+        </div>
+        <small class="text-muted mt-2 d-block">
+            <i class="fas fa-lightbulb"></i> Mỗi người sẽ học theo bài học riêng biệt để có trải nghiệm học tập tốt nhất!
+        </small>
+    </div>
+    
+    <!-- Lesson Container -->
+    <div class="lesson-container">
+        <div class="lesson-header">
+            <h2 class="lesson-title">{{ lesson_title }}</h2>
+            <p class="lesson-subtitle">
+                {% if lesson_type == 'japanese_learning' %}
+                    <i class="fas fa-graduation-cap text-primary"></i> 
+                    {% if user == post.japanese_user %}
+                        {% if post.japanese_user == user and post.vietnamese_user != user %}
+                            Bài học tiếng Việt mà bạn đã chọn khi đăng bài
+                        {% else %}
+                            Bài học tiếng Việt mà bạn đã chọn khi ứng tuyển
+                        {% endif %}
+                    {% else %}
+                        Bài học tiếng Việt mà đối tác đã chọn
+                    {% endif %}
+                {% elif lesson_type == 'vietnamese_learning' %}
+                    <i class="fas fa-graduation-cap text-success"></i> 
+                    {% if user == post.vietnamese_user %}
+                        {% if post.vietnamese_user == user and post.japanese_user != user %}
+                            Bài học tiếng Nhật mà bạn đã chọn khi đăng bài
+                        {% else %}
+                            Bài học tiếng Nhật mà bạn đã chọn khi ứng tuyển
+                        {% endif %}
+                    {% else %}
+                        Bài học tiếng Nhật mà đối tác đã chọn
+                    {% endif %}
+                {% else %}
+                    <i class="fas fa-graduation-cap text-info"></i> 
+                    Bài học ngôn ngữ
+                {% endif %}
+            </p>
+        </div>
+        
+        <div class="lesson-content">
+            {{ lesson_content|safe }}
+        </div>
+        
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <a href="{% url 'start_chat_session' post.id %}" class="btn btn-start-chat">
+                <i class="fas fa-comments"></i> Bắt đầu chat
+            </a>
+            <a href="{% url 'my_chats' %}" class="btn btn-back">
+                <i class="fas fa-arrow-left"></i> Quay lại
+            </a>
+        </div>
+    </div>
+    
+    <!-- Additional Tips -->
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="fas fa-lightbulb"></i> Mẹo học tập</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="mb-0">
+                        <li>Luyện tập phát âm nhiều lần</li>
+                        <li>Ghi chú những từ mới</li>
+                        <li>Thực hành với đối tác</li>
+                        <li>Không ngại mắc lỗi</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0"><i class="fas fa-star"></i> Mục tiêu phiên học</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="mb-0">
+                        <li>Học được từ mới</li>
+                        <li>Thực hành giao tiếp</li>
+                        <li>Hiểu văn hóa đối phương</li>
+                        <li>Xây dựng tình bạn</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

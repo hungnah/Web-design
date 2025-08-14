@@ -1,140 +1,22 @@
 {% extends 'base.html' %}
 
-{% block title %}Đổi điểm がんばりポイント - Vietnam-Japan Connect{% endblock %}
+{% block title %}Đổi điểm (đã tắt) - Vietnam-Japan Connect{% endblock %}
 
 {% block content %}
 <div class="container my-5">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <div class="card">
-                <div class="card-header bg-primary text-white">
-                    <h4 class="mb-0">
-                        <i class="fas fa-exchange-alt"></i> Đổi điểm がんばりポイント
-                    </h4>
-                </div>
-                <div class="card-body">
-                    <!-- Current Points Display -->
-                    <div class="alert alert-info text-center mb-4">
-                        <h5 class="mb-2">Điểm hiện tại của bạn</h5>
-                        <div class="display-4 text-primary">{{ user_points }}</div>
-                        <small class="text-muted">がんばりポイント</small>
-                    </div>
-
-                    <!-- Point Exchange Form -->
-                    <form method="post">
-                        {% csrf_token %}
-                        
-                        <div class="mb-4">
-                            <label for="{{ form.voucher_type.id_for_label }}" class="form-label">
-                                <strong>Chọn loại voucher bạn muốn đổi:</strong>
-                            </label>
-                            {{ form.voucher_type }}
-                            {% if form.voucher_type.errors %}
-                                <div class="text-danger mt-1">
-                                    {{ form.voucher_type.errors }}
-                                </div>
-                            {% endif %}
-                        </div>
-
-                        <!-- Voucher Information -->
-                        <div class="card mb-4">
-                            <div class="card-header bg-light">
-                                <h6 class="mb-0"><i class="fas fa-info-circle"></i> Thông tin voucher</h6>
-                            </div>
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <ul class="list-unstyled">
-                                            <li><i class="fas fa-tag text-primary me-2"></i>Giảm giá: <strong>10%</strong></li>
-                                            <li><i class="fas fa-calendar text-success me-2"></i>Hiệu lực: <strong>30 ngày</strong></li>
-                                            <li><i class="fas fa-map-marker-alt text-warning me-2"></i>Áp dụng tại: <strong>Toàn quốc</strong></li>
-                                        </ul>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <ul class="list-unstyled">
-                                                                                     <li><i class="fas fa-coffee text-info me-2"></i>Coffee Shop: <strong>10 điểm</strong></li>
-                                         <li><i class="fas fa-utensils text-danger me-2"></i>Nhà hàng: <strong>40 điểm</strong></li>
-                                         <li><i class="fas fa-shopping-bag text-success me-2"></i>Mua sắm: <strong>40 điểm</strong></li>
-                                         <li><i class="fas fa-bus text-warning me-2"></i>Giao thông: <strong>10 điểm</strong></li>
-                                         <li><i class="fas fa-film text-primary me-2"></i>Giải trí: <strong>30 điểm</strong></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Submit Button -->
-                        <div class="text-center">
-                            <button type="submit" class="btn btn-primary btn-lg">
-                                <i class="fas fa-exchange-alt"></i> Đổi điểm ngay
-                            </button>
-                        </div>
-                    </form>
-
-                    <!-- Navigation -->
-                    <div class="text-center mt-4">
-                        <a href="/auth/my-vouchers/" class="btn btn-outline-secondary me-2">
-                            <i class="fas fa-ticket-alt"></i> Xem voucher của tôi
-                        </a>
-                        <a href="/auth/dashboard/" class="btn btn-outline-primary">
-                            <i class="fas fa-arrow-left"></i> Quay lại Dashboard
-                        </a>
-                    </div>
-                </div>
+            <div class="alert alert-warning text-center">
+                <i class="fas fa-info-circle"></i>
+                Tính năng đổi điểm sang voucher đã bị tắt. Hai bên bình đẳng nên không sử dụng quy đổi voucher nữa.
             </div>
-
-            <!-- How to Earn Points -->
-            <div class="card mt-4">
-                <div class="card-header bg-success text-white">
-                    <h5 class="mb-0">
-                        <i class="fas fa-star"></i> Cách kiếm thêm điểm がんばりポイント
-                    </h5>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="d-flex align-items-center mb-3">
-                                <div class="bg-warning text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
-                                    <i class="fas fa-comments"></i>
-                                </div>
-                                <div>
-                                    <strong>Gặp gỡ bạn Nhật:</strong> +10 điểm (tối đa)
-                                </div>
-                            </div>
-                            
-                        </div>
-                    </div>
-                </div>
+            <div class="text-center">
+                <a href="/auth/dashboard/" class="btn btn-primary">
+                    <i class="fas fa-arrow-left"></i> Quay lại Dashboard
+                </a>
             </div>
         </div>
     </div>
+  </div>
 </div>
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const voucherSelect = document.getElementById('{{ form.voucher_type.id_for_label }}');
-    const submitButton = document.querySelector('button[type="submit"]');
-    
-    voucherSelect.addEventListener('change', function() {
-        const selectedOption = this.options[this.selectedIndex];
-        const optionText = selectedOption.text;
-        
-        // Check if user has enough points
-        if (optionText.includes('Không đủ điểm')) {
-            submitButton.disabled = true;
-            submitButton.classList.add('btn-secondary');
-            submitButton.classList.remove('btn-primary');
-            submitButton.innerHTML = '<i class="fas fa-lock"></i> Không đủ điểm';
-        } else {
-            submitButton.disabled = false;
-            submitButton.classList.remove('btn-secondary');
-            submitButton.classList.add('btn-primary');
-            submitButton.innerHTML = '<i class="fas fa-exchange-alt"></i> Đổi điểm ngay';
-        }
-    });
-    
-    // Trigger change event on page load
-    voucherSelect.dispatchEvent(new Event('change'));
-});
-</script>
 {% endblock %}

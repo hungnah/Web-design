@@ -1,0 +1,197 @@
+{% extends 'base.html' %}
+
+{% block title %}Bài đăng đã chấp nhận - Vietnam-Japan Connect{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <!-- Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1 class="text-center mb-3">
+                <i class="fas fa-handshake"></i> 
+                Bài đăng đã chấp nhận
+            </h1>
+            <p class="text-center text-muted">
+                Danh sách các bài đăng từ người Nhật mà bạn đã chấp nhận
+            </p>
+            <div class="text-center">
+                <a href="{% url 'my_posts' %}" class="btn btn-outline-primary me-2">
+                    <i class="fas fa-list"></i> 
+                    Bài đăng của tôi
+                </a>
+                <a href="{% url 'available_posts' %}" class="btn btn-outline-success">
+                    <i class="fas fa-search"></i> 
+                    Tìm bài đăng mới
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Posts -->
+    <div class="row">
+        {% for post in posts %}
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <span class="badge bg-primary">
+                            {% if post.phrase %}
+                                {{ post.phrase.get_category_display }}
+                            {% else %}
+                                Learning phrases
+                            {% endif %}
+                        </span>
+                        <span class="badge bg-{% if post.status == 'active' %}warning{% elif post.status == 'matched' %}success{% else %}secondary{% endif %}">
+                            {{ post.get_status_display }}
+                        </span>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title text-center mb-3">
+                            {% if post.phrase %}
+                                {{ post.phrase.vietnamese_text }}
+                            {% else %}
+                                Learning phrases
+                            {% endif %}
+                        </h5>
+                        
+                        <div class="mb-3">
+                            <small class="text-muted">
+                                {% if post.japanese_user %}
+                                    投稿者: {{ post.japanese_user.full_name|default:post.japanese_user.username }}
+                                    {% if post.japanese_user.get_age %}
+                                    <br>
+                                    <i class="fas fa-birthday-cake text-warning"></i> {{ post.japanese_user.get_age }} tuổi
+                                    {% endif %}
+                                    {% if post.japanese_user.gender %}
+                                    <br>
+                                    <i class="fas {% if post.japanese_user.gender == 'male' %}fa-mars text-primary{% elif post.japanese_user.gender == 'female' %}fa-venus text-danger{% else %}fa-user text-secondary{% endif %}"></i>
+                                    {% if post.japanese_user.gender == 'male' %}Nam{% elif post.japanese_user.gender == 'female' %}Nữ{% else %}Khác{% endif %}
+                                    {% endif %}
+                                {% else %}
+                                    投稿者: Không xác định
+                                {% endif %}
+                            </small>
+                        </div>
+                        
+                        {% if post.cultural_location %}
+                        <div class="mb-3">
+                            <small class="text-muted">
+                                <i class="fas fa-map-marker-alt"></i> {{ post.cultural_location.name }}
+                            </small>
+                        </div>
+                        {% endif %}
+                        
+                        {% if post.meeting_date %}
+                        <div class="mb-3">
+                            <small class="text-muted">
+                                <i class="fas fa-calendar"></i> {{ post.meeting_date|date:"d/m/Y H:i" }}
+                            </small>
+                        </div>
+                        {% endif %}
+
+                        {% if post.japanese_learning_phrases.exists %}
+                            <div class="mb-2 p-2 bg-light rounded">
+                                <small class="text-muted">
+                                    <i class="fas fa-graduation-cap"></i> 
+                                    Các câu nói tiếng Việt muốn học:
+                                </small>
+                                <div>
+                                    {% for phrase in post.japanese_learning_phrases.all|slice:":3" %}
+                                        <span class="badge bg-info me-1">{{ phrase.vietnamese_text }}</span>
+                                    {% endfor %}
+                                    {% if post.japanese_learning_phrases.count > 3 %}
+                                        <small class="text-muted">+{{ post.japanese_learning_phrases.count|add:"-3" }} more</small>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endif %}
+                        
+                        {% if post.notes %}
+                            <div class="mb-3">
+                                <small class="text-muted">Ghi chú:</small>
+                                <p class="mb-1">{{ post.notes }}</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="card-footer text-center">
+                        {% if post.status == 'matched' %}
+                            <div class="d-grid gap-2">
+                                <a href="{% url 'start_working_session' post.id %}" class="btn btn-success w-100">
+                                    <i class="fas fa-play"></i> 
+                                    Bắt đầu phiên làm việc
+                                </a>
+                                {% if post.chatroom %}
+                                <a href="{% url 'chat_room' post.chatroom.id %}" class="btn btn-primary w-100">
+                                    <i class="fas fa-comments"></i> 
+                                    Vào chat
+                                </a>
+                                {% endif %}
+                            </div>
+                        {% elif post.status == 'active' %}
+                            <div class="d-grid gap-2">
+                                <span class="text-muted">
+                                    <i class="fas fa-clock"></i> 
+                                    Đang chờ xác nhận
+                                </span>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <div class="col-12">
+                <div class="text-center">
+                    <i class="fas fa-handshake fa-3x text-muted mb-3"></i>
+                    <h4>Chưa có bài đăng nào được chấp nhận</h4>
+                    <p class="text-muted">
+                        Hãy tìm và chấp nhận bài đăng từ người Nhật để bắt đầu kết nối!
+                    </p>
+                    <div class="mt-3">
+                        <a href="{% url 'available_posts' %}" class="btn btn-primary">
+                            <i class="fas fa-search"></i> 
+                            Tìm bài đăng
+                        </a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <!-- Stats -->
+    {% if posts %}
+        <div class="row mt-5">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            <i class="fas fa-chart-bar"></i> 
+                            Thống kê
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row text-center">
+                            <div class="col-md-4">
+                                <h4 class="text-primary">{{ posts.count }}</h4>
+                                <small class="text-muted">
+                                    Tổng bài đăng đã chấp nhận
+                                </small>
+                            </div>
+                            <div class="col-md-4">
+                                <h4 class="text-success">{{ matched_posts_count }}</h4>
+                                <small class="text-muted">
+                                    Đã kết nối
+                                </small>
+                            </div>
+                            <div class="col-md-4">
+                                <h4 class="text-secondary">{{ completed_posts_count }}</h4>
+                                <small class="text-muted">
+                                    Đã hoàn thành
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

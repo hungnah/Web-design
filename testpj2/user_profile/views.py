@@ -126,7 +126,7 @@ def dashboard(request):
         recent_posts = LanguageExchangePost.objects.filter(
             vietnamese_user__nationality='vietnamese',
             status='active'
-        ).select_related('phrase', 'cafe_location', 'vietnamese_user').order_by('-created_at')[:5]
+        ).select_related('phrase', 'cultural_location', 'vietnamese_user').order_by('-created_at')[:5]
         
         context = {
             'user': user,
@@ -137,22 +137,29 @@ def dashboard(request):
         # Vietnamese user dashboard
         # For Vietnamese users, get available posts from Japanese users in their city
         available_posts = LanguageExchangePost.objects.filter(
-            japanese_user__nationality='japanese'
-        ).select_related('japanese_user', 'phrase', 'cafe_location')
+            japanese_user__nationality='japanese',
+            status='active'
+        ).select_related('japanese_user', 'phrase', 'cultural_location')
         
         # Filter by user's city if specified
         if user.city and user.city != 'any':
-            available_posts = available_posts.filter(cafe_location__city=user.city)
+            available_posts = available_posts.filter(cultural_location__city=user.city)
         
-        # Only show active posts (not accepted ones)
-        available_posts = available_posts.filter(status='active')
+        # Order by most recent posts first and add some variety
+        available_posts = available_posts.order_by('-created_at')
+        
+        # Add some additional context for better user experience
+        for post in available_posts:
+            # Ensure we have the necessary related data
+            if not hasattr(post, 'phrase') or not post.phrase:
+                continue
 
         # Get user's recent language exchange posts
-        recent_posts = user.vietnamese_posts.all().select_related('phrase', 'cafe_location')[:5]
+        recent_posts = user.vietnamese_posts.all().select_related('phrase', 'cultural_location')[:5]
         
         # Calculate statistics
         accepted_posts_count = user.vietnamese_posts.filter(status='matched').count()
-        available_posts_count = available_posts.filter(status='active').count()
+        available_posts_count = available_posts.count()
         
         context = {
             'user': user,
@@ -241,59 +248,10 @@ def change_password_ajax(request):
 @login_required
 def point_exchange(request):
     """
-    View for exchanging ganbari points for discount vouchers
+    Disabled: Previously allowed exchanging points for vouchers. Now disabled because both sides are equal.
     """
-    if request.method == 'POST':
-        form = PointExchangeForm(request.user, request.POST)
-        if form.is_valid():
-            voucher_type = form.cleaned_data['voucher_type']
-            
-            # Define point requirements for each voucher type
-            point_requirements = {
-                'coffee': 10,
-                'restaurant': 40,
-                'shopping': 40,
-                'transport': 10,
-                'entertainment': 30,
-            }
-            
-            points_needed = point_requirements[voucher_type]
-            
-            # Check if user has enough points
-            if request.user.point >= points_needed:
-                # Create discount voucher
-                from django.utils import timezone
-                from datetime import timedelta
-                
-                voucher = DiscountVoucher.objects.create(
-                    user=request.user,
-                    voucher_type=voucher_type,
-                    discount_percentage=10,  # Default 10% discount
-                    points_required=points_needed,
-                    description=f"Giảm giá {voucher_type} - {points_needed} điểm",
-                    valid_until=timezone.now() + timedelta(days=30)  # Valid for 30 days
-                )
-                
-                # Deduct points from user
-                request.user.point -= points_needed
-                request.user.save()
-                
-                messages.success(
-                    request, 
-                    f'Đổi điểm thành công! Bạn đã nhận được voucher giảm giá {voucher.get_voucher_type_display()}. '
-                    f'Điểm còn lại: {request.user.point}'
-                )
-                return redirect('/auth/my-vouchers/')
-            else:
-                messages.error(request, 'Bạn không đủ điểm để đổi voucher này.')
-    else:
-        form = PointExchangeForm(request.user)
-    
-    context = {
-        'form': form,
-        'user_points': request.user.point,
-    }
-    return render(request, 'user_profile/point_exchange.html', context)
+    messages.error(request, 'Tính năng đổi điểm sang voucher đã bị tắt.')
+    return redirect('dashboard')
 
 @login_required
 def my_vouchers(request):

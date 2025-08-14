@@ -128,20 +128,30 @@ def my_chats(request):
         accepted_posts = LanguageExchangePost.objects.filter(
             japanese_user=request.user,
             status='matched'
-        ).select_related('vietnamese_user', 'phrase', 'cafe_location')
+        ).select_related('vietnamese_user', 'phrase', 'cultural_location')
         
         for post in accepted_posts:
             try:
                 chat_room = ChatRoom.objects.get(post=post)
+                # Determine what to display in subtitle based on learning phrases
+                if post.japanese_learning_phrases.exists() and post.vietnamese_learning_phrases.exists():
+                    subtitle = f"Người Nhật học: {post.japanese_learning_phrases.first().vietnamese_text} | Người Việt học: {post.vietnamese_learning_phrases.first().vietnamese_text}"
+                elif post.japanese_learning_phrases.exists():
+                    subtitle = f"Người Nhật học: {post.japanese_learning_phrases.first().vietnamese_text}"
+                elif post.vietnamese_learning_phrases.exists():
+                    subtitle = f"Người Việt học: {post.vietnamese_learning_phrases.first().vietnamese_text}"
+                else:
+                    subtitle = "Không có nội dung học tập"
+                
                 chat_rooms.append({
                     'chat_room': chat_room,
                     'type': 'post',
                     'partner': post.vietnamese_user,
                     'title': f"Chat với {post.vietnamese_user.full_name or post.vietnamese_user.username}",
-                    'subtitle': f"Học: {post.phrase.vietnamese_text}",
+                    'subtitle': subtitle,
                     'last_message': chat_room.messages.last(),
                     'unread_count': chat_room.messages.filter(is_read=False).exclude(sender=request.user).count(),
-                    'meeting_info': f"{post.cafe_location.name} - {post.meeting_date.strftime('%d/%m/%Y %H:%M')}"
+                    'meeting_info': f"{post.cultural_location.name if post.cultural_location else 'Không có địa điểm'} - {post.meeting_date.strftime('%d/%m/%Y %H:%M')}"
                 })
             except ChatRoom.DoesNotExist:
                 # Create missing chat room
@@ -153,35 +163,56 @@ def my_chats(request):
                     sender=post.vietnamese_user,
                     content=welcome_message
                 )
+                
+                # Determine what to display in subtitle based on learning phrases
+                if post.japanese_learning_phrases.exists() and post.vietnamese_learning_phrases.exists():
+                    subtitle = f"Người Nhật học: {post.japanese_learning_phrases.first().vietnamese_text} | Người Việt học: {post.vietnamese_learning_phrases.first().vietnamese_text}"
+                elif post.japanese_learning_phrases.exists():
+                    subtitle = f"Người Nhật học: {post.japanese_learning_phrases.first().vietnamese_text}"
+                elif post.vietnamese_learning_phrases.exists():
+                    subtitle = f"Người Việt học: {post.vietnamese_learning_phrases.first().vietnamese_text}"
+                else:
+                    subtitle = "Không có nội dung học tập"
+                
                 chat_rooms.append({
                     'chat_room': chat_room,
                     'type': 'post',
                     'partner': post.vietnamese_user,
                     'title': f"Chat với {post.vietnamese_user.full_name or post.vietnamese_user.username}",
-                    'subtitle': f"Học: {post.phrase.vietnamese_text}",
+                    'subtitle': subtitle,
                     'last_message': chat_room.messages.last(),
                     'unread_count': chat_room.messages.filter(is_read=False).exclude(sender=request.user).count(),
-                    'meeting_info': f"{post.cafe_location.name} - {post.meeting_date.strftime('%d/%m/%Y %H:%M')}"
+                    'meeting_info': f"{post.cultural_location.name if post.cultural_location else 'Không có địa điểm'} - {post.meeting_date.strftime('%d/%m/%Y %H:%M')}"
                 })
     else:
         # Vietnamese user's accepted posts
         accepted_posts = LanguageExchangePost.objects.filter(
             vietnamese_user=request.user,
             status='matched'
-        ).select_related('japanese_user', 'phrase', 'cafe_location')
+        ).select_related('japanese_user', 'phrase', 'cultural_location')
         
         for post in accepted_posts:
             try:
                 chat_room = ChatRoom.objects.get(post=post)
+                # Determine what to display in subtitle based on learning phrases
+                if post.japanese_learning_phrases.exists() and post.vietnamese_learning_phrases.exists():
+                    subtitle = f"Người Nhật học: {post.japanese_learning_phrases.first().vietnamese_text} | Người Việt học: {post.vietnamese_learning_phrases.first().vietnamese_text}"
+                elif post.japanese_learning_phrases.exists():
+                    subtitle = f"Người Nhật học: {post.japanese_learning_phrases.first().vietnamese_text}"
+                elif post.vietnamese_learning_phrases.exists():
+                    subtitle = f"Người Việt học: {post.vietnamese_learning_phrases.first().vietnamese_text}"
+                else:
+                    subtitle = "Không có nội dung học tập"
+                
                 chat_rooms.append({
                     'chat_room': chat_room,
                     'type': 'post',
-                    'partner': post.japanese_user,
-                    'title': f"Chat với {post.japanese_user.full_name or post.japanese_user.username}",
-                    'subtitle': f"Học: {post.phrase.vietnamese_text}",
+                    'partner': post.japanese_user if post.japanese_user else 'Không có người dùng Nhật',
+                    'title': f"Chat với {post.japanese_user.full_name or post.japanese_user.username if post.japanese_user else 'Không có người dùng Nhật'}",
+                    'subtitle': subtitle,
                     'last_message': chat_room.messages.last(),
                     'unread_count': chat_room.messages.filter(is_read=False).exclude(sender=request.user).count(),
-                    'meeting_info': f"{post.cafe_location.name} - {post.meeting_date.strftime('%d/%m/%Y %H:%M')}"
+                    'meeting_info': f"{post.cultural_location.name if post.cultural_location else 'Không có địa điểm'} - {post.meeting_date.strftime('%d/%m/%Y %H:%M')}"
                 })
             except ChatRoom.DoesNotExist:
                 # Create missing chat room
@@ -193,15 +224,26 @@ def my_chats(request):
                     sender=request.user,
                     content=welcome_message
                 )
+                
+                # Determine what to display in subtitle based on learning phrases
+                if post.japanese_learning_phrases.exists() and post.vietnamese_learning_phrases.exists():
+                    subtitle = f"Người Nhật học: {post.japanese_learning_phrases.first().vietnamese_text} | Người Việt học: {post.vietnamese_learning_phrases.first().vietnamese_text}"
+                elif post.japanese_learning_phrases.exists():
+                    subtitle = f"Người Nhật học: {post.japanese_learning_phrases.first().vietnamese_text}"
+                elif post.vietnamese_learning_phrases.exists():
+                    subtitle = f"Người Việt học: {post.vietnamese_learning_phrases.first().vietnamese_text}"
+                else:
+                    subtitle = "Không có nội dung học tập"
+                
                 chat_rooms.append({
                     'chat_room': chat_room,
                     'type': 'post',
-                    'partner': post.japanese_user,
-                    'title': f"Chat với {post.japanese_user.full_name or post.japanese_user.username}",
-                    'subtitle': f"Học: {post.phrase.vietnamese_text}",
+                    'partner': post.japanese_user if post.japanese_user else 'Không có người dùng Nhật',
+                    'title': f"Chat với {post.japanese_user.full_name or post.japanese_user.username if post.japanese_user else 'Không có người dùng Nhật'}",
+                    'subtitle': subtitle,
                     'last_message': chat_room.messages.last(),
                     'unread_count': chat_room.messages.filter(is_read=False).exclude(sender=request.user).count(),
-                    'meeting_info': f"{post.cafe_location.name} - {post.meeting_date.strftime('%d/%m/%Y %H:%M')}"
+                    'meeting_info': f"{post.cultural_location.name if post.cultural_location else 'Không có địa điểm'} - {post.meeting_date.strftime('%d/%m/%Y %H:%M')}"
                 })
     
     # For PartnerRequest chats
@@ -239,7 +281,7 @@ def my_chats(request):
                 chat_rooms.append({
                     'chat_room': chat_room,
                     'type': 'partner_request',
-                    'partner': partner_request.accepted_by,
+                    'partner': partner_request.accepted_by if partner_request.accepted_by else 'Không có người chấp nhận',
                     'title': f"Partner Request: {partner_request.title}",
                     'subtitle': f"Loại: {partner_request.get_request_type_display()}",
                     'last_message': chat_room.messages.last(),

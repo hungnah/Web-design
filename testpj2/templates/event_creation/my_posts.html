@@ -19,20 +19,30 @@
                 {% if user.nationality == 'japanese' %}
                     あなたが作成した投稿の一覧です
                 {% else %}
-                    Danh sách các bài đăng bạn đã chấp nhận
+                    Danh sách các bài đăng bạn đã tạo
                 {% endif %}
             </p>
-            {% if user.nationality == 'vietnamese' %}
-                <div class="text-center">
+            <!-- Both Vietnamese and Japanese users can create posts -->
+            <div class="text-center">
                 {% if phrase %}
                     <a href="{% url 'create_post' phrase.id %}" class="btn btn-outline-success">
                 {% else %}
                     <a href="{% url 'create_post' %}" class="btn btn-outline-success">
                 {% endif %}
-                    <i class="fas fa-coffee"></i> Tìm kiếm đối tác
+                    <i class="fas fa-plus"></i> 
+                    {% if user.nationality == 'japanese' %}
+                        新しい投稿を作成
+                    {% else %}
+                        Tạo bài đăng mới
+                    {% endif %}
                 </a>
+                {% if user.nationality == 'vietnamese' %}
+                    <a href="{% url 'my_accepted_posts' %}" class="btn btn-outline-primary ms-2">
+                        <i class="fas fa-handshake"></i> 
+                        Bài đăng đã chấp nhận
+                    </a>
+                {% endif %}
             </div>
-            {% endif %}
         </div>
     </div>
 
@@ -74,13 +84,29 @@
             <div class="col-md-6 col-lg-4 mb-4">
                 <div class="card h-100">
                     <div class="card-header d-flex justify-content-between align-items-center">
-                        <span class="badge bg-primary">{{ post.phrase.get_category_display }}</span>
+                        <span class="badge bg-primary">
+                            {% if post.japanese_learning_phrases.exists %}
+                                {{ post.japanese_learning_phrases.first.get_category_display }}
+                            {% elif post.vietnamese_learning_phrases.exists %}
+                                {{ post.vietnamese_learning_phrases.first.get_category_display }}
+                            {% else %}
+                                {{ post.phrase.get_category_display }}
+                            {% endif %}
+                        </span>
                         <span class="badge bg-{% if post.status == 'active' %}warning{% elif post.status == 'matched' %}success{% else %}secondary{% endif %}">
                             {{ post.get_status_display }}
                         </span>
                     </div>
                     <div class="card-body">
-                        <h5 class="card-title text-center mb-3">{{ post.phrase.vietnamese_text }}</h5>
+                        <h5 class="card-title text-center mb-3">
+                            {% if post.japanese_learning_phrases.exists %}
+                                {{ post.japanese_learning_phrases.first.vietnamese_text }}
+                            {% elif post.vietnamese_learning_phrases.exists %}
+                                {{ post.vietnamese_learning_phrases.first.vietnamese_text }}
+                            {% else %}
+                                {{ post.phrase.vietnamese_text }}
+                            {% endif %}
+                        </h5>
                         
                         {% if user.nationality == 'japanese' %}
                             <div class="mb-3">
@@ -124,7 +150,7 @@
                         
                         <div class="mb-3">
                             <small class="text-muted">
-                                <i class="fas fa-map-marker-alt"></i> {{ post.cafe_location.name }}
+                                <i class="fas fa-map-marker-alt"></i> {{ post.cultural_location.name }}
                             </small>
                         </div>
                         
@@ -133,6 +159,47 @@
                                 <i class="fas fa-calendar"></i> {{ post.meeting_date|date:"d/m/Y H:i" }}
                             </small>
                         </div>
+
+                        {% if post.japanese_learning_phrases.exists %}
+                            <div class="mb-2 p-2 bg-light rounded">
+                                <small class="text-muted">
+                                    <i class="fas fa-graduation-cap"></i> 
+                                    {% if user.nationality == 'japanese' %}
+                                        学習したいベトナム語のフレーズ:
+                                    {% else %}
+                                        Các câu nói tiếng Việt muốn học:
+                                    {% endif %}
+                                </small>
+                                <div>
+                                    {% for phrase in post.japanese_learning_phrases.all|slice:":3" %}
+                                        <span class="badge bg-info me-1">{{ phrase.vietnamese_text }}</span>
+                                    {% endfor %}
+                                    {% if post.japanese_learning_phrases.count > 3 %}
+                                        <small class="text-muted">+{{ post.japanese_learning_phrases.count|add:"-3" }} more</small>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endif %}
+                        {% if post.vietnamese_learning_phrases.exists %}
+                            <div class="mb-2 p-2 bg-light rounded">
+                                <small class="text-muted">
+                                    <i class="fas fa-graduation-cap"></i> 
+                                    {% if user.nationality == 'japanese' %}
+                                        学習したい日本語のフレーズ:
+                                    {% else %}
+                                        Các câu nói tiếng Nhật muốn học:
+                                    {% endif %}
+                                </small>
+                                <div>
+                                    {% for phrase in post.vietnamese_learning_phrases.all|slice:":3" %}
+                                        <span class="badge bg-success me-1">{{ phrase.vietnamese_text }}</span>
+                                    {% endfor %}
+                                    {% if post.vietnamese_learning_phrases.count > 3 %}
+                                        <small class="text-muted">+{{ post.vietnamese_learning_phrases.count|add:"-3" }} more</small>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endif %}
                         
                         {% if post.notes %}
                             <div class="mb-3">
@@ -143,14 +210,24 @@
                     </div>
                     <div class="card-footer text-center">
                         {% if post.status == 'matched' %}
-                            <a href="{% url 'chat_room' post.chatroom.id %}" class="btn btn-primary w-100">
-                                <i class="fas fa-comments"></i> 
-                                {% if user.nationality == 'japanese' %}
-                                    チャットに参加
-                                {% else %}
-                                    Vào chat
-                                {% endif %}
-                            </a>
+                            <div class="d-grid gap-2">
+                                <a href="{% url 'start_working_session' post.id %}" class="btn btn-success w-100">
+                                    <i class="fas fa-play"></i> 
+                                    {% if user.nationality == 'japanese' %}
+                                        作業セッションを開始
+                                    {% else %}
+                                        Bắt đầu phiên làm việc
+                                    {% endif %}
+                                </a>
+                                <a href="{% url 'chat_room' post.chatroom.id %}" class="btn btn-primary w-100">
+                                    <i class="fas fa-comments"></i> 
+                                    {% if user.nationality == 'japanese' %}
+                                        チャットに参加
+                                    {% else %}
+                                        Vào chat
+                                    {% endif %}
+                                </a>
+                            </div>
                         {% elif post.status == 'active' and user.nationality == 'japanese' %}
                             <div class="d-grid gap-2">
                                 <span class="text-muted">
@@ -185,19 +262,26 @@
                         {% if user.nationality == 'japanese' %}
                             最初の投稿を作成して、ベトナム人のパートナーを見つけましょう！
                         {% else %}
-                            Hãy tìm và chấp nhận bài đăng từ người Nhật để bắt đầu kết nối!
+                            Hãy tạo bài đăng đầu tiên để tìm người Nhật muốn học tiếng Việt!
                         {% endif %}
                     </p>
                     <div class="mt-3">
-                        {% if user.nationality == 'japanese' %}
-                            <a href="{% url 'phrase_list' %}" class="btn btn-primary">
-                                <i class="fas fa-plus"></i> 投稿を作成
-                            </a>
-                        {% else %}
-                            <a href="{% url 'available_posts' %}" class="btn btn-primary">
-                                <i class="fas fa-search"></i> Tìm bài đăng
-                            </a>
-                        {% endif %}
+                        <a href="{% url 'create_post' %}" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> 
+                            {% if user.nationality == 'japanese' %}
+                                投稿を作成
+                            {% else %}
+                                Tạo bài đăng đầu tiên
+                            {% endif %}
+                        </a>
+                        <a href="{% url 'available_posts' %}" class="btn btn-outline-primary ms-2">
+                            <i class="fas fa-search"></i> 
+                            {% if user.nationality == 'japanese' %}
+                                他の投稿を見る
+                            {% else %}
+                                Tìm bài đăng từ người Nhật
+                            {% endif %}
+                        </a>
                     </div>
                 </div>
             </div>

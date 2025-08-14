@@ -6,7 +6,7 @@ The URLs are organized by functionality:
 
 - /auth/     -> user_profile.urls (authentication, registration, profiles, dashboards)
 - /chat/     -> chat_system.urls (chat rooms, messaging)
-- /create/   -> event_creation.urls (creating posts, lessons, partner requests)
+- /create/   -> event_creation.urls (creating posts, partner requests)
 - /search/   -> event_search.urls (finding and browsing opportunities)
 - /admin/    -> Django admin interface
 - /         -> Redirects to dashboard
@@ -32,7 +32,7 @@ urlpatterns = [
     path('auth/', include('user_profile.urls')),     # User management & authentication
 
     path('chat/', include('chat_system.urls')),      # Real-time messaging system
-    path('create/', include('event_creation.urls')), # Creating posts, lessons, requests
+    path('create/', include('event_creation.urls')), # Creating posts, partner requests
     path('search/', include('event_search.urls')),   # Finding & browsing opportunities
     path('session/', include('session.urls')), # Session management
     path('i18n/setlang/', set_language, name='set_language'),  # Language setting endpoint

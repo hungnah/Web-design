@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand
-from event_creation.models import VietnamesePhrase, CafeLocation
+from event_creation.models import VietnamesePhrase, CulturalLocation
 
 
 class Command(BaseCommand):
@@ -59,7 +59,7 @@ class Command(BaseCommand):
 
         created_locations = 0
         for name, address, city in locations:
-            _, created = CafeLocation.objects.get_or_create(
+            _, created = CulturalLocation.objects.get_or_create(
                 name=name,
                 address=address,
                 city=city,

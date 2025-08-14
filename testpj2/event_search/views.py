@@ -15,21 +15,44 @@ from event_creation.models import LanguageExchangePost, PartnerRequest
 @login_required
 def available_posts(request):
     """
-    Display available language exchange posts for Vietnamese users
+    Display available language exchange posts for both Vietnamese and Japanese users
     Allows filtering by city and shows only active (unmatched) posts
+    Japanese users see posts from Vietnamese users, Vietnamese users see posts from Japanese users
     Prioritizes posts from users who have been matched before
     """
-    if request.user.nationality != 'japanese':
-        return redirect('dashboard')
-    
     city = request.GET.get('city', request.user.city)
     
-    # Get posts filtered by city
-    posts = LanguageExchangePost.objects.filter(
-        vietnamese_user__nationality='vietnamese',
-        cafe_location__city=city,
-        status='active'
-    ).select_related('vietnamese_user', 'phrase', 'cafe_location')
+    # Filter posts based on user nationality - show posts from opposite nationality
+    if request.user.nationality == 'japanese':
+        # Japanese users see posts from Vietnamese users
+        posts = LanguageExchangePost.objects.filter(
+            vietnamese_user__nationality='vietnamese',
+            status='active'
+        ).select_related('vietnamese_user', 'phrase', 'cultural_location')
+        
+        # Filter by city if specified and not 'all'
+        if city and city != 'all' and city != '':
+            # Filter by cultural_location city OR user's city if cultural_location is null
+            posts = posts.filter(
+                Q(cultural_location__city=city) | 
+                Q(vietnamese_user__city=city) |
+                Q(cultural_location__isnull=True, vietnamese_user__city=city)
+            )
+    else:
+        # Vietnamese users see posts from Japanese users
+        posts = LanguageExchangePost.objects.filter(
+            japanese_user__nationality='japanese',
+            status='active'
+        ).select_related('japanese_user', 'phrase', 'cultural_location')
+        
+        # Filter by city if specified and not 'all'
+        if city and city != 'all' and city != '':
+            # Filter by cultural_location city OR user's city if cultural_location is null
+            posts = posts.filter(
+                Q(cultural_location__city=city) | 
+                Q(japanese_user__city=city) |
+                Q(cultural_location__isnull=True, japanese_user__city=city)
+            )
     
     # Get users that current user has chatted with before
     from chat_system.models import ChatRoom
@@ -58,13 +81,22 @@ def available_posts(request):
                 previous_chat_users.add(chat_room.partner_request.requester.id)
     
     # Annotate posts with priority (previous chat users get higher priority)
-    posts = posts.annotate(
-        priority=Case(
-            When(vietnamese_user__id__in=previous_chat_users, then=1),
-            default=0,
-            output_field=IntegerField(),
-        )
-    ).order_by('-priority', '-created_at')
+    if request.user.nationality == 'japanese':
+        posts = posts.annotate(
+            priority=Case(
+                When(vietnamese_user__id__in=previous_chat_users, then=1),
+                default=0,
+                output_field=IntegerField(),
+            )
+        ).order_by('-priority', '-created_at')
+    else:
+        posts = posts.annotate(
+            priority=Case(
+                When(japanese_user__id__in=previous_chat_users, then=1),
+                default=0,
+                output_field=IntegerField(),
+            )
+        ).order_by('-priority', '-created_at')
     
     context = {
         'posts': posts,
@@ -78,18 +110,24 @@ def available_posts(request):
 @login_required
 def all_posts(request):
     """
-    Display all available language exchange posts from all cities
+    Display all available language exchange posts from all cities for both nationalities
     Shows only active (unmatched) posts
+    Japanese users see posts from Vietnamese users, Vietnamese users see posts from Japanese users
     Prioritizes posts from users who have been matched before
     """
-    if request.user.nationality != 'japanese':
-        return redirect('dashboard')
-    
-    # Get all active posts
-    posts = LanguageExchangePost.objects.filter(
-        vietnamese_user__nationality='vietnamese',
-        status='active'
-    ).select_related('vietnamese_user', 'phrase', 'cafe_location')
+    # Filter posts based on user nationality - show posts from opposite nationality
+    if request.user.nationality == 'japanese':
+        # Japanese users see posts from Vietnamese users
+        posts = LanguageExchangePost.objects.filter(
+            vietnamese_user__nationality='vietnamese',
+            status='active'
+        ).select_related('vietnamese_user', 'phrase', 'cultural_location')
+    else:
+        # Vietnamese users see posts from Japanese users
+        posts = LanguageExchangePost.objects.filter(
+            japanese_user__nationality='japanese',
+            status='active'
+        ).select_related('japanese_user', 'phrase', 'cultural_location')
     
     # Get users that current user has chatted with before
     from chat_system.models import ChatRoom
@@ -118,13 +156,22 @@ def all_posts(request):
                 previous_chat_users.add(chat_room.partner_request.requester.id)
     
     # Annotate posts with priority (previous chat users get higher priority)
-    posts = posts.annotate(
-        priority=Case(
-            When(vietnamese_user__id__in=previous_chat_users, then=1),
-            default=0,
-            output_field=IntegerField(),
-        )
-    ).order_by('-priority', '-created_at')
+    if request.user.nationality == 'japanese':
+        posts = posts.annotate(
+            priority=Case(
+                When(vietnamese_user__id__in=previous_chat_users, then=1),
+                default=0,
+                output_field=IntegerField(),
+            )
+        ).order_by('-priority', '-created_at')
+    else:
+        posts = posts.annotate(
+            priority=Case(
+                When(japanese_user__id__in=previous_chat_users, then=1),
+                default=0,
+                output_field=IntegerField(),
+            )
+        ).order_by('-priority', '-created_at')
     
     context = {
         'posts': posts,

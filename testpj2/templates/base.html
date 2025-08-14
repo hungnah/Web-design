@@ -102,17 +102,35 @@
                                     <i class="fas fa-language"></i> {% trans "Vietnamese Learning" %}
                                 </a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="/create/lessons/">
-                                    <i class="fas fa-graduation-cap"></i> {% trans "Lessons" %}
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="/create/my-posts/">
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="japanesePostsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     <i class="fas fa-list"></i> {% trans "My Posts" %}
                                 </a>
+                                <ul class="dropdown-menu" aria-labelledby="japanesePostsDropdown">
+                                    <li><a class="dropdown-item" href="/create/my-posts/">
+                                        <i class="fas fa-list"></i> {% trans "Posts I Created" %}
+                                    </a></li>
+                                </ul>
                             </li>
                         {% else %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="/create/phrases/">
+                                    <i class="fas fa-language"></i> {% trans "Japanese Learning" %}
+                                </a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="postsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="fas fa-list"></i> {% trans "My Posts" %}
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="postsDropdown">
+                                    <li><a class="dropdown-item" href="/create/my-posts/">
+                                        <i class="fas fa-list"></i> {% trans "Posts I Created" %}
+                                    </a></li>
+                                    <li><a class="dropdown-item" href="/create/my-accepted-posts/">
+                                        <i class="fas fa-handshake"></i> {% trans "Posts I Accepted" %}
+                                    </a></li>
+                                </ul>
+                            </li>
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     <i class="fas fa-search"></i> {% trans "Search Posts" %}

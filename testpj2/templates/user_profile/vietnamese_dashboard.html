@@ -38,7 +38,7 @@
                 </div>
             </div>
 
-                        <!-- Quick Stats -->
+            <!-- Quick Stats -->
             <div class="card">
                 <div class="card-header">
                     <h5 class="mb-0"><i class="fas fa-chart-bar"></i> Thống kê</h5>
@@ -46,73 +46,45 @@
                 <div class="card-body">
                     <div class="row text-center">
                         <div class="col-6">
-                            <h4 class="text-primary">{{ user.point }}</h4>
-                            <small class="text-muted">Điểm Quy Đổi </small>
+                            <h4 class="text-primary">{{ user.get_average_rating }}/10</h4>
+                            <small class="text-muted">Điểm Đánh Giá Trung Bình</small>
                         </div>
                         <div class="col-6">
                             <h4 class="text-success">{{ user.vietnamese_posts.all|length }}</h4>
                             <small class="text-muted">Kết Nối</small>
                         </div>
                     </div>
-                    <div class="text-center mt-3">
-                        <a href="/auth/point-exchange/" class="btn btn-warning btn-sm">
-                            <i class="fas fa-exchange-alt"></i> Đổi điểm
-                        </a>
-                        <a href="/auth/my-vouchers/" class="btn btn-info btn-sm">
-                            <i class="fas fa-ticket-alt"></i> Voucher
-                        </a>
-                    </div>
                 </div>
             </div>
         </div>
 
         <div class="col-md-8">
-            <!-- Recent Posts -->
+            <!-- Welcome Section -->
             <div class="card mb-4">
-                <div class="card-header">
-                    <h5 class="mb-0"><i class="fas fa-list"></i> Bài đăng gần đây</h5>
-                </div>
-                <div class="card-body">
-                    {% if recent_posts %}
-                        {% for post in recent_posts|slice:":3" %}
-                            <div class="d-flex justify-content-between align-items-center mb-3 p-3 border rounded">
-                                <div>
-                                    <h6 class="mb-1">{{ post.phrase.vietnamese_text }}</h6>
-                                    <small class="text-muted">
-                                        <i class="fas fa-map-marker-alt"></i> {{ post.cafe_location.name }} - 
-                                        <i class="fas fa-calendar"></i> {{ post.meeting_date|date:"M d, Y H:i" }}
-                                    </small>
-                                </div>
-                                <span class="badge bg-{% if post.status == 'active' %}warning{% elif post.status == 'matched' %}success{% else %}secondary{% endif %}">
-                                    {{ post.get_status_display }}
-                                </span>
-                            </div>
-                        {% endfor %}
-                        <div class="text-center">
-                            <a href="/create/my-posts/" class="btn btn-outline-primary">Xem tất cả bài đăng</a>
-                        </div>
-                        <div class="text-center mt-2">
-                        {% if phrase %}
-                            <a href="{% url 'create_post' phrase.id %}" class="btn btn-outline-success">
-                        {% else %}
-                            <a href="{% url 'create_post' %}" class="btn btn-outline-success">
-                        {% endif %}
-                            <i class="fas fa-coffee"></i> Tìm kiếm bạn
+                <div class="card-body text-center">
+                    <h2 class="card-title">Chào mừng, {{ user.full_name|default:user.username }}!</h2>
+                    <p class="card-text">Hãy học tiếng Nhật và kết nối với người Nhật.</p>
+                    <div class="d-flex justify-content-center gap-3 flex-wrap">
+                        <a href="{% url 'create_post' %}" class="btn btn-success">
+                            <i class="fas fa-plus"></i> Tạo bài đăng mới
+                        </a>
+                        <a href="/search/available-posts/" class="btn btn-primary">
+                            <i class="fas fa-search"></i> Xem bài đăng
+                        </a>
+                        <a href="/search/all-posts/" class="btn btn-info">
+                            <i class="fas fa-globe"></i> Tất cả thành phố
+                        </a>
+                        <a href="/chat/my-chats/" class="btn btn-primary">
+                            <i class="fas fa-comments"></i> Xem chat
                         </a>
                     </div>
-                    {% else %}
-                        <p class="text-muted text-center">Chưa có bài đăng nào.</p>
-                        <div class="text-center">
-                            <a href="/create/create-post/" class="btn btn-primary">Tạo bài đăng đầu tiên</a>
-                        </div>
-                    {% endif %}
                 </div>
             </div>
 
             <!-- Lesson Plan Section -->
             <div class="card mb-4">
                 <div class="card-header">
-                    <h5 class="mb-0"><i class="fas fa-chalkboard-teacher"></i> Bộ Lesson Plan Sẵn</h5>
+                    <h5 class="mb-0"><i class="fas fa-chalkboard-teacher"></i> Danh sách Lesson Plan</h5>
                 </div>
                 <div class="card-body">
                     <p class="card-text mb-4">
@@ -182,16 +154,69 @@
                         </div>
                     </div>
                     
-                    <div class="d-flex justify-content-center gap-3 flex-wrap">
-                        <a href="/create/accept-post/0/phrases/" class="btn btn-primary">
-                            <i class="fas fa-language"></i> Xem văn bản
-                        </a>
+                    <div class="text-center mt-3">
+                        <div class="d-flex justify-content-center gap-3 flex-wrap">
+                            <a href="/create/accept-post/0/phrases/" class="btn btn-primary">
+                                <i class="fas fa-language"></i> Xem văn bản
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<style>
+.hover-shadow:hover {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    transform: translateY(-2px);
+    transition: all 0.3s ease;
+}
+
+.border.rounded {
+    border-color: #e9ecef !important;
+}
+
+.text-primary {
+    color: #0d6efd !important;
+}
+
+.badge.bg-primary {
+    background-color: #0d6efd !important;
+}
+
+.badge.bg-success {
+    background-color: #198754 !important;
+}
+
+.badge.bg-light {
+    background-color: #f8f9fa !important;
+    color: #6c757d !important;
+    border: 1px solid #dee2e6;
+}
+
+.btn-primary {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+}
+
+.btn-primary:hover {
+    background-color: #0b5ed7;
+    border-color: #0a58ca;
+}
+
+.btn-outline-info {
+    color: #0dcaf0;
+    border-color: #0dcaf0;
+}
+
+.btn-outline-info:hover {
+    background-color: #0dcaf0;
+    border-color: #0dcaf0;
+    color: #000;
+}
+</style>
 
 <script>
 function acceptPost(postId, phraseText) {

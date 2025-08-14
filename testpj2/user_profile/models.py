@@ -77,6 +77,18 @@ class CustomUser(AbstractUser):
         age = self.get_age()
         return age is not None and age >= 18
     
+    def get_average_rating(self):
+        """
+        Calculate average rating from received evaluations
+        Returns average score out of 10, or 0 if no evaluations
+        """
+        from session.models import Evaluation
+        evaluations = Evaluation.objects.filter(evaluatee=self)
+        if evaluations.exists():
+            total_score = sum(eval.score for eval in evaluations)
+            return round(total_score / evaluations.count(), 1)
+        return 0.0
+    
     class Meta:
         verbose_name = 'User'
         verbose_name_plural = 'Users'

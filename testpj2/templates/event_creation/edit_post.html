@@ -1,7 +1,13 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
 
-{% block title %}Chỉnh sửa bài đăng - Vietnam-Japan Connect{% endblock %}
+{% block title %}
+    {% if user.nationality == 'japanese' %}
+        投稿編集 - Vietnam-Japan Connect
+    {% else %}
+        Chỉnh sửa bài đăng - Vietnam-Japan Connect
+    {% endif %}
+{% endblock %}
 
 {% block content %}
 <div class="container my-5">
@@ -10,24 +16,91 @@
             <div class="card">
                 <div class="card-header bg-primary text-white">
                     <h3 class="mb-0">
-                        <i class="fas fa-edit"></i> Chỉnh sửa bài đăng
+                        <i class="fas fa-edit"></i> 
+                        {% if user.nationality == 'japanese' %}
+                            投稿を編集
+                        {% else %}
+                            Chỉnh sửa bài đăng
+                        {% endif %}
                     </h3>
                 </div>
                 <div class="card-body">
                     <!-- Selected Phrase -->
                     <div class="alert alert-info">
-                        <h5>Phrase đã chọn:</h5>
+                        <h5>
+                            {% if user.nationality == 'japanese' %}
+                                選択されたフレーズ:
+                            {% else %}
+                                Phrase đã chọn:
+                            {% endif %}
+                        </h5>
+                        
+                        <!-- Display learning phrases based on post creator -->
+                        {% if post.japanese_learning_phrases.exists %}
+                        <div class="mb-3">
+                            <strong>
+                                {% if user.nationality == 'japanese' %}
+                                    学習したいベトナム語のフレーズ:
+                                {% else %}
+                                    Các câu nói tiếng Việt muốn học:
+                                {% endif %}
+                            </strong>
+                            <div class="mt-2">
+                                {% for phrase in post.japanese_learning_phrases.all %}
+                                    <span class="badge bg-info me-1">{{ phrase.vietnamese_text }}</span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endif %}
+                        
+                        {% if post.vietnamese_learning_phrases.exists %}
+                        <div class="mb-3">
+                            <strong>
+                                {% if user.nationality == 'japanese' %}
+                                    学習したい日本語のフレーズ:
+                                {% else %}
+                                    Các câu nói tiếng Nhật muốn học:
+                                {% endif %}
+                            </strong>
+                            <div class="mt-2">
+                                {% for phrase in post.vietnamese_learning_phrases.all %}
+                                    <span class="badge bg-success me-1">{{ phrase.vietnamese_text }}</span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endif %}
+                        
+                        <!-- Fallback to phrase field if no learning phrases -->
+                        {% if not post.japanese_learning_phrases.exists and not post.vietnamese_learning_phrases.exists and post.phrase %}
                         <div class="row">
                             <div class="col-md-4">
-                                <strong>Tiếng Việt:</strong><br>
+                                <strong>
+                                    {% if user.nationality == 'japanese' %}
+                                        ベトナム語:
+                                    {% else %}
+                                        Tiếng Việt:
+                                    {% endif %}
+                                </strong><br>
                                 {{ post.phrase.vietnamese_text }}
                             </div>
                             <div class="col-md-4">
-                                <strong>Tiếng Nhật:</strong><br>
+                                <strong>
+                                    {% if user.nationality == 'japanese' %}
+                                        日本語:
+                                    {% else %}
+                                        Tiếng Nhật:
+                                    {% endif %}
+                                </strong><br>
                                 {{ post.phrase.japanese_translation }}
                             </div>
                             <div class="col-md-4">
-                                <strong>Tiếng Anh:</strong><br>
+                                <strong>
+                                    {% if user.nationality == 'japanese' %}
+                                        英語:
+                                    {% else %}
+                                        Tiếng Anh:
+                                    {% endif %}
+                                </strong><br>
                                 {{ post.phrase.english_translation }}
                             </div>
                         </div>
@@ -37,6 +110,7 @@
                                 {{ post.phrase.get_difficulty_display }}
                             </span>
                         </div>
+                        {% endif %}
                     </div>
 
                     <!-- Edit Post Form -->
@@ -45,27 +119,71 @@
                         
                         <div class="row">
                             <div class="col-md-6">
-                                {{ form.cafe_location|as_crispy_field }}
+                                {{ form.cultural_location|as_crispy_field }}
                             </div>
                             <div class="col-md-6">
                                 {{ form.meeting_date|as_crispy_field }}
                             </div>
                         </div>
-                        
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                {{ form.japanese_learning_phrases|as_crispy_field }}
+                                <small class="form-text text-muted">
+                                    {% if user.nationality == 'japanese' %}
+                                        学習したいベトナム語のフレーズを選択してください（任意）
+                                    {% else %}
+                                        Chọn các câu nói tiếng Việt mà bạn muốn học (tùy chọn)
+                                    {% endif %}
+                                </small>
+                            </div>
+                            <div class="col-md-6">
+                                {{ form.vietnamese_learning_phrases|as_crispy_field }}
+                                <small class="form-text text-muted">
+                                    {% if user.nationality == 'japanese' %}
+                                        学習したい日本語のフレーズを選択してください（任意）
+                                    {% else %}
+                                        Chọn các câu nói tiếng Nhật mà bạn muốn học (tùy chọn)
+                                    {% endif %}
+                                </small>
+                            </div>
+                        </div>
+
                         {{ form.notes|as_crispy_field }}
                         
                         <div class="alert alert-warning">
                             <i class="fas fa-info-circle"></i>
-                            <strong>Lưu ý:</strong> Chỉ có thể chỉnh sửa bài đăng chưa được chấp nhận. 
-                            Sau khi được chấp nhận, bài đăng sẽ không thể chỉnh sửa nữa.
+                            <strong>
+                                {% if user.nationality == 'japanese' %}
+                                    注意:
+                                {% else %}
+                                    Lưu ý:
+                                {% endif %}
+                            </strong> 
+                            {% if user.nationality == 'japanese' %}
+                                まだ受け入れられていない投稿のみ編集できます。受け入れられた後は、投稿を編集することはできません。
+                            {% else %}
+                                Chỉ có thể chỉnh sửa bài đăng chưa được chấp nhận. 
+                                Sau khi được chấp nhận, bài đăng sẽ không thể chỉnh sửa nữa.
+                            {% endif %}
                         </div>
                         
                         <div class="d-grid gap-2">
                             <button type="submit" class="btn btn-primary btn-lg">
-                                <i class="fas fa-save"></i> Cập nhật bài đăng
+                                <i class="fas fa-save"></i> 
+                                {% if user.nationality == 'japanese' %}
+                                    投稿を更新
+                                {% else %}
+                                    Cập nhật bài đăng
+                                {% endif %}
                             </button>
                             <a href="{% url 'my_posts' %}" class="btn btn-outline-secondary">
-                                <i class="fas fa-arrow-left"></i> Quay lại bài đăng của tôi
+                                <i class="fas fa-arrow-left"></i> 
+                                {% if user.nationality == 'japanese' %}
+                                    マイ投稿に戻る
+                                {% else %}
+                                    Quay lại bài đăng của tôi
+                                {% endif %}
                             </a>
                         </div>
                     </form>

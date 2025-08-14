@@ -12,6 +12,49 @@
                 <i class="fas fa-language"></i> {% trans "ベトナム語フレーズ" %}
             </h1>
             <p class="text-center text-muted">{% trans "日常生活でよく使うベトナム語のフレーズを学びましょう" %}</p>
+            
+            {% if post %}
+            <!-- Post Information -->
+            <div class="alert alert-info text-center">
+                <h5><i class="fas fa-info-circle"></i> 応募する投稿</h5>
+                <p class="mb-2">
+                    <strong>投稿者:</strong> {{ post.vietnamese_user.username }} 
+                    <span class="badge bg-secondary ms-2">{{ post.vietnamese_user.get_city_display }}</span>
+                </p>
+                <p class="mb-2">
+                    <strong>場所:</strong> {{ post.cultural_location.name|default:"未設定" }}
+                    <strong class="ms-3">日時:</strong> {{ post.meeting_date|date:"m/d H:i" }}
+                </p>
+                
+                <!-- Poster's Learning Goals -->
+                {% if post.japanese_learning_phrases.exists %}
+                <div class="mb-3 p-3 bg-light rounded">
+                    <h6><i class="fas fa-user-edit text-primary"></i> Người đăng bài muốn học:</h6>
+                    {% for phrase in post.japanese_learning_phrases.all|slice:":3" %}
+                        <span class="badge bg-success me-1 mb-1">{{ phrase.vietnamese_text }}</span>
+                    {% endfor %}
+                    {% if post.japanese_learning_phrases.count > 3 %}
+                        <small class="text-muted">+{{ post.japanese_learning_phrases.count|add:"-3" }} more</small>
+                    {% endif %}
+                </div>
+                {% endif %}
+                
+                <!-- Instructions for Accepter -->
+                <div class="mb-3 p-3 bg-warning bg-opacity-25 rounded">
+                    <h6><i class="fas fa-lightbulb text-warning"></i> Hướng dẫn:</h6>
+                    <p class="mb-0 small">
+                        <strong>Bạn sẽ học theo bài học mà bạn chọn ở đây</strong>, không phải theo bài học của người đăng bài. 
+                        Hãy chọn các câu nói tiếng Việt mà bạn muốn học để có trải nghiệm học tập tốt nhất.
+                    </p>
+                </div>
+                
+                <div class="mt-3">
+                    <a href="{% url 'available_posts' %}" class="btn btn-outline-secondary btn-sm">
+                        <i class="fas fa-arrow-left"></i> 投稿一覧に戻る
+                    </a>
+                </div>
+            </div>
+            {% endif %}
         </div>
     </div>
 

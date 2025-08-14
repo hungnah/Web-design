@@ -1,7 +1,13 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
 
-{% block title %}投稿作成 - Vietnam-Japan Connect{% endblock %}
+{% block title %}
+    {% if user.nationality == 'japanese' %}
+        投稿作成 - Vietnam-Japan Connect
+    {% else %}
+        Tạo bài đăng - Vietnam-Japan Connect
+    {% endif %}
+{% endblock %}
 
 {% block content %}
 <div class="container my-5">
@@ -10,63 +16,129 @@
             <div class="card">
                 <div class="card-header bg-success text-white">
                     <h3 class="mb-0">
-                        <i class="fas fa-plus"></i> Tạo bài đăng mới
+                        <i class="fas fa-plus"></i> 
+                        {% if user.nationality == 'japanese' %}
+                            新しい投稿を作成
+                        {% else %}
+                            Tạo bài đăng mới
+                        {% endif %}
                     </h3>
                 </div>
                 <div class="card-body">
-                    <!-- Selected Phrase
-                    <div class="alert alert-info">
-                        <h5>選択されたフレーズ:</h5>
-                        <div class="row">
-                            <div class="col-md-4">
-                                <strong>ベトナム語:</strong><br>
-                                {{ phrase.vietnamese_text }}
-                            </div>
-                            <div class="col-md-4">
-                                <strong>日本語訳:</strong><br>
-                                {{ phrase.japanese_translation }}
-                            </div>
-                            <div class="col-md-4">
-                                <strong>英語訳:</strong><br>
-                                {{ phrase.english_translation }}
-                            </div>
+                    <!-- Display form errors if any -->
+                    {% if form.errors %}
+                        <div class="alert alert-danger">
+                            <h5><i class="fas fa-exclamation-triangle"></i> 
+                                {% if user.nationality == 'japanese' %}
+                                    エラーがあります:
+                                {% else %}
+                                    Có lỗi xảy ra:
+                                {% endif %}
+                            </h5>
+                            <ul class="mb-0">
+                                {% for field, errors in form.errors.items %}
+                                    {% for error in errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                {% endfor %}
+                            </ul>
                         </div>
-                        <div class="mt-2">
-                            <span class="badge bg-primary">{{ phrase.get_category_display }}</span>
-                            <span class="badge bg-{% if phrase.difficulty == 'beginner' %}success{% elif phrase.difficulty == 'intermediate' %}warning{% else %}danger{% endif %}">
-                                {{ phrase.get_difficulty_display }}
-                            </span>
-                        </div>
-                    </div> -->
-
+                    {% endif %}
+                    
+                    <!-- Display messages if any -->
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                    
                     <!-- Create Post Form -->
                     <form method="post">
                         {% csrf_token %}
                         
                         <div class="row">
                             <div class="col-md-6">
-                                {{ form.cafe_location|as_crispy_field }}
+                                {{ form.cultural_location|as_crispy_field }}
                             </div>
                             <div class="col-md-6">
                                 {{ form.meeting_date|as_crispy_field }}
                             </div>
+                        </div>
+
+                        <div class="row">
+                            {% if form.japanese_learning_phrases.is_hidden %}
+                                <!-- Field is hidden, don't display -->
+                            {% else %}
+                                <div class="col-md-6">
+                                    {{ form.japanese_learning_phrases|as_crispy_field }}
+                                    <small class="form-text text-muted">
+                                        {% if user.nationality == 'japanese' %}
+                                            学習したいベトナム語のフレーズを選択してください（任意）
+                                        {% else %}
+                                            Chọn các câu nói tiếng Việt mà bạn muốn học (tùy chọn)
+                                        {% endif %}
+                                    </small>
+                                </div>
+                            {% endif %}
+                            
+                            {% if form.vietnamese_learning_phrases.is_hidden %}
+                                <!-- Field is hidden, don't display -->
+                            {% else %}
+                                <div class="col-md-6">
+                                    {{ form.vietnamese_learning_phrases|as_crispy_field }}
+                                    <small class="form-text text-muted">
+                                        {% if user.nationality == 'japanese' %}
+                                            学習したい日本語のフレーズを選択してください（任意）
+                                        {% else %}
+                                            Chọn các câu nói tiếng Nhật mà bạn muốn học (tùy chọn)
+                                        {% endif %}
+                                    </small>
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <!-- Cultural Location Details -->
+                        <div id="location-details" class="alert alert-info" style="display: none;">
+                            <h5><i class="fas fa-info-circle"></i> 
+                                {% if user.nationality == 'japanese' %}
+                                    文化施設の情報:
+                                {% else %}
+                                    Thông tin địa điểm văn hóa:
+                                {% endif %}
+                            </h5>
+                            <div id="location-info"></div>
                         </div>
                         
                         {{ form.notes|as_crispy_field }}
                         
                         <div class="alert alert-warning">
                             <i class="fas fa-info-circle"></i>
-                            <strong>Chú ý:</strong> Khi tạo bài đăng, người dùng người Nhật sẽ có thể xem được.
-                            Khi việc ghép đôi thành công, phòng chat sẽ được tạo.
+                            <strong>
+                                {% if user.nationality == 'japanese' %}
+                                    注意:
+                                {% else %}
+                                    Chú ý:
+                                {% endif %}
+                            </strong> 
+                            {% if user.nationality == 'japanese' %}
+                                ベトナム人と日本人の両方が投稿を作成できます。学習したい言語のフレーズを選択できます。
+                            {% else %}
+                                Cả người Việt và người Nhật đều có thể đăng ký và tạo bài đăng. Bạn có thể chọn các câu nói muốn học cho cả hai bên.
+                            {% endif %}
                         </div>
                         
                         <div class="d-grid gap-2">
                             <button type="submit" class="btn btn-success btn-lg">
-                                <i class="fas fa-paper-plane"></i> Tạo bài đăng
+                                <i class="fas fa-paper-plane"></i> 
+                                {% if user.nationality == 'japanese' %}
+                                    投稿を作成
+                                {% else %}
+                                    Tạo bài đăng
+                                {% endif %}
                             </button>
-                            <!-- <a href="{% url 'phrase_list' %}" class="btn btn-outline-secondary">
-                                <i class="fas fa-arrow-left"></i> フレーズ一覧に戻る
-                            </a> -->
                         </div>
                     </form>
                 </div>
@@ -74,4 +146,44 @@
         </div>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const locationSelect = document.getElementById('id_cultural_location');
+    const locationDetails = document.getElementById('location-details');
+    const locationInfo = document.getElementById('location-info');
+    
+    // Store location data (this would normally come from an API)
+    const locationData = {
+        // This data would be populated from the backend
+    };
+    
+    function showLocationDetails(locationId) {
+        if (locationId) {
+            // Fetch location details from the selected option
+            const selectedOption = locationSelect.options[locationSelect.selectedIndex];
+            if (selectedOption) {
+                const locationName = selectedOption.text;
+                locationInfo.innerHTML = `
+                    <p><strong>Địa điểm:</strong> ${locationName}</p>
+                    <p><strong>Loại:</strong> <span class="badge bg-primary">Địa điểm văn hóa</span></p>
+                    <p><strong>Mô tả:</strong> Đây là địa điểm tham quan văn hóa, nơi bạn có thể học tiếng Việt và trải nghiệm văn hóa Việt Nam.</p>
+                `;
+                locationDetails.style.display = 'block';
+            }
+        } else {
+            locationDetails.style.display = 'none';
+        }
+    }
+    
+    locationSelect.addEventListener('change', function() {
+        showLocationDetails(this.value);
+    });
+    
+    // Show details if location is pre-selected
+    if (locationSelect.value) {
+        showLocationDetails(locationSelect.value);
+    }
+});
+</script>
 {% endblock %}

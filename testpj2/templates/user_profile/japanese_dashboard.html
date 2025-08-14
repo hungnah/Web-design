@@ -46,8 +46,8 @@
                 <div class="card-body">
                     <div class="row text-center">
                         <div class="col-6">
-                            <h4 class="text-primary">{{ user.point }}</h4>
-                            <small class="text-muted">がんばりポイント</small>
+                            <h4 class="text-primary">{{ user.get_average_rating }}/10</h4>
+                            <small class="text-muted">評価平均点</small>
                         </div>
                         <div class="col-6">
                             <h4 class="text-success">{{ user.japanese_posts.all|length }}</h4>
@@ -65,6 +65,9 @@
                     <h2 class="card-title">ようこそ、{{ user.full_name|default:user.username }}さん！</h2>
                     <p class="card-text">ベトナム語を学び、ベトナム人と交流しましょう。</p>
                     <div class="d-flex justify-content-center gap-3 flex-wrap">
+                        <a href="{% url 'create_post' %}" class="btn btn-success">
+                            <i class="fas fa-plus"></i> 新しい投稿を作成
+                        </a>
                         <a href="/search/available-posts/" class="btn btn-primary">
                             <i class="fas fa-search"></i> 募集を見る
                         </a>

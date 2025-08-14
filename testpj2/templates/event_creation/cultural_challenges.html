@@ -1,0 +1,284 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Thử thách văn hóa - Vietnam-Japan Connect{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2><i class="fas fa-trophy"></i> Thử thách văn hóa</h2>
+                <div class="filters">
+                    <select id="city-filter" class="form-select d-inline-block w-auto me-2">
+                        <option value="">Tất cả thành phố</option>
+                        <option value="hanoi">Hà Nội</option>
+                        <option value="hochiminh">Hồ Chí Minh</option>
+                        <option value="haiphong">Hải Phòng</option>
+                        <option value="danang">Đà Nẵng</option>
+                        <option value="cantho">Cần Thơ</option>
+                        <option value="hue">Huế</option>
+                        <option value="hoian">Hội An</option>
+                        <option value="sapa">Sa Pa</option>
+                        <option value="nhatrang">Nha Trang</option>
+                        <option value="dalat">Đà Lạt</option>
+                    </select>
+                    <select id="difficulty-filter" class="form-select d-inline-block w-auto">
+                        <option value="">Tất cả trình độ</option>
+                        <option value="easy">Dễ</option>
+                        <option value="medium">Trung bình</option>
+                        <option value="hard">Khó</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="alert alert-info">
+                <i class="fas fa-info-circle"></i>
+                <strong>Thử thách cuối cùng:</strong> Sau khi hoàn thành bài học văn hóa, bạn sẽ tham gia thử thách giao tiếp với người dân địa phương. Đây là cơ hội để thực hành tiếng Việt và trải nghiệm văn hóa thực tế!
+            </div>
+        </div>
+    </div>
+
+    <div class="row" id="challenges-container">
+        <!-- Challenges will be loaded here -->
+    </div>
+</div>
+
+<!-- Challenge Detail Modal -->
+<div class="modal fade" id="challengeModal" tabindex="-1" aria-labelledby="challengeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="challengeModalLabel">Chi tiết thử thách</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="challengeModalBody">
+                <!-- Challenge content will be loaded here -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-success" id="startChallengeBtn">Bắt đầu thử thách</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const cityFilter = document.getElementById('city-filter');
+    const difficultyFilter = document.getElementById('difficulty-filter');
+    const challengesContainer = document.getElementById('challenges-container');
+    
+    // Sample challenge data (in real app, this would come from API)
+    const challenges = [
+        {
+            id: 1,
+            title: 'Thử thách tìm hiểu lịch sử',
+            location: 'Văn Miếu - Quốc Tử Giám',
+            city: 'hanoi',
+            difficulty: 'medium',
+            type: 'conversation',
+            timeLimit: 15,
+            description: 'Giao tiếp với hướng dẫn viên để tìm hiểu về lịch sử Văn Miếu',
+            objective: 'Hỏi và tìm hiểu về lịch sử Văn Miếu, các bia đá tiến sĩ, và văn hóa học tập truyền thống',
+            successCriteria: 'Có thể hỏi được ít nhất 3 câu hỏi về lịch sử và hiểu được câu trả lời',
+            helpfulPhrases: 'Văn Miếu được xây dựng khi nào? - 文廟はいつ建てられましたか？\nBia đá có ý nghĩa gì? - 石碑にはどんな意味がありますか？',
+            culturalTips: 'Tôn trọng không khí trang nghiêm, nói chuyện nhỏ nhẹ, lắng nghe cẩn thận',
+            isFinalChallenge: true
+        },
+        {
+            id: 2,
+            title: 'Thử thách khám phá văn hóa dân tộc',
+            location: 'Bảo tàng Dân tộc học Việt Nam',
+            city: 'hanoi',
+            difficulty: 'easy',
+            type: 'question_asking',
+            timeLimit: 20,
+            description: 'Tương tác với nhân viên bảo tàng để tìm hiểu về văn hóa các dân tộc',
+            objective: 'Hỏi về văn hóa của ít nhất 2 dân tộc khác nhau và hiểu được sự khác biệt',
+            successCriteria: 'Có thể hỏi và hiểu được thông tin về 2 dân tộc khác nhau',
+            helpfulPhrases: 'Dân tộc này có đặc điểm gì? - この民族にはどんな特徴がありますか？\nTrang phục này có ý nghĩa gì? - この衣装にはどんな意味がありますか？',
+            culturalTips: 'Tò mò và quan tâm đến văn hóa, hỏi câu hỏi cụ thể, ghi chú nếu cần',
+            isFinalChallenge: true
+        },
+        {
+            id: 3,
+            title: 'Thử thách mua sắm tại chợ',
+            location: 'Chợ Đồng Xuân',
+            city: 'hanoi',
+            difficulty: 'medium',
+            type: 'local_interaction',
+            timeLimit: 25,
+            description: 'Mua một món hàng bằng cách giao tiếp với người bán hàng',
+            objective: 'Mua được một món hàng bằng cách giao tiếp hoàn toàn bằng tiếng Việt',
+            successCriteria: 'Có thể hỏi giá, mặc cả và mua được món hàng mong muốn',
+            helpfulPhrases: 'Cái này bao nhiêu tiền? - これはいくらですか？\nCó thể giảm giá không? - 値段を下げてもらえますか？',
+            culturalTips: 'Mặc cả giá một cách thân thiện, tôn trọng người bán, không quá cứng rắn',
+            isFinalChallenge: true
+        }
+    ];
+    
+    function filterChallenges() {
+        const selectedCity = cityFilter.value;
+        const selectedDifficulty = difficultyFilter.value;
+        
+        const filteredChallenges = challenges.filter(challenge => {
+            const cityMatch = !selectedCity || challenge.city === selectedCity;
+            const difficultyMatch = !selectedDifficulty || challenge.difficulty === selectedDifficulty;
+            return cityMatch && difficultyMatch;
+        });
+        
+        displayChallenges(filteredChallenges);
+    }
+    
+    function displayChallenges(challengesToShow) {
+        challengesContainer.innerHTML = '';
+        
+        if (challengesToShow.length === 0) {
+            challengesContainer.innerHTML = `
+                <div class="col-12 text-center">
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle"></i> Không tìm thấy thử thách nào phù hợp với bộ lọc đã chọn.
+                    </div>
+                </div>
+            `;
+            return;
+        }
+        
+        challengesToShow.forEach(challenge => {
+            const challengeCard = createChallengeCard(challenge);
+            challengesContainer.appendChild(challengeCard);
+        });
+    }
+    
+    function createChallengeCard(challenge) {
+        const col = document.createElement('div');
+        col.className = 'col-md-6 col-lg-4 mb-4';
+        
+        const difficultyClass = challenge.difficulty === 'easy' ? 'success' : 
+                               challenge.difficulty === 'medium' ? 'warning' : 'danger';
+        
+        const typeClass = challenge.type === 'conversation' ? 'primary' :
+                          challenge.type === 'question_asking' ? 'info' :
+                          challenge.type === 'cultural_exchange' ? 'warning' : 'secondary';
+        
+        col.innerHTML = `
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <h5 class="card-title">${challenge.title}</h5>
+                        ${challenge.isFinalChallenge ? '<span class="badge bg-danger"><i class="fas fa-star"></i> Cuối cùng</span>' : ''}
+                    </div>
+                    
+                    <p class="card-text text-muted">${challenge.description}</p>
+                    
+                    <div class="mb-3">
+                        <span class="badge bg-primary me-1">${challenge.location}</span>
+                        <span class="badge bg-${difficultyClass}">${getDifficultyText(challenge.difficulty)}</span>
+                        <span class="badge bg-${typeClass}">${getTypeText(challenge.type)}</span>
+                        <span class="badge bg-info">${challenge.timeLimit} phút</span>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <small class="text-muted">
+                            <strong>Mục tiêu:</strong> ${challenge.objective}
+                        </small>
+                    </div>
+                    
+                    <button class="btn btn-outline-success btn-sm" onclick="showChallengeDetail(${challenge.id})">
+                        <i class="fas fa-eye"></i> Xem chi tiết
+                    </button>
+                </div>
+            </div>
+        `;
+        
+        return col;
+    }
+    
+    function getDifficultyText(difficulty) {
+        const difficultyMap = {
+            'easy': 'Dễ',
+            'medium': 'Trung bình',
+            'hard': 'Khó'
+        };
+        return difficultyMap[difficulty] || difficulty;
+    }
+    
+    function getTypeText(type) {
+        const typeMap = {
+            'conversation': 'Hội thoại',
+            'question_asking': 'Đặt câu hỏi',
+            'cultural_exchange': 'Trao đổi văn hóa',
+            'local_interaction': 'Tương tác địa phương'
+        };
+        return typeMap[type] || type;
+    }
+    
+    function showChallengeDetail(challengeId) {
+        const challenge = challenges.find(c => c.id === challengeId);
+        if (!challenge) return;
+        
+        const modalBody = document.getElementById('challengeModalBody');
+        modalBody.innerHTML = `
+            <div class="row">
+                <div class="col-12">
+                    <h4>${challenge.title}</h4>
+                    <p class="text-muted">${challenge.description}</p>
+                    
+                    <div class="mb-3">
+                        <span class="badge bg-primary me-1">${challenge.location}</span>
+                        <span class="badge bg-${challenge.difficulty === 'easy' ? 'success' : challenge.difficulty === 'medium' ? 'warning' : 'danger'}">${getDifficultyText(challenge.difficulty)}</span>
+                        <span class="badge bg-info">${challenge.timeLimit} phút</span>
+                        ${challenge.isFinalChallenge ? '<span class="badge bg-danger"><i class="fas fa-star"></i> Thử thách cuối cùng</span>' : ''}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <h6><i class="fas fa-bullseye"></i> Mục tiêu:</h6>
+                        <p>${challenge.objective}</p>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <h6><i class="fas fa-check-circle"></i> Tiêu chí thành công:</h6>
+                        <p>${challenge.successCriteria}</p>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <h6><i class="fas fa-comments"></i> Câu nói hữu ích:</h6>
+                        <div class="bg-light p-3 rounded">
+                            <pre>${challenge.helpfulPhrases}</pre>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <h6><i class="fas fa-lightbulb"></i> Mẹo văn hóa:</h6>
+                        <p>${challenge.culturalTips}</p>
+                    </div>
+                    
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <strong>Lưu ý:</strong> Đây là thử thách giao tiếp thực tế với người dân địa phương. Hãy tự tin và sử dụng những gì đã học!
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        const modal = new bootstrap.Modal(document.getElementById('challengeModal'));
+        modal.show();
+    }
+    
+    // Event listeners
+    cityFilter.addEventListener('change', filterChallenges);
+    difficultyFilter.addEventListener('change', filterChallenges);
+    
+    // Initial display
+    displayChallenges(challenges);
+});
+
+// Global function for modal
+window.showChallengeDetail = function(challengeId) {
+    // This will be called from the onclick in the card
+    const event = new Event('click');
+    document.dispatchEvent(event);
+};
+</script>
+{% endblock %}

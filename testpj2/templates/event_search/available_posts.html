@@ -1,6 +1,12 @@
 {% extends 'base.html' %}
 
-{% block title %}日本人を探す - Vietnam-Japan Connect{% endblock %}
+{% block title %}
+    {% if user.nationality == 'japanese' %}
+        ベトナム人を探す - Vietnam-Japan Connect
+    {% else %}
+        Tìm người Nhật - Vietnam-Japan Connect
+    {% endif %}
+{% endblock %}
 
 {% block extra_css %}
 <style>
@@ -144,12 +150,22 @@
 {% if user.is_authenticated %}
 <div class="container mt-3">
     <div class="alert alert-info">
-        <strong>デバッグ情報:</strong> 
-        ユーザー: {{ user.username }} | 
-        国籍: {{ user.nationality }} | 
-        都市: {{ user.city }} |
-        <a href="{% url 'dashboard' %}">ダッシュボード</a> |
-        <a href="{% url 'my_chats' %}">チャット一覧</a>
+        <strong>
+            {% if user.nationality == 'japanese' %}デバッグ情報:{% else %}Thông tin debug:{% endif %}
+        </strong> 
+        {% if user.nationality == 'japanese' %}
+            ユーザー: {{ user.username }} | 
+            国籍: {{ user.nationality }} | 
+            都市: {{ user.city }} |
+            <a href="{% url 'dashboard' %}">ダッシュボード</a> |
+            <a href="{% url 'my_chats' %}">チャット一覧</a>
+        {% else %}
+            Người dùng: {{ user.username }} | 
+            Quốc tịch: {{ user.nationality }} | 
+            Thành phố: {{ user.city }} |
+            <a href="{% url 'dashboard' %}">Bảng điều khiển</a> |
+            <a href="{% url 'my_chats' %}">Danh sách chat</a>
+        {% endif %}
     </div>
 </div>
 {% endif %}
@@ -159,9 +175,20 @@
     <div class="row mb-3">
         <div class="col-12">
             <h2 class="text-center mb-2">
-                <i class="fas fa-search text-primary"></i> パートナーを探す
+                <i class="fas fa-search text-primary"></i> 
+                {% if user.nationality == 'japanese' %}
+                    パートナーを探す
+                {% else %}
+                    Tìm kiếm đối tác
+                {% endif %}
             </h2>
-            <p class="text-center text-muted">ベトナム人パートナーと交流し、言語学習と文化交流を楽しみましょう</p>
+            <p class="text-center text-muted">
+                {% if user.nationality == 'japanese' %}
+                    ベトナム人パートナーと交流し、言語学習と文化交流を楽しみましょう
+                {% else %}
+                    Tìm kiếm đối tác người Nhật để học tiếng Nhật và giao lưu văn hóa
+                {% endif %}
+            </p>
         </div>
     </div>
 
@@ -173,11 +200,13 @@
                     <div class="btn-group w-100" role="group">
                         <a href="{% url 'available_posts' %}" 
                            class="btn btn-sm {% if view_mode == 'city' %}btn-primary{% else %}btn-outline-primary{% endif %}">
-                            <i class="fas fa-map-marker-alt"></i> 都市別
+                            <i class="fas fa-map-marker-alt"></i> 
+                            {% if user.nationality == 'japanese' %}都市別{% else %}Theo thành phố{% endif %}
                         </a>
                         <a href="{% url 'all_posts' %}" 
                            class="btn btn-sm {% if view_mode == 'all' %}btn-primary{% else %}btn-outline-primary{% endif %}">
-                            <i class="fas fa-globe"></i> 全都市
+                            <i class="fas fa-globe"></i> 
+                            {% if user.nationality == 'japanese' %}全都市{% else %}Tất cả thành phố{% endif %}
                         </a>
                     </div>
                 </div>
@@ -210,17 +239,36 @@
         <div class="col-12">
             {% if view_mode == 'city' %}
             <div class="alert alert-success py-2">
-                <i class="fas fa-map-marker-alt"></i> <strong>{{ selected_city }}</strong> には <strong>{{ posts|length }}</strong> 件の募集があります
+                <i class="fas fa-map-marker-alt"></i> 
+                {% if user.nationality == 'japanese' %}
+                    <strong>{{ selected_city }}</strong> には <strong>{{ posts|length }}</strong> 件の募集があります
+                {% else %}
+                    {% for city_code, city_name in cities %}
+                        {% if city_code == selected_city %}
+                            <strong>{{ city_name }}</strong> có <strong>{{ posts|length }}</strong> bài đăng
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
             </div>
             {% else %}
             <div class="alert alert-info py-2">
-                <i class="fas fa-globe"></i> <strong>全都市</strong> で <strong>{{ posts|length }}</strong> 件の募集があります
+                <i class="fas fa-globe"></i> 
+                {% if user.nationality == 'japanese' %}
+                    <strong>全都市</strong> で <strong>{{ posts|length }}</strong> 件の募集があります
+                {% else %}
+                    <strong>Tất cả thành phố</strong> có <strong>{{ posts|length }}</strong> bài đăng
+                {% endif %}
             </div>
             {% endif %}
             
             <!-- Priority Explanation -->
             <div class="alert alert-warning py-2">
-                <i class="fas fa-star text-warning"></i> 以前にマッチングしたユーザーは <span class="badge bg-success"><i class="fas fa-star"></i> 既知</span> バッジ付きで優先表示されます
+                <i class="fas fa-star text-warning"></i> 
+                {% if user.nationality == 'japanese' %}
+                    以前にマッチングしたユーザーは <span class="badge bg-success"><i class="fas fa-star"></i> 既知</span> バッジ付きで優先表示されます
+                {% else %}
+                    Người dùng đã từng kết nối trước đó sẽ được hiển thị ưu tiên với badge <span class="badge bg-success"><i class="fas fa-star"></i> Đã biết</span>
+                {% endif %}
             </div>
         </div>
     </div>
@@ -232,30 +280,84 @@
                     <div class="card-header py-2">
                         <div class="d-flex justify-content-between align-items-start">
                             <div class="flex-grow-1">
-                                <h6 class="mb-1 text-truncate">{{ post.phrase.vietnamese_text }}</h6>
-                                <div class="d-flex align-items-center gap-2">
-                                    {% if post.vietnamese_user.profile_picture %}
-                                        <img src="{{ post.vietnamese_user.profile_picture.url }}" 
-                                             alt="Profile" 
-                                             class="rounded-circle user-avatar" 
-                                             style="object-fit: cover;">
+                                <h6 class="mb-1 text-truncate">
+                                    {% if user.nationality == 'japanese' %}
+                                        {% if post.japanese_learning_phrases.exists %}
+                                            {{ post.japanese_learning_phrases.first.vietnamese_text }}
+                                        {% else %}
+                                            {{ post.phrase.vietnamese_text|default:"Không có nội dung" }}
+                                        {% endif %}
                                     {% else %}
-                                        <div class="rounded-circle user-avatar bg-secondary d-flex align-items-center justify-content-center">
-                                            <i class="fas fa-user text-white"></i>
+                                        {% if post.vietnamese_learning_phrases.exists %}
+                                            {{ post.vietnamese_learning_phrases.first.vietnamese_text }}
+                                        {% else %}
+                                            {{ post.phrase.vietnamese_text|default:"Không có nội dung" }}
+                                        {% endif %}
+                                    {% endif %}
+                                </h6>
+                                <div class="d-flex align-items-center gap-2">
+                                    {% if user.nationality == 'japanese' %}
+                                        {% if post.vietnamese_user.profile_picture %}
+                                            <img src="{{ post.vietnamese_user.profile_picture.url }}" 
+                                                 alt="Profile" 
+                                                 class="rounded-circle user-avatar" 
+                                                 style="object-fit: cover;">
+                                        {% else %}
+                                            <div class="rounded-circle user-avatar bg-secondary d-flex align-items-center justify-content-center">
+                                                <i class="fas fa-user text-white"></i>
+                                            </div>
+                                        {% endif %}
+                                        <div class="flex-grow-1">
+                                            <div class="fw-bold">{{ post.vietnamese_user.full_name|default:post.vietnamese_user.username }}</div>
+                                            <small class="text-muted">@{{ post.vietnamese_user.username }}</small>
+                                        </div>
+                                    {% else %}
+                                        {% if post.japanese_user.profile_picture %}
+                                            <img src="{{ post.japanese_user.profile_picture.url }}" 
+                                                 alt="Profile" 
+                                                 class="rounded-circle user-avatar" 
+                                                 style="object-fit: cover;">
+                                        {% else %}
+                                            <div class="rounded-circle user-avatar bg-secondary d-flex align-items-center justify-content-center">
+                                                <i class="fas fa-user text-white"></i>
+                                            </div>
+                                        {% endif %}
+                                        <div class="flex-grow-1">
+                                            <div class="fw-bold">{{ post.japanese_user.full_name|default:post.japanese_user.username }}</div>
+                                            <small class="text-muted">@{{ post.japanese_user.username }}</small>
                                         </div>
                                     {% endif %}
-                                    <div class="flex-grow-1">
-                                        <div class="fw-bold">{{ post.vietnamese_user.full_name|default:post.vietnamese_user.username }}</div>
-                                        <small class="text-muted">@{{ post.vietnamese_user.username }}</small>
-                                    </div>
                                 </div>
                             </div>
                             <div class="compact-badges">
-                                <span class="badge bg-info compact-badge">{{ post.phrase.get_category_display }}</span>
-                                <span class="badge bg-warning compact-badge">承認待ち</span>
+                                <span class="badge bg-info compact-badge">
+                                    {% if user.nationality == 'japanese' %}
+                                        {{ post.phrase.get_category_display }}
+                                    {% else %}
+                                        {{ post.phrase.get_category_display }}
+                                    {% endif %}
+                                </span>
+                                {% if post.status == 'active' %}
+                                    <span class="badge bg-success compact-badge">
+                                        {% if user.nationality == 'japanese' %}募集中{% else %}Đang tìm{% endif %}
+                                    </span>
+                                {% elif post.status == 'matched' %}
+                                    <span class="badge bg-warning compact-badge">
+                                        {% if user.nationality == 'japanese' %}応募済み{% else %}Đã ứng tuyển{% endif %}
+                                    </span>
+                                {% elif post.status == 'completed' %}
+                                    <span class="badge bg-primary compact-badge">
+                                        {% if user.nationality == 'japanese' %}完了{% else %}Hoàn thành{% endif %}
+                                    </span>
+                                {% elif post.status == 'cancelled' %}
+                                    <span class="badge bg-danger compact-badge">
+                                        {% if user.nationality == 'japanese' %}キャンセル{% else %}Đã hủy{% endif %}
+                                    </span>
+                                {% endif %}
                                 {% if post.priority == 1 %}
-                                <span class="badge bg-success compact-badge" title="以前にマッチングしたことがあるユーザーです">
-                                    <i class="fas fa-star"></i> 既知
+                                <span class="badge bg-success compact-badge" title="{% if user.nationality == 'japanese' %}以前にマッチングしたことがあるユーザーです{% else %}Người dùng đã từng kết nối trước đó{% endif %}">
+                                    <i class="fas fa-star"></i> 
+                                    {% if user.nationality == 'japanese' %}既知{% else %}Đã biết{% endif %}
                                 </span>
                                 {% endif %}
                             </div>
@@ -267,26 +369,54 @@
                         <div class="user-info-compact">
                             <div class="user-stats">
                                 <div class="stat-item">
-                                    {% if post.vietnamese_user.get_age %}
-                                    <i class="fas fa-birthday-cake icon"></i>
-                                    <span class="value">{{ post.vietnamese_user.get_age }}歳</span>
+                                    {% if user.nationality == 'japanese' %}
+                                        {% if post.vietnamese_user.get_age %}
+                                        <i class="fas fa-birthday-cake icon"></i>
+                                        <span class="value">{{ post.vietnamese_user.get_age }}歳</span>
+                                        {% endif %}
+                                    {% else %}
+                                        {% if post.japanese_user.get_age %}
+                                        <i class="fas fa-birthday-cake icon"></i>
+                                        <span class="value">{{ post.japanese_user.get_age }}歳</span>
+                                        {% endif %}
                                     {% endif %}
                                 </div>
                                 <div class="stat-item">
-                                    {% if post.vietnamese_user.gender %}
-                                    <i class="fas {% if post.vietnamese_user.gender == 'male' %}fa-mars text-primary{% elif post.vietnamese_user.gender == 'female' %}fa-venus text-danger{% else %}fa-user text-secondary{% endif %} icon"></i>
-                                    <span class="value">
-                                        {% if post.vietnamese_user.gender == 'male' %}男性{% elif post.vietnamese_user.gender == 'female' %}女性{% else %}その他{% endif %}
-                                    </span>
+                                    {% if user.nationality == 'japanese' %}
+                                        {% if post.vietnamese_user.gender %}
+                                        <i class="fas {% if post.vietnamese_user.gender == 'male' %}fa-mars text-primary{% elif post.vietnamese_user.gender == 'female' %}fa-venus text-danger{% else %}fa-user text-secondary{% endif %} icon"></i>
+                                        <span class="value">
+                                            {% if post.vietnamese_user.gender == 'male' %}男性{% elif post.vietnamese_user.gender == 'female' %}女性{% else %}その他{% endif %}
+                                        </span>
+                                        {% endif %}
+                                    {% else %}
+                                        {% if post.japanese_user.gender %}
+                                        <i class="fas {% if post.japanese_user.gender == 'male' %}fa-mars text-primary{% elif post.japanese_user.gender == 'female' %}fa-venus text-danger{% else %}fa-user text-secondary{% endif %} icon"></i>
+                                        <span class="value">
+                                            {% if post.japanese_user.gender == 'male' %}Nam{% elif post.japanese_user.gender == 'female' %}Nữ{% else %}Khác{% endif %}
+                                        </span>
+                                        {% endif %}
                                     {% endif %}
                                 </div>
                                 <div class="stat-item">
                                     <i class="fas fa-map-marker-alt icon"></i>
-                                    <span class="value">{{ post.vietnamese_user.get_city_display }}</span>
+                                    <span class="value">
+                                        {% if user.nationality == 'japanese' %}
+                                            {{ post.vietnamese_user.get_city_display }}
+                                        {% else %}
+                                            {{ post.japanese_user.get_city_display }}
+                                        {% endif %}
+                                    </span>
                                 </div>
                                 <div class="stat-item">
                                     <i class="fas fa-star icon"></i>
-                                    <span class="value">{{ post.vietnamese_user.point|default:0 }}</span>
+                                    <span class="value">
+                                        {% if user.nationality == 'japanese' %}
+                                            {{ post.vietnamese_user.get_average_rating|default:0 }}/10
+                                        {% else %}
+                                            {{ post.japanese_user.get_average_rating|default:0 }}/10
+                                        {% endif %}
+                                    </span>
                                 </div>
                             </div>
                         </div>
@@ -295,7 +425,17 @@
                         <div class="post-details">
                             <div class="detail-item">
                                 <i class="fas fa-map-marker-alt icon"></i>
-                                <span>{{ post.cafe_location.name }}</span>
+                                <span>
+                                    {% if post.cultural_location %}
+                                        {{ post.cultural_location.name }}
+                                    {% else %}
+                                        {% if user.nationality == 'japanese' %}
+                                            {{ post.vietnamese_user.get_city_display }}
+                                        {% else %}
+                                            {{ post.japanese_user.get_city_display }}
+                                        {% endif %}
+                                    {% endif %}
+                                </span>
                             </div>
                             <div class="detail-item">
                                 <i class="fas fa-calendar icon"></i>
@@ -303,21 +443,87 @@
                             </div>
                         </div>
                         
-                        {% if post.notes %}
-                            <div class="mb-2 p-2 bg-light rounded">
-                                <small class="text-muted">
-                                    <i class="fas fa-comment me-1"></i>{{ post.notes|truncatechars:50 }}
-                                </small>
+                    <!-- Learning Phrases Section -->
+                    {% if post.japanese_learning_phrases.exists %}
+                        <div class="mb-3">
+                            <small class="text-muted">
+                                {% if user.nationality == 'japanese' %}学習したいフレーズ{% else %}Các câu nói muốn học{% endif %}
+                            </small>
+                            <div>
+                                {% for phrase in post.japanese_learning_phrases.all|slice:":2" %}
+                                    <span class="badge bg-info me-1">{{ phrase.vietnamese_text }}</span>
+                                {% endfor %}
+                                {% if post.japanese_learning_phrases.count > 2 %}
+                                    <small class="text-muted">+{{ post.japanese_learning_phrases.count|add:"-2" }} more</small>
+                                {% endif %}
                             </div>
-                        {% endif %}
+                        </div>
+                    {% endif %}
+                    
+                    <!-- Poster's Learning Goals -->
+                    {% if post.japanese_user and post.japanese_user.nationality == 'japanese' %}
+                        <div class="mb-3">
+                            <small class="text-muted">
+                                <i class="fas fa-user-edit"></i> Người đăng bài muốn học:
+                            </small>
+                            <div>
+                                {% if post.japanese_learning_phrases.exists %}
+                                    {% for phrase in post.japanese_learning_phrases.all|slice:":2" %}
+                                        <span class="badge bg-success me-1">{{ phrase.vietnamese_text }}</span>
+                                    {% endfor %}
+                                {% else %}
+                                    <span class="badge bg-secondary">Chưa chọn</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% elif post.vietnamese_user and post.vietnamese_user.nationality == 'vietnamese' %}
+                        <div class="mb-3">
+                            <small class="text-muted">
+                                <i class="fas fa-user-edit"></i> Người đăng bài muốn học:
+                            </small>
+                            <div>
+                                {% if post.vietnamese_learning_phrases.exists %}
+                                    {% for phrase in post.vietnamese_learning_phrases.all|slice:":2" %}
+                                        <span class="badge bg-success me-1">{{ phrase.vietnamese_text }}</span>
+                                    {% endfor %}
+                                {% else %}
+                                    <span class="badge bg-secondary">Chưa chọn</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endif %}
                     </div>
                     
                     <div class="card-footer py-2 text-center">
-                        <a href="{% url 'phrase_list' post.id %}" 
-                           class="btn btn-success btn-sm w-100"
-                           onclick="return acceptPost({{ post.id }}, '{{ post.phrase.vietnamese_text }}')">
-                            <i class="fas fa-check me-1"></i> 応募する
-                        </a>
+                        {% if post.status == 'active' %}
+                            <a href="{% url 'phrase_list' post.id %}" 
+                               class="btn btn-success btn-sm w-100"
+                               onclick="return acceptPost({{ post.id }}, '{% if user.nationality == 'japanese' %}{% if post.japanese_learning_phrases.exists %}{{ post.japanese_learning_phrases.first.vietnamese_text }}{% else %}{{ post.phrase.vietnamese_text|default:'Không có nội dung' }}{% endif %}{% else %}{% if post.vietnamese_learning_phrases.exists %}{{ post.vietnamese_learning_phrases.first.vietnamese_text }}{% else %}{{ post.phrase.vietnamese_text|default:'Không có nội dung' }}{% endif %}{% endif %}')">
+                                <i class="fas fa-check me-1"></i> 
+                                {% if user.nationality == 'japanese' %}応募する{% else %}Ứng tuyển{% endif %}
+                            </a>
+                        {% elif post.status == 'matched' %}
+                            <div class="d-grid gap-2">
+                                <div class="text-warning mb-2">
+                                    <i class="fas fa-user-check me-1"></i> 
+                                    {% if user.nationality == 'japanese' %}既に応募済み{% else %}Đã ứng tuyển{% endif %}
+                                </div>
+                                <a href="{% url 'start_working_session' post.id %}" class="btn btn-primary btn-sm w-100">
+                                    <i class="fas fa-play me-1"></i> 
+                                    {% if user.nationality == 'japanese' %}作業セッションを開始{% else %}Bắt đầu phiên làm việc{% endif %}
+                                </a>
+                            </div>
+                        {% elif post.status == 'completed' %}
+                            <div class="text-success">
+                                <i class="fas fa-check-circle me-1"></i> 
+                                {% if user.nationality == 'japanese' %}完了済み{% else %}Hoàn thành{% endif %}
+                            </div>
+                        {% elif post.status == 'cancelled' %}
+                            <div class="text-danger">
+                                <i class="fas fa-times-circle me-1"></i> 
+                                {% if user.nationality == 'japanese' %}キャンセル済み{% else %}Đã hủy{% endif %}
+                            </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -325,22 +531,38 @@
             <div class="col-12">
                 <div class="text-center py-4">
                     <i class="fas fa-search fa-2x text-muted mb-3"></i>
-                    <h5>投稿がありません</h5>
+                    <h5>
+                        {% if user.nationality == 'japanese' %}投稿がありません{% else %}Không có bài đăng nào{% endif %}
+                    </h5>
                     <p class="text-muted">
                         {% if view_mode == 'city' %}
-                        現在、{{ selected_city }} の地域には投稿がありません。
+                            {% if user.nationality == 'japanese' %}
+                                現在、{{ selected_city }} の地域には投稿がありません。
+                            {% else %}
+                                {% for city_code, city_name in cities %}
+                                    {% if city_code == selected_city %}
+                                        Hiện tại không có bài đăng nào ở khu vực {{ city_name }}.
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
                         {% else %}
-                        現在、どの都市にも投稿がありません。
+                            {% if user.nationality == 'japanese' %}
+                                現在、どの都市にも投稿がありません。
+                            {% else %}
+                                Hiện tại không có bài đăng nào ở bất kỳ thành phố nào.
+                            {% endif %}
                         {% endif %}
                     </p>
                     <div class="mt-2">
                         {% if view_mode == 'city' %}
                         <a href="{% url 'all_posts' %}" class="btn btn-info btn-sm me-2">
-                            <i class="fas fa-globe"></i> 全都市表示
+                            <i class="fas fa-globe"></i> 
+                            {% if user.nationality == 'japanese' %}全都市表示{% else %}Xem tất cả thành phố{% endif %}
                         </a>
                         {% endif %}
                         <a href="{% url 'dashboard' %}" class="btn btn-primary btn-sm">
-                            <i class="fas fa-home"></i> ダッシュボード
+                            <i class="fas fa-home"></i> 
+                            {% if user.nationality == 'japanese' %}ダッシュボード{% else %}Bảng điều khiển{% endif %}
                         </a>
                     </div>
                 </div>

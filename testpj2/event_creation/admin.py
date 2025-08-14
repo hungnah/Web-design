@@ -2,14 +2,14 @@
 Event Creation Admin Configuration
 Provides Django admin interface for managing language exchange content:
 - Vietnamese phrases with translations
-- Cafe locations for meetups
+- Cultural locations for meetups
 - Language exchange posts
 - Partner requests
-- Lessons and lesson phrases
+- Cultural lessons and challenges
 """
 
 from django.contrib import admin
-from .models import VietnamesePhrase, CafeLocation, LanguageExchangePost, PartnerRequest, Lesson, LessonPhrase, QuizQuestion, TheorySection, TheoryPhrase, ConversationExample, ConversationLine
+from .models import VietnamesePhrase, CulturalLocation, LanguageExchangePost, PartnerRequest, CulturalLesson, CulturalChallenge
 
 @admin.register(VietnamesePhrase)
 class VietnamesePhraseAdmin(admin.ModelAdmin):
@@ -19,20 +19,88 @@ class VietnamesePhraseAdmin(admin.ModelAdmin):
     search_fields = ['vietnamese_text', 'japanese_translation', 'english_translation']
     ordering = ['category', 'difficulty']
 
-@admin.register(CafeLocation)
-class CafeLocationAdmin(admin.ModelAdmin):
-    """Admin interface for managing cafe and meeting locations"""
-    list_display = ['name', 'city', 'address']
-    list_filter = ['city']
-    search_fields = ['name', 'address']
+@admin.register(CulturalLocation)
+class CulturalLocationAdmin(admin.ModelAdmin):
+    """Admin interface for managing cultural and tourist locations"""
+    list_display = ['name', 'location_type', 'city', 'address', 'created_at']
+    list_filter = ['location_type', 'city', 'created_at']
+    search_fields = ['name', 'address', 'cultural_description']
+    fieldsets = (
+        ('Basic Information', {
+            'fields': ('name', 'location_type', 'city', 'address')
+        }),
+        ('Cultural Details', {
+            'fields': ('cultural_description', 'cultural_tips', 'best_time_to_visit', 'entrance_fee', 'opening_hours')
+        }),
+        ('Location Details', {
+            'fields': ('description', 'latitude', 'longitude')
+        }),
+    )
+
+@admin.register(CulturalLesson)
+class CulturalLessonAdmin(admin.ModelAdmin):
+    """Admin interface for managing cultural location-specific lessons"""
+    list_display = ['title', 'location', 'difficulty', 'estimated_duration', 'order', 'created_at']
+    list_filter = ['difficulty', 'location__city', 'location__location_type', 'created_at']
+    search_fields = ['title', 'description', 'vocabulary_list', 'essential_phrases']
+    ordering = ['location', 'order', 'difficulty']
+    list_select_related = ['location']
+    fieldsets = (
+        ('Basic Information', {
+            'fields': ('location', 'title', 'description', 'difficulty', 'order')
+        }),
+        ('Lesson Content', {
+            'fields': ('vocabulary_list', 'essential_phrases', 'cultural_context')
+        }),
+        ('Lesson Structure', {
+            'fields': ('estimated_duration',)
+        }),
+    )
+
+@admin.register(CulturalChallenge)
+class CulturalChallengeAdmin(admin.ModelAdmin):
+    """Admin interface for managing cultural communication challenges"""
+    list_display = ['title', 'location', 'challenge_type', 'difficulty', 'is_final_challenge', 'order', 'created_at']
+    list_filter = ['challenge_type', 'difficulty', 'is_final_challenge', 'location__city', 'created_at']
+    search_fields = ['title', 'description', 'objective', 'success_criteria']
+    ordering = ['location', 'order', 'difficulty']
+    list_select_related = ['location']
+    fieldsets = (
+        ('Basic Information', {
+            'fields': ('location', 'title', 'description', 'challenge_type', 'difficulty', 'order')
+        }),
+        ('Challenge Requirements', {
+            'fields': ('objective', 'success_criteria', 'time_limit', 'is_final_challenge')
+        }),
+        ('Supporting Materials', {
+            'fields': ('helpful_phrases', 'cultural_tips')
+        }),
+    )
 
 @admin.register(LanguageExchangePost)
 class LanguageExchangePostAdmin(admin.ModelAdmin):
     """Admin interface for managing language exchange posts created by Japanese users"""
-    list_display = ['japanese_user', 'vietnamese_user', 'phrase', 'cafe_location', 'meeting_date', 'status', 'created_at']
-    list_filter = ['status', 'meeting_date', 'created_at', 'cafe_location__city']
+    list_display = ['japanese_user', 'vietnamese_user', 'phrase', 'accepted_phrase', 'cultural_location', 'meeting_date', 'status', 'created_at']
+    list_filter = ['status', 'meeting_date', 'created_at', 'cultural_location__city']
     search_fields = ['japanese_user__username', 'vietnamese_user__username', 'notes']
     date_hierarchy = 'created_at'
+    filter_horizontal = ['japanese_learning_phrases', 'vietnamese_learning_phrases']
+    fieldsets = (
+        ('User Information', {
+            'fields': ('japanese_user', 'vietnamese_user', 'status')
+        }),
+        ('Learning Content', {
+            'fields': ('phrase', 'accepted_phrase', 'japanese_learning_phrases', 'vietnamese_learning_phrases')
+        }),
+        ('Meeting Details', {
+            'fields': ('cultural_location', 'meeting_date', 'notes')
+        }),
+        ('Timestamps', {
+            'fields': ('created_at', 'updated_at'),
+            'classes': ('collapse',)
+        }),
+    )
+    readonly_fields = ['created_at', 'updated_at']
 
 @admin.register(PartnerRequest)
 class PartnerRequestAdmin(admin.ModelAdmin):
@@ -43,99 +111,3 @@ class PartnerRequestAdmin(admin.ModelAdmin):
     date_hierarchy = 'created_at'
     readonly_fields = ['created_at', 'updated_at']
 
-@admin.register(Lesson)
-class LessonAdmin(admin.ModelAdmin):
-    """Admin interface for managing Vietnamese language lessons"""
-    list_display = ['title', 'category', 'difficulty', 'created_at']
-    list_filter = ['category', 'difficulty', 'created_at']
-    search_fields = ['title', 'description']
-    ordering = ['difficulty', 'category', 'title']
-    readonly_fields = ['created_at', 'updated_at']
-
-@admin.register(LessonPhrase)
-class LessonPhraseAdmin(admin.ModelAdmin):
-    """Admin interface for managing phrases within lessons"""
-    list_display = ['lesson', 'vietnamese_text', 'japanese_translation', 'order']
-    list_filter = ['lesson__category', 'lesson__difficulty', 'lesson']
-    search_fields = ['vietnamese_text', 'japanese_translation', 'english_translation']
-    ordering = ['lesson', 'order']
-    list_select_related = ['lesson']  # Optimize database queries
-
-@admin.register(QuizQuestion)
-class QuizQuestionAdmin(admin.ModelAdmin):
-    """Admin interface for managing quiz questions"""
-    list_display = ['lesson', 'question', 'correct_answer', 'order', 'created_at']
-    list_filter = ['lesson__category', 'lesson__difficulty', 'lesson']
-    search_fields = ['question', 'option_a', 'option_b', 'option_c', 'option_d']
-    ordering = ['lesson', 'order']
-    list_select_related = ['lesson']
-    fieldsets = (
-        ('Question Information', {
-            'fields': ('lesson', 'question', 'order')
-        }),
-        ('Answer Options', {
-            'fields': ('option_a', 'option_b', 'option_c', 'option_d', 'correct_answer')
-        }),
-        ('Learning Support', {
-            'fields': ('explanation',)
-        }),
-    )
-
-@admin.register(TheorySection)
-class TheorySectionAdmin(admin.ModelAdmin):
-    """Admin interface for managing theory sections"""
-    list_display = ['lesson', 'title', 'order', 'created_at']
-    list_filter = ['lesson__category', 'lesson__difficulty', 'lesson']
-    search_fields = ['title', 'description']
-    ordering = ['lesson', 'order']
-    list_select_related = ['lesson']
-    fieldsets = (
-        ('Basic Information', {
-            'fields': ('lesson', 'title', 'description', 'order')
-        }),
-    )
-
-@admin.register(TheoryPhrase)
-class TheoryPhraseAdmin(admin.ModelAdmin):
-    """Admin interface for managing theory phrases"""
-    list_display = ['theory_section', 'vietnamese_text', 'is_essential', 'order', 'created_at']
-    list_filter = ['theory_section__lesson__category', 'is_essential', 'theory_section']
-    search_fields = ['vietnamese_text', 'japanese_translation', 'english_translation']
-    ordering = ['theory_section', 'order']
-    list_select_related = ['theory_section']
-    fieldsets = (
-        ('Phrase Information', {
-            'fields': ('theory_section', 'vietnamese_text', 'japanese_translation', 'english_translation', 'order')
-        }),
-        ('Learning Support', {
-            'fields': ('pronunciation_guide', 'usage_note', 'is_essential')
-        }),
-    )
-
-@admin.register(ConversationExample)
-class ConversationExampleAdmin(admin.ModelAdmin):
-    """Admin interface for managing conversation examples"""
-    list_display = ['theory_section', 'title', 'order', 'created_at']
-    list_filter = ['theory_section__lesson__category', 'theory_section']
-    search_fields = ['title', 'description']
-    ordering = ['theory_section', 'order']
-    list_select_related = ['theory_section']
-    fieldsets = (
-        ('Conversation Information', {
-            'fields': ('theory_section', 'title', 'description', 'order')
-        }),
-    )
-
-@admin.register(ConversationLine)
-class ConversationLineAdmin(admin.ModelAdmin):
-    """Admin interface for managing conversation lines"""
-    list_display = ['conversation', 'speaker', 'vietnamese_text', 'order', 'created_at']
-    list_filter = ['speaker', 'conversation__theory_section__lesson__category']
-    search_fields = ['vietnamese_text', 'japanese_translation', 'english_translation']
-    ordering = ['conversation', 'order']
-    list_select_related = ['conversation']
-    fieldsets = (
-        ('Line Information', {
-            'fields': ('conversation', 'speaker', 'vietnamese_text', 'japanese_translation', 'english_translation', 'order')
-        }),
-    )

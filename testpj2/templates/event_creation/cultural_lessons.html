@@ -1,0 +1,240 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Bài học văn hóa - Vietnam-Japan Connect{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2><i class="fas fa-graduation-cap"></i> Bài học văn hóa</h2>
+                <div class="filters">
+                    <select id="city-filter" class="form-select d-inline-block w-auto me-2">
+                        <option value="">Tất cả thành phố</option>
+                        <option value="hanoi">Hà Nội</option>
+                        <option value="hochiminh">Hồ Chí Minh</option>
+                        <option value="haiphong">Hải Phòng</option>
+                        <option value="danang">Đà Nẵng</option>
+                        <option value="cantho">Cần Thơ</option>
+                        <option value="hue">Huế</option>
+                        <option value="hoian">Hội An</option>
+                        <option value="sapa">Sa Pa</option>
+                        <option value="nhatrang">Nha Trang</option>
+                        <option value="dalat">Đà Lạt</option>
+                    </select>
+                    <select id="difficulty-filter" class="form-select d-inline-block w-auto">
+                        <option value="">Tất cả trình độ</option>
+                        <option value="beginner">Sơ cấp</option>
+                        <option value="intermediate">Trung cấp</option>
+                        <option value="advanced">Cao cấp</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" id="lessons-container">
+        <!-- Lessons will be loaded here -->
+    </div>
+</div>
+
+<!-- Lesson Detail Modal -->
+<div class="modal fade" id="lessonModal" tabindex="-1" aria-labelledby="lessonModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="lessonModalLabel">Chi tiết bài học</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="lessonModalBody">
+                <!-- Lesson content will be loaded here -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-primary" id="startLessonBtn">Bắt đầu học</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const cityFilter = document.getElementById('city-filter');
+    const difficultyFilter = document.getElementById('difficulty-filter');
+    const lessonsContainer = document.getElementById('lessons-container');
+    
+    // Sample lesson data (in real app, this would come from API)
+    const lessons = [
+        {
+            id: 1,
+            title: 'Văn hóa học tập truyền thống Việt Nam',
+            location: 'Văn Miếu - Quốc Tử Giám',
+            city: 'hanoi',
+            difficulty: 'intermediate',
+            duration: 45,
+            description: 'Bài học về văn hóa học tập và giáo dục truyền thống của Việt Nam',
+            vocabulary: 'Văn Miếu, Quốc Tử Giám, tiến sĩ, bia đá, Khổng Tử, Nho giáo',
+            phrases: 'Đây là nơi gì? - ここはどこですか？\nTôi muốn tìm hiểu về lịch sử - 歴史について知りたいです',
+            cultural_context: 'Văn Miếu được xây dựng năm 1070, là trường đại học đầu tiên của Việt Nam.'
+        },
+        {
+            id: 2,
+            title: 'Văn hóa 54 dân tộc Việt Nam',
+            location: 'Bảo tàng Dân tộc học Việt Nam',
+            city: 'hanoi',
+            difficulty: 'beginner',
+            duration: 40,
+            description: 'Tìm hiểu về văn hóa đa dạng của các dân tộc Việt Nam',
+            vocabulary: 'dân tộc, văn hóa, bảo tàng, hiện vật, trang phục, công cụ',
+            phrases: 'Dân tộc này có bao nhiêu người? - この民族は何人いますか？\nTrang phục này đẹp quá! - この衣装はとても美しいですね！',
+            cultural_context: 'Việt Nam có 54 dân tộc anh em, mỗi dân tộc có văn hóa, trang phục, phong tục tập quán riêng.'
+        },
+        {
+            id: 3,
+            title: 'Văn hóa chợ truyền thống Việt Nam',
+            location: 'Chợ Đồng Xuân',
+            city: 'hanoi',
+            difficulty: 'beginner',
+            duration: 35,
+            description: 'Học cách mua sắm và giao tiếp tại chợ truyền thống',
+            vocabulary: 'chợ, mua sắm, mặc cả, giá cả, hàng hóa, người bán',
+            phrases: 'Cái này bao nhiêu tiền? - これはいくらですか？\nCó thể giảm giá không? - 値段を下げてもらえますか？',
+            cultural_context: 'Chợ Đồng Xuân là chợ truyền thống lớn nhất Hà Nội, có lịch sử hơn 100 năm.'
+        }
+    ];
+    
+    function filterLessons() {
+        const selectedCity = cityFilter.value;
+        const selectedDifficulty = difficultyFilter.value;
+        
+        const filteredLessons = lessons.filter(lesson => {
+            const cityMatch = !selectedCity || lesson.city === selectedCity;
+            const difficultyMatch = !selectedDifficulty || lesson.difficulty === selectedDifficulty;
+            return cityMatch && difficultyMatch;
+        });
+        
+        displayLessons(filteredLessons);
+    }
+    
+    function displayLessons(lessonsToShow) {
+        lessonsContainer.innerHTML = '';
+        
+        if (lessonsToShow.length === 0) {
+            lessonsContainer.innerHTML = `
+                <div class="col-12 text-center">
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle"></i> Không tìm thấy bài học nào phù hợp với bộ lọc đã chọn.
+                    </div>
+                </div>
+            `;
+            return;
+        }
+        
+        lessonsToShow.forEach(lesson => {
+            const lessonCard = createLessonCard(lesson);
+            lessonsContainer.appendChild(lessonCard);
+        });
+    }
+    
+    function createLessonCard(lesson) {
+        const col = document.createElement('div');
+        col.className = 'col-md-6 col-lg-4 mb-4';
+        
+        const difficultyClass = lesson.difficulty === 'beginner' ? 'success' : 
+                               lesson.difficulty === 'intermediate' ? 'warning' : 'danger';
+        
+        col.innerHTML = `
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">${lesson.title}</h5>
+                    <p class="card-text text-muted">${lesson.description}</p>
+                    
+                    <div class="mb-3">
+                        <span class="badge bg-primary me-1">${lesson.location}</span>
+                        <span class="badge bg-${difficultyClass}">${getDifficultyText(lesson.difficulty)}</span>
+                        <span class="badge bg-info">${lesson.duration} phút</span>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <small class="text-muted">
+                            <strong>Từ vựng:</strong> ${lesson.vocabulary}
+                        </small>
+                    </div>
+                    
+                    <button class="btn btn-outline-primary btn-sm" onclick="showLessonDetail(${lesson.id})">
+                        <i class="fas fa-eye"></i> Xem chi tiết
+                    </button>
+                </div>
+            </div>
+        `;
+        
+        return col;
+    }
+    
+    function getDifficultyText(difficulty) {
+        const difficultyMap = {
+            'beginner': 'Sơ cấp',
+            'intermediate': 'Trung cấp',
+            'advanced': 'Cao cấp'
+        };
+        return difficultyMap[difficulty] || difficulty;
+    }
+    
+    function showLessonDetail(lessonId) {
+        const lesson = lessons.find(l => l.id === lessonId);
+        if (!lesson) return;
+        
+        const modalBody = document.getElementById('lessonModalBody');
+        modalBody.innerHTML = `
+            <div class="row">
+                <div class="col-12">
+                    <h4>${lesson.title}</h4>
+                    <p class="text-muted">${lesson.description}</p>
+                    
+                    <div class="mb-3">
+                        <span class="badge bg-primary me-1">${lesson.location}</span>
+                        <span class="badge bg-${lesson.difficulty === 'beginner' ? 'success' : lesson.difficulty === 'intermediate' ? 'warning' : 'danger'}">${getDifficultyText(lesson.difficulty)}</span>
+                        <span class="badge bg-info">${lesson.duration} phút</span>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <h6><i class="fas fa-book"></i> Từ vựng chính:</h6>
+                        <p>${lesson.vocabulary}</p>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <h6><i class="fas fa-comments"></i> Câu nói cần thiết:</h6>
+                        <div class="bg-light p-3 rounded">
+                            <pre>${lesson.phrases}</pre>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <h6><i class="fas fa-globe"></i> Bối cảnh văn hóa:</h6>
+                        <p>${lesson.cultural_context}</p>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        const modal = new bootstrap.Modal(document.getElementById('lessonModal'));
+        modal.show();
+    }
+    
+    // Event listeners
+    cityFilter.addEventListener('change', filterLessons);
+    difficultyFilter.addEventListener('change', filterLessons);
+    
+    // Initial display
+    displayLessons(lessons);
+});
+
+// Global function for modal
+window.showLessonDetail = function(lessonId) {
+    // This will be called from the onclick in the card
+    const event = new Event('click');
+    document.dispatchEvent(event);
+};
+</script>
+{% endblock %}
