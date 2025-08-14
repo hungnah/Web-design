@@ -637,9 +637,7 @@ msgstr "パスワードを入力してください"
 msgid "hoặc"
 msgstr "または"
 
-#: .\templates\user_profile\login.html:393
-msgid "Đăng nhập bằng Google"
-msgstr "Googleでログイン"
+
 
 #: .\templates\user_profile\login.html:398
 msgid "Chưa có tài khoản?"
@@ -850,8 +848,7 @@ msgid "Tạo Tài Khoản"
 msgstr "アカウント作成"
 
 #: .\templates\user_profile\register.html:610
-msgid "Đăng ký bằng Google"
-msgstr "Googleアカウントで登録"
+
 
 #: .\templates\user_profile\register.html:615
 msgid "Đã có tài khoản?"

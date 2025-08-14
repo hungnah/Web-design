@@ -1,54 +1,40 @@
 """
 Custom decorators for user_profile app
-Handles session validation and security checks
+Handles profile completion requirements and other access controls
 """
 
 from django.shortcuts import redirect
-from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from functools import wraps
 
-def session_required(view_func):
+def profile_complete_required(view_func):
     """
-    Decorator to ensure user has valid session and prevent back button issues
+    Decorator to ensure user has complete profile information
+    Redirects to profile completion if gender, date_of_birth, nationality, or city is missing
     """
     @wraps(view_func)
-    def _wrapped_view(request, *args, **kwargs):
-        # Check if user is authenticated
-        if not request.user.is_authenticated:
-            messages.error(request, 'Please log in to access this page.')
-            return redirect('login')
-        
-        # Check if session is valid
-        if not request.session.session_key:
-            messages.error(request, 'Your session has expired. Please log in again.')
-            return redirect('login')
-        
-        # Check if user is trying to access restricted pages
-        restricted_paths = ['/auth/', '/auth', '/auth/login/', '/auth/register/']
-        if request.path in restricted_paths:
-            messages.info(request, 'Redirecting to dashboard...')
-            return redirect('dashboard')
+    def wrapper(request, *args, **kwargs):
+        if request.user.is_authenticated:
+            # Skip check for admin users
+            if request.user.is_staff:
+                return view_func(request, *args, **kwargs)
+            
+            # Check if user has complete profile
+            if not request.user.gender or not request.user.date_of_birth or not request.user.city:
+                messages.warning(request, 'Vui lòng hoàn thiện thông tin cá nhân để tiếp tục sử dụng hệ thống.')
+                return redirect('profile')
         
         return view_func(request, *args, **kwargs)
-    
-    return _wrapped_view
+    return wrapper
 
-def prevent_back_button(view_func):
+def complete_profile_required(view_func):
     """
-    Decorator to add cache control headers and prevent back button issues
+    Decorator that combines login_required and profile_complete_required
+    Ensures user is both logged in and has complete profile
     """
-    @wraps(view_func)
-    def _wrapped_view(request, *args, **kwargs):
-        response = view_func(request, *args, **kwargs)
-        
-        # Add cache control headers
-        response['Cache-Control'] = 'no-cache, no-store, must-revalidate, private'
-        response['Pragma'] = 'no-cache'
-        response['Expires'] = '0'
-        response['X-Frame-Options'] = 'DENY'
-        response['X-Content-Type-Options'] = 'nosniff'
-        
-        return response
-    
-    return _wrapped_view
+    @login_required
+    @profile_complete_required
+    def wrapper(request, *args, **kwargs):
+        return view_func(request, *args, **kwargs)
+    return wrapper

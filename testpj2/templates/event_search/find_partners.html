@@ -259,16 +259,18 @@
                                     <div class="user-info-compact">
                                         <div class="user-stats">
                                             <div class="stat-item">
-                                                <i class="fas fa-flag icon"></i>
+                                                {% if request.requester.get_age %}
+                                                <i class="fas fa-birthday-cake icon"></i>
+                                                <span class="value">{{ request.requester.get_age }} tuổi</span>
+                                                {% endif %}
+                                            </div>
+                                            <div class="stat-item">
+                                                {% if request.requester.gender %}
+                                                <i class="fas {% if request.requester.gender == 'male' %}fa-mars text-primary{% elif request.requester.gender == 'female' %}fa-venus text-danger{% else %}fa-user text-secondary{% endif %} icon"></i>
                                                 <span class="value">
-                                                    {% if request.requester.nationality == 'vietnamese' %}
-                                                        Người Việt
-                                                    {% elif request.requester.nationality == 'japanese' %}
-                                                        Người Nhật
-                                                    {% else %}
-                                                        {{ request.requester.get_nationality_display }}
-                                                    {% endif %}
+                                                    {% if request.requester.gender == 'male' %}Nam{% elif request.requester.gender == 'female' %}Nữ{% else %}Khác{% endif %}
                                                 </span>
+                                                {% endif %}
                                             </div>
                                             <div class="stat-item">
                                                 <i class="fas fa-map-marker-alt icon"></i>

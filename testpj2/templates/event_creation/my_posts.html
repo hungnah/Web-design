@@ -87,6 +87,15 @@
                                 <small class="text-muted">
                                     {% if post.vietnamese_user %}
                                         パートナー: {{ post.vietnamese_user.full_name|default:post.vietnamese_user.username }}
+                                        {% if post.vietnamese_user.get_age %}
+                                        <br>
+                                        <i class="fas fa-birthday-cake text-warning"></i> {{ post.vietnamese_user.get_age }}歳
+                                        {% endif %}
+                                        {% if post.vietnamese_user.gender %}
+                                        <br>
+                                        <i class="fas {% if post.vietnamese_user.gender == 'male' %}fa-mars text-primary{% elif post.vietnamese_user.gender == 'female' %}fa-venus text-danger{% else %}fa-user text-secondary{% endif %}"></i>
+                                        {% if post.vietnamese_user.gender == 'male' %}男性{% elif post.vietnamese_user.gender == 'female' %}女性{% else %}その他{% endif %}
+                                        {% endif %}
                                     {% else %}
                                         パートナー: まだマッチングしていません
                                     {% endif %}
@@ -97,6 +106,15 @@
                                 <small class="text-muted">
                                     {% if post.japanese_user %}
                                         日本人: {{ post.japanese_user.full_name|default:post.japanese_user.username }}
+                                        {% if post.japanese_user.get_age %}
+                                        <br>
+                                        <i class="fas fa-birthday-cake text-warning"></i> {{ post.japanese_user.get_age }} tuổi
+                                        {% endif %}
+                                        {% if post.japanese_user.gender %}
+                                        <br>
+                                        <i class="fas {% if post.japanese_user.gender == 'male' %}fa-mars text-primary{% elif post.japanese_user.gender == 'female' %}fa-venus text-danger{% else %}fa-user text-secondary{% endif %}"></i>
+                                        {% if post.japanese_user.gender == 'male' %}男性{% elif post.japanese_user.gender == 'female' %}女性{% else %}その他{% endif %}
+                                        {% endif %}
                                     {% else %}
                                         日本人: まだマッチングしていません
                                     {% endif %}

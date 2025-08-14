@@ -110,3 +110,5 @@ class PointExchangeForm(forms.Form):
                     ))
             
             self.fields['voucher_type'].choices = updated_choices
+
+
