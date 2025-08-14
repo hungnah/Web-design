@@ -24,16 +24,66 @@ def chat_room(request, room_id):
     """
     chat_room = get_object_or_404(ChatRoom, id=room_id)
     
-    # Check if user is part of this chat
+    # Debug logging
+    print(f"DEBUG: User {request.user.username} (nationality: {request.user.nationality}) trying to access chat room {room_id}")
+    print(f"DEBUG: Chat room post: {chat_room.post}")
+    print(f"DEBUG: Chat room partner_request: {chat_room.partner_request}")
+    
     if chat_room.post:
-        if request.user not in [chat_room.post.japanese_user, chat_room.post.vietnamese_user]:
+        print(f"DEBUG: Post japanese_user: {chat_room.post.japanese_user}")
+        print(f"DEBUG: Post vietnamese_user: {chat_room.post.vietnamese_user}")
+        print(f"DEBUG: Post japanese_partner: {chat_room.post.japanese_partner}")
+        print(f"DEBUG: Post vietnamese_partner: {chat_room.post.vietnamese_partner}")
+        print(f"DEBUG: Current user ID: {request.user.id}")
+        
+        # Check all possible user fields in the post
+        post_user_ids = []
+        if chat_room.post.japanese_user:
+            post_user_ids.append(chat_room.post.japanese_user.id)
+        if chat_room.post.vietnamese_user:
+            post_user_ids.append(chat_room.post.vietnamese_user.id)
+        if chat_room.post.japanese_partner:
+            post_user_ids.append(chat_room.post.japanese_partner.id)
+        if chat_room.post.vietnamese_partner:
+            post_user_ids.append(chat_room.post.vietnamese_partner.id)
+        
+        print(f"DEBUG: Post user IDs: {post_user_ids}")
+        print(f"DEBUG: Current user in post users: {request.user.id in post_user_ids}")
+        
+        if request.user.id not in post_user_ids:
+            print(f"DEBUG: Access denied - user not in post users")
             messages.error(request, 'You do not have access to this chat room.')
             return redirect('dashboard')
     elif chat_room.partner_request:
+        print(f"DEBUG: Partner request requester: {chat_room.partner_request.requester}")
+        print(f"DEBUG: Partner request accepted_by: {chat_room.partner_request.accepted_by}")
+        print(f"DEBUG: Current user ID: {request.user.id}")
+        
         # For partner requests, both the requester and the person who accepted can access
-        if request.user != chat_room.partner_request.requester and request.user != chat_room.partner_request.accepted_by:
+        partner_request_user_ids = []
+        if chat_room.partner_request.requester:
+            partner_request_user_ids.append(chat_room.partner_request.requester.id)
+        if chat_room.partner_request.accepted_by:
+            partner_request_user_ids.append(chat_room.partner_request.accepted_by.id)
+        
+        print(f"DEBUG: Partner request user IDs: {partner_request_user_ids}")
+        print(f"DEBUG: Current user in partner request users: {request.user.id in partner_request_user_ids}")
+        
+        if request.user.id not in partner_request_user_ids:
+            print(f"DEBUG: Access denied - user not in partner request users")
             messages.error(request, 'You do not have access to this chat room.')
             return redirect('dashboard')
+    
+    print(f"DEBUG: Access granted - proceeding to chat room")
+    
+    # Additional debug info for template
+    if chat_room.post:
+        print(f"DEBUG: Template context - post: {chat_room.post}")
+        print(f"DEBUG: Template context - japanese_user: {chat_room.post.japanese_user}")
+        print(f"DEBUG: Template context - vietnamese_user: {chat_room.post.vietnamese_user}")
+        print(f"DEBUG: Template context - japanese_partner: {chat_room.post.japanese_partner}")
+        print(f"DEBUG: Template context - vietnamese_partner: {chat_room.post.vietnamese_partner}")
+        print(f"DEBUG: Template context - current user: {request.user}")
     
     messages_list = chat_room.messages.all()
     
@@ -47,24 +97,57 @@ def chat_room(request, room_id):
 @login_required
 def send_message(request, room_id):
     """Send a message via AJAX"""
+    print(f"DEBUG: send_message called for room {room_id} by user {request.user.username}")
+    print(f"DEBUG: Request method: {request.method}")
+    print(f"DEBUG: Request POST data: {request.POST}")
+    
     if request.method == 'POST':
         chat_room = get_object_or_404(ChatRoom, id=room_id)
         content = request.POST.get('content', '').strip()
         
+        print(f"DEBUG: Chat room found: {chat_room}")
+        print(f"DEBUG: Content: '{content}'")
+        
         # Check if user has access to this chat room
         if chat_room.post:
-            if request.user not in [chat_room.post.japanese_user, chat_room.post.vietnamese_user]:
+            print(f"DEBUG: Chat room has post: {chat_room.post}")
+            print(f"DEBUG: Post japanese_user: {chat_room.post.japanese_user}")
+            print(f"DEBUG: Post vietnamese_user: {chat_room.post.vietnamese_user}")
+            print(f"DEBUG: Post japanese_partner: {chat_room.post.japanese_partner}")
+            print(f"DEBUG: Post vietnamese_partner: {chat_room.post.vietnamese_partner}")
+            print(f"DEBUG: Current user: {request.user} (ID: {request.user.id})")
+            
+            # Check all possible user fields in the post
+            post_user_ids = []
+            if chat_room.post.japanese_user:
+                post_user_ids.append(chat_room.post.japanese_user.id)
+            if chat_room.post.vietnamese_user:
+                post_user_ids.append(chat_room.post.vietnamese_user.id)
+            if chat_room.post.japanese_partner:
+                post_user_ids.append(chat_room.post.japanese_partner.id)
+            if chat_room.post.vietnamese_partner:
+                post_user_ids.append(chat_room.post.vietnamese_partner.id)
+            
+            print(f"DEBUG: Post user IDs: {post_user_ids}")
+            print(f"DEBUG: Current user in post users: {request.user.id in post_user_ids}")
+            
+            if request.user.id not in post_user_ids:
+                print(f"DEBUG: Access denied - user not in post users")
                 return JsonResponse({'success': False, 'error': 'Access denied'})
         elif chat_room.partner_request:
+            print(f"DEBUG: Chat room has partner request: {chat_room.partner_request}")
             if request.user != chat_room.partner_request.requester and request.user != chat_room.partner_request.accepted_by:
+                print(f"DEBUG: Access denied - user not in partner request users")
                 return JsonResponse({'success': False, 'error': 'Access denied'})
         
         if content:
+            print(f"DEBUG: Creating message with content: '{content}'")
             message = Message.objects.create(
                 chat_room=chat_room,
                 sender=request.user,
                 content=content
             )
+            print(f"DEBUG: Message created successfully: {message}")
             
             return JsonResponse({
                 'success': True,
@@ -75,8 +158,11 @@ def send_message(request, room_id):
                     'timestamp': message.timestamp.strftime('%H:%M'),
                 }
             })
+        else:
+            print(f"DEBUG: Content is empty")
     
-    return JsonResponse({'success': False})
+    print(f"DEBUG: Returning failure response")
+    return JsonResponse({'success': False, 'error': 'Invalid request or empty content'})
 
 @login_required
 def get_messages(request, room_id):
@@ -85,7 +171,18 @@ def get_messages(request, room_id):
     
     # Check access
     if chat_room.post:
-        if request.user not in [chat_room.post.japanese_user, chat_room.post.vietnamese_user]:
+        # Check all possible user fields in the post
+        post_user_ids = []
+        if chat_room.post.japanese_user:
+            post_user_ids.append(chat_room.post.japanese_user.id)
+        if chat_room.post.vietnamese_user:
+            post_user_ids.append(chat_room.post.vietnamese_user.id)
+        if chat_room.post.japanese_partner:
+            post_user_ids.append(chat_room.post.japanese_partner.id)
+        if chat_room.post.vietnamese_partner:
+            post_user_ids.append(chat_room.post.vietnamese_partner.id)
+        
+        if request.user.id not in post_user_ids:
             return JsonResponse({'success': False, 'error': 'Access denied'})
     elif chat_room.partner_request:
         if request.user != chat_room.partner_request.requester and request.user != chat_room.partner_request.accepted_by:
@@ -130,79 +227,99 @@ def my_chats(request):
             status='matched'
         ).select_related('vietnamese_user', 'phrase', 'cafe_location')
         
+        print(f"DEBUG: Found {accepted_posts.count()} accepted posts for Japanese user {request.user.username}")
+        
         for post in accepted_posts:
+            print(f"DEBUG: Processing post {post.id}: japanese_user={post.japanese_user}, vietnamese_partner={post.vietnamese_partner}")
+            
             try:
                 chat_room = ChatRoom.objects.get(post=post)
+                print(f"DEBUG: Found existing chat room {chat_room.id} for post {post.id}")
+                # Determine the correct partner for display
+                partner = post.vietnamese_user if post.vietnamese_user else post.vietnamese_partner
                 chat_rooms.append({
                     'chat_room': chat_room,
                     'type': 'post',
-                    'partner': post.vietnamese_user,
-                    'title': f"Chat với {post.vietnamese_user.full_name or post.vietnamese_user.username}",
+                    'partner': partner,
+                    'title': f"Chat với {partner.full_name or partner.username}",
                     'subtitle': f"Học: {post.phrase.vietnamese_text}",
                     'last_message': chat_room.messages.last(),
                     'unread_count': chat_room.messages.filter(is_read=False).exclude(sender=request.user).count(),
                     'meeting_info': f"{post.cafe_location.name} - {post.meeting_date.strftime('%d/%m/%Y %H:%M')}"
                 })
             except ChatRoom.DoesNotExist:
+                print(f"DEBUG: Creating new chat room for post {post.id}")
                 # Create missing chat room
                 chat_room = ChatRoom.objects.create(post=post)
+                print(f"DEBUG: Created chat room {chat_room.id} with post={chat_room.post}")
                 # Create welcome message
                 welcome_message = f"Xin chào! Tôi đã chấp nhận bài đăng của bạn. Hãy cùng trò chuyện và học tiếng Việt nhé!"
                 Message.objects.create(
                     chat_room=chat_room,
-                    sender=post.vietnamese_user,
+                    sender=partner,
                     content=welcome_message
                 )
                 chat_rooms.append({
                     'chat_room': chat_room,
                     'type': 'post',
-                    'partner': post.vietnamese_user,
-                    'title': f"Chat với {post.vietnamese_user.full_name or post.vietnamese_user.username}",
+                    'partner': partner,
+                    'title': f"Chat với {partner.full_name or partner.username}",
                     'subtitle': f"Học: {post.phrase.vietnamese_text}",
                     'last_message': chat_room.messages.last(),
                     'unread_count': chat_room.messages.filter(is_read=False).exclude(sender=request.user).count(),
                     'meeting_info': f"{post.cafe_location.name} - {post.meeting_date.strftime('%d/%m/%Y %H:%M')}"
                 })
     else:
-        # Vietnamese user's accepted posts
+        # Vietnamese user's accepted posts (posts created by Japanese users that Vietnamese user accepted)
         accepted_posts = LanguageExchangePost.objects.filter(
-            vietnamese_user=request.user,
+            japanese_user__isnull=False,  # Posts created by Japanese users
+            vietnamese_partner=request.user,  # Vietnamese user accepted these posts
             status='matched'
         ).select_related('japanese_user', 'phrase', 'cafe_location')
         
+        print(f"DEBUG: Found {accepted_posts.count()} accepted posts for Vietnamese user {request.user.username}")
+        
         for post in accepted_posts:
-            try:
-                chat_room = ChatRoom.objects.get(post=post)
-                chat_rooms.append({
-                    'chat_room': chat_room,
-                    'type': 'post',
-                    'partner': post.japanese_user,
-                    'title': f"Chat với {post.japanese_user.full_name or post.japanese_user.username}",
-                    'subtitle': f"Học: {post.phrase.vietnamese_text}",
-                    'last_message': chat_room.messages.last(),
-                    'unread_count': chat_room.messages.filter(is_read=False).exclude(sender=request.user).count(),
-                    'meeting_info': f"{post.cafe_location.name} - {post.meeting_date.strftime('%d/%m/%Y %H:%M')}"
-                })
-            except ChatRoom.DoesNotExist:
-                # Create missing chat room
-                chat_room = ChatRoom.objects.create(post=post)
-                # Create welcome message
-                welcome_message = f"Xin chào! Tôi đã chấp nhận bài đăng của bạn. Hãy cùng trò chuyện và học tiếng Việt nhé!"
-                Message.objects.create(
-                    chat_room=chat_room,
-                    sender=request.user,
-                    content=welcome_message
-                )
-                chat_rooms.append({
-                    'chat_room': chat_room,
-                    'type': 'post',
-                    'partner': post.japanese_user,
-                    'title': f"Chat với {post.japanese_user.full_name or post.japanese_user.username}",
-                    'subtitle': f"Học: {post.phrase.vietnamese_text}",
-                    'last_message': chat_room.messages.last(),
-                    'unread_count': chat_room.messages.filter(is_read=False).exclude(sender=request.user).count(),
-                    'meeting_info': f"{post.cafe_location.name} - {post.meeting_date.strftime('%d/%m/%Y %H:%M')}"
-                })
+            print(f"DEBUG: Processing post {post.id}: japanese_user={post.japanese_user}, vietnamese_partner={post.vietnamese_partner}")
+            
+            if post.japanese_user:  # Check if japanese_user exists
+                try:
+                    chat_room = ChatRoom.objects.get(post=post)
+                    print(f"DEBUG: Found existing chat room {chat_room.id} for post {post.id}")
+                    # Determine the correct partner for display
+                    partner = post.japanese_user if post.japanese_user else post.japanese_partner
+                    chat_rooms.append({
+                        'chat_room': chat_room,
+                        'type': 'post',
+                        'partner': partner,
+                        'title': f"Chat với {partner.full_name or partner.username}",
+                        'subtitle': f"Học: {post.phrase.vietnamese_text}",
+                        'last_message': chat_room.messages.last(),
+                        'unread_count': chat_room.messages.filter(is_read=False).exclude(sender=request.user).count(),
+                        'meeting_info': f"{post.cafe_location.name} - {post.meeting_date.strftime('%d/%m/%Y %H:%M')}"
+                    })
+                except ChatRoom.DoesNotExist:
+                    print(f"DEBUG: Creating new chat room for post {post.id}")
+                    # Create missing chat room
+                    chat_room = ChatRoom.objects.create(post=post)
+                    print(f"DEBUG: Created chat room {chat_room.id} with post={chat_room.post}")
+                    # Create welcome message
+                    welcome_message = f"Xin chào! Tôi đã chấp nhận bài đăng của bạn. Hãy cùng trò chuyện và học tiếng Việt nhé!"
+                    Message.objects.create(
+                        chat_room=chat_room,
+                        sender=request.user,
+                        content=welcome_message
+                    )
+                    chat_rooms.append({
+                        'chat_room': chat_room,
+                        'type': 'post',
+                        'partner': partner,
+                        'title': f"Chat với {partner.full_name or partner.username}",
+                        'subtitle': f"Học: {post.phrase.vietnamese_text}",
+                        'last_message': chat_room.messages.last(),
+                        'unread_count': chat_room.messages.filter(is_read=False).exclude(sender=request.user).count(),
+                        'meeting_info': f"{post.cafe_location.name} - {post.meeting_date.strftime('%d/%m/%Y %H:%M')}"
+                    })
     
     # For PartnerRequest chats
     if request.user.nationality == 'japanese':

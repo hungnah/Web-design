@@ -164,55 +164,93 @@ def lesson_quiz(request, lesson_id):
 
 @login_required
 def create_post(request, phrase_id=None):
-    """Create a language exchange post"""
-    # if request.user.nationality != 'japanese':
-    #     return redirect('dashboard')
+    """Create a language exchange post for both Vietnamese and Japanese users"""
     phrase = None
     
     if phrase_id:
         phrase = get_object_or_404(VietnamesePhrase, id=phrase_id)
     
+    # Test form creation
+    test_form = LanguageExchangePostForm(user=request.user)
+    print(f"DEBUG: Test form created for user {request.user.username}")
+    print(f"DEBUG: Form fields: {list(test_form.fields.keys())}")
+    print(f"DEBUG: User type field initial: {test_form.fields['user_type'].initial}")
+    
     if request.method == 'POST':
-        form = LanguageExchangePostForm(request.POST)
+        print(f"DEBUG: POST request received from user {request.user.username} with nationality {request.user.nationality}")
+        form = LanguageExchangePostForm(request.POST, user=request.user)
+        print(f"DEBUG: Form is valid: {form.is_valid()}")
         if form.is_valid():
+            print(f"DEBUG: Form data: {form.cleaned_data}")
             post = form.save(commit=False)
-            post.vietnamese_user = request.user
-            post.japanese_user_id = None
+            
+            # Set user based on nationality
+            if request.user.nationality == 'vietnamese':
+                post.vietnamese_user = request.user
+                post.user_type = 'vietnamese'
+                print(f"DEBUG: Set Vietnamese user: {post.vietnamese_user}")
+            elif request.user.nationality == 'japanese':
+                post.japanese_user = request.user
+                post.user_type = 'japanese'
+                print(f"DEBUG: Set Japanese user: {post.japanese_user}")
+            
             post.phrase = phrase
-            post.save()
-            messages.success(request, 'Post created successfully!')
-            return redirect('my_posts')
+            print(f"DEBUG: About to save post with user_type: {post.user_type}")
+            try:
+                post.save()
+                print(f"DEBUG: Post saved successfully with ID: {post.id}")
+                
+                if request.user.nationality == 'vietnamese':
+                    messages.success(request, 'Bài đăng đã được tạo thành công! Người dùng Nhật Bản sẽ có thể xem và chấp nhận.')
+                else:
+                    messages.success(request, '投稿が正常に作成されました！ベトナムのユーザーが閲覧・承認できるようになります。')
+                
+                return redirect('my_posts')
+            except Exception as e:
+                print(f"DEBUG: Error saving post: {e}")
+                messages.error(request, f'Lỗi khi tạo bài đăng: {e}')
+        else:
+            print(f"DEBUG: Form errors: {form.errors}")
+            for field, errors in form.errors.items():
+                print(f"DEBUG: Field {field} errors: {errors}")
     else:
-        form = LanguageExchangePostForm()
+        form = LanguageExchangePostForm(user=request.user)
     
     context = {
         'phrase': phrase,
         'form': form,
+        'debug': True,  # Enable debug mode
     }
     
     return render(request, 'event_creation/create_post.html', context)
 
 @login_required
 def edit_post(request, post_id):
-    """Edit a language exchange post"""
-    # if request.user.nationality != 'japanese':
-    #     return redirect('dashboard')
-    
-    post = get_object_or_404(LanguageExchangePost, id=post_id, vietnamese_user=request.user)
+    """Edit a language exchange post for both Vietnamese and Japanese users"""
+    if request.user.nationality == 'vietnamese':
+        post = get_object_or_404(LanguageExchangePost, id=post_id, vietnamese_user=request.user, user_type='vietnamese')
+    else:
+        post = get_object_or_404(LanguageExchangePost, id=post_id, japanese_user=request.user, user_type='japanese')
     
     # Only allow editing active posts (not matched ones)
     if post.status != 'active':
-        messages.error(request, 'Chỉ có thể chỉnh sửa bài đăng chưa được chấp nhận.')
+        if request.user.nationality == 'vietnamese':
+            messages.error(request, 'Chỉ có thể chỉnh sửa bài đăng chưa được chấp nhận.')
+        else:
+            messages.error(request, '承認されていない投稿のみ編集できます。')
         return redirect('my_posts')
     
     if request.method == 'POST':
-        form = LanguageExchangePostForm(request.POST, instance=post)
+        form = LanguageExchangePostForm(request.POST, instance=post, user=request.user)
         if form.is_valid():
             form.save()
-            messages.success(request, 'Bài đăng đã được cập nhật thành công!')
+            if request.user.nationality == 'vietnamese':
+                messages.success(request, 'Bài đăng đã được cập nhật thành công!')
+            else:
+                messages.success(request, '投稿が正常に更新されました！')
             return redirect('my_posts')
     else:
-        form = LanguageExchangePostForm(instance=post)
+        form = LanguageExchangePostForm(instance=post, user=request.user)
     
     context = {
         'post': post,
@@ -223,11 +261,11 @@ def edit_post(request, post_id):
 
 @login_required
 def my_posts(request):
-    """Display user's own posts"""
+    """Display user's own posts for both Vietnamese and Japanese users"""
     if request.user.nationality == 'vietnamese':
-        posts = LanguageExchangePost.objects.filter(vietnamese_user=request.user)
+        posts = LanguageExchangePost.objects.filter(vietnamese_user=request.user, user_type='vietnamese')
     else:
-        posts = LanguageExchangePost.objects.filter(japanese_user=request.user)
+        posts = LanguageExchangePost.objects.filter(japanese_user=request.user, user_type='japanese')
     
     # Calculate counts for statistics
     matched_posts_count = posts.filter(status='matched').count()
@@ -247,44 +285,84 @@ def my_posts(request):
 
 @login_required
 def accept_post(request, post_id, phrase_id):
-    """Accept a language exchange post"""
-    if request.user.nationality != 'japanese':
-        return redirect('dashboard')
-    
+    """Accept a language exchange post - Vietnamese users accept Japanese posts, Japanese users accept Vietnamese posts"""
     phrase = get_object_or_404(VietnamesePhrase, id=phrase_id)
-    
     post = get_object_or_404(LanguageExchangePost, id=post_id, status='active')
-    post.japanese_user = request.user
-    post.phrase = phrase
-    post.status = 'matched'
-    post.save()
+    
+    # Check if user can accept this post
+    if request.user.nationality == 'vietnamese':
+        # Vietnamese users can only accept posts created by Japanese users
+        if post.user_type != 'japanese':
+            messages.error(request, 'Bạn chỉ có thể chấp nhận bài đăng từ người dùng Nhật Bản.')
+            return redirect('dashboard')
+        if post.vietnamese_user:
+            messages.error(request, 'Bài đăng này đã được chấp nhận bởi người dùng khác.')
+            return redirect('dashboard')
+        
+        # Set Vietnamese partner
+        post.vietnamese_partner = request.user
+        post.phrase = phrase
+        post.status = 'matched'
+        post.save()
+        
+        welcome_message = f"Xin chào! Tôi đã chấp nhận bài đăng của bạn. Hãy cùng trò chuyện và học tiếng Việt nhé!"
+        
+    elif request.user.nationality == 'japanese':
+        # Japanese users can only accept posts created by Vietnamese users
+        if post.user_type != 'vietnamese':
+            messages.error(request, 'ベトナムのユーザーの投稿のみ承認できます。')
+            return redirect('dashboard')
+        if post.japanese_user:
+            messages.error(request, 'この投稿は既に他のユーザーによって承認されています。')
+            return redirect('dashboard')
+        
+        # Set Japanese partner
+        post.japanese_partner = request.user
+        post.phrase = phrase
+        post.status = 'matched'
+        post.save()
+        
+        welcome_message = f"こんにちは！あなたの投稿を承認しました。一緒にベトナム語を学びましょう！"
     
     # Create chat room
     chat_room, created = ChatRoom.objects.get_or_create(post=post)
     
     # Create welcome message
-    welcome_message = f"Xin chào! Tôi đã chấp nhận bài đăng của bạn. Hãy cùng trò chuyện và học tiếng Việt nhé!"
     Message.objects.create(
         chat_room=chat_room,
         sender=request.user,
         content=welcome_message
     )
     
-    messages.success(request, f'Đã chấp nhận bài đăng thành công! Bạn có thể chat với {post.japanese_user.full_name or post.japanese_user.username} ngay bây giờ.')
+    if request.user.nationality == 'vietnamese':
+        messages.success(request, f'Đã chấp nhận bài đăng thành công! Bạn có thể chat với {post.creator.full_name or post.creator.username} ngay bây giờ.')
+    else:
+        messages.success(request, f'投稿の承認が完了しました！今すぐ{post.creator.full_name or post.creator.username}とチャットできます。')
+    
     return redirect('chat_room', room_id=chat_room.id)
 
 @login_required
 def cancel_accept_post(request, post_id):
-    """Cancel accepting a language exchange post"""
-    if request.user.nationality != 'vietnamese':
-        return redirect('dashboard')
-    
-    post = get_object_or_404(LanguageExchangePost, id=post_id, status='matched', vietnamese_user=request.user)
-    
-    # Reset post status
-    post.vietnamese_user = None
-    post.status = 'active'
-    post.save()
+    """Cancel accepting a language exchange post for both Vietnamese and Japanese users"""
+    if request.user.nationality == 'vietnamese':
+        post = get_object_or_404(LanguageExchangePost, id=post_id, status='matched', vietnamese_partner=request.user)
+        
+        # Reset post status
+        post.vietnamese_partner = None
+        post.status = 'active'
+        post.save()
+        
+        messages.success(request, 'Đã hủy chấp nhận bài đăng.')
+        
+    elif request.user.nationality == 'japanese':
+        post = get_object_or_404(LanguageExchangePost, id=post_id, status='matched', japanese_partner=request.user)
+        
+        # Reset post status
+        post.japanese_partner = None
+        post.status = 'active'
+        post.save()
+        
+        messages.success(request, '投稿の承認をキャンセルしました。')
     
     # Delete chat room and messages
     try:
@@ -293,7 +371,6 @@ def cancel_accept_post(request, post_id):
     except ChatRoom.DoesNotExist:
         pass
     
-    messages.success(request, 'Đã hủy chấp nhận bài đăng.')
     return redirect('dashboard')
 
 @login_required

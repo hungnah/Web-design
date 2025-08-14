@@ -65,9 +65,21 @@
                                 {% if chat_room.post %}
                                     {% trans "Chat với" %} 
                                     {% if user == chat_room.post.japanese_user %}
-                                        {{ chat_room.post.vietnamese_user.full_name|default:chat_room.post.vietnamese_user.username }}
+                                        {% if chat_room.post.vietnamese_partner %}
+                                            {{ chat_room.post.vietnamese_partner.full_name|default:chat_room.post.vietnamese_partner.username }}
+                                        {% elif chat_room.post.vietnamese_user %}
+                                            {{ chat_room.post.vietnamese_user.full_name|default:chat_room.post.vietnamese_user.username }}
+                                        {% else %}
+                                            {% trans "Partner" %}
+                                        {% endif %}
                                     {% else %}
-                                        {{ chat_room.post.japanese_user.full_name|default:chat_room.post.japanese_user.username }}
+                                        {% if chat_room.post.japanese_partner %}
+                                            {{ chat_room.post.japanese_partner.full_name|default:chat_room.post.japanese_partner.username }}
+                                        {% elif chat_room.post.japanese_user %}
+                                            {{ chat_room.post.japanese_user.full_name|default:chat_room.post.japanese_user.username }}
+                                        {% else %}
+                                            {% trans "Partner" %}
+                                        {% endif %}
                                     {% endif %}
                                 {% elif chat_room.partner_request %}
                                     {% if user == chat_room.partner_request.requester %}
@@ -152,26 +164,44 @@
                         <h6><i class="fas fa-info-circle"></i> {% trans "Thông tin cuộc gặp mặt" %}</h6>
                         <div class="row">
                             <div class="col-md-6">
-                                <p><strong>{% trans "Địa điểm:" %}</strong> {{ chat_room.post.cafe_location.name }}</p>
-                                <p><strong>{% trans "Địa chỉ:" %}</strong> {{ chat_room.post.cafe_location.address }}</p>
+                                <p><strong>{% trans "Địa điểm:" %}</strong> {{ chat_room.post.cafe_location.name|default:"N/A" }}</p>
+                                <p><strong>{% trans "Địa chỉ:" %}</strong> {{ chat_room.post.cafe_location.address|default:"N/A" }}</p>
                             </div>
                             <div class="col-md-6">
-                                <p><strong>{% trans "Thời gian:" %}</strong> {{ chat_room.post.meeting_date|date:"d/m/Y H:i" }}</p>
-                                <p>{% trans "学習するフレーズ:" %} {{ chat_room.post.phrase }}</p>
+                                <p><strong>{% trans "Thời gian:" %}</strong> {{ chat_room.post.meeting_date|date:"d/m/Y H:i"|default:"N/A" }}</p>
+                                <p>{% trans "学習するフレーズ:" %} {{ chat_room.post.phrase.vietnamese_text|default:"N/A" }}</p>
                                 {% if user == chat_room.post.japanese_user %}
-                                    {% with session_partner_id=chat_room.post.vietnamese_user.id %}
-                                        <a href="{% url 'study' session_partner_id chat_room.post.id chat_room.post.phrase.id %}?timer=1"
-                                            style="display:inline-block; padding:10px 20px; background-color:#007BFF; color:white; text-decoration:none; border-radius:5px;">
-                                            {% trans "セッション開始!" %}
-                                        </a>
-                                    {% endwith %}
+                                    {% if chat_room.post.vietnamese_partner %}
+                                        {% with session_partner_id=chat_room.post.vietnamese_partner.id %}
+                                            <a href="{% url 'study' session_partner_id chat_room.post.id chat_room.post.phrase.id %}?timer=1"
+                                                style="display:inline-block; padding:10px 20px; background-color:#007BFF; color:white; text-decoration:none; border-radius:5px;">
+                                                {% trans "セッション開始!" %}
+                                            </a>
+                                        {% endwith %}
+                                    {% elif chat_room.post.vietnamese_user %}
+                                        {% with session_partner_id=chat_room.post.vietnamese_user.id %}
+                                            <a href="{% url 'study' session_partner_id chat_room.post.id chat_room.post.phrase.id %}?timer=1"
+                                                style="display:inline-block; padding:10px 20px; background-color:#007BFF; color:white; text-decoration:none; border-radius:5px;">
+                                                {% trans "セッション開始!" %}
+                                            </a>
+                                        {% endwith %}
+                                    {% endif %}
                                 {% else %}
-                                    {% with session_partner_id=chat_room.post.japanese_user.id %}
-                                        <a href="{% url 'study' session_partner_id chat_room.post.id chat_room.post.phrase.id %}?timer=1"
-                                            style="display:inline-block; padding:10px 20px; background-color:#007BFF; color:white; text-decoration:none; border-radius:5px;">
-                                            {% trans "セッション開始" %}
-                                        </a>
-                                    {% endwith %}
+                                    {% if chat_room.post.japanese_partner %}
+                                        {% with session_partner_id=chat_room.post.japanese_partner.id %}
+                                            <a href="{% url 'study' session_partner_id chat_room.post.id chat_room.post.phrase.id %}?timer=1"
+                                                style="display:inline-block; padding:10px 20px; background-color:#007BFF; color:white; text-decoration:none; border-radius:5px;">
+                                                {% trans "セッション開始" %}
+                                            </a>
+                                        {% endwith %}
+                                    {% elif chat_room.post.japanese_user %}
+                                        {% with session_partner_id=chat_room.post.japanese_user.id %}
+                                            <a href="{% url 'study' session_partner_id chat_room.post.id chat_room.post.phrase.id %}?timer=1"
+                                                style="display:inline-block; padding:10px 20px; background-color:#007BFF; color:white; text-decoration:none; border-radius:5px;">
+                                                {% trans "セッション開始" %}
+                                            </a>
+                                        {% endwith %}
+                                    {% endif %}
                                 {% endif %}
                                 <p><strong>{% trans "Trạng thái:" %}</strong> 
                                     <span class="badge bg-success">{{ chat_room.post.get_status_display }}</span>
@@ -237,14 +267,29 @@ $(document).ready(function() {
         $('#typing-indicator').show();
         scrollToBottom();
         
+        const csrfToken = $('[name=csrfmiddlewaretoken]').val();
+        console.log('DEBUG: CSRF Token:', csrfToken);
+        console.log('DEBUG: Sending message:', content);
+        console.log('DEBUG: URL:', $(this).attr('action'));
+        
         $.ajax({
             url: $(this).attr('action'),
             method: 'POST',
+            headers: {
+                'X-CSRFToken': csrfToken
+            },
             data: {
                 'content': content,
-                'csrfmiddlewaretoken': $('[name=csrfmiddlewaretoken]').val()
+                'csrfmiddlewaretoken': csrfToken
+            },
+            beforeSend: function(xhr) {
+                console.log('DEBUG: Request data:', {
+                    'content': content,
+                    'csrfmiddlewaretoken': csrfToken
+                });
             },
             success: function(response) {
+                console.log('DEBUG: Response received:', response);
                 if (response.success) {
                     // Add message to chat
                     const messageHtml = `
@@ -263,10 +308,26 @@ $(document).ready(function() {
                     $('#typing-indicator').hide();
                     scrollToBottom();
                     lastMessageId = response.message.id;
+                } else {
+                    console.error('DEBUG: Response indicates failure:', response);
+                    alert('Gửi tin nhắn thất bại: ' + (response.error || 'Không xác định'));
+                    $('#typing-indicator').hide();
                 }
             },
-            error: function() {
-                alert('Có lỗi xảy ra khi gửi tin nhắn. Vui lòng thử lại.');
+            error: function(xhr, status, error) {
+                console.error('Send message error:', xhr.responseText);
+                let errorMessage = 'Có lỗi xảy ra khi gửi tin nhắn. Vui lòng thử lại.';
+                
+                try {
+                    const response = JSON.parse(xhr.responseText);
+                    if (response.error) {
+                        errorMessage = response.error;
+                    }
+                } catch (e) {
+                    console.error('Failed to parse error response:', e);
+                }
+                
+                alert(errorMessage);
                 $('#typing-indicator').hide();
             }
         });

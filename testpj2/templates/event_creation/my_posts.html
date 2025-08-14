@@ -1,6 +1,12 @@
 {% extends 'base.html' %}
 
-{% block title %}Bài đăng của tôi - Vietnam-Japan Connect{% endblock %}
+{% block title %}
+    {% if user.nationality == 'japanese' %}
+        マイ投稿 - Vietnam-Japan Connect
+    {% else %}
+        Bài đăng của tôi - Vietnam-Japan Connect
+    {% endif %}
+{% endblock %}
 
 {% block content %}
 <div class="container my-5">
@@ -19,30 +25,41 @@
                 {% if user.nationality == 'japanese' %}
                     あなたが作成した投稿の一覧です
                 {% else %}
-                    Danh sách các bài đăng bạn đã chấp nhận
+                    Danh sách các bài đăng bạn đã tạo
                 {% endif %}
             </p>
-            {% if user.nationality == 'vietnamese' %}
-                <div class="text-center">
-                {% if phrase %}
-                    <a href="{% url 'create_post' phrase.id %}" class="btn btn-outline-success">
-                {% else %}
-                    <a href="{% url 'create_post' %}" class="btn btn-outline-success">
-                {% endif %}
-                    <i class="fas fa-coffee"></i> Tìm kiếm đối tác
+            <div class="text-center">
+                <a href="{% url 'create_post' %}" class="btn btn-outline-success">
+                    <i class="fas fa-plus"></i> 
+                    {% if user.nationality == 'japanese' %}
+                        新しい投稿を作成
+                    {% else %}
+                        Tạo bài đăng mới
+                    {% endif %}
                 </a>
             </div>
-            {% endif %}
         </div>
     </div>
 
     <!-- Recent Accepted Posts Notification -->
-    {% if recent_accepted_posts and user.nationality == 'japanese' %}
+    {% if recent_accepted_posts %}
         <div class="row mb-4">
             <div class="col-12">
                 <div class="alert alert-success">
-                    <h5><i class="fas fa-bell"></i> Thông báo mới!</h5>
-                    <p class="mb-2">Các bài đăng sau đã được người Việt chấp nhận:</p>
+                    <h5><i class="fas fa-bell"></i> 
+                        {% if user.nationality == 'japanese' %}
+                            新しい通知！
+                        {% else %}
+                            Thông báo mới!
+                        {% endif %}
+                    </h5>
+                    <p class="mb-2">
+                        {% if user.nationality == 'japanese' %}
+                            以下の投稿がベトナムのユーザーによって承認されました：
+                        {% else %}
+                            Các bài đăng sau đã được người Nhật chấp nhận:
+                        {% endif %}
+                    </p>
                     <div class="row">
                         {% for post in recent_accepted_posts %}
                             <div class="col-md-4 mb-2">
@@ -51,7 +68,19 @@
                                     <div>
                                         <strong>{{ post.phrase.vietnamese_text }}</strong><br>
                                         <small class="text-muted">
-                                            Chấp nhận bởi: {{ post.vietnamese_user.full_name|default:post.vietnamese_user.username }}
+                                            {% if user.nationality == 'japanese' %}
+                                                {% if post.vietnamese_partner %}
+                                                    承認者: {{ post.vietnamese_partner.full_name|default:post.vietnamese_partner.username }}
+                                                {% else %}
+                                                    承認者: まだマッチングしていません
+                                                {% endif %}
+                                            {% else %}
+                                                {% if post.japanese_partner %}
+                                                    Chấp nhận bởi: {{ post.japanese_partner.full_name|default:post.japanese_partner.username }}
+                                                {% else %}
+                                                    Chấp nhận bởi: Chưa có người chấp nhận
+                                                {% endif %}
+                                            {% endif %}
                                         </small>
                                     </div>
                                 </div>
@@ -60,7 +89,12 @@
                     </div>
                     <div class="mt-3">
                         <a href="{% url 'my_chats' %}" class="btn btn-success btn-sm">
-                            <i class="fas fa-comments"></i> Xem tất cả chat
+                            <i class="fas fa-comments"></i> 
+                            {% if user.nationality == 'japanese' %}
+                                すべてのチャットを見る
+                            {% else %}
+                                Xem tất cả chat
+                            {% endif %}
                         </a>
                     </div>
                 </div>
@@ -82,41 +116,49 @@
                     <div class="card-body">
                         <h5 class="card-title text-center mb-3">{{ post.phrase.vietnamese_text }}</h5>
                         
-                        {% if user.nationality == 'japanese' %}
+                        {% if post.status == 'matched' %}
                             <div class="mb-3">
                                 <small class="text-muted">
-                                    {% if post.vietnamese_user %}
-                                        パートナー: {{ post.vietnamese_user.full_name|default:post.vietnamese_user.username }}
-                                        {% if post.vietnamese_user.get_age %}
-                                        <br>
-                                        <i class="fas fa-birthday-cake text-warning"></i> {{ post.vietnamese_user.get_age }}歳
-                                        {% endif %}
-                                        {% if post.vietnamese_user.gender %}
-                                        <br>
-                                        <i class="fas {% if post.vietnamese_user.gender == 'male' %}fa-mars text-primary{% elif post.vietnamese_user.gender == 'female' %}fa-venus text-danger{% else %}fa-user text-secondary{% endif %}"></i>
-                                        {% if post.vietnamese_user.gender == 'male' %}男性{% elif post.vietnamese_user.gender == 'female' %}女性{% else %}その他{% endif %}
+                                    {% if user.nationality == 'japanese' %}
+                                        {% if post.vietnamese_partner %}
+                                            パートナー: {{ post.vietnamese_partner.full_name|default:post.vietnamese_partner.username }}
+                                            {% if post.vietnamese_partner.get_age %}
+                                            <br>
+                                            <i class="fas fa-birthday-cake text-warning"></i> {{ post.vietnamese_partner.get_age }}歳
+                                            {% endif %}
+                                            {% if post.vietnamese_partner.gender %}
+                                            <br>
+                                            <i class="fas {% if post.vietnamese_partner.gender == 'male' %}fa-mars text-primary{% elif post.vietnamese_partner.gender == 'female' %}fa-venus text-danger{% else %}fa-user text-secondary{% endif %}"></i>
+                                            {% if post.vietnamese_partner.gender == 'male' %}男性{% elif post.vietnamese_partner.gender == 'female' %}女性{% else %}その他{% endif %}
+                                            {% endif %}
+                                        {% else %}
+                                            パートナー: まだマッチングしていません
                                         {% endif %}
                                     {% else %}
-                                        パートナー: まだマッチングしていません
+                                        {% if post.japanese_partner %}
+                                            パートナー: {{ post.japanese_partner.full_name|default:post.japanese_partner.username }}
+                                            {% if post.japanese_partner.get_age %}
+                                            <br>
+                                            <i class="fas fa-birthday-cake text-warning"></i> {{ post.japanese_partner.get_age }} tuổi
+                                            {% endif %}
+                                            {% if post.japanese_partner.gender %}
+                                            <br>
+                                            <i class="fas {% if post.japanese_partner.gender == 'male' %}fa-mars text-primary{% elif post.japanese_partner.gender == 'female' %}fa-venus text-danger{% else %}fa-user text-secondary{% endif %}"></i>
+                                            {% if post.japanese_partner.gender == 'male' %}Nam{% elif post.japanese_partner.gender == 'female' %}Nữ{% else %}Khác{% endif %}
+                                            {% endif %}
+                                        {% else %}
+                                            パートナー: Chưa có người chấp nhận
+                                        {% endif %}
                                     {% endif %}
                                 </small>
                             </div>
                         {% else %}
                             <div class="mb-3">
                                 <small class="text-muted">
-                                    {% if post.japanese_user %}
-                                        日本人: {{ post.japanese_user.full_name|default:post.japanese_user.username }}
-                                        {% if post.japanese_user.get_age %}
-                                        <br>
-                                        <i class="fas fa-birthday-cake text-warning"></i> {{ post.japanese_user.get_age }} tuổi
-                                        {% endif %}
-                                        {% if post.japanese_user.gender %}
-                                        <br>
-                                        <i class="fas {% if post.japanese_user.gender == 'male' %}fa-mars text-primary{% elif post.japanese_user.gender == 'female' %}fa-venus text-danger{% else %}fa-user text-secondary{% endif %}"></i>
-                                        {% if post.japanese_user.gender == 'male' %}男性{% elif post.japanese_user.gender == 'female' %}女性{% else %}その他{% endif %}
-                                        {% endif %}
+                                    {% if user.nationality == 'japanese' %}
+                                        パートナー: まだマッチングしていません
                                     {% else %}
-                                        日本人: まだマッチングしていません
+                                        Đối tác: Chưa có người chấp nhận
                                     {% endif %}
                                 </small>
                             </div>

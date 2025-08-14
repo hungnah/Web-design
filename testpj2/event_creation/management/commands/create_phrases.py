@@ -24,6 +24,75 @@ class Command(BaseCommand):
             ('greetings', 'intermediate', 'Cảm ơn bạn đã hỏi thăm.', 'お気遣いありがとうございます。', 'Thank you for asking.'),
             ('greetings', 'intermediate', 'Chúc bạn một ngày tốt lành!', '良い一日をお過ごしください！', 'Have a good day!'),
             
+            # Family - Beginner
+            ('family', 'beginner', 'Đây là gia đình tôi.', 'これは私の家族です。', 'This is my family.'),
+            ('family', 'beginner', 'Tôi có anh trai.', '私は兄がいます。', 'I have an older brother.'),
+            ('family', 'beginner', 'Tôi có em gái.', '私は妹がいます。', 'I have a younger sister.'),
+            ('family', 'beginner', 'Bố tôi là giáo viên.', '私の父は教師です。', 'My father is a teacher.'),
+            ('family', 'beginner', 'Mẹ tôi là bác sĩ.', '私の母は医者です。', 'My mother is a doctor.'),
+            ('family', 'beginner', 'Tôi yêu gia đình tôi.', '私は家族を愛しています。', 'I love my family.'),
+            
+            # Family - Intermediate
+            ('family', 'intermediate', 'Gia đình tôi có 5 người.', '私の家族は5人です。', 'My family has 5 people.'),
+            ('family', 'intermediate', 'Tôi sống với bố mẹ.', '私は両親と一緒に住んでいます。', 'I live with my parents.'),
+            ('family', 'intermediate', 'Tôi có con trai và con gái.', '私は息子と娘がいます。', 'I have a son and daughter.'),
+            
+            # Health - Beginner
+            ('health', 'beginner', 'Tôi khỏe mạnh.', '私は健康です。', 'I am healthy.'),
+            ('health', 'beginner', 'Tôi bị ốm.', '私は病気です。', 'I am sick.'),
+            ('health', 'beginner', 'Tôi cần nghỉ ngơi.', '私は休む必要があります。', 'I need to rest.'),
+            ('health', 'beginner', 'Tôi uống thuốc.', '私は薬を飲みます。', 'I take medicine.'),
+            ('health', 'beginner', 'Tôi tập thể dục.', '私は運動します。', 'I exercise.'),
+            
+            # Health - Intermediate
+            ('health', 'intermediate', 'Tôi cảm thấy mệt mỏi.', '私は疲れています。', 'I feel tired.'),
+            ('health', 'intermediate', 'Tôi bị đau đầu.', '私は頭痛がします。', 'I have a headache.'),
+            ('health', 'intermediate', 'Tôi cần gặp bác sĩ.', '私は医者に診てもらう必要があります。', 'I need to see a doctor.'),
+            
+            # Time - Beginner
+            ('time', 'beginner', 'Bây giờ là mấy giờ?', '今何時ですか？', 'What time is it now?'),
+            ('time', 'beginner', 'Tôi thức dậy lúc 7 giờ.', '私は7時に起きます。', 'I wake up at 7 o\'clock.'),
+            ('time', 'beginner', 'Tôi đi ngủ lúc 11 giờ.', '私は11時に寝ます。', 'I go to sleep at 11 o\'clock.'),
+            ('time', 'beginner', 'Hôm nay là thứ mấy?', '今日は何曜日ですか？', 'What day is today?'),
+            ('time', 'beginner', 'Tôi có cuộc hẹn lúc 3 giờ.', '私は3時に約束があります。', 'I have an appointment at 3 o\'clock.'),
+            
+            # Time - Intermediate
+            ('time', 'intermediate', 'Tôi sẽ đến trong 30 phút.', '私は30分後に到着します。', 'I will arrive in 30 minutes.'),
+            ('time', 'intermediate', 'Cuộc hẹn bị trễ 15 phút.', '約束は15分遅れています。', 'The appointment is 15 minutes late.'),
+            
+            # Weather - Beginner
+            ('weather', 'beginner', 'Hôm nay trời nắng.', '今日は晴れです。', 'It is sunny today.'),
+            ('weather', 'beginner', 'Hôm nay trời mưa.', '今日は雨です。', 'It is rainy today.'),
+            ('weather', 'beginner', 'Hôm nay trời lạnh.', '今日は寒いです。', 'It is cold today.'),
+            ('weather', 'beginner', 'Hôm nay trời nóng.', '今日は暑いです。', 'It is hot today.'),
+            ('weather', 'beginner', 'Trời đẹp quá!', '天気がとても良いですね！', 'The weather is so nice!'),
+            
+            # Weather - Intermediate
+            ('weather', 'intermediate', 'Dự báo thời tiết thế nào?', '天気予報はどうですか？', 'What\'s the weather forecast?'),
+            ('weather', 'intermediate', 'Tôi thích thời tiết mùa thu.', '私は秋の天気が好きです。', 'I like autumn weather.'),
+            
+            # Directions - Beginner
+            ('directions', 'beginner', 'Nhà hàng ở đâu?', 'レストランはどこですか？', 'Where is the restaurant?'),
+            ('directions', 'beginner', 'Đi thẳng.', 'まっすぐ行ってください。', 'Go straight.'),
+            ('directions', 'beginner', 'Rẽ phải.', '右に曲がってください。', 'Turn right.'),
+            ('directions', 'beginner', 'Rẽ trái.', '左に曲がってください。', 'Turn left.'),
+            ('directions', 'beginner', 'Gần đây.', 'この近くです。', 'Near here.'),
+            
+            # Directions - Intermediate
+            ('directions', 'intermediate', 'Bạn có thể chỉ đường không?', '道案内してもらえますか？', 'Can you give me directions?'),
+            ('directions', 'intermediate', 'Tôi bị lạc đường.', '私は道に迷いました。', 'I am lost.'),
+            
+            # Self Introduction - Beginner
+            ('self_intro', 'beginner', 'Tôi tên là...', '私の名前は...です。', 'My name is...'),
+            ('self_intro', 'beginner', 'Tôi đến từ Việt Nam.', '私はベトナムから来ました。', 'I am from Vietnam.'),
+            ('self_intro', 'beginner', 'Tôi là sinh viên.', '私は学生です。', 'I am a student.'),
+            ('self_intro', 'beginner', 'Tôi thích học tiếng Nhật.', '私は日本語を勉強するのが好きです。', 'I like learning Japanese.'),
+            ('self_intro', 'beginner', 'Rất vui được gặp bạn!', 'お会いできて嬉しいです！', 'Nice to meet you!'),
+            
+            # Self Introduction - Intermediate
+            ('self_intro', 'intermediate', 'Tôi làm việc tại công ty...', '私は...会社で働いています。', 'I work at... company.'),
+            ('self_intro', 'intermediate', 'Tôi đã học tiếng Nhật được 2 năm.', '私は日本語を2年間勉強しています。', 'I have been learning Japanese for 2 years.'),
+            
             # Food & Dining - Beginner
             ('food', 'beginner', 'Cho tôi xem thực đơn.', 'メニューを見せてください。', 'Please show me the menu.'),
             ('food', 'beginner', 'Tôi muốn gọi món phở.', 'フォーを注文したいです。', 'I\'d like to order pho.'),
