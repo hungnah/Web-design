@@ -83,12 +83,14 @@
                     {% if user.is_authenticated %}
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'dashboard' %}">
-                                <i class="fas fa-home"></i> {% trans "Dashboard" %}
+                                <i class="fas fa-home"></i> 
+                                {% if is_japanese_user %}ダッシュボード{% else %}Dashboard{% endif %}
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link position-relative" href="/chat/my-chats/">
-                                <i class="fas fa-comments"></i> {% trans "Chat" %}
+                                <i class="fas fa-comments"></i> 
+                                {% if is_japanese_user %}チャット{% else %}Chat{% endif %}
                                 {% if unread_messages_count > 0 %}
                                     <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                                         {{ unread_messages_count }}
@@ -99,54 +101,52 @@
                         {% if user.nationality == 'japanese' %}
                             <li class="nav-item">
                                 <a class="nav-link" href="/create/phrases/">
-                                    <i class="fas fa-language"></i> {% trans "Vietnamese Learning" %}
+                                    <i class="fas fa-language"></i> 
+                                    {% if is_japanese_user %}ベトナム語学習{% else %}Học tiếng Việt{% endif %}
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="/create/lessons/">
-                                    <i class="fas fa-graduation-cap"></i> {% trans "Lessons" %}
+                                    <i class="fas fa-graduation-cap"></i> 
+                                    {% if is_japanese_user %}レッスン{% else %}Bài học{% endif %}
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="/create/my-posts/">
-                                    <i class="fas fa-list"></i> {% trans "My Posts" %}
+                                    <i class="fas fa-list"></i> 
+                                    {% if is_japanese_user %}応募一覧{% else %}Bài đăng của tôi{% endif %}
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="/create/create-post/">
-                                    <i class="fas fa-plus"></i> {% trans "Create Post" %}
+                                    <i class="fas fa-plus"></i> 
+                                    {% if is_japanese_user %}投稿を作成{% else %}Tạo bài đăng{% endif %}
                                 </a>
                             </li>
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="fas fa-search"></i> {% trans "Search Posts" %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="/search/available-posts/">
+                                    <i class="fas fa-search"></i> 
+                                    {% if is_japanese_user %}募集を探す{% else %}Tìm kiếm bài đăng{% endif %}
                                 </a>
-                                <ul class="dropdown-menu" aria-labelledby="searchDropdown">
-                                    <li><a class="dropdown-item" href="/search/available-posts/">
-                                        <i class="fas fa-map-marker-alt"></i> {% trans "Search by City" %}
-                                    </a></li>
-                                </ul>
                             </li>
                         {% else %}
                             <li class="nav-item">
                                 <a class="nav-link" href="/create/my-posts/">
-                                    <i class="fas fa-list"></i> {% trans "My Posts" %}
+                                    <i class="fas fa-list"></i> 
+                                    {% if is_japanese_user %}応募一覧{% else %}Bài đăng của tôi{% endif %}
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="/create/create-post/">
-                                    <i class="fas fa-plus"></i> {% trans "Create Post" %}
+                                    <i class="fas fa-plus"></i> 
+                                    {% if is_japanese_user %}投稿を作成{% else %}Tạo bài đăng{% endif %}
                                 </a>
                             </li>
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="fas fa-search"></i> {% trans "Search Posts" %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="/search/available-posts/">
+                                    <i class="fas fa-search"></i> 
+                                    {% if is_japanese_user %}募集を探す{% else %}Tìm kiếm bài đăng{% endif %}
                                 </a>
-                                <ul class="dropdown-menu" aria-labelledby="searchDropdown">
-                                    <li><a class="dropdown-item" href="/search/available-posts/">
-                                        <i class="fas fa-map-marker-alt"></i> {% trans "Search by City" %}
-                                    </a></li>
-                                </ul>
                             </li>
                         {% endif %}
                     {% endif %}
@@ -161,11 +161,13 @@
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <li><a class="dropdown-item" href="{% url 'profile' %}">
-                                    <i class="fas fa-user-edit"></i> {% trans "Profile" %}
+                                    <i class="fas fa-user-edit"></i> 
+                                    {% if is_japanese_user %}プロフィール{% else %}Hồ sơ{% endif %}
                                 </a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" href="{% url 'logout' %}">
-                                    <i class="fas fa-sign-out-alt"></i> {% trans "Logout" %}
+                                    <i class="fas fa-sign-out-alt"></i> 
+                                    {% if is_japanese_user %}ログアウト{% else %}Đăng xuất{% endif %}
                                 </a></li>
                             </ul>
                         </li>
@@ -198,16 +200,32 @@
             <div class="row">
                 <div class="col-md-6">
                     <h5>Vietnam-Japan Connect</h5>
-                    <p>{% trans "Connecting Vietnamese and Japanese people for language exchange and cultural understanding." %}</p>
+                    <p>
+                        {% if is_japanese_user %}
+                            相互の言語交換と文化理解により、ベトナム人と日本人を繋ぐ
+                        {% else %}
+                            Kết nối người Việt Nam và Nhật Bản để trao đổi ngôn ngữ và hiểu biết văn hóa
+                        {% endif %}
+                    </p>
                 </div>
                 <div class="col-md-6 text-md-end">
-                    <h5>{% trans "Quick Links" %}</h5>
+                    <h5>
+                        {% if is_japanese_user %}クイックリンク{% else %}Liên kết nhanh{% endif %}
+                    </h5>
                     <ul class="list-unstyled">
-                        <li><a href="{% url 'home' %}" class="text-light">{% trans "Home" %}</a></li>
-                        <li><a href="{% url 'guide' %}" class="text-light">{% trans "Guide" %}</a></li>
+                        <li><a href="{% url 'home' %}" class="text-light">
+                            {% if is_japanese_user %}ホーム{% else %}Trang chủ{% endif %}
+                        </a></li>
+                        <li><a href="{% url 'guide' %}" class="text-light">
+                            {% if is_japanese_user %}ガイド{% else %}Hướng dẫn{% endif %}
+                        </a></li>
                         {% if user.is_authenticated %}
-                            <li><a href="{% url 'dashboard' %}" class="text-light">{% trans "Dashboard" %}</a></li>
-                            <li><a href="{% url 'profile' %}" class="text-light">{% trans "Profile" %}</a></li>
+                            <li><a href="{% url 'dashboard' %}" class="text-light">
+                                {% if is_japanese_user %}ダッシュボード{% else %}Dashboard{% endif %}
+                            </a></li>
+                            <li><a href="{% url 'profile' %}" class="text-light">
+                                {% if is_japanese_user %}プロフィール{% else %}Hồ sơ{% endif %}
+                            </a></li>
                         {% endif %}
                     </ul>
                 </div>

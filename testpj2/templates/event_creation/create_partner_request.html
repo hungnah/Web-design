@@ -1,7 +1,13 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
 
-{% block title %}Tạo yêu cầu tìm partner - Vietnam-Japan Connect{% endblock %}
+{% block title %}
+    {% if user.nationality == 'japanese' %}
+        パートナーリクエスト作成 - Vietnam-Japan Connect
+    {% else %}
+        Tạo yêu cầu tìm partner - Vietnam-Japan Connect
+    {% endif %}
+{% endblock %}
 
 {% block content %}
 <div class="container mt-4">
@@ -11,7 +17,11 @@
                 <div class="card-header bg-primary text-white">
                     <h4 class="mb-0">
                         <i class="fas fa-user-plus me-2"></i>
-                        Tạo yêu cầu tìm partner
+                        {% if user.nationality == 'japanese' %}
+                            パートナーリクエスト作成
+                        {% else %}
+                            Tạo yêu cầu tìm partner
+                        {% endif %}
                     </h4>
                 </div>
                 <div class="card-body">
@@ -21,18 +31,37 @@
                         
                         <div class="alert alert-info">
                             <i class="fas fa-info-circle me-2"></i>
-                            <strong>Lưu ý:</strong> Mô tả chi tiết sẽ giúp bạn tìm được partner phù hợp hơn. 
-                            Hãy chia sẻ về mục tiêu học tập, sở thích và lịch trình của bạn.
+                            <strong>
+                                {% if user.nationality == 'japanese' %}
+                                    注意:
+                                {% else %}
+                                    Lưu ý:
+                                {% endif %}
+                            </strong> 
+                            {% if user.nationality == 'japanese' %}
+                                詳細な説明は、適切なパートナーを見つけるのに役立ちます。学習目標、興味、スケジュールについて共有してください。
+                            {% else %}
+                                Mô tả chi tiết sẽ giúp bạn tìm được partner phù hợp hơn. 
+                                Hãy chia sẻ về mục tiêu học tập, sở thích và lịch trình của bạn.
+                            {% endif %}
                         </div>
                         
                         <div class="d-grid gap-2">
                             <button type="submit" class="btn btn-primary btn-lg">
                                 <i class="fas fa-paper-plane me-2"></i>
-                                Đăng yêu cầu
+                                {% if user.nationality == 'japanese' %}
+                                    リクエストを投稿
+                                {% else %}
+                                    Đăng yêu cầu
+                                {% endif %}
                             </button>
                             <a href="{% url 'find_partners' %}" class="btn btn-outline-secondary">
                                 <i class="fas fa-search me-2"></i>
-                                Xem các yêu cầu khác
+                                {% if user.nationality == 'japanese' %}
+                                    他のリクエストを見る
+                                {% else %}
+                                    Xem các yêu cầu khác
+                                {% endif %}
                             </a>
                         </div>
                     </form>

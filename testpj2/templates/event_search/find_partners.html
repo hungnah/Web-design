@@ -1,6 +1,12 @@
 {% extends 'base.html' %}
 
-{% block title %}Tìm partner - Vietnam-Japan Connect{% endblock %}
+{% block title %}
+    {% if user.nationality == 'japanese' %}
+        パートナーを探す - Vietnam-Japan Connect
+    {% else %}
+        Tìm partner - Vietnam-Japan Connect
+    {% endif %}
+{% endblock %}
 
 {% block extra_css %}
 <style>

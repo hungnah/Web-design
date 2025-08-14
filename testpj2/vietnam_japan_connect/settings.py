@@ -98,6 +98,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'chat_system.context_processors.unread_messages_count',
+                'user_profile.context_processors.user_language_context',
             ],
         },
     },

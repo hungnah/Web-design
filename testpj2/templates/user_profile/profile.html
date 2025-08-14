@@ -3,7 +3,11 @@
 {% load i18n tz %}
 
 {% block title %}
-プロフィール - Vietnam-Japan Connect
+    {% if user.nationality == 'japanese' %}
+        プロフィール - Vietnam-Japan Connect
+    {% else %}
+        Hồ sơ - Vietnam-Japan Connect
+    {% endif %}
 {% endblock %}
 
 {% block content %}
@@ -64,7 +68,8 @@
             <div class="card">
                 <div class="card-header">
                     <h5 class="mb-0">
-                        <i class="fas fa-chart-bar"></i> {% trans "統計" %}
+                        <i class="fas fa-chart-bar"></i> 
+                        {% if user.nationality == 'japanese' %}統計{% else %}Thống kê{% endif %}
                     </h5>
                 </div>
                 <div class="card-body">
@@ -74,7 +79,7 @@
                                 {{ user.japanese_posts.count }}
                             </h4>
                             <small class="text-muted">
-                                {% trans "投稿数" %}
+                                {% if user.nationality == 'japanese' %}投稿数{% else %}Số bài đăng{% endif %}
                             </small>
                         </div>
                         <div class="col-6">
@@ -82,7 +87,7 @@
                                 {{ user.japanese_posts.all|length }}
                             </h4>
                             <small class="text-muted">
-                                {% trans "マッチング" %}
+                                {% if user.nationality == 'japanese' %}マッチング{% else %}Kết nối{% endif %}
                             </small>
                         </div>
                     </div>
@@ -95,7 +100,8 @@
             <div class="card">
                 <div class="card-header">
                     <h3 class="mb-0">
-                        <i class="fas fa-edit"></i> {% trans "プロフィール編集" %}
+                        <i class="fas fa-edit"></i> 
+                        {% if user.nationality == 'japanese' %}プロフィール編集{% else %}Chỉnh sửa hồ sơ{% endif %}
                     </h3>
                 </div>
                 <div class="card-body">

@@ -40,7 +40,7 @@ msgstr ""
 
 #: .\templates\base.html:118
 msgid "Search Posts"
-msgstr ""
+msgstr "Tìm kiếm bài đăng"
 
 #: .\templates\base.html:122
 msgid "Search by City"

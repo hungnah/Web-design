@@ -11,14 +11,26 @@
             <div class="header-icon">
                 <i class="fas fa-comments"></i>
             </div>
-            <h1 class="dashboard-title">Language Learning Dashboard</h1>
+            <h1 class="dashboard-title">
+                {% if user.nationality == 'japanese' %}
+                    言語学習ダッシュボード
+                {% else %}
+                    Bảng điều khiển học ngôn ngữ
+                {% endif %}
+            </h1>
         </div>
 
         <!-- Languages Section -->
         <div class="dashboard-section">
             <div class="section-header">
                 <i class="fas fa-th-large"></i>
-                <h2>LANGUAGES</h2>
+                <h2>
+                    {% if user.nationality == 'japanese' %}
+                        言語
+                    {% else %}
+                        NGÔN NGỮ
+                    {% endif %}
+                </h2>
             </div>
             
             <div class="language-cards">
@@ -64,11 +76,11 @@
                         
                         <div class="difficulty-tag">
                             {% if lesson.difficulty == 'beginner' %}
-                                Beginner
+                                {% if user.nationality == 'japanese' %}初級{% else %}Sơ cấp{% endif %}
                             {% elif lesson.difficulty == 'intermediate' %}
-                                Intermediate
+                                {% if user.nationality == 'japanese' %}中級{% else %}Trung cấp{% endif %}
                             {% else %}
-                                Advanced
+                                {% if user.nationality == 'japanese' %}上級{% else %}Cao cấp{% endif %}
                             {% endif %}
                         </div>
                         
@@ -82,22 +94,29 @@
                         <div class="stats">
                             <div class="stat-item">
                                 <span class="stat-number">{{ lesson.phrases.count }}</span>
-                                <span class="stat-label">words learned</span>
+                                <span class="stat-label">
+                                    {% if user.nationality == 'japanese' %}学習した単語{% else %}từ đã học{% endif %}
+                                </span>
                             </div>
                             <div class="stat-item">
                                 <span class="stat-number">{{ lesson.phrases.count }}</span>
-                                <span class="stat-label">/{{ lesson.phrases.count|add:1000 }} words mastered</span>
+                                <span class="stat-label">
+                                    {% if user.nationality == 'japanese' %}/{{ lesson.phrases.count|add:1000 }} 単語マスター{% else %}/{{ lesson.phrases.count|add:1000 }} từ đã nắm vững{% endif %}
+                                </span>
                                 <i class="fas fa-gem text-pink"></i>
                             </div>
                             <div class="stat-item">
                                 <span class="stat-number">0 hrs 0 mins</span>
-                                <span class="stat-label">spent</span>
+                                <span class="stat-label">
+                                    {% if user.nationality == 'japanese' %}費やした時間{% else %}thời gian đã dành{% endif %}
+                                </span>
                                 <i class="fas fa-clock"></i>
                             </div>
                         </div>
                         
                         <a href="{% url 'lesson_detail' lesson.id %}" class="start-learning-btn">
-                            <i class="fas fa-play"></i> Start Learning
+                            <i class="fas fa-play"></i> 
+                            {% if user.nationality == 'japanese' %}学習を始める{% else %}Bắt đầu học{% endif %}
                         </a>
                     </div>
                 </div>
