@@ -160,14 +160,14 @@
                                 <p>{% trans "学習するフレーズ:" %} {{ chat_room.post.phrase }}</p>
                                 {% if user == chat_room.post.japanese_user %}
                                     {% with session_partner_id=chat_room.post.vietnamese_user.id %}
-                                        <a href="{% url 'study' session_partner_id chat_room.post.id chat_room.post.phrase.id %}?timer=1"
+                                        <a href="{% url 'start_learning_session' session_partner_id chat_room.post.id chat_room.post.phrase.id %}"
                                             style="display:inline-block; padding:10px 20px; background-color:#007BFF; color:white; text-decoration:none; border-radius:5px;">
                                             {% trans "セッション開始!" %}
                                         </a>
                                     {% endwith %}
                                 {% else %}
                                     {% with session_partner_id=chat_room.post.japanese_user.id %}
-                                        <a href="{% url 'study' session_partner_id chat_room.post.id chat_room.post.phrase.id %}?timer=1"
+                                        <a href="{% url 'start_learning_session' session_partner_id chat_room.post.id chat_room.post.phrase.id %}"
                                             style="display:inline-block; padding:10px 20px; background-color:#007BFF; color:white; text-decoration:none; border-radius:5px;">
                                             {% trans "セッション開始" %}
                                         </a>

@@ -1,0 +1,438 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Phiên học tập - Vietnam-Japan Connect{% endblock %}
+
+{% block extra_css %}
+<style>
+    .learning-container {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        border-radius: 15px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    
+    .learning-header {
+        text-align: center;
+        margin-bottom: 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 2px solid #007bff;
+    }
+    
+    .learning-title {
+        color: #2c3e50;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+    
+    .learning-subtitle {
+        color: #6c757d;
+        font-size: 1.1rem;
+    }
+    
+    .conversation-container {
+        background: white;
+        padding: 2rem;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        margin-bottom: 2rem;
+    }
+    
+    .conversation-message {
+        margin-bottom: 1.5rem;
+        padding: 1rem;
+        border-radius: 10px;
+        position: relative;
+    }
+    
+    .message-system {
+        background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+        color: white;
+        text-align: center;
+        font-weight: 600;
+        margin: 1rem 0;
+    }
+    
+    .message-left {
+        background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+        color: white;
+        margin-right: 20%;
+        border-bottom-left-radius: 5px;
+    }
+    
+    .message-right {
+        background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        color: white;
+        margin-left: 20%;
+        border-bottom-right-radius: 5px;
+        text-align: right;
+    }
+    
+    .message-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        margin-right: 10px;
+        display: inline-block;
+        vertical-align: middle;
+    }
+    
+    .message-content {
+        display: inline-block;
+        vertical-align: middle;
+        max-width: calc(100% - 60px);
+    }
+    
+    .message-text {
+        margin: 0;
+        line-height: 1.6;
+        font-size: 1.1rem;
+    }
+    
+    .message-name {
+        font-size: 0.9rem;
+        opacity: 0.8;
+        margin-bottom: 0.5rem;
+    }
+    
+    .phrase-display {
+        background: linear-gradient(135deg, #ffc107 0%, #fd7e14 100%);
+        color: white;
+        padding: 2rem;
+        border-radius: 15px;
+        text-align: center;
+        margin-bottom: 2rem;
+        box-shadow: 0 4px 15px rgba(255, 193, 7, 0.3);
+    }
+    
+    .phrase-vietnamese {
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    }
+    
+    .phrase-japanese {
+        font-size: 1.5rem;
+        font-weight: 600;
+        opacity: 0.9;
+        margin-bottom: 1rem;
+    }
+    
+    .phrase-category {
+        background: rgba(255,255,255,0.2);
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+    
+    .partner-info {
+        background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        color: white;
+        padding: 1.5rem;
+        border-radius: 10px;
+        margin-bottom: 2rem;
+        text-align: center;
+    }
+    
+    .partner-avatar {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        margin: 0 auto 1rem;
+        display: block;
+        border: 3px solid rgba(255,255,255,0.3);
+    }
+    
+    .action-buttons {
+        text-align: center;
+        margin-top: 2rem;
+    }
+    
+    .btn-action {
+        background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+        border: none;
+        color: white;
+        padding: 1rem 2rem;
+        font-size: 1.1rem;
+        border-radius: 25px;
+        transition: all 0.3s ease;
+        margin: 0 0.5rem;
+        text-decoration: none;
+        display: inline-block;
+    }
+    
+    .btn-action:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(0,123,255,0.4);
+        color: white;
+        text-decoration: none;
+    }
+    
+    .btn-back {
+        background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+        border: none;
+        color: white;
+        padding: 1rem 2rem;
+        font-size: 1.1rem;
+        border-radius: 25px;
+        transition: all 0.3s ease;
+        margin: 0 0.5rem;
+        text-decoration: none;
+        display: inline-block;
+    }
+    
+    .btn-back:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(108,117,125,0.4);
+        color: white;
+        text-decoration: none;
+    }
+    
+    .timer-container {
+        background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+        color: white;
+        padding: 1rem;
+        border-radius: 10px;
+        text-align: center;
+        margin-bottom: 2rem;
+        font-size: 1.2rem;
+        font-weight: 600;
+    }
+    
+    .timer-display {
+        font-size: 2rem;
+        font-weight: 700;
+        margin: 0;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+    
+    @media (max-width: 768px) {
+        .learning-container {
+            padding: 1rem;
+        }
+        
+        .conversation-container {
+            padding: 1rem;
+        }
+        
+        .message-left, .message-right {
+            margin: 0 0 1rem 0;
+        }
+        
+        .phrase-vietnamese {
+            font-size: 1.5rem;
+        }
+        
+        .phrase-japanese {
+            font-size: 1.2rem;
+        }
+        
+        .btn-action, .btn-back {
+            display: block;
+            margin: 0.5rem auto;
+            width: 100%;
+            max-width: 300px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="learning-container">
+        <!-- Header -->
+        <div class="learning-header">
+            <h1 class="learning-title">
+                <i class="fas fa-graduation-cap text-primary me-2"></i>
+                {% if user.nationality == 'japanese' %}
+                    ベトナム語学習セッション
+                {% else %}
+                    Phiên học tiếng Nhật
+                {% endif %}
+            </h1>
+            <p class="learning-subtitle">
+                {% if user.nationality == 'japanese' %}
+                    ベトナム人のパートナーと一緒に学習しましょう
+                {% else %}
+                    Học tập cùng người Nhật
+                {% endif %}
+            </p>
+        </div>
+
+        <!-- Timer -->
+        {% if timer_flag %}
+        <div class="timer-container">
+            <p class="timer-display" id="timer">00:00</p>
+            <small>Thời gian học tập</small>
+        </div>
+        {% endif %}
+
+        <!-- Phrase Display -->
+        {% if phrase and phrase.vietnamese_text %}
+        <div class="phrase-display">
+            <div class="phrase-vietnamese">{{ phrase.vietnamese_text }}</div>
+            <div class="phrase-japanese">{{ phrase.japanese_translation }}</div>
+            <div class="phrase-category">{{ phrase.category|title }} - {{ phrase.difficulty|title }}</div>
+        </div>
+        {% endif %}
+
+        <!-- Partner Info -->
+        {% if poster %}
+        <div class="partner-info">
+            <img src="{% static 'images/session/teacher.png' %}" alt="Partner" class="partner-avatar">
+            <h4>{{ poster.full_name|default:poster.username }}</h4>
+            <p>
+                <i class="fas fa-map-marker-alt me-2"></i>{{ poster.city|default:"Unknown" }}
+                {% if poster.gender %}
+                <span class="ms-3">
+                    <i class="fas {% if poster.gender == 'male' %}fa-mars{% elif poster.gender == 'female' %}fa-venus{% else %}fa-user{% endif %} me-2"></i>
+                    {% if poster.gender == 'male' %}Nam{% elif poster.gender == 'female' %}Nữ{% else %}Khác{% endif %}
+                </span>
+                {% endif %}
+            </p>
+        </div>
+        {% endif %}
+
+        <!-- Conversation -->
+        {% if messages %}
+        <div class="conversation-container">
+            <h4 class="text-center mb-4">
+                <i class="fas fa-comments text-primary me-2"></i>
+                {% if user.nationality == 'japanese' %}
+                    会話練習
+                {% else %}
+                    Luyện tập hội thoại
+                {% endif %}
+            </h4>
+            
+            {% for message in messages %}
+            <div class="conversation-message message-{{ message.side }}">
+                {% if message.side == 'left' %}
+                    <img src="{% static left_icon %}" alt="Teacher" class="message-avatar">
+                    <div class="message-content">
+                        <div class="message-name">{{ left_name }}</div>
+                        <div class="message-text">{{ message.text }}</div>
+                    </div>
+                {% elif message.side == 'right' %}
+                    <img src="{% static right_icon %}" alt="Student" class="message-avatar">
+                    <div class="message-content">
+                        <div class="message-name">{{ right_name }}</div>
+                        <div class="message-text">{{ message.text }}</div>
+                    </div>
+                {% else %}
+                    <div class="message-text">{{ message.text }}</div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="conversation-container">
+            <div class="text-center">
+                <i class="fas fa-info-circle text-info fa-3x mb-3"></i>
+                <h5>
+                    {% if user.nationality == 'japanese' %}
+                        会話内容が準備中です
+                    {% else %}
+                        Nội dung hội thoại đang được chuẩn bị
+                    {% endif %}
+                </h5>
+                <p class="text-muted">
+                    {% if user.nationality == 'japanese' %}
+                        しばらくお待ちください
+                    {% else %}
+                        Vui lòng chờ một chút
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            {% if post and post.chatroom %}
+            <a href="{% url 'chat_room' post.chatroom.id %}" class="btn-action">
+                <i class="fas fa-comments me-2"></i>
+                {% if user.nationality == 'japanese' %}
+                    チャットに参加
+                {% else %}
+                    Vào chat
+                {% endif %}
+            </a>
+            {% endif %}
+            
+            <a href="{% url 'evaluate' partner_id post_id phrase_id %}" class="btn-action">
+                <i class="fas fa-star me-2"></i>
+                {% if user.nationality == 'japanese' %}
+                    評価する
+                {% else %}
+                    Đánh giá
+                {% endif %}
+            </a>
+            
+            <a href="{% url 'my_posts' %}" class="btn-back">
+                <i class="fas fa-arrow-left me-2"></i>
+                {% if user.nationality == 'japanese' %}
+                    戻る
+                {% else %}
+                    Quay lại
+                {% endif %}
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Timer functionality
+    {% if timer_flag %}
+    let startTime = Date.now();
+    let timerInterval = setInterval(updateTimer, 1000);
+    
+    function updateTimer() {
+        let elapsed = Date.now() - startTime;
+        let minutes = Math.floor(elapsed / 60000);
+        let seconds = Math.floor((elapsed % 60000) / 1000);
+        
+        document.getElementById('timer').textContent = 
+            (minutes < 10 ? '0' : '') + minutes + ':' + 
+            (seconds < 10 ? '0' : '') + seconds;
+    }
+    
+    // Clean up timer when page is unloaded
+    window.addEventListener('beforeunload', function() {
+        clearInterval(timerInterval);
+    });
+    {% endif %}
+    
+    // Add smooth scrolling for better UX
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            document.querySelector(this.getAttribute('href')).scrollIntoView({
+                behavior: 'smooth'
+            });
+        });
+    });
+    
+    // Add animation for conversation messages
+    const messages = document.querySelectorAll('.conversation-message');
+    messages.forEach((message, index) => {
+        message.style.opacity = '0';
+        message.style.transform = 'translateY(20px)';
+        
+        setTimeout(() => {
+            message.style.transition = 'all 0.5s ease';
+            message.style.opacity = '1';
+            message.style.transform = 'translateY(0)';
+        }, index * 200);
+    });
+});
+</script>
+{% endblock %}

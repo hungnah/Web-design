@@ -13,5 +13,7 @@ urlpatterns = [
     path('study_phrase/<int:phrase_id>/', views.study_detail, name='study_phrase'),
     path('text-session/<int:post_id>', views.text_session, name='text_session'),
     path('start-chat/<int:post_id>/', views.start_chat_session, name='start_chat_session'),
-
+    path('start-learning/<int:partner_id>/<int:post_id>/<int:phrase_id>/', views.start_learning_session, name='start_learning_session'),
+    path('start-working/<int:post_id>/', views.start_working_session, name='start_working_session'),
+    path('start-session-from-dashboard/', views.start_session_from_dashboard, name='start_session_from_dashboard'),
 ]

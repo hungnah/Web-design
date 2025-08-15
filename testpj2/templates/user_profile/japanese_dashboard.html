@@ -1,168 +1,376 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}ダッシュボード - Vietnam-Japan Connect{% endblock %}
 
+{% block extra_css %}
+<style>
+    /* Hero Section với hình ảnh Nhật Bản */
+    .hero-section {
+        background: linear-gradient(135deg, rgba(220, 53, 69, 0.9) 0%, rgba(255, 193, 7, 0.9) 100%),
+                    url('https://images.unsplash.com/photo-1545569341-9eb8b30979d9?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80');
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        color: white;
+        padding: 80px 0;
+        margin-bottom: 40px;
+        border-radius: 0 0 30px 30px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .hero-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="japanese" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="1" fill="white" opacity="0.1"/><circle cx="5" cy="5" r="0.5" fill="white" opacity="0.1"/><circle cx="15" cy="15" r="0.5" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23japanese)"/></svg>');
+        opacity: 0.3;
+    }
+
+    .hero-content {
+        position: relative;
+        z-index: 2;
+    }
+
+    .hero-title {
+        font-size: 3rem;
+        font-weight: 700;
+        margin-bottom: 20px;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        animation: fadeInUp 1s ease-out;
+    }
+
+    .hero-subtitle {
+        font-size: 1.2rem;
+        margin-bottom: 30px;
+        opacity: 0.9;
+        animation: fadeInUp 1s ease-out 0.2s both;
+    }
+
+    .hero-buttons {
+        animation: fadeInUp 1s ease-out 0.4s both;
+    }
+
+    /* Card animations và effects */
+    .dashboard-card {
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        border: none;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        overflow: hidden;
+        position: relative;
+    }
+
+    .dashboard-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, #dc3545, #ffc107, #28a745, #17a2b8);
+        transform: scaleX(0);
+        transition: transform 0.3s ease;
+    }
+
+    .dashboard-card:hover::before {
+        transform: scaleX(1);
+    }
+
+    .dashboard-card:hover {
+        transform: translateY(-10px) scale(1.02);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+    }
+
+    .profile-card {
+        background: linear-gradient(135deg, #dc3545 0%, #fd7e14 100%);
+        color: white;
+        border-radius: 25px;
+        overflow: hidden;
+        position: relative;
+    }
+
+    .profile-card .card-body {
+        padding: 2rem !important;
+    }
+
+    .profile-card .card-body > * {
+        margin-bottom: 1.5rem;
+    }
+
+    .profile-card .card-body > *:last-child {
+        margin-bottom: 0;
+    }
+
+    .profile-card::after {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -50%;
+        width: 200%;
+        height: 200%;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="white" opacity="0.1"/><circle cx="80" cy="40" r="1" fill="white" opacity="0.1"/><circle cx="40" cy="80" r="1.5" fill="white" opacity="0.1"/></svg>');
+        animation: float 6s ease-in-out infinite;
+    }
+
+    .profile-picture {
+        width: 120px;
+        height: 120px;
+        border: 4px solid rgba(255,255,255,0.3);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        transition: all 0.3s ease;
+    }
+
+    .profile-picture:hover {
+        transform: scale(1.1);
+        border-color: rgba(255,255,255,0.6);
+    }
+
+    .stats-card {
+        background: linear-gradient(135deg, #6f42c1 0%, #e83e8c 100%);
+        color: white;
+        border-radius: 20px;
+        overflow: hidden;
+    }
+
+    .stats-card .card-body {
+        padding: 2rem !important;
+    }
+
+    .stats-card .stats-number {
+        margin-bottom: 1rem !important;
+    }
+
+    .stats-number {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 5px;
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+    }
+
+    .stats-label {
+        font-size: 0.9rem;
+        opacity: 0.9;
+    }
+
+    .feature-card {
+        background: white;
+        border-radius: 15px;
+        padding: 25px;
+        margin-bottom: 20px;
+        border-left: 5px solid #dc3545;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .feature-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(45deg, transparent 30%, rgba(220,53,69,0.05) 50%, transparent 70%);
+        transform: translateX(-100%);
+        transition: transform 0.6s ease;
+    }
+
+    .feature-card:hover::before {
+        transform: translateX(100%);
+    }
+
+    .feature-card:hover {
+        transform: translateX(10px);
+        box-shadow: 0 10px 25px rgba(220,53,69,0.15);
+    }
+
+    .feature-icon {
+        font-size: 2.5rem;
+        margin-bottom: 15px;
+        background: linear-gradient(135deg, #dc3545, #fd7e14);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    /* Button styles */
+    .btn-modern {
+        border-radius: 25px;
+        padding: 12px 25px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        border: none;
+    }
+
+    .btn-modern::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+        transition: left 0.5s ease;
+    }
+
+    .btn-modern:hover::before {
+        left: 100%;
+    }
+
+    .btn-modern:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    }
+
+    /* Lesson plan cards */
+    .lesson-card {
+        background: white;
+        border-radius: 15px;
+        padding: 20px;
+        margin-bottom: 20px;
+        border: 2px solid transparent;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .lesson-card::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, rgba(220,53,69,0.1) 0%, rgba(255,193,7,0.1) 100%);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .lesson-card:hover::after {
+        opacity: 1;
+    }
+
+    .lesson-card:hover {
+        transform: translateY(-5px);
+        border-color: #dc3545;
+        box-shadow: 0 15px 30px rgba(220,53,69,0.2);
+    }
+
+    /* Animations */
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes float {
+        0%, 100% { transform: translateY(0px) rotate(0deg); }
+        50% { transform: translateY(-20px) rotate(180deg); }
+    }
+
+    @keyframes pulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+    }
+
+    .pulse-animation {
+        animation: pulse 2s infinite;
+    }
+
+    /* Responsive design */
+    @media (max-width: 768px) {
+        .hero-title {
+            font-size: 2rem;
+        }
+        
+        .hero-subtitle {
+            font-size: 1rem;
+        }
+        
+        .dashboard-card {
+            margin-bottom: 20px;
+        }
+    }
+
+    /* Japanese cultural elements */
+    .japanese-pattern {
+        background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="japanese" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="1" fill="%23dc3545" opacity="0.3"/><circle cx="5" cy="5" r="0.5" fill="%23ffc107" opacity="0.3"/><circle cx="15" cy="15" r="0.5" fill="%23dc3545" opacity="0.3"/></pattern></defs><rect width="100" height="100" fill="url(%23japanese)"/></svg>');
+        opacity: 0.1;
+    }
+
+    .cultural-badge {
+        background: linear-gradient(135deg, #dc3545, #ffc107);
+        color: white;
+        border-radius: 20px;
+        padding: 12px 20px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        box-shadow: 0 4px 15px rgba(220, 53, 69, 0.3);
+        display: inline-block;
+        margin: 8px 0;
+    }
+
+    /* Cherry blossom effect */
+    .cherry-blossom {
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        background: rgba(255, 192, 203, 0.6);
+        border-radius: 50%;
+        animation: fall 10s linear infinite;
+    }
+
+    @keyframes fall {
+        0% {
+            transform: translateY(-100vh) rotate(0deg);
+            opacity: 1;
+        }
+        100% {
+            transform: translateY(100vh) rotate(360deg);
+            opacity: 0;
+        }
+    }
+</style>
+{% endblock %}
+
 {% block content %}
-<div class="container my-5">
-    <div class="row">
-        <div class="col-md-4">
-            <!-- User Profile Card -->
-            <div class="card mb-4">
-                <div class="card-body text-center">
-                    {% if user.profile_picture %}
-                        <img src="{{ user.profile_picture.url }}" alt="プロフィール画像" class="rounded-circle mb-3" style="width: 100px; height: 100px; object-fit: cover;">
-                    {% else %}
-                        <div class="bg-secondary rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 100px; height: 100px;">
-                            <i class="fas fa-user fa-3x text-white"></i>
-                        </div>
-                    {% endif %}
-                    <h4>{{ user.full_name|default:user.username }}</h4>
-                    <p class="text-muted">{{ user.city }}</p>
-                    {% if user.get_age %}
-                    <p class="mt-2">
-                        <i class="fas fa-birthday-cake text-warning"></i> {{ user.get_age }}歳
+<!-- Hero Section -->
+<div class="hero-section">
+    <div class="container">
+        <div class="row justify-content-center text-center">
+            <div class="col-lg-8">
+                <div class="hero-content">
+                    <h1 class="hero-title">
+                        <i class="fas fa-flag text-warning me-3"></i>
+                        日本へようこそ！
+                    </h1>
+                    <p class="hero-subtitle">
+                        ベトナム語を学び、文化を繋ぎ、持続可能な友情を築きましょう
                     </p>
-                    {% endif %}
-                    <span class="badge bg-primary language-badge">日本人</span>
-                    {% if user.gender %}
-                    <p class="mt-2">
-                        <i class="fas {% if user.gender == 'male' %}fa-mars text-primary{% elif user.gender == 'female' %}fa-venus text-danger{% else %}fa-user text-secondary{% endif %}"></i>
-                        {% if user.gender == 'male' %}男性{% elif user.gender == 'female' %}女性{% else %}その他{% endif %}
-                    </p>
-                    {% endif %}
-                    <div class="mt-3">
-                        <a href="{% url 'profile' %}" class="btn btn-outline-primary btn-sm">
-                            <i class="fas fa-edit"></i> プロフィール編集
+                    <div class="hero-buttons">
+                        <a href="{% url 'create_post' %}" class="btn btn-modern btn-light me-3 mb-2">
+                            <i class="fas fa-plus-circle me-2"></i>新しい投稿を作成
                         </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Quick Stats -->
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="mb-0"><i class="fas fa-chart-bar"></i> 統計</h5>
-                </div>
-                <div class="card-body">
-                    <div class="row text-center">
-                        <div class="col-6">
-                            <h4 class="text-primary">{{ user.get_average_rating }}/10</h4>
-                            <small class="text-muted">評価平均点</small>
-                        </div>
-                        <div class="col-6">
-                            <h4 class="text-success">{{ user.japanese_posts.all|length }}</h4>
-                            <small class="text-muted">マッチング</small>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-8">
-            <!-- Welcome Section -->
-            <div class="card mb-4">
-                <div class="card-body text-center">
-                    <h2 class="card-title">ようこそ、{{ user.full_name|default:user.username }}さん！</h2>
-                    <p class="card-text">ベトナム語を学び、ベトナム人と交流しましょう。</p>
-                    <div class="d-flex justify-content-center gap-3 flex-wrap">
-                        <a href="{% url 'create_post' %}" class="btn btn-success">
-                            <i class="fas fa-plus"></i> 新しい投稿を作成
+                        <a href="/search/available-posts/" class="btn btn-modern btn-outline-light me-3 mb-2">
+                            <i class="fas fa-search me-2"></i>パートナーを探す
                         </a>
-                        <a href="/search/available-posts/" class="btn btn-primary">
-                            <i class="fas fa-search"></i> 募集を見る
-                        </a>
-                        <a href="/search/all-posts/" class="btn btn-info">
-                            <i class="fas fa-globe"></i> 全都市の募集
-                        </a>
-                        <a href="/chat/my-chats/" class="btn btn-primary">
-                            <i class="fas fa-comments"></i> チャットを見る
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Lesson Plan Section -->
-            <div class="card mb-4">
-                <div class="card-header">
-                    <h5 class="mb-0"><i class="fas fa-chalkboard-teacher"></i> レッスンプラン一覧</h5>
-                </div>
-                <div class="card-body">
-                    <p class="card-text mb-4">
-                        各セッションに用いるテキストの紹介をします：各セッションには目標、語彙、文法、例文、活動があります。
-                        ベトナム語-日本語のバイリンガル会話例を提供し、教師が参考にできます。
-                    </p>
-                    
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <div class="card border-primary">
-                                <div class="card-body">
-                                    <h6 class="card-title text-primary">
-                                        <i class="fas fa-target"></i> 学習目標
-                                    </h6>
-                                    <ul class="list-unstyled">
-                                        <li><i class="fas fa-check text-success me-2"></i>各セッションの明確な目標を設定</li>
-                                        <li><i class="fas fa-check text-success me-2"></i>学習者のニーズに合わせた内容</li>
-                                        <li><i class="fas fa-check text-success me-2"></i>セッション終了時に成果を評価</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="col-md-6 mb-3">
-                            <div class="card border-success">
-                                <div class="card-body">
-                                    <h6 class="card-title text-success">
-                                        <i class="fas fa-book"></i> 語彙 & 文法
-                                    </h6>
-                                    <ul class="list-unstyled">
-                                        <li><i class="fas fa-check text-success me-2"></i>テーマ別のリスト</li>
-                                        <li><i class="fas fa-check text-success me-2"></i>簡単な文法解説</li>
-                                        <li><i class="fas fa-check text-success me-2"></i>実用的な例文</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="col-md-6 mb-3">
-                            <div class="card border-warning">
-                                <div class="card-body">
-                                    <h6 class="card-title text-warning">
-                                        <i class="fas fa-comments"></i> 例文 & 会話
-                                    </h6>
-                                    <ul class="list-unstyled">
-                                        <li><i class="fas fa-check text-success me-2"></i>ベトナム語-日本語のバイリンガル会話</li>
-                                        <li><i class="fas fa-check text-success me-2"></i>実用的な例文</li>
-                                        <li><i class="fas fa-check text-success me-2"></i>発音とイントネーション</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="col-md-6 mb-3">
-                            <div class="card border-info">
-                                <div class="card-body">
-                                    <h6 class="card-title text-info">
-                                        <i class="fas fa-gamepad"></i> アクティビティ & 実践
-                                    </h6>
-                                    <ul class="list-unstyled">
-                                        <li><i class="fas fa-check text-success me-2"></i>インタラクティブな練習問題</li>
-                                        <li><i class="fas fa-check text-success me-2"></i>ネイティブスピーカーとの会話</li>
-                                        <li><i class="fas fa-check text-success me-2"></i>コミュニケーション実践</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="text-center mt-3">
-                        <div class="d-flex justify-content-center gap-3 flex-wrap">
-                            <a href="/create/accept-post/0/phrases/" class="btn btn-primary">
-                                <i class="fas fa-language"></i> テキストを見る
-                            </a>
-                            <!-- <a href="/create/lessons/" class="btn btn-primary me-2">
-                                <i class="fas fa-list"></i> 語彙を学ぶ
-                            </a> -->
-                        </div>
                     </div>
                 </div>
             </div>
@@ -170,4 +378,327 @@
     </div>
 </div>
 
+<div class="container my-5">
+    <div class="row">
+        <div class="col-lg-4 mb-4">
+            <!-- Profile Card -->
+            <div class="dashboard-card profile-card">
+                <div class="card-body text-center p-4">
+                    {% if user.profile_picture %}
+                        <img src="{{ user.profile_picture.url }}" alt="プロフィール画像" class="rounded-circle profile-picture mb-3">
+                    {% else %}
+                        <div class="bg-white rounded-circle d-inline-flex align-items-center justify-content-center profile-picture mb-3">
+                            <i class="fas fa-user fa-3x text-danger"></i>
+                        </div>
+                    {% endif %}
+                    
+                    <h4 class="mb-3">{{ user.full_name|default:user.username }}</h4>
+                    <p class="mb-4 opacity-75">
+                        <i class="fas fa-map-marker-alt me-2"></i>{{ user.city }}
+                    </p>
+                    
+                    {% if user.get_age %}
+                    <p class="mb-4">
+                        <i class="fas fa-birthday-cake text-warning me-2"></i> {{ user.get_age }}歳
+                    </p>
+                    {% endif %}
+                    
+                    <div class="mb-4">
+                        <span class="cultural-badge">
+                            <i class="fas fa-flag me-2"></i>日本人
+                        </span>
+                    </div>
+                    
+                    {% if user.gender %}
+                    <p class="mb-4">
+                        <i class="fas {% if user.gender == 'male' %}fa-mars text-info{% elif user.gender == 'female' %}fa-venus text-pink{% else %}fa-user text-secondary{% endif %} me-2"></i>
+                        {% if user.gender == 'male' %}男性{% elif user.gender == 'female' %}女性{% else %}その他{% endif %}
+                    </p>
+                    {% endif %}
+                    
+                    <div class="mt-5">
+                        <a href="{% url 'profile' %}" class="btn btn-modern btn-outline-light btn-sm">
+                            <i class="fas fa-edit me-2"></i>プロフィール編集
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats Card -->
+            <div class="dashboard-card stats-card mt-4">
+                <div class="card-body text-center p-4">
+                    <h5 class="mb-4">
+                        <i class="fas fa-chart-line me-2"></i>個人統計
+                    </h5>
+                    <div class="row text-center">
+                        <div class="col-6 mb-4">
+                            <div class="stats-number">{{ user.get_average_rating|default:"0" }}/10</div>
+                            <div class="stats-label">評価点</div>
+                        </div>
+                        <div class="col-6 mb-4">
+                            <div class="stats-number">{{ user.japanese_posts.all|length|default:"0" }}</div>
+                            <div class="stats-label">マッチング</div>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <div class="progress" style="height: 8px;">
+                            <div class="progress-bar bg-warning" style="width: {{ user.get_average_rating|default:0|floatformat:0 }}%"></div>
+                        </div>
+                        <small class="text-white-50">学習進度</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-8">
+            <!-- Quick Actions -->
+            <div class="dashboard-card mb-4">
+                <div class="card-body p-4">
+                    <h4 class="card-title mb-4 text-center">
+                        <i class="fas fa-rocket text-danger me-2"></i>クイックアクション
+                    </h4>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <a href="/search/available-posts/" class="btn btn-modern btn-primary w-100">
+                                <i class="fas fa-search me-2"></i>学習パートナーを探す
+                            </a>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <a href="/chat/my-chats/" class="btn btn-modern btn-success w-100">
+                                <i class="fas fa-comments me-2"></i>メッセージを見る
+                            </a>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <a href="{% url 'phrase_list' %}" class="btn btn-modern btn-info w-100">
+                                <i class="fas fa-language me-2"></i>語彙を学ぶ
+                            </a>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <a href="{% url 'start_session_from_dashboard' %}" class="btn btn-modern btn-warning w-100">
+                                <i class="fas fa-play me-2"></i>セッション開始
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lesson Plan Section -->
+            <div class="dashboard-card">
+                <div class="card-body p-4">
+                    <h4 class="card-title mb-4 text-center">
+                        <i class="fas fa-graduation-cap text-success me-2"></i>学習計画
+                    </h4>
+                    <p class="card-text mb-4 text-center text-muted">
+                        ベトナム人向けに特別に設計された学習システム
+                    </p>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <div class="feature-card lesson-card">
+                                <div class="text-center">
+                                    <i class="fas fa-target feature-icon"></i>
+                                    <h6 class="text-primary">学習目標</h6>
+                                </div>
+                                <ul class="list-unstyled mt-3">
+                                    <li><i class="fas fa-check text-success me-2"></i>各セッションの明確な目標</li>
+                                    <li><i class="fas fa-check text-success me-2"></i>学習者のニーズに合わせた内容</li>
+                                    <li><i class="fas fa-check text-success me-2"></i>セッション終了時の成果評価</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <div class="feature-card lesson-card">
+                                <div class="text-center">
+                                    <i class="fas fa-book feature-icon"></i>
+                                    <h6 class="text-success">語彙 & 文法</h6>
+                                </div>
+                                <ul class="list-unstyled mt-3">
+                                    <li><i class="fas fa-check text-success me-2"></i>テーマ別の語彙リスト</li>
+                                    <li><i class="fas fa-check text-success me-2"></i>簡単な文法解説</li>
+                                    <li><i class="fas fa-check text-success me-2"></i>実用的な例文</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <div class="feature-card lesson-card">
+                                <div class="text-center">
+                                    <i class="fas fa-comments feature-icon"></i>
+                                    <h6 class="text-warning">例文 & 会話</h6>
+                                </div>
+                                <ul class="list-unstyled mt-3">
+                                    <li><i class="fas fa-check text-success me-2"></i>ベトナム語-日本語のバイリンガル会話</li>
+                                    <li><i class="fas fa-check text-success me-2"></i>実用的な例文</li>
+                                    <li><i class="fas fa-check text-success me-2"></i>発音とイントネーション</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <div class="feature-card lesson-card">
+                                <div class="text-center">
+                                    <i class="fas fa-gamepad feature-icon"></i>
+                                    <h6 class="text-info">アクティビティ & 実践</h6>
+                                </div>
+                                <ul class="list-unstyled mt-3">
+                                    <li><i class="fas fa-check text-success me-2"></i>インタラクティブな練習問題</li>
+                                    <li><i class="fas fa-check text-success me-2"></i>ネイティブスピーカーとの会話</li>
+                                    <li><i class="fas fa-check text-success me-2"></i>コミュニケーション実践</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center mt-4">
+                        <a href="{% url 'start_session_from_dashboard' %}" class="btn btn-modern btn-primary btn-lg pulse-animation">
+                            <i class="fas fa-rocket me-2"></i>セッションを開始
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Japanese Cultural Elements -->
+<div class="container-fluid japanese-pattern py-5 mt-5">
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-12">
+                <h3 class="text-danger mb-4">
+                    <i class="fas fa-heart text-warning me-2"></i>
+                    日本文化 - 学習の基盤
+                </h3>
+                <p class="lead text-muted">
+                    ベトナム語学習を通じて日本文化の美しさを発見しましょう
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Cherry Blossom Effect -->
+<div id="cherry-blossoms"></div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Add smooth scrolling and enhanced interactions
+document.addEventListener('DOMContentLoaded', function() {
+    // Add scroll animations
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, observerOptions);
+
+    // Observe all cards for animation
+    document.querySelectorAll('.dashboard-card, .feature-card').forEach(card => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(30px)';
+        card.style.transition = 'all 0.6s ease';
+        observer.observe(card);
+    });
+
+    // Enhanced button interactions
+    document.querySelectorAll('.btn-modern').forEach(btn => {
+        btn.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-3px) scale(1.02)';
+        });
+        
+        btn.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0) scale(1)';
+        });
+    });
+
+    // Profile picture hover effect
+    const profilePic = document.querySelector('.profile-picture');
+    if (profilePic) {
+        profilePic.addEventListener('mouseenter', function() {
+            this.style.transform = 'scale(1.1) rotate(5deg)';
+        });
+        
+        profilePic.addEventListener('mouseleave', function() {
+            this.style.transform = 'scale(1) rotate(0deg)';
+        });
+    }
+
+    // Cherry blossom effect
+    createCherryBlossoms();
+});
+
+// Create cherry blossom effect
+function createCherryBlossoms() {
+    const container = document.getElementById('cherry-blossoms');
+    const numBlossoms = 20;
+    
+    for (let i = 0; i < numBlossoms; i++) {
+        setTimeout(() => {
+            const blossom = document.createElement('div');
+            blossom.className = 'cherry-blossom';
+            blossom.style.left = Math.random() * 100 + 'vw';
+            blossom.style.animationDelay = Math.random() * 10 + 's';
+            blossom.style.animationDuration = (Math.random() * 10 + 10) + 's';
+            container.appendChild(blossom);
+            
+            // Remove blossom after animation
+            setTimeout(() => {
+                if (blossom.parentNode) {
+                    blossom.parentNode.removeChild(blossom);
+                }
+            }, 20000);
+        }, i * 500);
+    }
+}
+
+// Enhanced accept post function
+function acceptPost(postId, phraseText) {
+    console.log('Accept button clicked for post:', postId, 'phrase:', phraseText);
+    
+    // Show enhanced confirmation dialog
+    const confirmed = confirm('🎯 この投稿を受け入れることを確認しますか？\n\nベトナム人とのチャットルームに移動し、学習の旅を始めます！');
+    
+    if (confirmed) {
+        console.log('User confirmed, redirecting to accept post...');
+        return true;
+    } else {
+        console.log('User cancelled');
+        return false;
+    }
+}
+
+// Enhanced filter function
+function filterPosts() {
+    const cityFilter = document.getElementById('city').value;
+    const categoryFilter = document.getElementById('category').value;
+    const items = document.querySelectorAll('.post-item');
+    
+    items.forEach(item => {
+        const city = item.getAttribute('data-city');
+        const category = item.getAttribute('data-category');
+        
+        const cityMatch = !cityFilter || city === cityFilter;
+        const categoryMatch = !categoryFilter || category === categoryFilter;
+        
+        if (cityMatch && categoryMatch) {
+            item.style.display = 'block';
+            item.style.animation = 'fadeInUp 0.5s ease';
+        } else {
+            item.style.display = 'none';
+        }
+    });
+}
+
+// Recreate cherry blossoms periodically
+setInterval(createCherryBlossoms, 30000);
+</script>
 {% endblock %}

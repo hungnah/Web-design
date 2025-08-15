@@ -3,37 +3,474 @@
 
 {% block title %}Bài học văn hóa - Vietnam-Japan Connect{% endblock %}
 
+{% block extra_css %}
+<style>
+    /* Hero Section với hình ảnh văn hóa */
+    .hero-section {
+        background: linear-gradient(135deg, rgba(40, 167, 69, 0.9) 0%, rgba(23, 162, 184, 0.9) 100%),
+                    url('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80');
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        color: white;
+        padding: 80px 0;
+        margin-bottom: 40px;
+        border-radius: 0 0 30px 30px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .hero-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="cultural" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="1" fill="white" opacity="0.1"/><circle cx="5" cy="5" r="0.5" fill="white" opacity="0.1"/><circle cx="15" cy="15" r="0.5" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23cultural)"/></svg>');
+        opacity: 0.3;
+    }
+
+    .hero-content {
+        position: relative;
+        z-index: 2;
+    }
+
+    .hero-title {
+        font-size: 3rem;
+        font-weight: 700;
+        margin-bottom: 20px;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        animation: fadeInUp 1s ease-out;
+    }
+
+    .hero-subtitle {
+        font-size: 1.2rem;
+        margin-bottom: 30px;
+        opacity: 0.9;
+        animation: fadeInUp 1s ease-out 0.2s both;
+    }
+
+    /* Filter section styling */
+    .filter-section {
+        background: white;
+        border-radius: 20px;
+        padding: 30px;
+        margin-bottom: 40px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        border: none;
+    }
+
+    .filter-title {
+        color: #28a745;
+        font-weight: 700;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    .form-select {
+        border-radius: 15px;
+        border: 2px solid #e9ecef;
+        padding: 12px 20px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+    }
+
+    .form-select:focus {
+        border-color: #28a745;
+        box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+        transform: translateY(-2px);
+    }
+
+    /* Lesson card styling */
+    .lesson-card {
+        background: white;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        border: none;
+        margin-bottom: 30px;
+    }
+
+    .lesson-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, #28a745, #17a2b8, #ffc107, #fd7e14);
+        transform: scaleX(0);
+        transition: transform 0.3s ease;
+    }
+
+    .lesson-card:hover::before {
+        transform: scaleX(1);
+    }
+
+    .lesson-card:hover {
+        transform: translateY(-10px) scale(1.02);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+    }
+
+    .lesson-image {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+    }
+
+    .lesson-card:hover .lesson-image {
+        transform: scale(1.1);
+    }
+
+    .lesson-content {
+        padding: 25px;
+    }
+
+    .lesson-title {
+        color: #2c3e50;
+        font-weight: 700;
+        margin-bottom: 15px;
+        font-size: 1.3rem;
+        line-height: 1.4;
+    }
+
+    .lesson-description {
+        color: #6c757d;
+        margin-bottom: 20px;
+        line-height: 1.6;
+    }
+
+    .lesson-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+
+    .lesson-badge {
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .badge-location {
+        background: linear-gradient(135deg, #007bff, #0056b3);
+        color: white;
+    }
+
+    .badge-difficulty {
+        background: linear-gradient(135deg, #28a745, #1e7e34);
+        color: white;
+    }
+
+    .badge-duration {
+        background: linear-gradient(135deg, #17a2b8, #138496);
+        color: white;
+    }
+
+    .badge-beginner {
+        background: linear-gradient(135deg, #28a745, #1e7e34);
+        color: white;
+    }
+
+    .badge-intermediate {
+        background: linear-gradient(135deg, #ffc107, #e0a800);
+        color: #212529;
+    }
+
+    .badge-advanced {
+        background: linear-gradient(135deg, #dc3545, #c82333);
+        color: white;
+    }
+
+    .lesson-vocabulary {
+        background: #f8f9fa;
+        padding: 15px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        border-left: 4px solid #28a745;
+    }
+
+    .vocabulary-title {
+        color: #28a745;
+        font-weight: 600;
+        margin-bottom: 10px;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .vocabulary-text {
+        color: #495057;
+        font-size: 0.9rem;
+        line-height: 1.5;
+        margin: 0;
+    }
+
+    .lesson-actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    .btn-lesson {
+        border-radius: 25px;
+        padding: 12px 25px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        border: none;
+        flex: 1;
+        min-width: 120px;
+    }
+
+    .btn-lesson::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+        transition: left 0.5s ease;
+    }
+
+    .btn-lesson:hover::before {
+        left: 100%;
+    }
+
+    .btn-lesson:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #007bff, #0056b3);
+        color: white;
+    }
+
+    .btn-outline-primary {
+        background: transparent;
+        color: #007bff;
+        border: 2px solid #007bff;
+    }
+
+    .btn-outline-primary:hover {
+        background: #007bff;
+        color: white;
+    }
+
+    /* Modal styling */
+    .modal-content {
+        border-radius: 20px;
+        border: none;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+
+    .modal-header {
+        background: linear-gradient(135deg, #28a745, #17a2b8);
+        color: white;
+        border-radius: 20px 20px 0 0;
+        border: none;
+        padding: 25px 30px;
+    }
+
+    .modal-title {
+        font-weight: 700;
+        font-size: 1.5rem;
+    }
+
+    .modal-body {
+        padding: 30px;
+    }
+
+    .modal-footer {
+        border: none;
+        padding: 20px 30px 30px;
+    }
+
+    /* Animations */
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes slideInLeft {
+        from {
+            opacity: 0;
+            transform: translateX(-30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    .fade-in-up {
+        animation: fadeInUp 0.6s ease-out;
+    }
+
+    .slide-in-left {
+        animation: slideInLeft 0.6s ease-out;
+    }
+
+    /* Responsive design */
+    @media (max-width: 768px) {
+        .hero-title {
+            font-size: 2rem;
+        }
+        
+        .hero-subtitle {
+            font-size: 1rem;
+        }
+        
+        .lesson-card {
+            margin-bottom: 20px;
+        }
+        
+        .lesson-actions {
+            flex-direction: column;
+        }
+        
+        .btn-lesson {
+            width: 100%;
+        }
+    }
+
+    /* Cultural theme images */
+    .cultural-theme {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .cultural-theme::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(45deg, transparent 30%, rgba(40,167,69,0.1) 50%, transparent 70%);
+        transform: translateX(-100%);
+        transition: transform 0.6s ease;
+    }
+
+    .lesson-card:hover .cultural-theme::after {
+        transform: translateX(100%);
+    }
+
+    /* Loading animation */
+    .loading-spinner {
+        display: inline-block;
+        width: 40px;
+        height: 40px;
+        border: 4px solid #f3f3f3;
+        border-top: 4px solid #28a745;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    /* Empty state styling */
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        color: #6c757d;
+    }
+
+    .empty-state i {
+        font-size: 4rem;
+        color: #dee2e6;
+        margin-bottom: 20px;
+    }
+
+    .empty-state h4 {
+        color: #495057;
+        margin-bottom: 15px;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
-<div class="container my-5">
-    <div class="row">
-        <div class="col-12">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2><i class="fas fa-graduation-cap"></i> Bài học văn hóa</h2>
-                <div class="filters">
-                    <select id="city-filter" class="form-select d-inline-block w-auto me-2">
-                        <option value="">Tất cả thành phố</option>
-                        <option value="hanoi">Hà Nội</option>
-                        <option value="hochiminh">Hồ Chí Minh</option>
-                        <option value="haiphong">Hải Phòng</option>
-                        <option value="danang">Đà Nẵng</option>
-                        <option value="cantho">Cần Thơ</option>
-                        <option value="hue">Huế</option>
-                        <option value="hoian">Hội An</option>
-                        <option value="sapa">Sa Pa</option>
-                        <option value="nhatrang">Nha Trang</option>
-                        <option value="dalat">Đà Lạt</option>
-                    </select>
-                    <select id="difficulty-filter" class="form-select d-inline-block w-auto">
-                        <option value="">Tất cả trình độ</option>
-                        <option value="beginner">Sơ cấp</option>
-                        <option value="intermediate">Trung cấp</option>
-                        <option value="advanced">Cao cấp</option>
-                    </select>
+<!-- Hero Section -->
+<div class="hero-section">
+    <div class="container">
+        <div class="row justify-content-center text-center">
+            <div class="col-lg-8">
+                <div class="hero-content">
+                    <h1 class="hero-title">
+                        <i class="fas fa-graduation-cap me-3"></i>
+                        Bài học văn hóa Việt Nam
+                    </h1>
+                    <p class="hero-subtitle">
+                        Khám phá vẻ đẹp văn hóa Việt Nam thông qua việc học tiếng Nhật
+                    </p>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
+<div class="container my-5">
+    <!-- Filter Section -->
+    <div class="filter-section">
+        <h3 class="filter-title">
+            <i class="fas fa-filter me-2"></i>Tìm kiếm bài học
+        </h3>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label for="city-filter" class="form-label fw-bold">
+                    <i class="fas fa-map-marker-alt me-2"></i>Thành phố
+                </label>
+                <select id="city-filter" class="form-select">
+                    <option value="">Tất cả thành phố</option>
+                    <option value="hanoi">Hà Nội</option>
+                    <option value="hochiminh">Hồ Chí Minh</option>
+                    <option value="haiphong">Hải Phòng</option>
+                    <option value="danang">Đà Nẵng</option>
+                    <option value="cantho">Cần Thơ</option>
+                    <option value="hue">Huế</option>
+                    <option value="hoian">Hội An</option>
+                    <option value="sapa">Sa Pa</option>
+                    <option value="nhatrang">Nha Trang</option>
+                    <option value="dalat">Đà Lạt</option>
+                </select>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label for="difficulty-filter" class="form-label fw-bold">
+                    <i class="fas fa-signal me-2"></i>Trình độ
+                </label>
+                <select id="difficulty-filter" class="form-select">
+                    <option value="">Tất cả trình độ</option>
+                    <option value="beginner">Sơ cấp</option>
+                    <option value="intermediate">Trung cấp</option>
+                    <option value="advanced">Cao cấp</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lessons Container -->
     <div class="row" id="lessons-container">
         <!-- Lessons will be loaded here -->
     </div>
@@ -44,27 +481,33 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="lessonModalLabel">Chi tiết bài học</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <h5 class="modal-title" id="lessonModalLabel">
+                    <i class="fas fa-book-open me-2"></i>Chi tiết bài học
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body" id="lessonModalBody">
                 <!-- Lesson content will be loaded here -->
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                <button type="button" class="btn btn-primary" id="startLessonBtn">Bắt đầu học</button>
+                <button type="button" class="btn btn-primary" id="startLessonBtn">
+                    <i class="fas fa-play me-2"></i>Bắt đầu học
+                </button>
             </div>
         </div>
     </div>
 </div>
+{% endblock %}
 
+{% block extra_js %}
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const cityFilter = document.getElementById('city-filter');
     const difficultyFilter = document.getElementById('difficulty-filter');
     const lessonsContainer = document.getElementById('lessons-container');
     
-    // Sample lesson data (in real app, this would come from API)
+    // Enhanced lesson data with images and cultural themes
     const lessons = [
         {
             id: 1,
@@ -76,7 +519,9 @@ document.addEventListener('DOMContentLoaded', function() {
             description: 'Bài học về văn hóa học tập và giáo dục truyền thống của Việt Nam',
             vocabulary: 'Văn Miếu, Quốc Tử Giám, tiến sĩ, bia đá, Khổng Tử, Nho giáo',
             phrases: 'Đây là nơi gì? - ここはどこですか？\nTôi muốn tìm hiểu về lịch sử - 歴史について知りたいです',
-            cultural_context: 'Văn Miếu được xây dựng năm 1070, là trường đại học đầu tiên của Việt Nam.'
+            cultural_context: 'Văn Miếu được xây dựng năm 1070, là trường đại học đầu tiên của Việt Nam.',
+            image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+            theme: 'education'
         },
         {
             id: 2,
@@ -88,7 +533,9 @@ document.addEventListener('DOMContentLoaded', function() {
             description: 'Tìm hiểu về văn hóa đa dạng của các dân tộc Việt Nam',
             vocabulary: 'dân tộc, văn hóa, bảo tàng, hiện vật, trang phục, công cụ',
             phrases: 'Dân tộc này có bao nhiêu người? - この民族は何人いますか？\nTrang phục này đẹp quá! - この衣装はとても美しいですね！',
-            cultural_context: 'Việt Nam có 54 dân tộc anh em, mỗi dân tộc có văn hóa, trang phục, phong tục tập quán riêng.'
+            cultural_context: 'Việt Nam có 54 dân tộc anh em, mỗi dân tộc có văn hóa, trang phục, phong tục tập quán riêng.',
+            image: 'https://images.unsplash.com/photo-1545569341-9eb8b30979d9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+            theme: 'ethnicity'
         },
         {
             id: 3,
@@ -100,7 +547,37 @@ document.addEventListener('DOMContentLoaded', function() {
             description: 'Học cách mua sắm và giao tiếp tại chợ truyền thống',
             vocabulary: 'chợ, mua sắm, mặc cả, giá cả, hàng hóa, người bán',
             phrases: 'Cái này bao nhiêu tiền? - これはいくらですか？\nCó thể giảm giá không? - 値段を下げてもらえますか？',
-            cultural_context: 'Chợ Đồng Xuân là chợ truyền thống lớn nhất Hà Nội, có lịch sử hơn 100 năm.'
+            cultural_context: 'Chợ Đồng Xuân là chợ truyền thống lớn nhất Hà Nội, có lịch sử hơn 100 năm.',
+            image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+            theme: 'market'
+        },
+        {
+            id: 4,
+            title: 'Văn hóa ẩm thực Việt Nam',
+            location: 'Phố ẩm thực Hà Nội',
+            city: 'hanoi',
+            difficulty: 'intermediate',
+            duration: 50,
+            description: 'Khám phá văn hóa ẩm thực đặc trưng của Việt Nam',
+            vocabulary: 'phở, bún chả, nem, bánh mì, nước mắm, gia vị',
+            phrases: 'Món này có cay không? - この料理は辛いですか？\nTôi muốn thử món đặc sản - 特産品を試してみたいです',
+            cultural_context: 'Ẩm thực Việt Nam nổi tiếng với hương vị tinh tế, sử dụng nhiều rau thơm và gia vị tự nhiên.',
+            image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+            theme: 'food'
+        },
+        {
+            id: 5,
+            title: 'Văn hóa làng nghề truyền thống',
+            location: 'Làng gốm Bát Tràng',
+            city: 'hanoi',
+            difficulty: 'advanced',
+            duration: 60,
+            description: 'Tìm hiểu về nghề thủ công truyền thống của Việt Nam',
+            vocabulary: 'gốm sứ, thủ công, nghệ nhân, làng nghề, truyền thống, bảo tồn',
+            phrases: 'Bạn có thể dạy tôi làm gốm không? - 陶芸を教えてもらえますか？\nSản phẩm này làm bằng gì? - この製品は何で作られていますか？',
+            cultural_context: 'Làng gốm Bát Tràng có lịch sử hơn 500 năm, nổi tiếng với kỹ thuật làm gốm tinh xảo.',
+            image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+            theme: 'craft'
         }
     ];
     
@@ -122,49 +599,59 @@ document.addEventListener('DOMContentLoaded', function() {
         
         if (lessonsToShow.length === 0) {
             lessonsContainer.innerHTML = `
-                <div class="col-12 text-center">
-                    <div class="alert alert-info">
-                        <i class="fas fa-info-circle"></i> Không tìm thấy bài học nào phù hợp với bộ lọc đã chọn.
+                <div class="col-12">
+                    <div class="empty-state">
+                        <i class="fas fa-search"></i>
+                        <h4>Không tìm thấy bài học nào</h4>
+                        <p>Hãy thử thay đổi bộ lọc để tìm bài học phù hợp.</p>
                     </div>
                 </div>
             `;
             return;
         }
         
-        lessonsToShow.forEach(lesson => {
-            const lessonCard = createLessonCard(lesson);
+        lessonsToShow.forEach((lesson, index) => {
+            const lessonCard = createLessonCard(lesson, index);
             lessonsContainer.appendChild(lessonCard);
         });
     }
     
-    function createLessonCard(lesson) {
+    function createLessonCard(lesson, index) {
         const col = document.createElement('div');
         col.className = 'col-md-6 col-lg-4 mb-4';
+        col.style.animationDelay = `${index * 0.1}s`;
         
-        const difficultyClass = lesson.difficulty === 'beginner' ? 'success' : 
-                               lesson.difficulty === 'intermediate' ? 'warning' : 'danger';
+        const difficultyClass = lesson.difficulty === 'beginner' ? 'badge-beginner' : 
+                               lesson.difficulty === 'intermediate' ? 'badge-intermediate' : 'badge-advanced';
         
         col.innerHTML = `
-            <div class="card h-100 shadow-sm">
-                <div class="card-body">
-                    <h5 class="card-title">${lesson.title}</h5>
-                    <p class="card-text text-muted">${lesson.description}</p>
+            <div class="lesson-card cultural-theme">
+                <img src="${lesson.image}" alt="${lesson.title}" class="lesson-image">
+                <div class="lesson-content">
+                    <h5 class="lesson-title">${lesson.title}</h5>
+                    <p class="lesson-description">${lesson.description}</p>
                     
-                    <div class="mb-3">
-                        <span class="badge bg-primary me-1">${lesson.location}</span>
-                        <span class="badge bg-${difficultyClass}">${getDifficultyText(lesson.difficulty)}</span>
-                        <span class="badge bg-info">${lesson.duration} phút</span>
+                    <div class="lesson-meta">
+                        <span class="lesson-badge badge-location">${lesson.location}</span>
+                        <span class="lesson-badge ${difficultyClass}">${getDifficultyText(lesson.difficulty)}</span>
+                        <span class="lesson-badge badge-duration">${lesson.duration} phút</span>
                     </div>
                     
-                    <div class="mb-3">
-                        <small class="text-muted">
-                            <strong>Từ vựng:</strong> ${lesson.vocabulary}
-                        </small>
+                    <div class="lesson-vocabulary">
+                        <div class="vocabulary-title">
+                            <i class="fas fa-book me-2"></i>Từ vựng chính
+                        </div>
+                        <p class="vocabulary-text">${lesson.vocabulary}</p>
                     </div>
                     
-                    <button class="btn btn-outline-primary btn-sm" onclick="showLessonDetail(${lesson.id})">
-                        <i class="fas fa-eye"></i> Xem chi tiết
-                    </button>
+                    <div class="lesson-actions">
+                        <button class="btn btn-lesson btn-outline-primary" onclick="showLessonDetail(${lesson.id})">
+                            <i class="fas fa-eye me-2"></i>Xem chi tiết
+                        </button>
+                        <button class="btn btn-lesson btn-primary" onclick="startLesson(${lesson.id})">
+                            <i class="fas fa-play me-2"></i>Bắt đầu
+                        </button>
+                    </div>
                 </div>
             </div>
         `;
@@ -189,30 +676,60 @@ document.addEventListener('DOMContentLoaded', function() {
         modalBody.innerHTML = `
             <div class="row">
                 <div class="col-12">
-                    <h4>${lesson.title}</h4>
-                    <p class="text-muted">${lesson.description}</p>
-                    
-                    <div class="mb-3">
-                        <span class="badge bg-primary me-1">${lesson.location}</span>
-                        <span class="badge bg-${lesson.difficulty === 'beginner' ? 'success' : lesson.difficulty === 'intermediate' ? 'warning' : 'danger'}">${getDifficultyText(lesson.difficulty)}</span>
-                        <span class="badge bg-info">${lesson.duration} phút</span>
+                    <div class="text-center mb-4">
+                        <img src="${lesson.image}" alt="${lesson.title}" class="img-fluid rounded" style="max-height: 200px; object-fit: cover;">
                     </div>
                     
-                    <div class="mb-3">
-                        <h6><i class="fas fa-book"></i> Từ vựng chính:</h6>
-                        <p>${lesson.vocabulary}</p>
-                    </div>
+                    <h4 class="text-primary mb-3">${lesson.title}</h4>
+                    <p class="text-muted mb-4">${lesson.description}</p>
                     
-                    <div class="mb-3">
-                        <h6><i class="fas fa-comments"></i> Câu nói cần thiết:</h6>
-                        <div class="bg-light p-3 rounded">
-                            <pre>${lesson.phrases}</pre>
+                    <div class="row mb-4">
+                        <div class="col-md-4">
+                            <div class="text-center">
+                                <i class="fas fa-map-marker-alt fa-2x text-primary mb-2"></i>
+                                <h6>Địa điểm</h6>
+                                <span class="badge bg-primary">${lesson.location}</span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="text-center">
+                                <i class="fas fa-signal fa-2x text-warning mb-2"></i>
+                                <h6>Trình độ</h6>
+                                <span class="badge bg-warning text-dark">${getDifficultyText(lesson.difficulty)}</span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="text-center">
+                                <i class="fas fa-clock fa-2x text-info mb-2"></i>
+                                <h6>Thời gian</h6>
+                                <span class="badge bg-info">${lesson.duration} phút</span>
+                            </div>
                         </div>
                     </div>
                     
-                    <div class="mb-3">
-                        <h6><i class="fas fa-globe"></i> Bối cảnh văn hóa:</h6>
-                        <p>${lesson.cultural_context}</p>
+                    <div class="mb-4">
+                        <h6 class="text-success">
+                            <i class="fas fa-book me-2"></i>Từ vựng chính
+                        </h6>
+                        <div class="bg-light p-3 rounded">
+                            <p class="mb-0">${lesson.vocabulary}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <h6 class="text-warning">
+                            <i class="fas fa-comments me-2"></i>Câu nói cần thiết
+                        </h6>
+                        <div class="bg-light p-3 rounded">
+                            <pre class="mb-0">${lesson.phrases}</pre>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <h6 class="text-info">
+                            <i class="fas fa-globe me-2"></i>Bối cảnh văn hóa
+                        </h6>
+                        <p class="mb-0">${lesson.cultural_context}</p>
                     </div>
                 </div>
             </div>
@@ -222,17 +739,37 @@ document.addEventListener('DOMContentLoaded', function() {
         modal.show();
     }
     
+    function startLesson(lessonId) {
+        const lesson = lessons.find(l => l.id === lessonId);
+        if (!lesson) return;
+        
+        // Show confirmation
+        const confirmed = confirm(`🎯 Bạn có muốn bắt đầu bài học "${lesson.title}"?\n\nBài học sẽ kéo dài ${lesson.duration} phút.`);
+        
+        if (confirmed) {
+            // Here you would typically redirect to the lesson page
+            alert(`Bắt đầu bài học: ${lesson.title}`);
+            // window.location.href = `/lesson/${lessonId}/`;
+        }
+    }
+    
     // Event listeners
     cityFilter.addEventListener('change', filterLessons);
     difficultyFilter.addEventListener('change', filterLessons);
     
-    // Initial display
-    displayLessons(lessons);
+    // Initial display with animation
+    setTimeout(() => {
+        displayLessons(lessons);
+    }, 300);
 });
 
-// Global function for modal
+// Global functions for onclick handlers
 window.showLessonDetail = function(lessonId) {
-    // This will be called from the onclick in the card
+    const event = new Event('click');
+    document.dispatchEvent(event);
+};
+
+window.startLesson = function(lessonId) {
     const event = new Event('click');
     document.dispatchEvent(event);
 };

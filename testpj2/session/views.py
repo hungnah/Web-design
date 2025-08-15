@@ -458,3 +458,542 @@ def start_chat_session(request, post_id):
     
     # Redirect to chat room
     return redirect(f'/chat/chat/{chat_room.id}/')
+
+@login_required
+def start_learning_session(request, partner_id, post_id, phrase_id):
+    """
+    Start learning session with conversation based on selected phrase
+    This replaces the old study view with dynamic conversation content
+    """
+    # Get the language exchange post to access user information
+    poster = None
+    try:
+        post = LanguageExchangePost.objects.get(id=post_id)
+        # Determine which user posted this (japanese_user or vietnamese_user)
+        if post.japanese_user and post.japanese_user.id == int(partner_id):
+            poster = post.japanese_user
+        elif post.vietnamese_user and post.vietnamese_user.id == int(partner_id):
+            poster = post.vietnamese_user
+        else:
+            # Log this case for debugging
+            print(f"Warning: partner_id {partner_id} not found in post {post_id}")
+    except LanguageExchangePost.DoesNotExist:
+        print(f"Error: LanguageExchangePost with id {post_id} not found")
+        return redirect('/auth/dashboard/')
+    except Exception as e:
+        print(f"Error in start_learning_session view: {e}")
+        return redirect('/auth/dashboard/')
+    
+    # Get the appropriate phrase based on user nationality and what they want to learn
+    phrase = None
+    
+    # Debug logging
+    print(f"DEBUG: User nationality: {request.user.nationality}")
+    print(f"DEBUG: User ID: {request.user.id}")
+    print(f"DEBUG: User username: {request.user.username}")
+    print(f"DEBUG: Post ID: {post_id}")
+    print(f"DEBUG: Post phrase: {post.phrase}")
+    print(f"DEBUG: Post accepted_phrase: {post.accepted_phrase}")
+    print(f"DEBUG: Post japanese_learning_phrases count: {post.japanese_learning_phrases.count()}")
+    print(f"DEBUG: Post vietnamese_learning_phrases count: {post.vietnamese_learning_phrases.count()}")
+    
+    # Check if user is authenticated
+    if not request.user.is_authenticated:
+        print(f"DEBUG: User is not authenticated!")
+        return redirect('/auth/login/')
+    
+    # Check if nationality is set
+    if not hasattr(request.user, 'nationality') or not request.user.nationality:
+        print(f"DEBUG: User nationality is not set!")
+        # Try to get from profile
+        try:
+            from user_profile.models import CustomUser
+            user_profile = CustomUser.objects.get(id=request.user.id)
+            print(f"DEBUG: User profile nationality: {user_profile.nationality}")
+            request.user.nationality = user_profile.nationality
+        except Exception as e:
+            print(f"DEBUG: Error getting user profile: {e}")
+            request.user.nationality = 'unknown'
+    
+    if request.user.nationality == 'japanese':
+        # Japanese user wants to learn Vietnamese phrases
+        print(f"DEBUG: Japanese user - checking japanese_learning_phrases")
+        if post.japanese_learning_phrases.exists():
+            # Use the first phrase from japanese_learning_phrases, or the accepted_phrase if available
+            phrase = post.accepted_phrase if post.accepted_phrase else post.japanese_learning_phrases.first()
+            print(f"DEBUG: Japanese user - selected phrase: {phrase}")
+        else:
+            # Fallback to main phrase
+            phrase = post.phrase
+            print(f"DEBUG: Japanese user - fallback to main phrase: {phrase}")
+    elif request.user.nationality == 'vietnamese':
+        # Vietnamese user wants to learn Japanese phrases
+        print(f"DEBUG: Vietnamese user - checking vietnamese_learning_phrases")
+        if post.vietnamese_learning_phrases.exists():
+            # Use the first phrase from vietnamese_learning_phrases, or the accepted_phrase if available
+            phrase = post.accepted_phrase if post.accepted_phrase else post.vietnamese_learning_phrases.first()
+            print(f"DEBUG: Vietnamese user - selected phrase: {phrase}")
+        else:
+            # Fallback to main phrase
+            phrase = post.phrase
+            print(f"DEBUG: Vietnamese user - fallback to main phrase: {phrase}")
+    else:
+        # Fallback to main phrase for other nationalities
+        phrase = post.phrase
+        print(f"DEBUG: Other nationality - using main phrase: {phrase}")
+    
+    # If still no phrase, try to get from the original phrase_id parameter
+    if not phrase and phrase_id:
+        try:
+            from event_creation.models import VietnamesePhrase
+            phrase = VietnamesePhrase.objects.get(id=phrase_id)
+            print(f"DEBUG: Using phrase_id parameter: {phrase}")
+        except Exception as e:
+            print(f"DEBUG: Error getting phrase from phrase_id: {e}")
+            pass
+    
+    print(f"DEBUG: Final selected phrase: {phrase}")
+    
+    # If still no phrase, create a default one
+    if not phrase:
+        print(f"DEBUG: No phrase found, creating default conversation")
+        # Create a default phrase object for fallback
+        class DefaultPhrase:
+            def __init__(self):
+                self.id = 1
+                self.vietnamese_text = "Xin chào"
+                self.japanese_translation = "こんにちは"
+                self.category = "greetings"
+                self.difficulty = "beginner"
+        
+        phrase = DefaultPhrase()
+    
+    # Determine conversation content based on phrase category and difficulty
+    if phrase:
+        category = phrase.category
+        difficulty = phrase.difficulty
+        
+        # Generate conversation based on category and difficulty
+        if category == 'greetings':
+            if difficulty == 'beginner':
+                messages = [
+                    {'side': 'system', 'text': f'＜{phrase.id}＞{phrase.vietnamese_text}\n「{phrase.japanese_translation}」を学ぼう'},
+                    {'side': 'left', 'text': f'{phrase.vietnamese_text}\n({phrase.japanese_translation})'},
+                    {'side': 'right', 'text': f'{phrase.vietnamese_text}\n({phrase.japanese_translation})'},
+                    {'side': 'left', 'text': 'Lặp lại theo tôi.\n(私が読んだ後に繰り返してください)'},
+                    {'side': 'left', 'text': f'{phrase.vietnamese_text}\n({phrase.japanese_translation})'},
+                    {'side': 'right', 'text': f'{phrase.vietnamese_text}\n({phrase.japanese_translation})'},
+                    {'side': 'system', 'text': '＜練習＞　Lặp lại và đối thoại ngắn'},
+                    {'side': 'left', 'text': f'{phrase.japanese_translation}。私は{poster.full_name or poster.username}です。\n({phrase.vietnamese_text}. Tôi là {poster.full_name or poster.username}.)'},
+                    {'side': 'right', 'text': f'{phrase.japanese_translation}。私は{request.user.full_name or request.user.username}です。\n({phrase.vietnamese_text}. Tôi là {request.user.full_name or request.user.username}.)'},
+                ]
+            elif difficulty == 'intermediate':
+                messages = [
+                    {'side': 'system', 'text': f'＜{phrase.id}＞{phrase.vietnamese_text}\n「{phrase.japanese_translation}」を学ぼう'},
+                    {'side': 'left', 'text': f'{phrase.vietnamese_text}\n({phrase.japanese_translation})'},
+                    {'side': 'right', 'text': f'{phrase.vietnamese_text}\n({phrase.japanese_translation})'},
+                    {'side': 'left', 'text': 'Bạn có thể lặp lại không?\n(繰り返せますか？)'},
+                    {'side': 'right', 'text': f'Vâng, {phrase.vietnamese_text}\n(はい、{phrase.japanese_translation})'},
+                    {'side': 'left', 'text': 'Rất tốt! Bây giờ hãy thực hành.\n(とても良いです！今度は練習しましょう。)'},
+                    {'side': 'system', 'text': '＜会話練習＞'},
+                    {'side': 'left', 'text': f'{phrase.japanese_translation}！私は{poster.full_name or poster.username}です。\n({phrase.vietnamese_text}! Tôi là {poster.full_name or poster.username}.)'},
+                    {'side': 'right', 'text': f'{phrase.japanese_translation}！Tôi rất vui được gặp bạn.\n({phrase.vietnamese_text}! Rất vui được gặp bạn.)'},
+                ]
+            else:  # advanced
+                messages = [
+                    {'side': 'system', 'text': f'＜{phrase.id}＞{phrase.vietnamese_text}\n「{phrase.japanese_translation}」を学ぼう'},
+                    {'side': 'left', 'text': f'{phrase.vietnamese_text}\n({phrase.japanese_translation})'},
+                    {'side': 'right', 'text': f'{phrase.vietnamese_text}\n({phrase.japanese_translation})'},
+                    {'side': 'left', 'text': 'Bạn có thể sử dụng câu này trong tình huống nào?\n(この表現はどんな場面で使えますか？)'},
+                    {'side': 'right', 'text': 'Tôi nghĩ có thể dùng khi gặp người mới.\n(新しい人に会った時に使えると思います。)'},
+                    {'side': 'left', 'text': 'Đúng rồi! Hãy thực hành với tôi.\n(その通りです！一緒に練習しましょう。)'},
+                    {'side': 'system', 'text': '＜応用練習＞'},
+                    {'side': 'left', 'text': f'{phrase.japanese_translation}！私は{poster.full_name or poster.username}です。\n({phrase.vietnamese_text}! Tôi là {poster.full_name or poster.username}.)'},
+                    {'side': 'right', 'text': f'{phrase.japanese_translation}！Tôi rất vui được gặp bạn. Bạn có khỏe không?\n({phrase.vietnamese_text}! Rất vui được gặp bạn. Bạn có khỏe không?)'},
+                ]
+        elif category == 'food':
+            if difficulty == 'beginner':
+                messages = [
+                    {'side': 'system', 'text': f'＜{phrase.id}＞{phrase.vietnamese_text}\n「{phrase.japanese_translation}」を学ぼう'},
+                    {'side': 'left', 'text': f'{phrase.vietnamese_text}\n({phrase.japanese_translation})'},
+                    {'side': 'right', 'text': f'{phrase.vietnamese_text}\n({phrase.japanese_translation})'},
+                    {'side': 'left', 'text': 'Đây là câu nói về ẩm thực.\n(これは料理についての表現です。)'},
+                    {'side': 'right', 'text': 'Tôi hiểu rồi. Có thể lặp lại không?\n(分かりました。繰り返せますか？)'},
+                    {'side': 'left', 'text': f'Vâng, {phrase.vietnamese_text}\n(はい、{phrase.japanese_translation})'},
+                    {'side': 'right', 'text': f'{phrase.vietnamese_text}\n({phrase.japanese_translation})'},
+                    {'side': 'system', 'text': '＜練習＞　Thực hành về ẩm thực'},
+                    {'side': 'left', 'text': f'{phrase.japanese_translation}！Tôi thích món này.\n({phrase.vietnamese_text}! Tôi thích món này.)'},
+                    {'side': 'right', 'text': f'{phrase.vietnamese_text}！Tôi cũng thích.\n({phrase.japanese_translation}! Tôi cũng thích.)'},
+                ]
+            elif difficulty == 'intermediate':
+                messages = [
+                    {'side': 'system', 'text': f'＜{phrase.id}＞{phrase.vietnamese_text}\n「{phrase.japanese_translation}」を学ぼう'},
+                    {'side': 'left', 'text': f'{phrase.vietnamese_text}\n({phrase.japanese_translation})'},
+                    {'side': 'right', 'text': f'{phrase.vietnamese_text}\n({phrase.japanese_translation})'},
+                    {'side': 'left', 'text': 'Bạn có thể giải thích ý nghĩa không?\n(意味を説明できますか？)'},
+                    {'side': 'right', 'text': 'Tôi nghĩ có nghĩa là...\n(意味は...だと思います。)'},
+                    {'side': 'left', 'text': 'Rất tốt! Hãy thực hành.\n(とても良いです！練習しましょう。)'},
+                    {'side': 'system', 'text': '＜会話練習＞'},
+                    {'side': 'left', 'text': f'{phrase.japanese_translation}！Bạn có muốn ăn món này không?\n({phrase.vietnamese_text}! Bạn có muốn ăn món này không?)'},
+                    {'side': 'right', 'text': f'{phrase.vietnamese_text}！Vâng, tôi rất muốn.\n({phrase.japanese_translation}! Vâng, tôi rất muốn.)'},
+                ]
+            else:  # advanced
+                messages = [
+                    {'side': 'system', 'text': f'＜{phrase.id}＞{phrase.vietnamese_text}\n「{phrase.japanese_translation}」を学ぼう'},
+                    {'side': 'left', 'text': f'{phrase.vietnamese_text}\n({phrase.japanese_translation})'},
+                    {'side': 'right', 'text': f'{phrase.vietnamese_text}\n({phrase.japanese_translation})'},
+                    {'side': 'left', 'text': 'Bạn có thể sử dụng câu này như thế nào?\n(この表現をどう使えますか？)'},
+                    {'side': 'right', 'text': 'Tôi nghĩ có thể dùng khi gọi món.\n(料理を注文する時に使えると思います。)'},
+                    {'side': 'left', 'text': 'Đúng rồi! Hãy thực hành.\n(その通りです！練習しましょう。)'},
+                    {'side': 'system', 'text': '＜応用練習＞'},
+                    {'side': 'left', 'text': f'{phrase.japanese_translation}！Tôi muốn gọi món này.\n({phrase.vietnamese_text}! Tôi muốn gọi món này.)'},
+                    {'side': 'right', 'text': f'{phrase.vietnamese_text}！Tôi cũng muốn thử.\n({phrase.japanese_translation}! Tôi cũng muốn thử.)'},
+                ]
+        elif category == 'business':
+            if difficulty == 'beginner':
+                messages = [
+                    {'side': 'system', 'text': f'＜{phrase.id}＞{phrase.vietnamese_text}\n「{phrase.japanese_translation}」を学ぼう'},
+                    {'side': 'left', 'text': f'{phrase.vietnamese_text}\n({phrase.japanese_translation})'},
+                    {'side': 'right', 'text': f'{phrase.vietnamese_text}\n({phrase.japanese_translation})'},
+                    {'side': 'left', 'text': 'Đây là câu nói trong môi trường công việc.\n(これは仕事の場面で使う表現です。)'},
+                    {'side': 'right', 'text': 'Tôi hiểu rồi. Có thể lặp lại không?\n(分かりました。繰り返せますか？)'},
+                    {'side': 'left', 'text': f'Vâng, {phrase.vietnamese_text}\n(はい、{phrase.japanese_translation})'},
+                    {'side': 'right', 'text': f'{phrase.vietnamese_text}\n({phrase.japanese_translation})'},
+                ]
+            elif difficulty == 'intermediate':
+                messages = [
+                    {'side': 'system', 'text': f'＜{phrase.id}＞{phrase.vietnamese_text}\n「{phrase.japanese_translation}」を学ぼう'},
+                    {'side': 'left', 'text': f'{phrase.vietnamese_text}\n({phrase.japanese_translation})'},
+                    {'side': 'right', 'text': f'{phrase.vietnamese_text}\n({phrase.japanese_translation})'},
+                    {'side': 'left', 'text': 'Bạn có thể giải thích ý nghĩa không?\n(意味を説明できますか？)'},
+                    {'side': 'right', 'text': 'Tôi nghĩ có nghĩa là...\n(意味は...だと思います。)'},
+                    {'side': 'left', 'text': 'Rất tốt! Hãy thực hành.\n(とても良いです！練習しましょう。)'},
+                ]
+            else:  # advanced
+                messages = [
+                    {'side': 'system', 'text': f'＜{phrase.id}＞{phrase.vietnamese_text}\n「{phrase.japanese_translation}」を学ぼう'},
+                    {'side': 'left', 'text': f'{phrase.vietnamese_text}\n({phrase.japanese_translation})'},
+                    {'side': 'right', 'text': f'{phrase.vietnamese_text}\n({phrase.japanese_translation})'},
+                    {'side': 'left', 'text': 'Bạn có thể sử dụng câu này như thế nào?\n(この表現をどう使えますか？)'},
+                    {'side': 'right', 'text': 'Tôi nghĩ có thể dùng trong cuộc họp.\n(会議で使えると思います。)'},
+                    {'side': 'left', 'text': 'Đúng rồi! Hãy thực hành.\n(その通りです！練習しましょう。)'},
+                ]
+        else:  # other categories
+            messages = [
+                {'side': 'system', 'text': f'＜{phrase.id}＞{phrase.vietnamese_text}\n「{phrase.japanese_translation}」を学ぼう'},
+                {'side': 'left', 'text': f'{phrase.vietnamese_text}\n({phrase.japanese_translation})'},
+                {'side': 'right', 'text': f'{phrase.vietnamese_text}\n({phrase.japanese_translation})'},
+                {'side': 'left', 'text': 'Lặp lại theo tôi.\n(私が読んだ後に繰り返してください)'},
+                {'side': 'left', 'text': f'{phrase.vietnamese_text}\n({phrase.japanese_translation})'},
+                {'side': 'right', 'text': f'{phrase.vietnamese_text}\n({phrase.japanese_translation})'},
+                {'side': 'system', 'text': '＜練習＞'},
+                {'side': 'left', 'text': f'{phrase.japanese_translation}！\n({phrase.vietnamese_text}!)'},
+                {'side': 'right', 'text': f'{phrase.vietnamese_text}！\n({phrase.japanese_translation}!)'},
+            ]
+    else:
+        # Fallback conversation if no phrase
+        messages = [
+            {'side': 'system', 'text': '＜学習セッション＞\n「学習セッション」を始めましょう'},
+            {'side': 'left', 'text': 'Xin chào! Tôi là giáo viên.\n(こんにちは！私は先生です。)'},
+            {'side': 'right', 'text': 'Xin chào! Tôi rất vui được gặp bạn.\n(こんにちは！お会いできて嬉しいです。)'},
+            {'side': 'left', 'text': 'Hôm nay chúng ta sẽ học tiếng Việt.\n(今日はベトナム語を学びましょう。)'},
+            {'side': 'right', 'text': 'Vâng, tôi rất thích.\n(はい、とても楽しみです。)'},
+        ]
+    
+    context = {
+        'partner_id': partner_id,
+        'post_id': post_id,
+        'phrase_id': phrase.id if phrase else phrase_id,
+        'timer_flag': True,  # Enable timer by default
+        'poster_gender': poster.gender if poster else None,
+        'poster_nationality': poster.nationality if poster else None,
+        'poster_city': poster.city if poster else None,
+        'poster': poster,
+        'post': post,  # Add post to context
+        'phrase': phrase,
+        'messages': messages,
+        'left_icon': 'images/session/teacher.png',
+        'left_name': '先生/giáo viên',
+        'right_icon': 'images/session/student.png',
+        'right_name': '生徒/học sinh',
+    }
+    
+    return render(request, 'session/learning_session.html', context)
+
+@login_required
+def start_session_from_dashboard(request):
+    """
+    Start a new session from dashboard
+    This view handles the "Bắt đầu phiên làm việc" button from dashboard
+    """
+    try:
+        # Check if user has any existing posts
+        user_posts = LanguageExchangePost.objects.filter(
+            japanese_user=request.user
+        ) | LanguageExchangePost.objects.filter(
+            vietnamese_user=request.user
+        )
+        
+        # If user has posts, redirect to my_posts
+        if user_posts.exists():
+            return redirect('my_posts')
+        
+        # If no posts, redirect to create post
+        return redirect('create_post')
+        
+    except Exception as e:
+        print(f"DEBUG: Error in start_session_from_dashboard: {e}")
+        # Fallback to create post
+        return redirect('create_post')
+
+@login_required
+def start_working_session(request, post_id):
+    """
+    Start working session for language exchange
+    This view handles the "Bắt đầu phiên làm việc" button from my_posts.html
+    """
+    post = get_object_or_404(LanguageExchangePost, id=post_id)
+    
+    # Check if user has access to this post
+    if request.user not in [post.japanese_user, post.vietnamese_user]:
+        messages.error(request, 'Bạn không có quyền truy cập vào phiên học này.')
+        return redirect('/auth/dashboard/')
+    
+    # Check if post is matched
+    if post.status != 'matched':
+        messages.error(request, 'Chỉ có thể bắt đầu phiên học khi đã được kết nối.')
+        return redirect('/auth/dashboard/')
+    
+    # Get the appropriate phrase based on user nationality and what they want to learn
+    phrase = None
+    
+    # Debug logging
+    print(f"DEBUG WORKING: User nationality: {request.user.nationality}")
+    print(f"DEBUG WORKING: User ID: {request.user.id}")
+    print(f"DEBUG WORKING: User username: {request.user.username}")
+    print(f"DEBUG WORKING: Post ID: {post_id}")
+    print(f"DEBUG WORKING: Post phrase: {post.phrase}")
+    print(f"DEBUG WORKING: Post accepted_phrase: {post.accepted_phrase}")
+    print(f"DEBUG WORKING: Post japanese_learning_phrases count: {post.japanese_learning_phrases.count()}")
+    print(f"DEBUG WORKING: Post vietnamese_learning_phrases count: {post.vietnamese_learning_phrases.count()}")
+    
+    # Check if user is authenticated
+    if not request.user.is_authenticated:
+        print(f"DEBUG: User is not authenticated!")
+        return redirect('/auth/login/')
+    
+    # Check if nationality is set
+    if not hasattr(request.user, 'nationality') or not request.user.nationality:
+        print(f"DEBUG: User nationality is not set!")
+        # Try to get from profile
+        try:
+            from user_profile.models import CustomUser
+            user_profile = CustomUser.objects.get(id=request.user.id)
+            print(f"DEBUG: User profile nationality: {user_profile.nationality}")
+            request.user.nationality = user_profile.nationality
+        except Exception as e:
+            print(f"DEBUG: Error getting user profile: {e}")
+            request.user.nationality = 'unknown'
+    
+    if request.user.nationality == 'japanese':
+        # Japanese user wants to learn Vietnamese phrases
+        print(f"DEBUG WORKING: Japanese user - checking japanese_learning_phrases")
+        if post.japanese_learning_phrases.exists():
+            # Use the first phrase from japanese_learning_phrases, or the accepted_phrase if available
+            phrase = post.accepted_phrase if post.accepted_phrase else post.japanese_learning_phrases.first()
+            print(f"DEBUG WORKING: Japanese user - selected phrase: {phrase}")
+        else:
+            # Fallback to main phrase
+            phrase = post.phrase
+            print(f"DEBUG WORKING: Japanese user - fallback to main phrase: {phrase}")
+    elif request.user.nationality == 'vietnamese':
+        # Vietnamese user wants to learn Japanese phrases
+        print(f"DEBUG WORKING: Vietnamese user - checking vietnamese_learning_phrases")
+        if post.vietnamese_learning_phrases.exists():
+            # Use the first phrase from vietnamese_learning_phrases, or the accepted_phrase if available
+            phrase = post.accepted_phrase if post.accepted_phrase else post.vietnamese_learning_phrases.first()
+            print(f"DEBUG WORKING: Vietnamese user - selected phrase: {phrase}")
+        else:
+            # Fallback to main phrase
+            phrase = post.phrase
+            print(f"DEBUG WORKING: Vietnamese user - fallback to main phrase: {phrase}")
+    else:
+        # Fallback to main phrase for other nationalities
+        phrase = post.phrase
+        print(f"DEBUG WORKING: Other nationality - using main phrase: {phrase}")
+    
+    print(f"DEBUG WORKING: Final selected phrase: {phrase}")
+    
+    # If still no phrase, create a default one
+    if not phrase:
+        print(f"DEBUG WORKING: No phrase found, creating default conversation")
+        # Create a default phrase object for fallback
+        class DefaultPhrase:
+            def __init__(self):
+                self.id = 1
+                self.vietnamese_text = "Xin chào"
+                self.japanese_translation = "こんにちは"
+                self.category = "greetings"
+                self.difficulty = "beginner"
+        
+        phrase = DefaultPhrase()
+    
+    # Determine conversation content based on phrase category and difficulty
+    if phrase:
+        category = phrase.category
+        difficulty = phrase.difficulty
+        
+        # Generate conversation based on category and difficulty
+        if category == 'greetings':
+            if difficulty == 'beginner':
+                messages = [
+                    {'side': 'system', 'text': f'＜{phrase.id}＞{phrase.vietnamese_text}\n「{phrase.japanese_translation}」を学ぼう'},
+                    {'side': 'left', 'text': f'{phrase.vietnamese_text}\n({phrase.japanese_translation})'},
+                    {'side': 'right', 'text': f'{phrase.vietnamese_text}\n({phrase.japanese_translation})'},
+                    {'side': 'left', 'text': 'Lặp lại theo tôi.\n(私が読んだ後に繰り返してください)'},
+                    {'side': 'left', 'text': f'{phrase.vietnamese_text}\n({phrase.japanese_translation})'},
+                    {'side': 'right', 'text': f'{phrase.vietnamese_text}\n({phrase.japanese_translation})'},
+                    {'side': 'system', 'text': '＜練習＞　Lặp lại và đối thoại ngắn'},
+                    {'side': 'left', 'text': f'{phrase.japanese_translation}。私は{post.japanese_user.full_name or post.japanese_user.username}です。\n({phrase.vietnamese_text}. Tôi là {post.japanese_user.full_name or post.japanese_user.username}.)'},
+                    {'side': 'right', 'text': f'{phrase.japanese_translation}。私は{post.vietnamese_user.full_name or post.vietnamese_user.username}です。\n({phrase.vietnamese_text}. Tôi là {post.vietnamese_user.full_name or post.vietnamese_user.username}.)'},
+                ]
+            elif difficulty == 'intermediate':
+                messages = [
+                    {'side': 'system', 'text': f'＜{phrase.id}＞{phrase.vietnamese_text}\n「{phrase.japanese_translation}」を学ぼう'},
+                    {'side': 'left', 'text': f'{phrase.vietnamese_text}\n({phrase.japanese_translation})'},
+                    {'side': 'right', 'text': f'{phrase.vietnamese_text}\n({phrase.japanese_translation})'},
+                    {'side': 'left', 'text': 'Bạn có thể lặp lại không?\n(繰り返せますか？)'},
+                    {'side': 'right', 'text': f'Vâng, {phrase.vietnamese_text}\n(はい、{phrase.japanese_translation})'},
+                    {'side': 'left', 'text': 'Rất tốt! Bây giờ hãy thực hành.\n(とても良いです！今度は練習しましょう。)'},
+                    {'side': 'system', 'text': '＜会話練習＞'},
+                    {'side': 'left', 'text': f'{phrase.japanese_translation}！私は{post.japanese_user.full_name or post.japanese_user.username}です。\n({phrase.vietnamese_text}! Tôi là {post.japanese_user.full_name or post.japanese_user.username}.)'},
+                    {'side': 'right', 'text': f'{phrase.japanese_translation}！Tôi rất vui được gặp bạn.\n({phrase.vietnamese_text}! Rất vui được gặp bạn.)'},
+                ]
+            else:  # advanced
+                messages = [
+                    {'side': 'system', 'text': f'＜{phrase.id}＞{phrase.vietnamese_text}\n「{phrase.japanese_translation}」を学ぼう'},
+                    {'side': 'left', 'text': f'{phrase.vietnamese_text}\n({phrase.japanese_translation})'},
+                    {'side': 'right', 'text': f'{phrase.vietnamese_text}\n({phrase.japanese_translation})'},
+                    {'side': 'left', 'text': 'Bạn có thể sử dụng câu này trong tình huống nào?\n(この表現はどんな場面で使えますか？)'},
+                    {'side': 'right', 'text': 'Tôi nghĩ có thể dùng khi gặp người mới.\n(新しい人に会った時に使えると思います。)'},
+                    {'side': 'left', 'text': 'Đúng rồi! Hãy thực hành với tôi.\n(その通りです！一緒に練習しましょう。)'},
+                    {'side': 'system', 'text': '＜応用練習＞'},
+                    {'side': 'left', 'text': f'{phrase.japanese_translation}！私は{post.japanese_user.full_name or post.japanese_user.username}です。\n({phrase.vietnamese_text}! Tôi là {post.japanese_user.full_name or post.japanese_user.username}.)'},
+                    {'side': 'right', 'text': f'{phrase.japanese_translation}！Tôi rất vui được gặp bạn. Bạn có khỏe không?\n({phrase.vietnamese_text}! Rất vui được gặp bạn. Bạn có khỏe không?)'},
+                ]
+        elif category == 'food':
+            if difficulty == 'beginner':
+                messages = [
+                    {'side': 'system', 'text': f'＜{phrase.id}＞{phrase.vietnamese_text}\n「{phrase.japanese_translation}」を学ぼう'},
+                    {'side': 'left', 'text': f'{phrase.vietnamese_text}\n({phrase.japanese_translation})'},
+                    {'side': 'right', 'text': f'{phrase.vietnamese_text}\n({phrase.japanese_translation})'},
+                    {'side': 'left', 'text': 'Đây là câu nói về ẩm thực.\n(これは料理についての表現です。)'},
+                    {'side': 'right', 'text': 'Tôi hiểu rồi. Có thể lặp lại không?\n(分かりました。繰り返せますか？)'},
+                    {'side': 'left', 'text': f'Vâng, {phrase.vietnamese_text}\n(はい、{phrase.japanese_translation})'},
+                    {'side': 'right', 'text': f'{phrase.vietnamese_text}\n({phrase.japanese_translation})'},
+                    {'side': 'system', 'text': '＜練習＞　Thực hành về ẩm thực'},
+                    {'side': 'left', 'text': f'{phrase.japanese_translation}！Tôi thích món này.\n({phrase.vietnamese_text}! Tôi thích món này.)'},
+                    {'side': 'right', 'text': f'{phrase.vietnamese_text}！Tôi cũng thích.\n({phrase.japanese_translation}! Tôi cũng thích.)'},
+                ]
+            elif difficulty == 'intermediate':
+                messages = [
+                    {'side': 'system', 'text': f'＜{phrase.id}＞{phrase.vietnamese_text}\n「{phrase.japanese_translation}」を学ぼう'},
+                    {'side': 'left', 'text': f'{phrase.vietnamese_text}\n({phrase.japanese_translation})'},
+                    {'side': 'right', 'text': f'{phrase.vietnamese_text}\n({phrase.japanese_translation})'},
+                    {'side': 'left', 'text': 'Bạn có thể giải thích ý nghĩa không?\n(意味を説明できますか？)'},
+                    {'side': 'right', 'text': 'Tôi nghĩ có nghĩa là...\n(意味は...だと思います。)'},
+                    {'side': 'left', 'text': 'Rất tốt! Hãy thực hành.\n(とても良いです！練習しましょう。)'},
+                    {'side': 'system', 'text': '＜会話練習＞'},
+                    {'side': 'left', 'text': f'{phrase.japanese_translation}！Bạn có muốn ăn món này không?\n({phrase.vietnamese_text}! Bạn có muốn ăn món này không?)'},
+                    {'side': 'right', 'text': f'{phrase.vietnamese_text}！Vâng, tôi rất muốn.\n({phrase.japanese_translation}! Vâng, tôi rất muốn.)'},
+                ]
+            else:  # advanced
+                messages = [
+                    {'side': 'system', 'text': f'＜{phrase.id}＞{phrase.vietnamese_text}\n「{phrase.japanese_translation}」を学ぼう'},
+                    {'side': 'left', 'text': f'{phrase.vietnamese_text}\n({phrase.japanese_translation})'},
+                    {'side': 'right', 'text': f'{phrase.vietnamese_text}\n({phrase.japanese_translation})'},
+                    {'side': 'left', 'text': 'Bạn có thể sử dụng câu này như thế nào?\n(この表現をどう使えますか？)'},
+                    {'side': 'right', 'text': 'Tôi nghĩ có thể dùng khi gọi món.\n(料理を注文する時に使えると思います。)'},
+                    {'side': 'left', 'text': 'Đúng rồi! Hãy thực hành.\n(その通りです！練習しましょう。)'},
+                    {'side': 'system', 'text': '＜応用練習＞'},
+                    {'side': 'left', 'text': f'{phrase.japanese_translation}！Tôi muốn gọi món này.\n({phrase.vietnamese_text}! Tôi muốn gọi món này.)'},
+                    {'side': 'right', 'text': f'{phrase.vietnamese_text}！Tôi cũng muốn thử.\n({phrase.japanese_translation}! Tôi cũng muốn thử.)'},
+                ]
+        elif category == 'business':
+            if difficulty == 'beginner':
+                messages = [
+                    {'side': 'system', 'text': f'＜{phrase.id}＞{phrase.vietnamese_text}\n「{phrase.japanese_translation}」を学ぼう'},
+                    {'side': 'left', 'text': f'{phrase.vietnamese_text}\n({phrase.japanese_translation})'},
+                    {'side': 'right', 'text': f'{phrase.vietnamese_text}\n({phrase.japanese_translation})'},
+                    {'side': 'left', 'text': 'Đây là câu nói trong môi trường công việc.\n(これは仕事の場面で使う表現です。)'},
+                    {'side': 'right', 'text': 'Tôi hiểu rồi. Có thể lặp lại không?\n(分かりました。繰り返せますか？)'},
+                    {'side': 'left', 'text': f'Vâng, {phrase.vietnamese_text}\n(はい、{phrase.japanese_translation})'},
+                    {'side': 'right', 'text': f'{phrase.vietnamese_text}\n({phrase.japanese_translation})'},
+                ]
+            elif difficulty == 'intermediate':
+                messages = [
+                    {'side': 'system', 'text': f'＜{phrase.id}＞{phrase.vietnamese_text}\n「{phrase.japanese_translation}」を学ぼう'},
+                    {'side': 'left', 'text': f'{phrase.vietnamese_text}\n({phrase.japanese_translation})'},
+                    {'side': 'right', 'text': f'{phrase.vietnamese_text}\n({phrase.japanese_translation})'},
+                    {'side': 'left', 'text': 'Bạn có thể giải thích ý nghĩa không?\n(意味を説明できますか？)'},
+                    {'side': 'right', 'text': 'Tôi nghĩ có nghĩa là...\n(意味は...だと思います。)'},
+                    {'side': 'left', 'text': 'Rất tốt! Hãy thực hành.\n(とても良いです！練習しましょう。)'},
+                ]
+            else:  # advanced
+                messages = [
+                    {'side': 'system', 'text': f'＜{phrase.id}＞{phrase.vietnamese_text}\n「{phrase.japanese_translation}」を学ぼう'},
+                    {'side': 'left', 'text': f'{phrase.vietnamese_text}\n({phrase.japanese_translation})'},
+                    {'side': 'right', 'text': f'{phrase.vietnamese_text}\n({phrase.japanese_translation})'},
+                    {'side': 'left', 'text': 'Bạn có thể sử dụng câu này như thế nào?\n(この表現をどう使えますか？)'},
+                    {'side': 'right', 'text': 'Tôi nghĩ có thể dùng trong cuộc họp.\n(会議で使えると思います。)'},
+                    {'side': 'left', 'text': 'Đúng rồi! Hãy thực hành.\n(その通りです！練習しましょう。)'},
+                ]
+        else:  # other categories
+            messages = [
+                {'side': 'system', 'text': f'＜{phrase.id}＞{phrase.vietnamese_text}\n「{phrase.japanese_translation}」を学ぼう'},
+                {'side': 'left', 'text': f'{phrase.vietnamese_text}\n({phrase.japanese_translation})'},
+                {'side': 'right', 'text': f'{phrase.vietnamese_text}\n({phrase.japanese_translation})'},
+                {'side': 'left', 'text': 'Lặp lại theo tôi.\n(私が読んだ後に繰り返してください)'},
+                {'side': 'left', 'text': f'{phrase.vietnamese_text}\n({phrase.japanese_translation})'},
+                {'side': 'right', 'text': f'{phrase.vietnamese_text}\n({phrase.japanese_translation})'},
+                {'side': 'system', 'text': '＜練習＞'},
+                {'side': 'left', 'text': f'{phrase.japanese_translation}！\n({phrase.vietnamese_text}!)'},
+                {'side': 'right', 'text': f'{phrase.vietnamese_text}！\n({phrase.japanese_translation}!)'},
+            ]
+    else:
+        # Fallback conversation if no phrase
+        messages = [
+            {'side': 'system', 'text': '＜学習セッション＞\n「学習セッション」を始めましょう'},
+            {'side': 'left', 'text': 'Xin chào! Tôi là giáo viên.\n(こんにちは！私は先生です。)'},
+            {'side': 'right', 'text': 'Xin chào! Tôi rất vui được gặp bạn.\n(こんにちは！お会いできて嬉しいです。)'},
+            {'side': 'left', 'text': 'Hôm nay chúng ta sẽ học tiếng Việt.\n(今日はベトナム語を学びましょう。)'},
+            {'side': 'right', 'text': 'Vâng, tôi rất thích.\n(はい、とても楽しみです。)'},
+        ]
+    
+    # Determine partner info
+    if request.user == post.japanese_user:
+        partner_id = post.vietnamese_user.id
+        poster = post.vietnamese_user
+    else:
+        partner_id = post.japanese_user.id
+        poster = post.japanese_user
+    
+    context = {
+        'partner_id': partner_id,
+        'post_id': post_id,
+        'phrase_id': phrase.id if phrase else 1,
+        'timer_flag': True,  # Enable timer by default
+        'poster_gender': poster.gender if poster else None,
+        'poster_nationality': poster.nationality if poster else None,
+        'poster_city': poster.city if poster else None,
+        'poster': poster,
+        'phrase': phrase,
+        'messages': messages,
+        'left_icon': 'images/session/teacher.png',
+        'left_name': '先生/giáo viên',
+        'right_icon': 'images/session/student.png',
+        'right_name': '生徒/học sinh',
+        'post': post,
+    }
+    
+    return render(request, 'session/learning_session.html', context)

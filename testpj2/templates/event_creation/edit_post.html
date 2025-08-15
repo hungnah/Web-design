@@ -9,11 +9,61 @@
     {% endif %}
 {% endblock %}
 
+{% block extra_css %}
+<!-- Select2 CSS -->
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" rel="stylesheet" />
+<style>
+    .select2-container--bootstrap-5 .select2-selection--multiple {
+        min-height: 38px;
+        border: 1px solid #ced4da;
+        border-radius: 0.375rem;
+    }
+    .select2-container--bootstrap-5 .select2-selection--multiple .select2-selection__choice {
+        background-color: #0d6efd;
+        color: white;
+        border: none;
+        border-radius: 0.25rem;
+        padding: 2px 8px;
+        margin: 2px;
+    }
+    .select2-container--bootstrap-5 .select2-selection--multiple .select2-selection__choice__remove {
+        color: white;
+        margin-right: 5px;
+    }
+    .select2-container--bootstrap-5 .select2-selection--multiple .select2-selection__choice__remove:hover {
+        color: #f8f9fa;
+    }
+    .location-info-card {
+        transition: all 0.3s ease;
+        border-left: 4px solid #0d6efd;
+    }
+    .form-section {
+        background: #f8f9fa;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 20px;
+        border: 1px solid #e9ecef;
+    }
+    .form-section h5 {
+        color: #495057;
+        margin-bottom: 15px;
+        font-size: 1.1rem;
+    }
+    .phrase-info-card {
+        background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+        border: none;
+        border-radius: 12px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 <div class="container my-5">
     <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
+        <div class="col-md-10">
+            <div class="card shadow">
                 <div class="card-header bg-primary text-white">
                     <h3 class="mb-0">
                         <i class="fas fa-edit"></i> 
@@ -26,8 +76,9 @@
                 </div>
                 <div class="card-body">
                     <!-- Selected Phrase -->
-                    <div class="alert alert-info">
-                        <h5>
+                    <div class="alert alert-info phrase-info-card">
+                        <h5 class="mb-3">
+                            <i class="fas fa-language text-primary"></i>
                             {% if user.nationality == 'japanese' %}
                                 選択されたフレーズ:
                             {% else %}
@@ -43,7 +94,7 @@
                                         Tiếng Việt:
                                     {% endif %}
                                 </strong><br>
-                                {{ post.phrase.vietnamese_text }}
+                                <span class="text-primary">{{ post.phrase.vietnamese_text }}</span>
                             </div>
                             <div class="col-md-4">
                                 <strong>
@@ -53,7 +104,7 @@
                                         Tiếng Nhật:
                                     {% endif %}
                                 </strong><br>
-                                {{ post.phrase.japanese_translation }}
+                                <span class="text-primary">{{ post.phrase.japanese_translation }}</span>
                             </div>
                             <div class="col-md-4">
                                 <strong>
@@ -63,11 +114,11 @@
                                         Tiếng Anh:
                                     {% endif %}
                                 </strong><br>
-                                {{ post.phrase.english_translation }}
+                                <span class="text-primary">{{ post.phrase.english_translation }}</span>
                             </div>
                         </div>
-                        <div class="mt-2">
-                            <span class="badge bg-primary">{{ post.phrase.get_category_display }}</span>
+                        <div class="mt-3">
+                            <span class="badge bg-primary me-2">{{ post.phrase.get_category_display }}</span>
                             <span class="badge bg-{% if post.phrase.difficulty == 'beginner' %}success{% elif post.phrase.difficulty == 'intermediate' %}warning{% else %}danger{% endif %}">
                                 {{ post.phrase.get_difficulty_display }}
                             </span>
@@ -78,74 +129,99 @@
                     <form method="post">
                         {% csrf_token %}
                         
-                        <div class="row">
-                            <div class="col-md-6">
-                                {{ form.cultural_location|as_crispy_field }}
+                        <!-- Location and Date Section -->
+                        <div class="form-section">
+                            <h5><i class="fas fa-map-marker-alt text-primary"></i> 
+                                {% if user.nationality == 'japanese' %}
+                                    会場と日時
+                                {% else %}
+                                    Địa điểm và thời gian
+                                {% endif %}
+                            </h5>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    {{ form.cultural_location|as_crispy_field }}
+                                </div>
+                                <div class="col-md-6">
+                                    {{ form.meeting_date|as_crispy_field }}
+                                </div>
                             </div>
-                            <div class="col-md-6">
-                                {{ form.meeting_date|as_crispy_field }}
+                            
+                            <!-- Cultural Location Details -->
+                            <div id="location-details" class="alert alert-info location-info-card mt-3" style="display: none;">
+                                <h6><i class="fas fa-info-circle"></i> 
+                                    {% if user.nationality == 'japanese' %}
+                                        文化施設の情報:
+                                    {% else %}
+                                        Thông tin địa điểm văn hóa:
+                                    {% endif %}
+                                </h6>
+                                <div id="location-info"></div>
                             </div>
                         </div>
 
-                        <div class="row">
-                            <div class="col-md-6">
-                                {{ form.japanese_learning_phrases|as_crispy_field }}
-                                <small class="form-text text-muted">
-                                    {% if user.nationality == 'japanese' %}
-                                        学習したいベトナム語のフレーズを選択してください（任意）
-                                    {% else %}
-                                        Chọn các câu nói tiếng Việt mà bạn muốn học (tùy chọn)
-                                    {% endif %}
-                                </small>
-                            </div>
-                            <div class="col-md-6">
-                                {{ form.vietnamese_learning_phrases|as_crispy_field }}
-                                <small class="form-text text-muted">
-                                    {% if user.nationality == 'japanese' %}
-                                        学習したい日本語のフレーズを選択してください（任意）
-                                    {% else %}
-                                        Chọn các câu nói tiếng Nhật mà bạn muốn học (tùy chọn)
-                                    {% endif %}
-                                </small>
+                        <!-- Learning Phrases Section -->
+                        <div class="form-section">
+                            <h5><i class="fas fa-graduation-cap text-success"></i> 
+                                {% if user.nationality == 'japanese' %}
+                                    学習したいフレーズ
+                                {% else %}
+                                    Câu nói muốn học
+                                {% endif %}
+                            </h5>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    {{ form.japanese_learning_phrases|as_crispy_field }}
+                                    <small class="form-text text-muted">
+                                        {% if user.nationality == 'japanese' %}
+                                            学習したいベトナム語のフレーズを選択してください（任意）
+                                        {% else %}
+                                            Chọn các câu nói tiếng Việt mà bạn muốn học (tùy chọn)
+                                        {% endif %}
+                                    </small>
+                                </div>
+                                <div class="col-md-6">
+                                    {{ form.vietnamese_learning_phrases|as_crispy_field }}
+                                    <small class="form-text text-muted">
+                                        {% if user.nationality == 'japanese' %}
+                                            学習したい日本語のフレーズを選択してください（任意）
+                                        {% else %}
+                                            Chọn các câu nói tiếng Nhật mà bạn muốn học (tùy chọn)
+                                        {% endif %}
+                                    </small>
+                                </div>
                             </div>
                         </div>
-
-                        {{ form.notes|as_crispy_field }}
                         
-                        <div class="alert alert-warning">
-                            <i class="fas fa-info-circle"></i>
-                            <strong>
+                        <!-- Notes Section -->
+                        <div class="form-section">
+                            <h5><i class="fas fa-sticky-note text-warning"></i> 
                                 {% if user.nationality == 'japanese' %}
-                                    注意:
+                                    備考
                                 {% else %}
-                                    Lưu ý:
+                                    Ghi chú
                                 {% endif %}
-                            </strong> 
-                            {% if user.nationality == 'japanese' %}
-                                まだ受け入れられていない投稿のみ編集できます。受け入れられた後は、投稿を編集することはできません。
-                            {% else %}
-                                Chỉ có thể chỉnh sửa bài đăng chưa được chấp nhận. 
-                                Sau khi được chấp nhận, bài đăng sẽ không thể chỉnh sửa nữa.
-                            {% endif %}
+                            </h5>
+                            {{ form.notes|as_crispy_field }}
                         </div>
                         
-                        <div class="d-grid gap-2">
-                            <button type="submit" class="btn btn-primary btn-lg">
-                                <i class="fas fa-save"></i> 
-                                {% if user.nationality == 'japanese' %}
-                                    投稿を更新
-                                {% else %}
-                                    Cập nhật bài đăng
-                                {% endif %}
-                            </button>
-                            <a href="{% url 'my_posts' %}" class="btn btn-outline-secondary">
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a href="{% url 'my_posts' %}" class="btn btn-outline-secondary me-md-2">
                                 <i class="fas fa-arrow-left"></i> 
                                 {% if user.nationality == 'japanese' %}
-                                    マイ投稿に戻る
+                                    戻る
                                 {% else %}
-                                    Quay lại bài đăng của tôi
+                                    Quay lại
                                 {% endif %}
                             </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> 
+                                {% if user.nationality == 'japanese' %}
+                                    更新
+                                {% else %}
+                                    Cập nhật
+                                {% endif %}
+                            </button>
                         </div>
                     </form>
                 </div>
@@ -153,4 +229,74 @@
         </div>
     </div>
 </div>
+
+<!-- Select2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize Select2 for multiple select fields
+    $('.select2-multiple').select2({
+        theme: 'bootstrap-5',
+        width: '100%',
+        placeholder: function() {
+            return $(this).data('placeholder');
+        },
+        allowClear: true,
+        closeOnSelect: false
+    });
+    
+    const locationSelect = document.getElementById('id_cultural_location');
+    const locationDetails = document.getElementById('location-details');
+    const locationInfo = document.getElementById('location-info');
+    
+    function showLocationDetails(locationId) {
+        if (locationId) {
+            // Fetch location details from the selected option
+            const selectedOption = locationSelect.options[locationSelect.selectedIndex];
+            if (selectedOption) {
+                const locationName = selectedOption.text;
+                locationInfo.innerHTML = `
+                    <p class="mb-2"><strong>Địa điểm:</strong> ${locationName}</p>
+                    <p class="mb-2"><strong>Loại:</strong> <span class="badge bg-primary">Địa điểm văn hóa</span></p>
+                    <p class="mb-0"><strong>Mô tả:</strong> Đây là địa điểm tham quan văn hóa, nơi bạn có thể học tiếng Việt và trải nghiệm văn hóa Việt Nam.</p>
+                `;
+                locationDetails.style.display = 'block';
+                
+                // Add smooth animation
+                locationDetails.style.opacity = '0';
+                locationDetails.style.transform = 'translateY(-10px)';
+                setTimeout(() => {
+                    locationDetails.style.transition = 'all 0.3s ease';
+                    locationDetails.style.opacity = '1';
+                    locationDetails.style.transform = 'translateY(0)';
+                }, 10);
+            }
+        } else {
+            locationDetails.style.display = 'none';
+        }
+    }
+    
+    locationSelect.addEventListener('change', function() {
+        showLocationDetails(this.value);
+    });
+    
+    // Show details if location is pre-selected
+    if (locationSelect.value) {
+        showLocationDetails(locationSelect.value);
+    }
+    
+    // Add some interactivity to the form sections
+    const formSections = document.querySelectorAll('.form-section');
+    formSections.forEach(section => {
+        section.addEventListener('mouseenter', function() {
+            this.style.boxShadow = '0 4px 8px rgba(0,0,0,0.1)';
+        });
+        
+        section.addEventListener('mouseleave', function() {
+            this.style.boxShadow = 'none';
+        });
+    });
+});
+</script>
 {% endblock %}
