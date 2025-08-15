@@ -1,200 +1,201 @@
 {% extends 'base_timer.html' %}
+{% load static %}
 
-{% block title %}Lesson5: Shopping and Bargaining - 買い物と値引き交渉{% endblock %}
+{% block title %}Lesson5: Emergency - 緊急時{% endblock %}
 
 {% block body_class %}enable-timer{% endblock %}
 
 {% block style %}
-  .conversation {
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #e5ddd5;
+    margin: 0;
+    padding: 20px;
+  }
+
+  .chat-container {
+    max-width: 600px;
+    margin: 0 auto;
     display: flex;
     flex-direction: column;
-    gap: 20px;
-    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    gap: 15px;
   }
-  .message {
+
+  .message-row {
     display: flex;
-    max-width: 70%;
-    padding: 15px 20px;
-    border-radius: 20px;
-    line-height: 1.5;
-    box-shadow: 0 3px 6px rgba(0,0,0,0.1);
-    font-size: 1rem;
-    align-items: center;
+    align-items: flex-start;
   }
-  .teacher {
-    margin-left: auto;
-    background-color: #d1e7dd;
-    color: #0f5132;
+
+  .message-row.right {
     flex-direction: row-reverse;
   }
-  .student {
-    margin-right: auto;
-    background-color: #cff4fc;
-    color: #055160;
-  }
+
   .icon {
-    font-size: 2.2rem;
-    margin: 0 15px;
-    flex-shrink: 0;
-    color: inherit;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background-color: #ccc;
+    overflow: hidden;
+    margin: 0 10px;
   }
-  .text {
-    white-space: pre-line;
+
+  .icon img {
+    width: 90%;
+    height: 100%;
+    object-fit: cover;
   }
+
+  .message-content {
+    max-width: 70%;
+  }
+
+  .name {
+    font-size: 20px;
+    margin-bottom: 5px;
+    color: #555;
+  }
+
+  .bubble {
+    background-color: #d0ebff;
+    font-size: 20px;
+    padding: 10px;
+    border-radius: 10px;
+    position: relative;
+    text-align: left !important;
+  }
+
+  .message-row.right .bubble {
+    background-color: #ffd59e;
+  }
+
+  .message-row.right .message-content {
+    text-align: right;
+  }
+
+  .system-message {
+    text-align: center;
+    font-weight: bold;
+    margin: 20px 0;
+    color: #cd1f1f;
+    font-size: 30px;
+  }
+</style>
 {% endblock %}
 
 {% block content %}
-  <h1>Lesson5: Shopping and Bargaining<br>買い物と値引き交渉</h1>
+<div class="chat-container">
+  <!-- System message -->
+  <div class="system-message">Lesson5: Emergency<br>緊急時</div>
 
-  <div class="conversation">
-    <div class="message teacher">
-      <i class="fas fa-chalkboard-teacher icon" title="Teacher"></i>
-      <div class="text">
-        Hôm nay chúng ta sẽ học cách mua sắm và trả giá nhé.<br>
-        (今日は買い物と値引き交渉の表現を学びましょう。)
-      </div>
+  <!-- Teacher message -->
+  <div class="message-row">
+    <div class="icon">
+      <img src="{% static 'images/session/teacher.png' %}" alt="Teacher icon">
     </div>
-
-    <div class="message student">
-      <i class="fas fa-user icon" title="Student"></i>
-      <div class="text">
-        How do you say "How much is this?" in Vietnamese?<br>
-        (「これはいくらですか？」をベトナム語でどう言いますか？)
-      </div>
-    </div>
-
-    <div class="message teacher">
-      <i class="fas fa-chalkboard-teacher icon"></i>
-      <div class="text">
-        Cái này bao nhiêu tiền?<br>
-        (カイ ナイ バオ ニエウ ティエン？)
-      </div>
-    </div>
-
-    <div class="message student">
-      <i class="fas fa-user icon"></i>
-      <div class="text">
-        Cái này bao nhiêu tiền?<br>
-        (Cái này bao nhiêu tiền?)<br>
-        What does it mean?<br>
-        (どういう意味ですか？)
-      </div>
-    </div>
-
-    <div class="message teacher">
-      <i class="fas fa-chalkboard-teacher icon"></i>
-      <div class="text">
-        It means "How much is this?"<br>
-        (「これはいくらですか？」という意味です。)
-      </div>
-    </div>
-
-    <div class="message student">
-      <i class="fas fa-user icon"></i>
-      <div class="text">
-        How do you say "Can you give me a discount?"<br>
-        (「値引きしてもらえますか？」をベトナム語でどう言いますか？)
-      </div>
-    </div>
-
-    <div class="message teacher">
-      <i class="fas fa-chalkboard-teacher icon"></i>
-      <div class="text">
-        Bạn có thể giảm giá cho tôi không?<br>
-        (バン コ テ ザム ザ チョ トイ コーン？)
-      </div>
-    </div>
-
-    <div class="message student">
-      <i class="fas fa-user icon"></i>
-      <div class="text">
-        Bạn có thể giảm giá cho tôi không?<br>
-        (Bạn có thể giảm giá cho tôi không?)<br>
-        What does it mean?<br>
-        (どういう意味ですか？)
-      </div>
-    </div>
-
-    <div class="message teacher">
-      <i class="fas fa-chalkboard-teacher icon"></i>
-      <div class="text">
-        It means "Can you give me a discount?"<br>
-        (「値引きしてもらえますか？」という意味です。)
-      </div>
-    </div>
-
-    <div class="message student">
-      <i class="fas fa-user icon"></i>
-      <div class="text">
-        How do you say "It's too expensive"<br>
-        (「高すぎます」をベトナム語でどう言いますか？)
-      </div>
-    </div>
-
-    <div class="message teacher">
-      <i class="fas fa-chalkboard-teacher icon"></i>
-      <div class="text">
-        Đắt quá!<br>
-        (ダット クア！)
-      </div>
-    </div>
-
-    <div class="message student">
-      <i class="fas fa-user icon"></i>
-      <div class="text">
-        Đắt quá!<br>
-        (Đắt quá!)<br>
-        What does it mean?<br>
-        (どういう意味ですか？)
-      </div>
-    </div>
-
-    <div class="message teacher">
-      <i class="fas fa-chalkboard-teacher icon"></i>
-      <div class="text">
-        It means "It's too expensive!"<br>
-        (「高すぎます！」という意味です。)
-      </div>
-    </div>
-
-    <div class="message student">
-      <i class="fas fa-user icon"></i>
-      <div class="text">
-        How do you say "I'll take it"<br>
-        (「買います」をベトナム語でどう言いますか？)
-      </div>
-    </div>
-
-    <div class="message teacher">
-      <i class="fas fa-chalkboard-teacher icon"></i>
-      <div class="text">
-        Tôi sẽ mua cái này.<br>
-        (トイ セ ムア カイ ナイ。)
-      </div>
-    </div>
-
-    <div class="message student">
-      <i class="fas fa-user icon"></i>
-      <div class="text">
-        Tôi sẽ mua cái này.<br>
-        (Tôi sẽ mua cái này.)<br>
-        What does it mean?<br>
-        (どういう意味ですか？)
-      </div>
-    </div>
-
-    <div class="message teacher">
-      <i class="fas fa-chalkboard-teacher icon"></i>
-      <div class="text">
-        It means "I'll take this" or "I'll buy this"<br>
-        (「これを買います」という意味です。)
+    <div class="message-content">
+      <div class="name">先生/giáo viên</div>
+      <div class="bubble">
+        Hôm nay chúng ta sẽ học các câu nói quan trọng trong trường hợp khẩn cấp.<br>
+        (今日は緊急時に重要な表現を学びましょう。)
       </div>
     </div>
   </div>
 
-  <div class="text-center mt-4">
-    <a href="{% url 'evaluate' partner_id post_id phrase_id %}" class="btn btn-primary btn-lg">
-      <i class="fas fa-star"></i> Đánh giá bài học
-    </a>
+  <!-- Student message -->
+  <div class="message-row right">
+    <div class="icon">
+      <img src="{% static 'images/session/student.png' %}" alt="Student icon">
+    </div>
+    <div class="message-content">
+      <div class="name">生徒/học sinh</div>
+      <div class="bubble">
+        What if I need help in an emergency?<br>
+        (緊急時に助けが必要な場合はどうしますか？)<br>
+        How do I say "Help me!" in Vietnamese?<br>
+        (ベトナム語で「助けて！」をどう言いますか？)
+      </div>
+    </div>
   </div>
+
+  <!-- Teacher message -->
+  <div class="message-row">
+    <div class="icon">
+      <img src="{% static 'images/session/teacher.png' %}" alt="Teacher icon">
+    </div>
+    <div class="message-content">
+      <div class="name">先生/giáo viên</div>
+      <div class="bubble">
+        Bạn có thể nói: "Cứu tôi với!"<br>
+        (「クウ トイ ヴォイ！」と言えます。)<br>
+        This means "Help me!" in Vietnamese.<br>
+        (これはベトナム語で「助けて！」という意味です。)
+      </div>
+    </div>
+  </div>
+
+  <!-- Student message -->
+  <div class="message-row right">
+    <div class="icon">
+      <img src="{% static 'images/session/student.png' %}" alt="Student icon">
+    </div>
+    <div class="message-content">
+      <div class="name">生徒/học sinh</div>
+      <div class="bubble">
+        Cứu tôi với!<br>
+        (クウ トイ ヴォイ！)<br>
+        Is this phrase very important to remember?<br>
+        (このフレーズは覚えるのがとても重要ですか？)
+      </div>
+    </div>
+  </div>
+
+  <!-- Teacher message -->
+  <div class="message-row">
+    <div class="icon">
+      <img src="{% static 'images/session/teacher.png' %}" alt="Teacher icon">
+    </div>
+    <div class="message-content">
+      <div class="name">先生/giáo viên</div>
+      <div class="bubble">
+        Vâng, đây là câu nói rất quan trọng!<br>
+        (はい、これはとても重要な表現です！)<br>
+        You should also know "Gọi cảnh sát!" (Call the police!)<br>
+        (「ゴイ カイン サット！」(警察を呼んで！)も知っておくべきです。)
+      </div>
+    </div>
+  </div>
+
+  <!-- Student message -->
+  <div class="message-row right">
+    <div class="icon">
+      <img src="{% static 'images/session/student.png' %}" alt="Student icon">
+    </div>
+    <div class="message-content">
+      <div class="name">生徒/học sinh</div>
+      <div class="bubble">
+        What about medical emergencies?<br>
+        (医療の緊急時はどうですか？)<br>
+        How do I say "I need a doctor"?<br>
+        (「医者が必要です」をどう言いますか？)
+      </div>
+    </div>
+  </div>
+
+  <!-- Teacher message -->
+  <div class="message-row">
+    <div class="icon">
+      <img src="{% static 'images/session/teacher.png' %}" alt="Teacher icon">
+    </div>
+    <div class="message-content">
+      <div class="name">先生/giáo viên</div>
+      <div class="bubble">
+        "Tôi cần gặp bác sĩ" means "I need to see a doctor".<br>
+        (「トイ カン ガップ バック シー」は「医者に診てもらう必要があります」という意味です。)<br>
+        Remember these emergency phrases - they could save your life!<br>
+        (これらの緊急フレーズを覚えておいてください - 命を救うことができます！)
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}

@@ -1,126 +1,201 @@
 {% extends 'base_timer.html' %}
+{% load static %}
 
-{% block title %}Lesson2: Asking about nationality - 国籍を尋ねる{% endblock %}
+{% block title %}Lesson2: Food & Dining - 食事{% endblock %}
 
 {% block body_class %}enable-timer{% endblock %}
 
 {% block style %}
-  .conversation {
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #e5ddd5;
+    margin: 0;
+    padding: 20px;
+  }
+
+  .chat-container {
+    max-width: 600px;
+    margin: 0 auto;
     display: flex;
     flex-direction: column;
-    gap: 20px;
-    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    gap: 15px;
   }
-  .message {
+
+  .message-row {
     display: flex;
-    max-width: 70%;
-    padding: 15px 20px;
-    border-radius: 20px;
-    line-height: 1.5;
-    box-shadow: 0 3px 6px rgba(0,0,0,0.1);
-    font-size: 1rem;
-    align-items: center;
+    align-items: flex-start;
   }
-  /* 先生の発言は右寄せで背景色は緑系 */
-  .teacher {
-    margin-left: auto;
-    background-color: #d1e7dd;
-    color: #0f5132;
+
+  .message-row.right {
     flex-direction: row-reverse;
   }
-  /* 生徒の発言は左寄せで背景色は水色系 */
-  .student {
-    margin-right: auto;
-    background-color: #cff4fc;
-    color: #055160;
-  }
+
   .icon {
-    font-size: 2.2rem;
-    margin: 0 15px;
-    flex-shrink: 0;
-    color: inherit;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background-color: #ccc;
+    overflow: hidden;
+    margin: 0 10px;
   }
-  .text {
-    white-space: pre-line;
+
+  .icon img {
+    width: 90%;
+    height: 100%;
+    object-fit: cover;
   }
+
+  .message-content {
+    max-width: 70%;
+  }
+
+  .name {
+    font-size: 20px;
+    margin-bottom: 5px;
+    color: #555;
+  }
+
+  .bubble {
+    background-color: #d0ebff;
+    font-size: 20px;
+    padding: 10px;
+    border-radius: 10px;
+    position: relative;
+    text-align: left !important;
+  }
+
+  .message-row.right .bubble {
+    background-color: #ffd59e;
+  }
+
+  .message-row.right .message-content {
+    text-align: right;
+  }
+
+  .system-message {
+    text-align: center;
+    font-weight: bold;
+    margin: 20px 0;
+    color: #cd1f1f;
+    font-size: 30px;
+  }
+</style>
 {% endblock %}
 
 {% block content %}
-  <h1>Lesson2: Asking about nationality<br>国籍を尋ねる</h1>
+<div class="chat-container">
+  <!-- System message -->
+  <div class="system-message">Lesson2: Food & Dining<br>食事</div>
 
-  <div class="conversation">
-    <div class="message teacher">
-      <i class="fas fa-chalkboard-teacher icon" title="Teacher"></i>
-      <div class="text">
-        Hôm nay chúng ta sẽ học cách hỏi về quốc tịch nhé.<br>
-        (今日は国籍を尋ねる表現を学びましょう。)
-      </div>
+  <!-- Teacher message -->
+  <div class="message-row">
+    <div class="icon">
+      <img src="{% static 'images/session/teacher.png' %}" alt="Teacher icon">
     </div>
-
-    <div class="message student">
-      <i class="fas fa-user icon" title="Student"></i>
-      <div class="text">
-        How do you say "Where are you from?" in Vietnamese?<br>
-        (「あなたはどこの出身ですか？」をベトナム語でどう言いますか？)
-      </div>
-    </div>
-
-    <div class="message teacher">
-      <i class="fas fa-chalkboard-teacher icon"></i>
-      <div class="text">
-        Bạn đến từ đâu?<br>
-        (バン ゼン トゥ ダウ？)
-      </div>
-    </div>
-
-    <div class="message student">
-      <i class="fas fa-user icon"></i>
-      <div class="text">
-        Bạn đến từ đâu?<br>
-        (Bạn đến từ đâu?)<br>
-        What does it mean?<br>
-        (どういう意味ですか？)
-      </div>
-    </div>
-
-    <div class="message teacher">
-      <i class="fas fa-chalkboard-teacher icon"></i>
-      <div class="text">
-        It means "Where are you from?"<br>
-        (「あなたはどこの出身ですか？」という意味です。)
-      </div>
-    </div>
-
-    <div class="message student">
-      <i class="fas fa-user icon"></i>
-      <div class="text">
-        I’m from Japan.<br>
-        (私は日本出身です。)
-      </div>
-    </div>
-
-    <div class="message teacher">
-      <i class="fas fa-chalkboard-teacher icon"></i>
-      <div class="text">
-        Tôi đến từ Nhật Bản.<br>
-        (私は日本から来ました。)
-      </div>
-    </div>
-
-    <div class="message student">
-      <i class="fas fa-user icon"></i>
-      <div class="text">
-        Great! Let’s practice this together.<br>
-        (すごい！一緒に練習しましょう。)
-      </div>
-    </div>
-
-    <div class="message teacher">
-      <i class="fas fa-chalkboard-teacher icon"></i>
-      <div class="text">
-        Ok, bạn hỏi tôi nhé!<br>
-        (さあ、私に聞いてみてください！)
+    <div class="message-content">
+      <div class="name">先生/giáo viên</div>
+      <div class="bubble">
+        Hôm nay chúng ta sẽ học về ẩm thực Việt Nam.<br>
+        (今日はベトナム料理について学びましょう。)
       </div>
     </div>
   </div>
+
+  <!-- Student message -->
+  <div class="message-row right">
+    <div class="icon">
+      <img src="{% static 'images/session/student.png' %}" alt="Student icon">
+    </div>
+    <div class="message-content">
+      <div class="name">生徒/học sinh</div>
+      <div class="bubble">
+        I'm hungry! How do you say "I want to eat rice"?<br>
+        (お腹が空きました！「ご飯を食べたい」をベトナム語でどう言いますか？)
+      </div>
+    </div>
+  </div>
+
+  <!-- Teacher message -->
+  <div class="message-row">
+    <div class="icon">
+      <img src="{% static 'images/session/teacher.png' %}" alt="Teacher icon">
+    </div>
+    <div class="message-content">
+      <div class="name">先生/giáo viên</div>
+      <div class="bubble">
+        Tôi muốn ăn cơm.<br>
+        (トイ ムオン アン コム)<br>
+        This means "I want to eat rice" in Vietnamese.<br>
+        (これはベトナム語で「ご飯を食べたい」という意味です。)
+      </div>
+    </div>
+  </div>
+
+  <!-- Student message -->
+  <div class="message-row right">
+    <div class="icon">
+      <img src="{% static 'images/session/student.png' %}" alt="Student icon">
+    </div>
+    <div class="message-content">
+      <div class="message-content">
+        <div class="name">生徒/học sinh</div>
+        <div class="bubble">
+          Tôi muốn ăn cơm.<br>
+          (トイ ムオン アン コム)<br>
+          What is "cơm"?<br>
+          (「コム」とは何ですか？)
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Teacher message -->
+  <div class="message-row">
+    <div class="icon">
+      <img src="{% static 'images/session/teacher.png' %}" alt="Teacher icon">
+    </div>
+    <div class="message-content">
+      <div class="name">先生/giáo viên</div>
+      <div class="bubble">
+        "Cơm" means "rice" in Vietnamese.<br>
+        (「コム」はベトナム語で「ご飯」という意味です。)<br>
+        It's a staple food in Vietnam.<br>
+        (ベトナムの主食です。)
+      </div>
+    </div>
+  </div>
+
+  <!-- Student message -->
+  <div class="message-row right">
+    <div class="icon">
+      <img src="{% static 'images/session/student.png' %}" alt="Student icon">
+    </div>
+    <div class="message-content">
+      <div class="name">生徒/học sinh</div>
+      <div class="bubble">
+        Can I say "Tôi muốn ăn phở"?<br>
+        (「トイ ムオン アン フォー」と言えますか？)<br>
+        I love phở!<br>
+        (フォーが大好きです！)
+      </div>
+    </div>
+  </div>
+
+  <!-- Teacher message -->
+  <div class="message-row">
+    <div class="icon">
+      <img src="{% static 'images/session/teacher.png' %}" alt="Teacher icon">
+    </div>
+    <div class="message-content">
+      <div class="name">先生/giáo viên</div>
+      <div class="bubble">
+        Tuyệt vời! "Tôi muốn ăn phở" means "I want to eat phở".<br>
+        (素晴らしい！「トイ ムオン アン フォー」は「フォーを食べたい」という意味です。)<br>
+        Phở is a famous Vietnamese noodle soup!<br>
+        (フォーは有名なベトナムの麺料理です！)
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}

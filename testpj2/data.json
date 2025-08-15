@@ -101,7 +101,21 @@
     "model": "contenttypes.contenttype",
     "fields": {
       "app_label": "event_creation",
-      "model": "quizquestion"
+      "model": "culturallocation"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "fields": {
+      "app_label": "event_creation",
+      "model": "culturallesson"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "fields": {
+      "app_label": "event_creation",
+      "model": "culturalchallenge"
     }
   },
   {
@@ -114,56 +128,15 @@
   {
     "model": "contenttypes.contenttype",
     "fields": {
-      "app_label": "event_creation",
-      "model": "theorysection"
+      "app_label": "session",
+      "model": "evaluation"
     }
   },
   {
     "model": "contenttypes.contenttype",
     "fields": {
-      "app_label": "event_creation",
-      "model": "theoryphrase"
-    }
-  },
-  {
-    "model": "contenttypes.contenttype",
-    "fields": {
-      "app_label": "event_creation",
-      "model": "conversationline"
-    }
-  },
-  {
-    "model": "sessions.session",
-    "pk": "71ostr98fbzig7b670w1pacwx2mrpo87",
-    "fields": {
-      "session_data": ".eJxVjMsOwiAUBf-FtSG8CrRL934DucDFogZMaRON8d-VpAvdnpkzL-JgW2e3NVxcjmQighx-Nw_hiqWDeIFyrjTUsi7Z067QnTZ6qhFvx939C8zQ5u87iREwcQkStPYjsDGINISBWdRcKZEMTxEtGsuM8lZwg51IGaWO3GOPNmwt1-Lwcc_Lk0zs_QGSaj8Y:1ulPzz:WOGn07iT_wlpTSIFz1rpT22yZfxdkziqPi32qQxZ-6g",
-      "expire_date": "2025-08-11T11:43:27.393Z"
-    }
-  },
-  {
-    "model": "sessions.session",
-    "pk": "i4aaf1n9yojpwppoenuao08vjqtiak2p",
-    "fields": {
-      "session_data": ".eJxVjMsOwiAUBf-FtSG8CrRL934DucDFogZMaRON8d-VpAvdnpkzL-JgW2e3NVxcjmQighx-Nw_hiqWDeIFyrjTUsi7Z067QnTZ6qhFvx939C8zQ5u87iREwcQkStPYjsDGINISBWdRcKZEMTxEtGsuM8lZwg51IGaWO3GOPNmwt1-Lwcc_Lk0zs_QGSaj8Y:1ulQB0:vYBP7dO__JJb21fiBw8zygRypV4eggynaahGmRJS-aw",
-      "expire_date": "2025-08-11T11:54:50.002Z"
-    }
-  },
-  {
-    "model": "sessions.session",
-    "pk": "mtaivdti2gdu8ofxd9tid2txt69s3ecr",
-    "fields": {
-      "session_data": ".eJxVjMsOwiAUBf-FtSG8CrRL934DucDFogZMaRON8d-VpAvdnpkzL-JgW2e3NVxcjmQighx-Nw_hiqWDeIFyrjTUsi7Z067QnTZ6qhFvx939C8zQ5u87iREwcQkStPYjsDGINISBWdRcKZEMTxEtGsuM8lZwg51IGaWO3GOPNmwt1-Lwcc_Lk0zs_QGSaj8Y:1ulQ7A:NRZvNAmcFWRecu-luRaN8vyfYTzvJwsFjaIhSkj5wPE",
-      "expire_date": "2025-08-11T11:50:52.728Z"
-    }
-  },
-  {
-    "model": "chat_system.chatroom",
-    "pk": 1,
-    "fields": {
-      "post": 1,
-      "partner_request": null,
-      "created_at": "2025-08-11T10:35:07.443Z",
-      "is_active": true
+      "app_label": "session",
+      "model": "evaluationsession"
     }
   },
   {
@@ -183,11 +156,11 @@
     "model": "event_creation.vietnamesephrase",
     "pk": 2,
     "fields": {
-      "category": "greetings",
+      "category": "food",
       "difficulty": "beginner",
-      "vietnamese_text": "Chào buổi sáng.",
-      "japanese_translation": "おはようございます。",
-      "english_translation": "Good morning.",
+      "vietnamese_text": "Tôi muốn ăn cơm.",
+      "japanese_translation": "ご飯を食べたいです。",
+      "english_translation": "I want to eat rice.",
       "audio_file": "",
       "created_at": "2025-08-11T10:34:16.519Z"
     }
@@ -196,11 +169,11 @@
     "model": "event_creation.vietnamesephrase",
     "pk": 3,
     "fields": {
-      "category": "greetings",
+      "category": "shopping",
       "difficulty": "beginner",
-      "vietnamese_text": "Chào buổi trưa.",
-      "japanese_translation": "こんにちは。",
-      "english_translation": "Good afternoon.",
+      "vietnamese_text": "Cái này bao nhiêu tiền?",
+      "japanese_translation": "これはいくらですか？",
+      "english_translation": "How much is this?",
       "audio_file": "",
       "created_at": "2025-08-11T10:34:16.523Z"
     }
@@ -209,11 +182,11 @@
     "model": "event_creation.vietnamesephrase",
     "pk": 4,
     "fields": {
-      "category": "greetings",
+      "category": "transport",
       "difficulty": "beginner",
-      "vietnamese_text": "Chào buổi tối.",
-      "japanese_translation": "こんばんは。",
-      "english_translation": "Good evening.",
+      "vietnamese_text": "Làm sao để đến sân bay?",
+      "japanese_translation": "空港までどうやって行けばいいですか？",
+      "english_translation": "How do I get to the airport?",
       "audio_file": "",
       "created_at": "2025-08-11T10:34:16.527Z"
     }
@@ -222,11 +195,11 @@
     "model": "event_creation.vietnamesephrase",
     "pk": 5,
     "fields": {
-      "category": "greetings",
+      "category": "emergency",
       "difficulty": "beginner",
-      "vietnamese_text": "Bạn khỏe không?",
-      "japanese_translation": "お元気ですか？",
-      "english_translation": "How are you?",
+      "vietnamese_text": "Cứu tôi với!",
+      "japanese_translation": "助けてください！",
+      "english_translation": "Help me!",
       "audio_file": "",
       "created_at": "2025-08-11T10:34:16.530Z"
     }
@@ -235,7 +208,7 @@
     "model": "event_creation.vietnamesephrase",
     "pk": 6,
     "fields": {
-      "category": "greetings",
+      "category": "daily",
       "difficulty": "beginner",
       "vietnamese_text": "Tôi khỏe, cảm ơn.",
       "japanese_translation": "元気です、ありがとう。",
@@ -248,11 +221,11 @@
     "model": "event_creation.vietnamesephrase",
     "pk": 7,
     "fields": {
-      "category": "greetings",
+      "category": "business",
       "difficulty": "beginner",
-      "vietnamese_text": "Hẹn gặp lại!",
-      "japanese_translation": "また会いましょう！",
-      "english_translation": "See you again!",
+      "vietnamese_text": "Rất vui được gặp bạn.",
+      "japanese_translation": "お会いできて嬉しいです。",
+      "english_translation": "Nice to meet you.",
       "audio_file": "",
       "created_at": "2025-08-11T10:34:16.538Z"
     }
@@ -261,3298 +234,759 @@
     "model": "event_creation.vietnamesephrase",
     "pk": 8,
     "fields": {
-      "category": "greetings",
-      "difficulty": "beginner",
-      "vietnamese_text": "Tạm biệt!",
-      "japanese_translation": "さようなら！",
-      "english_translation": "Goodbye!",
-      "audio_file": "",
-      "created_at": "2025-08-11T10:34:16.541Z"
-    }
-  },
-  {
-    "model": "event_creation.vietnamesephrase",
-    "pk": 9,
-    "fields": {
-      "category": "greetings",
-      "difficulty": "intermediate",
-      "vietnamese_text": "Chào bạn, lâu rồi không gặp!",
-      "japanese_translation": "こんにちは、久しぶりですね！",
-      "english_translation": "Hello, long time no see!",
-      "audio_file": "",
-      "created_at": "2025-08-11T10:34:16.545Z"
-    }
-  },
-  {
-    "model": "event_creation.vietnamesephrase",
-    "pk": 10,
-    "fields": {
-      "category": "greetings",
-      "difficulty": "intermediate",
-      "vietnamese_text": "Bạn có khỏe không?",
-      "japanese_translation": "お元気ですか？",
-      "english_translation": "How are you doing?",
-      "audio_file": "",
-      "created_at": "2025-08-11T10:34:16.549Z"
-    }
-  },
-  {
-    "model": "event_creation.vietnamesephrase",
-    "pk": 11,
-    "fields": {
-      "category": "greetings",
-      "difficulty": "intermediate",
-      "vietnamese_text": "Cảm ơn bạn đã hỏi thăm.",
-      "japanese_translation": "お気遣いありがとうございます。",
-      "english_translation": "Thank you for asking.",
-      "audio_file": "",
-      "created_at": "2025-08-11T10:34:16.552Z"
-    }
-  },
-  {
-    "model": "event_creation.vietnamesephrase",
-    "pk": 12,
-    "fields": {
-      "category": "greetings",
-      "difficulty": "intermediate",
-      "vietnamese_text": "Chúc bạn một ngày tốt lành!",
-      "japanese_translation": "良い一日をお過ごしください！",
-      "english_translation": "Have a good day!",
-      "audio_file": "",
-      "created_at": "2025-08-11T10:34:16.556Z"
-    }
-  },
-  {
-    "model": "event_creation.vietnamesephrase",
-    "pk": 13,
-    "fields": {
-      "category": "food",
-      "difficulty": "beginner",
-      "vietnamese_text": "Cho tôi xem thực đơn.",
-      "japanese_translation": "メニューを見せてください。",
-      "english_translation": "Please show me the menu.",
-      "audio_file": "",
-      "created_at": "2025-08-11T10:34:16.559Z"
-    }
-  },
-  {
-    "model": "event_creation.vietnamesephrase",
-    "pk": 14,
-    "fields": {
-      "category": "food",
-      "difficulty": "beginner",
-      "vietnamese_text": "Tôi muốn gọi món phở.",
-      "japanese_translation": "フォーを注文したいです。",
-      "english_translation": "I'd like to order pho.",
-      "audio_file": "",
-      "created_at": "2025-08-11T10:34:16.563Z"
-    }
-  },
-  {
-    "model": "event_creation.vietnamesephrase",
-    "pk": 15,
-    "fields": {
-      "category": "food",
-      "difficulty": "beginner",
-      "vietnamese_text": "Món này rất ngon!",
-      "japanese_translation": "この料理はとてもおいしい！",
-      "english_translation": "This dish is very delicious!",
-      "audio_file": "",
-      "created_at": "2025-08-11T10:34:16.567Z"
-    }
-  },
-  {
-    "model": "event_creation.vietnamesephrase",
-    "pk": 16,
-    "fields": {
-      "category": "food",
-      "difficulty": "beginner",
-      "vietnamese_text": "Xin cho hóa đơn.",
-      "japanese_translation": "お会計をお願いします。",
-      "english_translation": "The bill, please.",
-      "audio_file": "",
-      "created_at": "2025-08-11T10:34:16.572Z"
-    }
-  },
-  {
-    "model": "event_creation.vietnamesephrase",
-    "pk": 17,
-    "fields": {
-      "category": "food",
-      "difficulty": "beginner",
-      "vietnamese_text": "Tôi thích ăn cơm.",
-      "japanese_translation": "ご飯を食べるのが好きです。",
-      "english_translation": "I like eating rice.",
-      "audio_file": "",
-      "created_at": "2025-08-11T10:34:16.577Z"
-    }
-  },
-  {
-    "model": "event_creation.vietnamesephrase",
-    "pk": 18,
-    "fields": {
-      "category": "food",
-      "difficulty": "beginner",
-      "vietnamese_text": "Cho tôi thêm nước.",
-      "japanese_translation": "水を追加してください。",
-      "english_translation": "Please add more water.",
-      "audio_file": "",
-      "created_at": "2025-08-11T10:34:16.580Z"
-    }
-  },
-  {
-    "model": "event_creation.vietnamesephrase",
-    "pk": 19,
-    "fields": {
-      "category": "food",
-      "difficulty": "intermediate",
-      "vietnamese_text": "Món này có cay không?",
-      "japanese_translation": "この料理は辛いですか？",
-      "english_translation": "Is this dish spicy?",
-      "audio_file": "",
-      "created_at": "2025-08-11T10:34:16.584Z"
-    }
-  },
-  {
-    "model": "event_creation.vietnamesephrase",
-    "pk": 20,
-    "fields": {
-      "category": "food",
-      "difficulty": "intermediate",
-      "vietnamese_text": "Tôi bị dị ứng với...",
-      "japanese_translation": "私は...にアレルギーがあります。",
-      "english_translation": "I am allergic to...",
-      "audio_file": "",
-      "created_at": "2025-08-11T10:34:16.587Z"
-    }
-  },
-  {
-    "model": "event_creation.vietnamesephrase",
-    "pk": 21,
-    "fields": {
-      "category": "food",
-      "difficulty": "intermediate",
-      "vietnamese_text": "Có thể nấu ít muối không?",
-      "japanese_translation": "塩を少なめに調理できますか？",
-      "english_translation": "Can you cook with less salt?",
-      "audio_file": "",
-      "created_at": "2025-08-11T10:34:16.591Z"
-    }
-  },
-  {
-    "model": "event_creation.vietnamesephrase",
-    "pk": 22,
-    "fields": {
-      "category": "food",
-      "difficulty": "intermediate",
-      "vietnamese_text": "Món này được nấu như thế nào?",
-      "japanese_translation": "この料理はどのように調理されますか？",
-      "english_translation": "How is this dish cooked?",
-      "audio_file": "",
-      "created_at": "2025-08-11T10:34:16.594Z"
-    }
-  },
-  {
-    "model": "event_creation.vietnamesephrase",
-    "pk": 23,
-    "fields": {
-      "category": "shopping",
-      "difficulty": "beginner",
-      "vietnamese_text": "Cái này giá bao nhiêu?",
-      "japanese_translation": "これはいくらですか？",
-      "english_translation": "How much is this?",
-      "audio_file": "",
-      "created_at": "2025-08-11T10:34:16.598Z"
-    }
-  },
-  {
-    "model": "event_creation.vietnamesephrase",
-    "pk": 24,
-    "fields": {
-      "category": "shopping",
-      "difficulty": "beginner",
-      "vietnamese_text": "Tôi muốn mua cái này.",
-      "japanese_translation": "これを買いたいです。",
-      "english_translation": "I want to buy this.",
-      "audio_file": "",
-      "created_at": "2025-08-11T10:34:16.602Z"
-    }
-  },
-  {
-    "model": "event_creation.vietnamesephrase",
-    "pk": 25,
-    "fields": {
-      "category": "shopping",
-      "difficulty": "beginner",
-      "vietnamese_text": "Cho tôi túi nhé.",
-      "japanese_translation": "袋をください。",
-      "english_translation": "Please give me a bag.",
-      "audio_file": "",
-      "created_at": "2025-08-11T10:34:16.606Z"
-    }
-  },
-  {
-    "model": "event_creation.vietnamesephrase",
-    "pk": 26,
-    "fields": {
-      "category": "shopping",
-      "difficulty": "beginner",
-      "vietnamese_text": "Có thể xem cái khác không?",
-      "japanese_translation": "他のものを見せてもらえますか？",
-      "english_translation": "Can I see something else?",
-      "audio_file": "",
-      "created_at": "2025-08-11T10:34:16.609Z"
-    }
-  },
-  {
-    "model": "event_creation.vietnamesephrase",
-    "pk": 27,
-    "fields": {
-      "category": "shopping",
-      "difficulty": "beginner",
-      "vietnamese_text": "Tôi đang tìm...",
-      "japanese_translation": "私は...を探しています。",
-      "english_translation": "I am looking for...",
-      "audio_file": "",
-      "created_at": "2025-08-11T10:34:16.613Z"
-    }
-  },
-  {
-    "model": "event_creation.vietnamesephrase",
-    "pk": 28,
-    "fields": {
-      "category": "shopping",
-      "difficulty": "intermediate",
-      "vietnamese_text": "Có thể trả bằng thẻ không?",
-      "japanese_translation": "カードで払えますか？",
-      "english_translation": "Can I pay by card?",
-      "audio_file": "",
-      "created_at": "2025-08-11T10:34:16.616Z"
-    }
-  },
-  {
-    "model": "event_creation.vietnamesephrase",
-    "pk": 29,
-    "fields": {
-      "category": "shopping",
-      "difficulty": "intermediate",
-      "vietnamese_text": "Có thể giảm giá không?",
-      "japanese_translation": "値引きできますか？",
-      "english_translation": "Can you reduce the price?",
-      "audio_file": "",
-      "created_at": "2025-08-11T10:34:16.620Z"
-    }
-  },
-  {
-    "model": "event_creation.vietnamesephrase",
-    "pk": 30,
-    "fields": {
-      "category": "shopping",
-      "difficulty": "intermediate",
-      "vietnamese_text": "Quá đắt rồi.",
-      "japanese_translation": "高すぎます。",
-      "english_translation": "Too expensive.",
-      "audio_file": "",
-      "created_at": "2025-08-11T10:34:16.623Z"
-    }
-  },
-  {
-    "model": "event_creation.vietnamesephrase",
-    "pk": 31,
-    "fields": {
-      "category": "shopping",
-      "difficulty": "intermediate",
-      "vietnamese_text": "Bạn có thể bán với giá... không?",
-      "japanese_translation": "...円で売ってくれませんか？",
-      "english_translation": "Can you sell it for...?",
-      "audio_file": "",
-      "created_at": "2025-08-11T10:34:16.627Z"
-    }
-  },
-  {
-    "model": "event_creation.vietnamesephrase",
-    "pk": 32,
-    "fields": {
-      "category": "shopping",
-      "difficulty": "intermediate",
-      "vietnamese_text": "Có bảo hành không?",
-      "japanese_translation": "保証はありますか？",
-      "english_translation": "Is there a warranty?",
-      "audio_file": "",
-      "created_at": "2025-08-11T10:34:16.631Z"
-    }
-  },
-  {
-    "model": "event_creation.vietnamesephrase",
-    "pk": 33,
-    "fields": {
-      "category": "transport",
-      "difficulty": "beginner",
-      "vietnamese_text": "Tôi muốn mua vé đến Hà Nội.",
-      "japanese_translation": "ハノイ行きの切符を買いたいです。",
-      "english_translation": "I want to buy a ticket to Hanoi.",
-      "audio_file": "",
-      "created_at": "2025-08-11T10:34:16.635Z"
-    }
-  },
-  {
-    "model": "event_creation.vietnamesephrase",
-    "pk": 34,
-    "fields": {
-      "category": "transport",
-      "difficulty": "beginner",
-      "vietnamese_text": "Xe buýt dừng ở đâu?",
-      "japanese_translation": "バスはどこで止まりますか？",
-      "english_translation": "Where does the bus stop?",
-      "audio_file": "",
-      "created_at": "2025-08-11T10:34:16.639Z"
-    }
-  },
-  {
-    "model": "event_creation.vietnamesephrase",
-    "pk": 35,
-    "fields": {
-      "category": "transport",
-      "difficulty": "beginner",
-      "vietnamese_text": "Có taxi ở gần đây không?",
-      "japanese_translation": "この近くにタクシーはありますか？",
-      "english_translation": "Is there a taxi nearby?",
-      "audio_file": "",
-      "created_at": "2025-08-11T10:34:16.643Z"
-    }
-  },
-  {
-    "model": "event_creation.vietnamesephrase",
-    "pk": 36,
-    "fields": {
-      "category": "transport",
-      "difficulty": "beginner",
-      "vietnamese_text": "Tôi muốn đến...",
-      "japanese_translation": "...に行きたいです。",
-      "english_translation": "I want to go to...",
-      "audio_file": "",
-      "created_at": "2025-08-11T10:34:16.647Z"
-    }
-  },
-  {
-    "model": "event_creation.vietnamesephrase",
-    "pk": 37,
-    "fields": {
-      "category": "transport",
-      "difficulty": "beginner",
-      "vietnamese_text": "Bao nhiêu tiền?",
-      "japanese_translation": "いくらですか？",
-      "english_translation": "How much?",
-      "audio_file": "",
-      "created_at": "2025-08-11T10:34:16.651Z"
-    }
-  },
-  {
-    "model": "event_creation.vietnamesephrase",
-    "pk": 38,
-    "fields": {
-      "category": "transport",
-      "difficulty": "intermediate",
-      "vietnamese_text": "Có chuyến nào vào... không?",
-      "japanese_translation": "...発の便はありますか？",
-      "english_translation": "Is there a flight at...?",
-      "audio_file": "",
-      "created_at": "2025-08-11T10:34:16.654Z"
-    }
-  },
-  {
-    "model": "event_creation.vietnamesephrase",
-    "pk": 39,
-    "fields": {
-      "category": "transport",
-      "difficulty": "intermediate",
-      "vietnamese_text": "Chuyến này có muộn không?",
-      "japanese_translation": "この便は遅れていますか？",
-      "english_translation": "Is this flight delayed?",
-      "audio_file": "",
-      "created_at": "2025-08-11T10:34:16.658Z"
-    }
-  },
-  {
-    "model": "event_creation.vietnamesephrase",
-    "pk": 40,
-    "fields": {
-      "category": "transport",
-      "difficulty": "intermediate",
-      "vietnamese_text": "Tôi bị lỡ chuyến.",
-      "japanese_translation": "乗り遅れました。",
-      "english_translation": "I missed my flight.",
-      "audio_file": "",
-      "created_at": "2025-08-11T10:34:16.662Z"
-    }
-  },
-  {
-    "model": "event_creation.vietnamesephrase",
-    "pk": 41,
-    "fields": {
-      "category": "transport",
-      "difficulty": "intermediate",
-      "vietnamese_text": "Có thể đổi vé không?",
-      "japanese_translation": "チケットを変更できますか？",
-      "english_translation": "Can I change my ticket?",
-      "audio_file": "",
-      "created_at": "2025-08-11T10:34:16.665Z"
-    }
-  },
-  {
-    "model": "event_creation.vietnamesephrase",
-    "pk": 42,
-    "fields": {
-      "category": "emergency",
-      "difficulty": "intermediate",
-      "vietnamese_text": "Tôi cần gặp bác sĩ.",
-      "japanese_translation": "医者に診てもらう必要があります。",
-      "english_translation": "I need to see a doctor.",
-      "audio_file": "",
-      "created_at": "2025-08-11T10:34:16.669Z"
-    }
-  },
-  {
-    "model": "event_creation.vietnamesephrase",
-    "pk": 43,
-    "fields": {
-      "category": "emergency",
-      "difficulty": "intermediate",
-      "vietnamese_text": "Gọi cấp cứu giúp tôi!",
-      "japanese_translation": "救急車を呼んでください！",
-      "english_translation": "Call an ambulance!",
-      "audio_file": "",
-      "created_at": "2025-08-11T10:34:16.673Z"
-    }
-  },
-  {
-    "model": "event_creation.vietnamesephrase",
-    "pk": 44,
-    "fields": {
-      "category": "emergency",
-      "difficulty": "intermediate",
-      "vietnamese_text": "Tôi bị đau...",
-      "japanese_translation": "私は...が痛いです。",
-      "english_translation": "I have pain in...",
-      "audio_file": "",
-      "created_at": "2025-08-11T10:34:16.676Z"
-    }
-  },
-  {
-    "model": "event_creation.vietnamesephrase",
-    "pk": 45,
-    "fields": {
-      "category": "emergency",
-      "difficulty": "intermediate",
-      "vietnamese_text": "Có ai giúp tôi không?",
-      "japanese_translation": "誰か助けてくれませんか？",
-      "english_translation": "Can anyone help me?",
-      "audio_file": "",
-      "created_at": "2025-08-11T10:34:16.680Z"
-    }
-  },
-  {
-    "model": "event_creation.vietnamesephrase",
-    "pk": 46,
-    "fields": {
-      "category": "emergency",
-      "difficulty": "intermediate",
-      "vietnamese_text": "Tôi cần giúp đỡ.",
-      "japanese_translation": "助けが必要です。",
-      "english_translation": "I need help.",
-      "audio_file": "",
-      "created_at": "2025-08-11T10:34:16.685Z"
-    }
-  },
-  {
-    "model": "event_creation.vietnamesephrase",
-    "pk": 47,
-    "fields": {
-      "category": "daily",
-      "difficulty": "beginner",
-      "vietnamese_text": "Bây giờ là mấy giờ?",
-      "japanese_translation": "今何時ですか？",
-      "english_translation": "What time is it now?",
-      "audio_file": "",
-      "created_at": "2025-08-11T10:34:16.689Z"
-    }
-  },
-  {
-    "model": "event_creation.vietnamesephrase",
-    "pk": 48,
-    "fields": {
-      "category": "daily",
-      "difficulty": "beginner",
-      "vietnamese_text": "Hôm nay trời nắng.",
-      "japanese_translation": "今日は晴れです。",
-      "english_translation": "It is sunny today.",
-      "audio_file": "",
-      "created_at": "2025-08-11T10:34:16.692Z"
-    }
-  },
-  {
-    "model": "event_creation.vietnamesephrase",
-    "pk": 49,
-    "fields": {
-      "category": "daily",
-      "difficulty": "beginner",
-      "vietnamese_text": "Tôi thích...",
-      "japanese_translation": "私は...が好きです。",
-      "english_translation": "I like...",
-      "audio_file": "",
-      "created_at": "2025-08-11T10:34:16.697Z"
-    }
-  },
-  {
-    "model": "event_creation.vietnamesephrase",
-    "pk": 50,
-    "fields": {
-      "category": "daily",
-      "difficulty": "beginner",
-      "vietnamese_text": "Tôi không thích...",
-      "japanese_translation": "私は...が好きではありません。",
-      "english_translation": "I don't like...",
-      "audio_file": "",
-      "created_at": "2025-08-11T10:34:16.700Z"
-    }
-  },
-  {
-    "model": "event_creation.vietnamesephrase",
-    "pk": 51,
-    "fields": {
-      "category": "daily",
-      "difficulty": "beginner",
-      "vietnamese_text": "Bạn có thể... không?",
-      "japanese_translation": "...できますか？",
-      "english_translation": "Can you...?",
-      "audio_file": "",
-      "created_at": "2025-08-11T10:34:16.704Z"
-    }
-  },
-  {
-    "model": "event_creation.vietnamesephrase",
-    "pk": 52,
-    "fields": {
-      "category": "daily",
-      "difficulty": "intermediate",
-      "vietnamese_text": "Tôi đang học tiếng Việt.",
-      "japanese_translation": "私はベトナム語を勉強しています。",
-      "english_translation": "I am learning Vietnamese.",
-      "audio_file": "",
-      "created_at": "2025-08-11T10:34:16.708Z"
-    }
-  },
-  {
-    "model": "event_creation.vietnamesephrase",
-    "pk": 53,
-    "fields": {
-      "category": "daily",
-      "difficulty": "intermediate",
-      "vietnamese_text": "Bạn có thể nói chậm hơn không?",
-      "japanese_translation": "もっとゆっくり話せますか？",
-      "english_translation": "Can you speak slower?",
-      "audio_file": "",
-      "created_at": "2025-08-11T10:34:16.712Z"
-    }
-  },
-  {
-    "model": "event_creation.vietnamesephrase",
-    "pk": 54,
-    "fields": {
-      "category": "daily",
-      "difficulty": "intermediate",
-      "vietnamese_text": "Tôi không hiểu.",
-      "japanese_translation": "分かりません。",
-      "english_translation": "I don't understand.",
-      "audio_file": "",
-      "created_at": "2025-08-11T10:34:16.716Z"
-    }
-  },
-  {
-    "model": "event_creation.vietnamesephrase",
-    "pk": 55,
-    "fields": {
-      "category": "daily",
-      "difficulty": "intermediate",
-      "vietnamese_text": "Bạn có thể giải thích lại không?",
-      "japanese_translation": "もう一度説明してもらえますか？",
-      "english_translation": "Can you explain again?",
-      "audio_file": "",
-      "created_at": "2025-08-11T10:34:16.720Z"
-    }
-  },
-  {
-    "model": "event_creation.vietnamesephrase",
-    "pk": 56,
-    "fields": {
-      "category": "business",
-      "difficulty": "intermediate",
-      "vietnamese_text": "Tôi muốn gặp...",
-      "japanese_translation": "...に会いたいです。",
-      "english_translation": "I want to meet...",
-      "audio_file": "",
-      "created_at": "2025-08-11T10:34:16.723Z"
-    }
-  },
-  {
-    "model": "event_creation.vietnamesephrase",
-    "pk": 57,
-    "fields": {
-      "category": "business",
-      "difficulty": "intermediate",
-      "vietnamese_text": "Bạn có thể gọi lại cho tôi không?",
-      "japanese_translation": "後で電話してもらえますか？",
-      "english_translation": "Can you call me back?",
-      "audio_file": "",
-      "created_at": "2025-08-11T10:34:16.727Z"
-    }
-  },
-  {
-    "model": "event_creation.vietnamesephrase",
-    "pk": 58,
-    "fields": {
-      "category": "business",
-      "difficulty": "intermediate",
-      "vietnamese_text": "Tôi sẽ gửi email cho bạn.",
-      "japanese_translation": "メールを送ります。",
-      "english_translation": "I will send you an email.",
-      "audio_file": "",
-      "created_at": "2025-08-11T10:34:16.730Z"
-    }
-  },
-  {
-    "model": "event_creation.vietnamesephrase",
-    "pk": 59,
-    "fields": {
-      "category": "business",
-      "difficulty": "intermediate",
-      "vietnamese_text": "Chúng ta có thể hẹn gặp vào...",
-      "japanese_translation": "...に会うことができます。",
-      "english_translation": "We can meet on...",
-      "audio_file": "",
-      "created_at": "2025-08-11T10:34:16.734Z"
-    }
-  },
-  {
-    "model": "event_creation.vietnamesephrase",
-    "pk": 60,
-    "fields": {
-      "category": "business",
-      "difficulty": "intermediate",
-      "vietnamese_text": "Xin lỗi vì sự cố.",
-      "japanese_translation": "トラブルで申し訳ありません。",
-      "english_translation": "Sorry for the trouble.",
-      "audio_file": "",
-      "created_at": "2025-08-11T10:34:16.737Z"
-    }
-  },
-  {
-    "model": "event_creation.vietnamesephrase",
-    "pk": 61,
-    "fields": {
       "category": "travel",
       "difficulty": "beginner",
-      "vietnamese_text": "Tôi muốn đi du lịch.",
-      "japanese_translation": "旅行に行きたいです。",
-      "english_translation": "I want to travel.",
-      "audio_file": "",
-      "created_at": "2025-08-11T10:34:16.741Z"
-    }
-  },
-  {
-    "model": "event_creation.vietnamesephrase",
-    "pk": 62,
-    "fields": {
-      "category": "travel",
-      "difficulty": "beginner",
-      "vietnamese_text": "Đây là lần đầu tôi đến Việt Nam.",
-      "japanese_translation": "ベトナムに来るのは初めてです。",
-      "english_translation": "This is my first time in Vietnam.",
-      "audio_file": "",
-      "created_at": "2025-08-11T10:34:16.745Z"
-    }
-  },
-  {
-    "model": "event_creation.vietnamesephrase",
-    "pk": 63,
-    "fields": {
-      "category": "travel",
-      "difficulty": "beginner",
-      "vietnamese_text": "Tôi thích Việt Nam.",
-      "japanese_translation": "ベトナムが好きです。",
-      "english_translation": "I like Vietnam.",
-      "audio_file": "",
-      "created_at": "2025-08-11T10:34:16.748Z"
-    }
-  },
-  {
-    "model": "event_creation.vietnamesephrase",
-    "pk": 64,
-    "fields": {
-      "category": "travel",
-      "difficulty": "beginner",
-      "vietnamese_text": "Bạn có thể chụp ảnh giúp tôi không?",
-      "japanese_translation": "写真を撮ってもらえますか？",
+      "vietnamese_text": "Bạn có thể chụp ảnh cho tôi không?",
+      "japanese_translation": "写真を撮ってもらえませんか？",
       "english_translation": "Can you take a photo for me?",
       "audio_file": "",
-      "created_at": "2025-08-11T10:34:16.752Z"
+      "created_at": "2025-08-11T10:34:16.542Z"
     }
   },
   {
     "model": "event_creation.vietnamesephrase",
-    "pk": 65,
-    "fields": {
-      "category": "travel",
-      "difficulty": "beginner",
-      "vietnamese_text": "Đây là địa điểm đẹp.",
-      "japanese_translation": "ここは美しい場所です。",
-      "english_translation": "This is a beautiful place.",
-      "audio_file": "",
-      "created_at": "2025-08-11T10:34:16.756Z"
-    }
-  },
-  {
-    "model": "event_creation.vietnamesephrase",
-    "pk": 66,
-    "fields": {
-      "category": "travel",
-      "difficulty": "intermediate",
-      "vietnamese_text": "Bạn có thể giới thiệu địa điểm nào đẹp không?",
-      "japanese_translation": "美しい場所を紹介してもらえますか？",
-      "english_translation": "Can you recommend a beautiful place?",
-      "audio_file": "",
-      "created_at": "2025-08-11T10:34:16.760Z"
-    }
-  },
-  {
-    "model": "event_creation.vietnamesephrase",
-    "pk": 67,
-    "fields": {
-      "category": "travel",
-      "difficulty": "intermediate",
-      "vietnamese_text": "Tôi muốn tìm hiểu văn hóa Việt Nam.",
-      "japanese_translation": "ベトナム文化を学びたいです。",
-      "english_translation": "I want to learn about Vietnamese culture.",
-      "audio_file": "",
-      "created_at": "2025-08-11T10:34:16.764Z"
-    }
-  },
-  {
-    "model": "event_creation.vietnamesephrase",
-    "pk": 68,
-    "fields": {
-      "category": "travel",
-      "difficulty": "intermediate",
-      "vietnamese_text": "Có thể hướng dẫn tôi không?",
-      "japanese_translation": "案内してもらえますか？",
-      "english_translation": "Can you guide me?",
-      "audio_file": "",
-      "created_at": "2025-08-11T10:34:16.768Z"
-    }
-  },
-  {
-    "model": "event_creation.vietnamesephrase",
-    "pk": 69,
-    "fields": {
-      "category": "travel",
-      "difficulty": "intermediate",
-      "vietnamese_text": "Tôi muốn thử món ăn địa phương.",
-      "japanese_translation": "地元の料理を試してみたいです。",
-      "english_translation": "I want to try local food.",
-      "audio_file": "",
-      "created_at": "2025-08-11T10:34:16.772Z"
-    }
-  },
-  {
-    "model": "event_creation.cafelocation",
-    "pk": 1,
-    "fields": {
-      "name": "Cafe Tranquil",
-      "address": "5 Nguyễn Quang Bích, Hoàn Kiếm",
-      "city": "hanoi",
-      "latitude": null,
-      "longitude": null,
-      "description": "Địa điểm gợi ý để hẹn gặp"
-    }
-  },
-  {
-    "model": "event_creation.cafelocation",
-    "pk": 2,
-    "fields": {
-      "name": "The Workshop",
-      "address": "27 Ngô Đức Kế, Quận 1",
-      "city": "hochiminh",
-      "latitude": null,
-      "longitude": null,
-      "description": "Địa điểm gợi ý để hẹn gặp"
-    }
-  },
-  {
-    "model": "event_creation.cafelocation",
-    "pk": 3,
-    "fields": {
-      "name": "Mun Coffee",
-      "address": "20 Lạch Tray, Ngô Quyền",
-      "city": "haiphong",
-      "latitude": null,
-      "longitude": null,
-      "description": "Địa điểm gợi ý để hẹn gặp"
-    }
-  },
-  {
-    "model": "event_creation.cafelocation",
-    "pk": 4,
-    "fields": {
-      "name": "43 Factory",
-      "address": "Lê Văn Duyệt, Sơn Trà",
-      "city": "danang",
-      "latitude": null,
-      "longitude": null,
-      "description": "Địa điểm gợi ý để hẹn gặp"
-    }
-  },
-  {
-    "model": "event_creation.cafelocation",
-    "pk": 5,
-    "fields": {
-      "name": "Cafe 1985",
-      "address": "Hai Bà Trưng, Ninh Kiều",
-      "city": "cantho",
-      "latitude": null,
-      "longitude": null,
-      "description": "Địa điểm gợi ý để hẹn gặp"
-    }
-  },
-  {
-    "model": "event_creation.lesson",
-    "pk": 1,
-    "fields": {
-      "title": "Chào hỏi cơ bản (Basic Greetings)",
-      "description": "Học các câu chào hỏi cơ bản trong tiếng Việt",
-      "category": "greetings",
-      "difficulty": "beginner",
-      "image": "",
-      "created_at": "2025-08-11T10:34:16.224Z",
-      "updated_at": "2025-08-11T10:34:16.224Z"
-    }
-  },
-  {
-    "model": "event_creation.lesson",
-    "pk": 2,
-    "fields": {
-      "title": "Giới thiệu bản thân (Self Introduction)",
-      "description": "Học cách giới thiệu bản thân một cách tự tin",
-      "category": "self_introduction",
-      "difficulty": "beginner",
-      "image": "",
-      "created_at": "2025-08-11T10:34:16.251Z",
-      "updated_at": "2025-08-11T10:34:16.251Z"
-    }
-  },
-  {
-    "model": "event_creation.lesson",
-    "pk": 3,
-    "fields": {
-      "title": "Hỏi đường (Asking for Directions)",
-      "description": "Học cách hỏi đường và chỉ đường trong tiếng Việt",
-      "category": "asking_directions",
-      "difficulty": "intermediate",
-      "image": "",
-      "created_at": "2025-08-11T10:34:16.278Z",
-      "updated_at": "2025-08-11T10:34:16.278Z"
-    }
-  },
-  {
-    "model": "event_creation.lesson",
-    "pk": 4,
-    "fields": {
-      "title": "Mua sắm (Shopping)",
-      "description": "Học các câu nói cần thiết khi đi mua sắm",
-      "category": "shopping",
-      "difficulty": "intermediate",
-      "image": "",
-      "created_at": "2025-08-11T10:34:16.308Z",
-      "updated_at": "2025-08-11T10:34:16.308Z"
-    }
-  },
-  {
-    "model": "event_creation.lesson",
-    "pk": 5,
-    "fields": {
-      "title": "Nhà hàng / Gọi món (Restaurant)",
-      "description": "Học cách gọi món và giao tiếp trong nhà hàng",
-      "category": "restaurant",
-      "difficulty": "intermediate",
-      "image": "",
-      "created_at": "2025-08-11T10:34:16.334Z",
-      "updated_at": "2025-08-11T10:34:16.334Z"
-    }
-  },
-  {
-    "model": "event_creation.lesson",
-    "pk": 6,
-    "fields": {
-      "title": "Giao thông / Đi lại (Transportation)",
-      "description": "Học cách sử dụng các phương tiện giao thông công cộng",
-      "category": "transportation",
-      "difficulty": "intermediate",
-      "image": "",
-      "created_at": "2025-08-11T10:34:16.360Z",
-      "updated_at": "2025-08-11T10:34:16.360Z"
-    }
-  },
-  {
-    "model": "event_creation.lesson",
-    "pk": 7,
-    "fields": {
-      "title": "Thời tiết (Weather)",
-      "description": "Học cách nói về thời tiết và khí hậu Việt Nam",
-      "category": "weather",
-      "difficulty": "beginner",
-      "image": "",
-      "created_at": "2025-08-11T10:34:16.385Z",
-      "updated_at": "2025-08-11T10:34:16.385Z"
-    }
-  },
-  {
-    "model": "event_creation.lesson",
-    "pk": 8,
-    "fields": {
-      "title": "Gia đình (Family)",
-      "description": "Học cách giới thiệu và nói về gia đình",
-      "category": "family",
-      "difficulty": "intermediate",
-      "image": "",
-      "created_at": "2025-08-11T10:34:16.409Z",
-      "updated_at": "2025-08-11T10:34:16.409Z"
-    }
-  },
-  {
-    "model": "event_creation.lesson",
     "pk": 9,
     "fields": {
-      "title": "Sức khỏe / Trường hợp khẩn cấp (Health & Emergency)",
-      "description": "Học các câu nói cần thiết khi gặp vấn đề về sức khỏe",
-      "category": "health_emergency",
-      "difficulty": "advanced",
-      "image": "",
-      "created_at": "2025-08-11T10:34:16.451Z",
-      "updated_at": "2025-08-11T10:34:16.451Z"
-    }
-  },
-  {
-    "model": "event_creation.lesson",
-    "pk": 10,
-    "fields": {
-      "title": "Thời gian / Lịch trình (Time & Schedule)",
-      "description": "Học cách nói về thời gian và lập lịch trình",
-      "category": "time_schedule",
+      "category": "culture",
       "difficulty": "beginner",
-      "image": "",
-      "created_at": "2025-08-11T10:34:16.483Z",
-      "updated_at": "2025-08-11T10:34:16.483Z"
+      "vietnamese_text": "Văn hóa Việt Nam rất thú vị.",
+      "japanese_translation": "ベトナム文化はとても興味深いです。",
+      "english_translation": "Vietnamese culture is very interesting.",
+      "audio_file": "",
+      "created_at": "2025-08-11T10:34:16.546Z"
     }
   },
   {
-    "model": "event_creation.quizquestion",
-    "pk": 1,
-    "fields": {
-      "lesson": 1,
-      "question": "Câu \"Xin chào\" có nghĩa gì?",
-      "option_a": "Goodbye",
-      "option_b": "Hello",
-      "option_c": "Thank you",
-      "option_d": "Sorry",
-      "correct_answer": "B",
-      "explanation": "\"Xin chào\" có nghĩa là \"Hello\" trong tiếng Anh",
-      "order": 1,
-      "created_at": "2025-08-11T10:34:16.780Z"
-    }
-  },
-  {
-    "model": "event_creation.quizquestion",
-    "pk": 2,
-    "fields": {
-      "lesson": 1,
-      "question": "Khi nào bạn nói \"Chào buổi sáng\"?",
-      "option_a": "Buổi tối",
-      "option_b": "Buổi trưa",
-      "option_c": "Buổi sáng",
-      "option_d": "Cả ngày",
-      "correct_answer": "C",
-      "explanation": "\"Chào buổi sáng\" dùng để chào hỏi vào buổi sáng",
-      "order": 2,
-      "created_at": "2025-08-11T10:34:16.784Z"
-    }
-  },
-  {
-    "model": "event_creation.quizquestion",
-    "pk": 3,
-    "fields": {
-      "lesson": 1,
-      "question": "Câu \"Bạn khỏe không?\" dùng để làm gì?",
-      "option_a": "Chào hỏi",
-      "option_b": "Hỏi thăm sức khỏe",
-      "option_c": "Tạm biệt",
-      "option_d": "Xin lỗi",
-      "correct_answer": "B",
-      "explanation": "Câu này dùng để hỏi thăm sức khỏe của người khác",
-      "order": 3,
-      "created_at": "2025-08-11T10:34:16.788Z"
-    }
-  },
-  {
-    "model": "event_creation.quizquestion",
-    "pk": 4,
-    "fields": {
-      "lesson": 2,
-      "question": "Cách giới thiệu tên trong tiếng Việt là gì?",
-      "option_a": "Tôi là...",
-      "option_b": "Tôi tên là...",
-      "option_c": "Tôi đến từ...",
-      "option_d": "Tôi sống ở...",
-      "correct_answer": "B",
-      "explanation": "\"Tôi tên là...\" là cách giới thiệu tên chuẩn trong tiếng Việt",
-      "order": 1,
-      "created_at": "2025-08-11T10:34:16.793Z"
-    }
-  },
-  {
-    "model": "event_creation.quizquestion",
-    "pk": 5,
-    "fields": {
-      "lesson": 2,
-      "question": "Câu \"Tôi ... tuổi\" dùng để làm gì?",
-      "option_a": "Giới thiệu tên",
-      "option_b": "Giới thiệu tuổi",
-      "option_c": "Giới thiệu quê quán",
-      "option_d": "Giới thiệu nghề nghiệp",
-      "correct_answer": "B",
-      "explanation": "Câu này dùng để giới thiệu tuổi của mình",
-      "order": 2,
-      "created_at": "2025-08-11T10:34:16.797Z"
-    }
-  },
-  {
-    "model": "event_creation.quizquestion",
-    "pk": 6,
-    "fields": {
-      "lesson": 3,
-      "question": "Cách hỏi đường lịch sự trong tiếng Việt là gì?",
-      "option_a": "Chỉ đường cho tôi!",
-      "option_b": "Xin lỗi, bạn có thể chỉ đường không?",
-      "option_c": "Đường này đi đâu?",
-      "option_d": "Tôi muốn đi...",
-      "correct_answer": "B",
-      "explanation": "Cách hỏi đường lịch sự nhất là \"Xin lỗi, bạn có thể chỉ đường không?\"",
-      "order": 1,
-      "created_at": "2025-08-11T10:34:16.802Z"
-    }
-  },
-  {
-    "model": "event_creation.quizquestion",
-    "pk": 7,
-    "fields": {
-      "lesson": 3,
-      "question": "Khi muốn đi thẳng, bạn nói gì?",
-      "option_a": "Rẽ phải",
-      "option_b": "Rẽ trái",
-      "option_c": "Đi thẳng",
-      "option_d": "Dừng lại",
-      "correct_answer": "C",
-      "explanation": "\"Đi thẳng\" có nghĩa là \"Go straight\"",
-      "order": 2,
-      "created_at": "2025-08-11T10:34:16.807Z"
-    }
-  },
-  {
-    "model": "event_creation.quizquestion",
-    "pk": 8,
-    "fields": {
-      "lesson": 4,
-      "question": "Câu \"Cái này giá bao nhiêu?\" dùng để làm gì?",
-      "option_a": "Hỏi giá sản phẩm",
-      "option_b": "Mặc cả giá",
-      "option_c": "Yêu cầu giảm giá",
-      "option_d": "Thanh toán",
-      "correct_answer": "A",
-      "explanation": "Câu này dùng để hỏi giá của sản phẩm",
-      "order": 1,
-      "created_at": "2025-08-11T10:34:16.811Z"
-    }
-  },
-  {
-    "model": "event_creation.quizquestion",
-    "pk": 9,
-    "fields": {
-      "lesson": 4,
-      "question": "Khi muốn mua sản phẩm, bạn nói gì?",
-      "option_a": "Tôi không thích cái này",
-      "option_b": "Tôi muốn mua cái này",
-      "option_c": "Cái này đắt quá",
-      "option_d": "Cho tôi xem cái khác",
-      "correct_answer": "B",
-      "explanation": "\"Tôi muốn mua cái này\" có nghĩa là \"I want to buy this\"",
-      "order": 2,
-      "created_at": "2025-08-11T10:34:16.815Z"
-    }
-  },
-  {
-    "model": "event_creation.quizquestion",
+    "model": "event_creation.vietnamesephrase",
     "pk": 10,
     "fields": {
-      "lesson": 5,
-      "question": "Khi muốn xem menu, bạn nói gì?",
-      "option_a": "Cho tôi xem thực đơn",
-      "option_b": "Tôi muốn gọi món",
-      "option_c": "Món này ngon quá",
-      "option_d": "Xin hóa đơn",
-      "correct_answer": "A",
-      "explanation": "\"Cho tôi xem thực đơn\" có nghĩa là \"Please show me the menu\"",
-      "order": 1,
-      "created_at": "2025-08-11T10:34:16.819Z"
-    }
-  },
-  {
-    "model": "event_creation.quizquestion",
-    "pk": 11,
-    "fields": {
-      "lesson": 5,
-      "question": "Khi muốn thanh toán, bạn nói gì?",
-      "option_a": "Cho tôi thêm nước",
-      "option_b": "Món này cay quá",
-      "option_c": "Xin hóa đơn",
-      "option_d": "Tôi muốn gọi món khác",
-      "correct_answer": "C",
-      "explanation": "\"Xin hóa đơn\" có nghĩa là \"The bill, please\"",
-      "order": 2,
-      "created_at": "2025-08-11T10:34:16.823Z"
-    }
-  },
-  {
-    "model": "event_creation.quizquestion",
-    "pk": 12,
-    "fields": {
-      "lesson": 6,
-      "question": "Khi muốn hỏi điểm dừng xe buýt, bạn nói gì?",
-      "option_a": "Xe buýt dừng ở đâu?",
-      "option_b": "Tôi muốn đi xe buýt",
-      "option_c": "Xe buýt có đắt không?",
-      "option_d": "Xe buýt đi đâu?",
-      "correct_answer": "A",
-      "explanation": "\"Xe buýt dừng ở đâu?\" có nghĩa là \"Where does the bus stop?\"",
-      "order": 1,
-      "created_at": "2025-08-11T10:34:16.828Z"
-    }
-  },
-  {
-    "model": "event_creation.quizquestion",
-    "pk": 13,
-    "fields": {
-      "lesson": 6,
-      "question": "Khi muốn mua vé, bạn nói gì?",
-      "option_a": "Tôi muốn đi bộ",
-      "option_b": "Tôi muốn mua vé đến...",
-      "option_c": "Vé có đắt không?",
-      "option_d": "Tôi muốn đi taxi",
-      "correct_answer": "B",
-      "explanation": "\"Tôi muốn mua vé đến...\" có nghĩa là \"I want to buy a ticket to...\"",
-      "order": 2,
-      "created_at": "2025-08-11T10:34:16.832Z"
-    }
-  },
-  {
-    "model": "event_creation.quizquestion",
-    "pk": 14,
-    "fields": {
-      "lesson": 7,
-      "question": "Khi trời nắng, bạn nói gì?",
-      "option_a": "Trời mưa",
-      "option_b": "Trời lạnh",
-      "option_c": "Hôm nay trời nắng",
-      "option_d": "Trời âm u",
-      "correct_answer": "C",
-      "explanation": "\"Hôm nay trời nắng\" có nghĩa là \"It is sunny today\"",
-      "order": 1,
-      "created_at": "2025-08-11T10:34:16.836Z"
-    }
-  },
-  {
-    "model": "event_creation.quizquestion",
-    "pk": 15,
-    "fields": {
-      "lesson": 7,
-      "question": "Khi trời mưa, bạn nói gì?",
-      "option_a": "Trời nắng",
-      "option_b": "Trời mưa",
-      "option_c": "Trời lạnh",
-      "option_d": "Trời nóng",
-      "correct_answer": "B",
-      "explanation": "\"Trời mưa\" có nghĩa là \"It is raining\"",
-      "order": 2,
-      "created_at": "2025-08-11T10:34:16.840Z"
-    }
-  },
-  {
-    "model": "event_creation.quizquestion",
-    "pk": 16,
-    "fields": {
-      "lesson": 8,
-      "question": "Khi giới thiệu gia đình, bạn nói gì?",
-      "option_a": "Đây là bạn tôi",
-      "option_b": "Đây là gia đình tôi",
-      "option_c": "Đây là nhà tôi",
-      "option_d": "Đây là phòng tôi",
-      "correct_answer": "B",
-      "explanation": "\"Đây là gia đình tôi\" có nghĩa là \"This is my family\"",
-      "order": 1,
-      "created_at": "2025-08-11T10:34:16.845Z"
-    }
-  },
-  {
-    "model": "event_creation.quizquestion",
-    "pk": 17,
-    "fields": {
-      "lesson": 8,
-      "question": "Khi gọi bố, bạn nói gì?",
-      "option_a": "Mẹ tôi",
-      "option_b": "Bố tôi",
-      "option_c": "Anh trai tôi",
-      "option_d": "Chị gái tôi",
-      "correct_answer": "B",
-      "explanation": "\"Bố tôi\" có nghĩa là \"My father\"",
-      "order": 2,
-      "created_at": "2025-08-11T10:34:16.849Z"
-    }
-  },
-  {
-    "model": "event_creation.quizquestion",
-    "pk": 18,
-    "fields": {
-      "lesson": 9,
-      "question": "Khi bị ốm, bạn nói gì?",
-      "option_a": "Tôi khỏe",
-      "option_b": "Tôi bị ốm",
-      "option_c": "Tôi vui",
-      "option_d": "Tôi buồn",
-      "correct_answer": "B",
-      "explanation": "\"Tôi bị ốm\" có nghĩa là \"I am sick\"",
-      "order": 1,
-      "created_at": "2025-08-11T10:34:16.853Z"
-    }
-  },
-  {
-    "model": "event_creation.quizquestion",
-    "pk": 19,
-    "fields": {
-      "lesson": 9,
-      "question": "Khi cần cấp cứu, bạn nói gì?",
-      "option_a": "Gọi cảnh sát",
-      "option_b": "Gọi cấp cứu",
-      "option_c": "Gọi taxi",
-      "option_d": "Gọi xe buýt",
-      "correct_answer": "B",
-      "explanation": "\"Gọi cấp cứu\" có nghĩa là \"Call an ambulance\"",
-      "order": 2,
-      "created_at": "2025-08-11T10:34:16.857Z"
-    }
-  },
-  {
-    "model": "event_creation.quizquestion",
-    "pk": 20,
-    "fields": {
-      "lesson": 10,
-      "question": "Khi muốn hỏi giờ, bạn nói gì?",
-      "option_a": "Bây giờ là mấy giờ?",
-      "option_b": "Hôm nay là thứ mấy?",
-      "option_c": "Tháng này là tháng mấy?",
-      "option_d": "Năm nay là năm mấy?",
-      "correct_answer": "A",
-      "explanation": "\"Bây giờ là mấy giờ?\" có nghĩa là \"What time is it now?\"",
-      "order": 1,
-      "created_at": "2025-08-11T10:34:16.862Z"
-    }
-  },
-  {
-    "model": "event_creation.quizquestion",
-    "pk": 21,
-    "fields": {
-      "lesson": 10,
-      "question": "Khi muốn hỏi lịch rảnh, bạn nói gì?",
-      "option_a": "Bạn có bận không?",
-      "option_b": "Bạn có rảnh vào... không?",
-      "option_c": "Bạn có thời gian không?",
-      "option_d": "Bạn có thể gặp tôi không?",
-      "correct_answer": "B",
-      "explanation": "\"Bạn có rảnh vào... không?\" có nghĩa là \"Are you free on...?\"",
-      "order": 2,
-      "created_at": "2025-08-11T10:34:16.865Z"
-    }
-  },
-  {
-    "model": "event_creation.theorysection",
-    "pk": 1,
-    "fields": {
-      "lesson": 1,
-      "title": "Phần lý thuyết - Chào hỏi cơ bản (Basic Greetings)",
-      "description": "Lý thuyết cơ bản cho bài học Chào hỏi cơ bản (Basic Greetings)",
-      "order": 1,
-      "created_at": "2025-08-11T10:34:16.229Z"
-    }
-  },
-  {
-    "model": "event_creation.theorysection",
-    "pk": 2,
-    "fields": {
-      "lesson": 2,
-      "title": "Phần lý thuyết - Giới thiệu bản thân (Self Introduction)",
-      "description": "Lý thuyết cơ bản cho bài học Giới thiệu bản thân (Self Introduction)",
-      "order": 1,
-      "created_at": "2025-08-11T10:34:16.255Z"
-    }
-  },
-  {
-    "model": "event_creation.theorysection",
-    "pk": 3,
-    "fields": {
-      "lesson": 3,
-      "title": "Phần lý thuyết - Hỏi đường (Asking for Directions)",
-      "description": "Lý thuyết cơ bản cho bài học Hỏi đường (Asking for Directions)",
-      "order": 1,
-      "created_at": "2025-08-11T10:34:16.282Z"
-    }
-  },
-  {
-    "model": "event_creation.theorysection",
-    "pk": 4,
-    "fields": {
-      "lesson": 4,
-      "title": "Phần lý thuyết - Mua sắm (Shopping)",
-      "description": "Lý thuyết cơ bản cho bài học Mua sắm (Shopping)",
-      "order": 1,
-      "created_at": "2025-08-11T10:34:16.313Z"
-    }
-  },
-  {
-    "model": "event_creation.theorysection",
-    "pk": 5,
-    "fields": {
-      "lesson": 5,
-      "title": "Phần lý thuyết - Nhà hàng / Gọi món (Restaurant)",
-      "description": "Lý thuyết cơ bản cho bài học Nhà hàng / Gọi món (Restaurant)",
-      "order": 1,
-      "created_at": "2025-08-11T10:34:16.339Z"
-    }
-  },
-  {
-    "model": "event_creation.theorysection",
-    "pk": 6,
-    "fields": {
-      "lesson": 6,
-      "title": "Phần lý thuyết - Giao thông / Đi lại (Transportation)",
-      "description": "Lý thuyết cơ bản cho bài học Giao thông / Đi lại (Transportation)",
-      "order": 1,
-      "created_at": "2025-08-11T10:34:16.365Z"
-    }
-  },
-  {
-    "model": "event_creation.theorysection",
-    "pk": 7,
-    "fields": {
-      "lesson": 7,
-      "title": "Phần lý thuyết - Thời tiết (Weather)",
-      "description": "Lý thuyết cơ bản cho bài học Thời tiết (Weather)",
-      "order": 1,
-      "created_at": "2025-08-11T10:34:16.389Z"
-    }
-  },
-  {
-    "model": "event_creation.theorysection",
-    "pk": 8,
-    "fields": {
-      "lesson": 8,
-      "title": "Phần lý thuyết - Gia đình (Family)",
-      "description": "Lý thuyết cơ bản cho bài học Gia đình (Family)",
-      "order": 1,
-      "created_at": "2025-08-11T10:34:16.419Z"
-    }
-  },
-  {
-    "model": "event_creation.theorysection",
-    "pk": 9,
-    "fields": {
-      "lesson": 9,
-      "title": "Phần lý thuyết - Sức khỏe / Trường hợp khẩn cấp (Health & Emergency)",
-      "description": "Lý thuyết cơ bản cho bài học Sức khỏe / Trường hợp khẩn cấp (Health & Emergency)",
-      "order": 1,
-      "created_at": "2025-08-11T10:34:16.457Z"
-    }
-  },
-  {
-    "model": "event_creation.theorysection",
-    "pk": 10,
-    "fields": {
-      "lesson": 10,
-      "title": "Phần lý thuyết - Thời gian / Lịch trình (Time & Schedule)",
-      "description": "Lý thuyết cơ bản cho bài học Thời gian / Lịch trình (Time & Schedule)",
-      "order": 1,
-      "created_at": "2025-08-11T10:34:16.489Z"
-    }
-  },
-  {
-    "model": "event_creation.theorysection",
-    "pk": 11,
-    "fields": {
-      "lesson": 1,
-      "title": "Chào hỏi cơ bản hàng ngày",
-      "description": "Các câu chào hỏi cơ bản mà bạn có thể sử dụng mỗi ngày",
-      "order": 1,
-      "created_at": "2025-08-11T10:34:16.874Z"
-    }
-  },
-  {
-    "model": "event_creation.theorysection",
-    "pk": 12,
-    "fields": {
-      "lesson": 1,
-      "title": "Giới thiệu bản thân chi tiết",
-      "description": "Học cách giới thiệu bản thân một cách chi tiết hơn",
-      "order": 2,
-      "created_at": "2025-08-11T10:34:16.937Z"
-    }
-  },
-  {
-    "model": "event_creation.theoryphrase",
-    "pk": 1,
-    "fields": {
-      "theory_section": 1,
-      "vietnamese_text": "Chào buổi sáng",
-      "japanese_translation": "おはようございます",
-      "english_translation": "Good morning",
-      "pronunciation_guide": "chào buổi sáng",
-      "usage_note": "Dùng từ 5h sáng đến 11h sáng",
-      "is_essential": true,
-      "order": 1,
-      "created_at": "2025-08-11T10:34:16.234Z"
-    }
-  },
-  {
-    "model": "event_creation.theoryphrase",
-    "pk": 2,
-    "fields": {
-      "theory_section": 1,
-      "vietnamese_text": "Chào buổi trưa",
-      "japanese_translation": "こんにちは",
-      "english_translation": "Good afternoon",
-      "pronunciation_guide": "chào buổi trưa",
-      "usage_note": "Dùng từ 11h trưa đến 5h chiều",
-      "is_essential": true,
-      "order": 2,
-      "created_at": "2025-08-11T10:34:16.238Z"
-    }
-  },
-  {
-    "model": "event_creation.theoryphrase",
-    "pk": 3,
-    "fields": {
-      "theory_section": 1,
-      "vietnamese_text": "Chào buổi tối",
-      "japanese_translation": "こんばんは",
-      "english_translation": "Good evening",
-      "pronunciation_guide": "chào buổi tối",
-      "usage_note": "Dùng từ 5h chiều đến 10h tối",
-      "is_essential": true,
-      "order": 3,
-      "created_at": "2025-08-11T10:34:16.242Z"
-    }
-  },
-  {
-    "model": "event_creation.theoryphrase",
-    "pk": 4,
-    "fields": {
-      "theory_section": 1,
-      "vietnamese_text": "Bạn khỏe không?",
-      "japanese_translation": "お元気ですか？",
-      "english_translation": "How are you?",
-      "pronunciation_guide": "bạn khỏe không",
-      "usage_note": "Hỏi thăm sức khỏe",
-      "is_essential": true,
-      "order": 4,
-      "created_at": "2025-08-11T10:34:16.246Z"
-    }
-  },
-  {
-    "model": "event_creation.theoryphrase",
-    "pk": 5,
-    "fields": {
-      "theory_section": 2,
-      "vietnamese_text": "Tôi tên là...",
-      "japanese_translation": "私の名前は...です",
-      "english_translation": "My name is...",
-      "pronunciation_guide": "tôi tên là",
-      "usage_note": "Dùng để giới thiệu tên",
-      "is_essential": true,
-      "order": 1,
-      "created_at": "2025-08-11T10:34:16.260Z"
-    }
-  },
-  {
-    "model": "event_creation.theoryphrase",
-    "pk": 6,
-    "fields": {
-      "theory_section": 2,
-      "vietnamese_text": "Tôi ... tuổi",
-      "japanese_translation": "私は...歳です",
-      "english_translation": "I am ... years old",
-      "pronunciation_guide": "tôi ... tuổi",
-      "usage_note": "Giới thiệu tuổi",
-      "is_essential": true,
-      "order": 2,
-      "created_at": "2025-08-11T10:34:16.265Z"
-    }
-  },
-  {
-    "model": "event_creation.theoryphrase",
-    "pk": 7,
-    "fields": {
-      "theory_section": 2,
-      "vietnamese_text": "Tôi đến từ...",
-      "japanese_translation": "私は...から来ました",
-      "english_translation": "I come from...",
-      "pronunciation_guide": "tôi đến từ",
-      "usage_note": "Giới thiệu quê quán",
-      "is_essential": true,
-      "order": 3,
-      "created_at": "2025-08-11T10:34:16.269Z"
-    }
-  },
-  {
-    "model": "event_creation.theoryphrase",
-    "pk": 8,
-    "fields": {
-      "theory_section": 2,
-      "vietnamese_text": "Tôi là sinh viên",
-      "japanese_translation": "私は学生です",
-      "english_translation": "I am a student",
-      "pronunciation_guide": "tôi là sinh viên",
-      "usage_note": "Giới thiệu nghề nghiệp",
-      "is_essential": true,
-      "order": 4,
-      "created_at": "2025-08-11T10:34:16.274Z"
-    }
-  },
-  {
-    "model": "event_creation.theoryphrase",
-    "pk": 9,
-    "fields": {
-      "theory_section": 3,
-      "vietnamese_text": "Xin lỗi, bạn có thể chỉ đường không?",
-      "japanese_translation": "すみません、道を教えていただけますか？",
-      "english_translation": "Excuse me, can you show me the way?",
-      "pronunciation_guide": "xin lỗi, bạn có thể chỉ đường không",
-      "usage_note": "Cách hỏi đường lịch sự",
-      "is_essential": true,
-      "order": 1,
-      "created_at": "2025-08-11T10:34:16.287Z"
-    }
-  },
-  {
-    "model": "event_creation.theoryphrase",
-    "pk": 10,
-    "fields": {
-      "theory_section": 3,
-      "vietnamese_text": "Làm sao để đến...?",
-      "japanese_translation": "...にはどうやって行けばいいですか？",
-      "english_translation": "How do I get to...?",
-      "pronunciation_guide": "làm sao để đến",
-      "usage_note": "Hỏi đường đến địa điểm cụ thể",
-      "is_essential": true,
-      "order": 2,
-      "created_at": "2025-08-11T10:34:16.292Z"
-    }
-  },
-  {
-    "model": "event_creation.theoryphrase",
-    "pk": 11,
-    "fields": {
-      "theory_section": 3,
-      "vietnamese_text": "Đi thẳng",
-      "japanese_translation": "まっすぐ行ってください",
-      "english_translation": "Go straight",
-      "pronunciation_guide": "đi thẳng",
-      "usage_note": "Chỉ đường thẳng",
-      "is_essential": true,
-      "order": 3,
-      "created_at": "2025-08-11T10:34:16.298Z"
-    }
-  },
-  {
-    "model": "event_creation.theoryphrase",
-    "pk": 12,
-    "fields": {
-      "theory_section": 3,
-      "vietnamese_text": "Rẽ phải",
-      "japanese_translation": "右に曲がってください",
-      "english_translation": "Turn right",
-      "pronunciation_guide": "rẽ phải",
-      "usage_note": "Chỉ hướng rẽ phải",
-      "is_essential": true,
-      "order": 4,
-      "created_at": "2025-08-11T10:34:16.304Z"
-    }
-  },
-  {
-    "model": "event_creation.theoryphrase",
-    "pk": 13,
-    "fields": {
-      "theory_section": 4,
-      "vietnamese_text": "Cái này giá bao nhiêu?",
-      "japanese_translation": "これはいくらですか？",
-      "english_translation": "How much is this?",
-      "pronunciation_guide": "cái này giá bao nhiêu",
-      "usage_note": "Hỏi giá sản phẩm",
-      "is_essential": true,
-      "order": 1,
-      "created_at": "2025-08-11T10:34:16.317Z"
-    }
-  },
-  {
-    "model": "event_creation.theoryphrase",
-    "pk": 14,
-    "fields": {
-      "theory_section": 4,
-      "vietnamese_text": "Tôi muốn mua cái này",
-      "japanese_translation": "これを買いたいです",
-      "english_translation": "I want to buy this",
-      "pronunciation_guide": "tôi muốn mua cái này",
-      "usage_note": "Thông báo muốn mua",
-      "is_essential": true,
-      "order": 2,
-      "created_at": "2025-08-11T10:34:16.322Z"
-    }
-  },
-  {
-    "model": "event_creation.theoryphrase",
-    "pk": 15,
-    "fields": {
-      "theory_section": 4,
-      "vietnamese_text": "Có thể giảm giá không?",
-      "japanese_translation": "値引きできますか？",
-      "english_translation": "Can you reduce the price?",
-      "pronunciation_guide": "có thể giảm giá không",
-      "usage_note": "Mặc cả giá",
-      "is_essential": true,
-      "order": 3,
-      "created_at": "2025-08-11T10:34:16.326Z"
-    }
-  },
-  {
-    "model": "event_creation.theoryphrase",
-    "pk": 16,
-    "fields": {
-      "theory_section": 4,
-      "vietnamese_text": "Cho tôi túi nhé",
-      "japanese_translation": "袋をください",
-      "english_translation": "Please give me a bag",
-      "pronunciation_guide": "cho tôi túi nhé",
-      "usage_note": "Yêu cầu túi đựng",
-      "is_essential": true,
-      "order": 4,
-      "created_at": "2025-08-11T10:34:16.330Z"
-    }
-  },
-  {
-    "model": "event_creation.theoryphrase",
-    "pk": 17,
-    "fields": {
-      "theory_section": 5,
-      "vietnamese_text": "Cho tôi xem thực đơn",
-      "japanese_translation": "メニューを見せてください",
-      "english_translation": "Please show me the menu",
-      "pronunciation_guide": "cho tôi xem thực đơn",
-      "usage_note": "Yêu cầu xem menu",
-      "is_essential": true,
-      "order": 1,
-      "created_at": "2025-08-11T10:34:16.343Z"
-    }
-  },
-  {
-    "model": "event_creation.theoryphrase",
-    "pk": 18,
-    "fields": {
-      "theory_section": 5,
-      "vietnamese_text": "Tôi muốn gọi món...",
-      "japanese_translation": "...を注文したいです",
-      "english_translation": "I would like to order...",
-      "pronunciation_guide": "tôi muốn gọi món",
-      "usage_note": "Gọi món cụ thể",
-      "is_essential": true,
-      "order": 2,
-      "created_at": "2025-08-11T10:34:16.347Z"
-    }
-  },
-  {
-    "model": "event_creation.theoryphrase",
-    "pk": 19,
-    "fields": {
-      "theory_section": 5,
-      "vietnamese_text": "Món này rất ngon",
-      "japanese_translation": "この料理はとてもおいしい",
-      "english_translation": "This dish is very delicious",
-      "pronunciation_guide": "món này rất ngon",
-      "usage_note": "Khen món ăn",
-      "is_essential": true,
-      "order": 3,
-      "created_at": "2025-08-11T10:34:16.352Z"
-    }
-  },
-  {
-    "model": "event_creation.theoryphrase",
-    "pk": 20,
-    "fields": {
-      "theory_section": 5,
-      "vietnamese_text": "Xin hóa đơn",
-      "japanese_translation": "お会計をお願いします",
-      "english_translation": "The bill, please",
-      "pronunciation_guide": "xin hóa đơn",
-      "usage_note": "Yêu cầu thanh toán",
-      "is_essential": true,
-      "order": 4,
-      "created_at": "2025-08-11T10:34:16.356Z"
-    }
-  },
-  {
-    "model": "event_creation.theoryphrase",
-    "pk": 21,
-    "fields": {
-      "theory_section": 6,
-      "vietnamese_text": "Xe buýt dừng ở đâu?",
-      "japanese_translation": "バスはどこで止まりますか？",
-      "english_translation": "Where does the bus stop?",
-      "pronunciation_guide": "xe buýt dừng ở đâu",
-      "usage_note": "Hỏi điểm dừng xe buýt",
-      "is_essential": true,
-      "order": 1,
-      "created_at": "2025-08-11T10:34:16.369Z"
-    }
-  },
-  {
-    "model": "event_creation.theoryphrase",
-    "pk": 22,
-    "fields": {
-      "theory_section": 6,
-      "vietnamese_text": "Có taxi ở gần đây không?",
-      "japanese_translation": "この近くにタクシーはありますか？",
-      "english_translation": "Is there a taxi nearby?",
-      "pronunciation_guide": "có taxi ở gần đây không",
-      "usage_note": "Hỏi về taxi",
-      "is_essential": true,
-      "order": 2,
-      "created_at": "2025-08-11T10:34:16.373Z"
-    }
-  },
-  {
-    "model": "event_creation.theoryphrase",
-    "pk": 23,
-    "fields": {
-      "theory_section": 6,
-      "vietnamese_text": "Tôi muốn đến...",
-      "japanese_translation": "...に行きたいです",
-      "english_translation": "I want to go to...",
-      "pronunciation_guide": "tôi muốn đến",
-      "usage_note": "Nói địa điểm muốn đến",
-      "is_essential": true,
-      "order": 3,
-      "created_at": "2025-08-11T10:34:16.377Z"
-    }
-  },
-  {
-    "model": "event_creation.theoryphrase",
-    "pk": 24,
-    "fields": {
-      "theory_section": 6,
-      "vietnamese_text": "Tôi muốn mua vé đến...",
-      "japanese_translation": "...行きの切符を買いたいです",
-      "english_translation": "I want to buy a ticket to...",
-      "pronunciation_guide": "tôi muốn mua vé đến",
-      "usage_note": "Mua vé đến địa điểm",
-      "is_essential": true,
-      "order": 4,
-      "created_at": "2025-08-11T10:34:16.381Z"
-    }
-  },
-  {
-    "model": "event_creation.theoryphrase",
-    "pk": 25,
-    "fields": {
-      "theory_section": 7,
-      "vietnamese_text": "Hôm nay trời nắng",
-      "japanese_translation": "今日は晴れです",
-      "english_translation": "It is sunny today",
-      "pronunciation_guide": "hôm nay trời nắng",
-      "usage_note": "Mô tả thời tiết nắng",
-      "is_essential": true,
-      "order": 1,
-      "created_at": "2025-08-11T10:34:16.393Z"
-    }
-  },
-  {
-    "model": "event_creation.theoryphrase",
-    "pk": 26,
-    "fields": {
-      "theory_section": 7,
-      "vietnamese_text": "Trời mưa",
-      "japanese_translation": "雨が降っています",
-      "english_translation": "It is raining",
-      "pronunciation_guide": "trời mưa",
-      "usage_note": "Mô tả thời tiết mưa",
-      "is_essential": true,
-      "order": 2,
-      "created_at": "2025-08-11T10:34:16.397Z"
-    }
-  },
-  {
-    "model": "event_creation.theoryphrase",
-    "pk": 27,
-    "fields": {
-      "theory_section": 7,
-      "vietnamese_text": "Trời lạnh",
-      "japanese_translation": "寒いです",
-      "english_translation": "It is cold",
-      "pronunciation_guide": "trời lạnh",
-      "usage_note": "Mô tả thời tiết lạnh",
-      "is_essential": true,
-      "order": 3,
-      "created_at": "2025-08-11T10:34:16.401Z"
-    }
-  },
-  {
-    "model": "event_creation.theoryphrase",
-    "pk": 28,
-    "fields": {
-      "theory_section": 7,
-      "vietnamese_text": "Mùa mưa bắt đầu",
-      "japanese_translation": "雨季が始まりました",
-      "english_translation": "Rainy season has begun",
-      "pronunciation_guide": "mùa mưa bắt đầu",
-      "usage_note": "Nói về mùa mưa",
-      "is_essential": true,
-      "order": 4,
-      "created_at": "2025-08-11T10:34:16.405Z"
-    }
-  },
-  {
-    "model": "event_creation.theoryphrase",
-    "pk": 29,
-    "fields": {
-      "theory_section": 8,
-      "vietnamese_text": "Đây là gia đình tôi",
-      "japanese_translation": "これは私の家族です",
-      "english_translation": "This is my family",
-      "pronunciation_guide": "đây là gia đình tôi",
-      "usage_note": "Giới thiệu gia đình",
-      "is_essential": true,
-      "order": 1,
-      "created_at": "2025-08-11T10:34:16.425Z"
-    }
-  },
-  {
-    "model": "event_creation.theoryphrase",
-    "pk": 30,
-    "fields": {
-      "theory_section": 8,
-      "vietnamese_text": "Bố tôi",
-      "japanese_translation": "私の父",
-      "english_translation": "My father",
-      "pronunciation_guide": "bố tôi",
-      "usage_note": "Gọi bố",
-      "is_essential": true,
-      "order": 2,
-      "created_at": "2025-08-11T10:34:16.433Z"
-    }
-  },
-  {
-    "model": "event_creation.theoryphrase",
-    "pk": 31,
-    "fields": {
-      "theory_section": 8,
-      "vietnamese_text": "Mẹ tôi",
-      "japanese_translation": "私の母",
-      "english_translation": "My mother",
-      "pronunciation_guide": "mẹ tôi",
-      "usage_note": "Gọi mẹ",
-      "is_essential": true,
-      "order": 3,
-      "created_at": "2025-08-11T10:34:16.439Z"
-    }
-  },
-  {
-    "model": "event_creation.theoryphrase",
-    "pk": 32,
-    "fields": {
-      "theory_section": 8,
-      "vietnamese_text": "Gia đình bạn có mấy người?",
-      "japanese_translation": "ご家族は何人ですか？",
-      "english_translation": "How many people are in your family?",
-      "pronunciation_guide": "gia đình bạn có mấy người",
-      "usage_note": "Hỏi về số lượng thành viên",
-      "is_essential": true,
-      "order": 4,
-      "created_at": "2025-08-11T10:34:16.446Z"
-    }
-  },
-  {
-    "model": "event_creation.theoryphrase",
-    "pk": 33,
-    "fields": {
-      "theory_section": 9,
-      "vietnamese_text": "Tôi bị ốm",
-      "japanese_translation": "私は病気です",
-      "english_translation": "I am sick",
-      "pronunciation_guide": "tôi bị ốm",
-      "usage_note": "Nói về tình trạng ốm",
-      "is_essential": true,
-      "order": 1,
-      "created_at": "2025-08-11T10:34:16.463Z"
-    }
-  },
-  {
-    "model": "event_creation.theoryphrase",
-    "pk": 34,
-    "fields": {
-      "theory_section": 9,
-      "vietnamese_text": "Tôi cần gặp bác sĩ",
-      "japanese_translation": "医者に診てもらう必要があります",
-      "english_translation": "I need to see a doctor",
-      "pronunciation_guide": "tôi cần gặp bác sĩ",
-      "usage_note": "Yêu cầu gặp bác sĩ",
-      "is_essential": true,
-      "order": 2,
-      "created_at": "2025-08-11T10:34:16.469Z"
-    }
-  },
-  {
-    "model": "event_creation.theoryphrase",
-    "pk": 35,
-    "fields": {
-      "theory_section": 9,
-      "vietnamese_text": "Gọi cấp cứu!",
-      "japanese_translation": "救急車を呼んでください！",
-      "english_translation": "Call an ambulance!",
-      "pronunciation_guide": "gọi cấp cứu",
-      "usage_note": "Yêu cầu cấp cứu",
-      "is_essential": true,
-      "order": 3,
-      "created_at": "2025-08-11T10:34:16.474Z"
-    }
-  },
-  {
-    "model": "event_creation.theoryphrase",
-    "pk": 36,
-    "fields": {
-      "theory_section": 9,
-      "vietnamese_text": "Có ai giúp tôi không?",
-      "japanese_translation": "誰か助けてくれませんか？",
-      "english_translation": "Can anyone help me?",
-      "pronunciation_guide": "có ai giúp tôi không",
-      "usage_note": "Kêu gọi sự giúp đỡ",
-      "is_essential": true,
-      "order": 4,
-      "created_at": "2025-08-11T10:34:16.478Z"
-    }
-  },
-  {
-    "model": "event_creation.theoryphrase",
-    "pk": 37,
-    "fields": {
-      "theory_section": 10,
-      "vietnamese_text": "Bây giờ là mấy giờ?",
-      "japanese_translation": "今何時ですか？",
-      "english_translation": "What time is it now?",
-      "pronunciation_guide": "bây giờ là mấy giờ",
-      "usage_note": "Hỏi giờ hiện tại",
-      "is_essential": true,
-      "order": 1,
-      "created_at": "2025-08-11T10:34:16.495Z"
-    }
-  },
-  {
-    "model": "event_creation.theoryphrase",
-    "pk": 38,
-    "fields": {
-      "theory_section": 10,
-      "vietnamese_text": "Bây giờ là... giờ",
-      "japanese_translation": "今...時です",
-      "english_translation": "It is ... o'clock now",
-      "pronunciation_guide": "bây giờ là ... giờ",
-      "usage_note": "Trả lời về giờ",
-      "is_essential": true,
-      "order": 2,
-      "created_at": "2025-08-11T10:34:16.499Z"
-    }
-  },
-  {
-    "model": "event_creation.theoryphrase",
-    "pk": 39,
-    "fields": {
-      "theory_section": 10,
-      "vietnamese_text": "Khi nào chúng ta gặp nhau?",
-      "japanese_translation": "いつ会いましょうか？",
-      "english_translation": "When shall we meet?",
-      "pronunciation_guide": "khi nào chúng ta gặp nhau",
-      "usage_note": "Hỏi về thời gian gặp mặt",
-      "is_essential": true,
-      "order": 3,
-      "created_at": "2025-08-11T10:34:16.504Z"
-    }
-  },
-  {
-    "model": "event_creation.theoryphrase",
-    "pk": 40,
-    "fields": {
-      "theory_section": 10,
-      "vietnamese_text": "Bạn có rảnh vào... không?",
-      "japanese_translation": "...はお暇ですか？",
-      "english_translation": "Are you free on...?",
-      "pronunciation_guide": "bạn có rảnh vào",
-      "usage_note": "Hỏi về lịch rảnh",
-      "is_essential": true,
-      "order": 4,
-      "created_at": "2025-08-11T10:34:16.507Z"
-    }
-  },
-  {
-    "model": "event_creation.theoryphrase",
-    "pk": 41,
-    "fields": {
-      "theory_section": 11,
-      "vietnamese_text": "Xin chào",
-      "japanese_translation": "こんにちは",
-      "english_translation": "Hello",
-      "pronunciation_guide": "sin chào",
-      "usage_note": "Dùng để chào hỏi vào ban ngày",
-      "is_essential": true,
-      "order": 1,
-      "created_at": "2025-08-11T10:34:16.879Z"
-    }
-  },
-  {
-    "model": "event_creation.theoryphrase",
-    "pk": 42,
-    "fields": {
-      "theory_section": 11,
-      "vietnamese_text": "Chào bạn",
-      "japanese_translation": "こんにちは",
-      "english_translation": "Hello (informal)",
-      "pronunciation_guide": "chào bạn",
-      "usage_note": "Cách chào thân thiện với bạn bè",
-      "is_essential": true,
-      "order": 2,
-      "created_at": "2025-08-11T10:34:16.883Z"
-    }
-  },
-  {
-    "model": "event_creation.theoryphrase",
-    "pk": 43,
-    "fields": {
-      "theory_section": 11,
-      "vietnamese_text": "Tôi tên là...",
-      "japanese_translation": "私の名前は...です",
-      "english_translation": "My name is...",
-      "pronunciation_guide": "tôi tên là",
-      "usage_note": "Dùng để giới thiệu tên của mình",
-      "is_essential": true,
-      "order": 3,
-      "created_at": "2025-08-11T10:34:16.887Z"
-    }
-  },
-  {
-    "model": "event_creation.theoryphrase",
-    "pk": 44,
-    "fields": {
-      "theory_section": 11,
-      "vietnamese_text": "Rất vui được gặp bạn",
-      "japanese_translation": "お会いできて嬉しいです",
-      "english_translation": "Nice to meet you",
-      "pronunciation_guide": "rất vui được gặp bạn",
-      "usage_note": "Dùng khi gặp ai đó lần đầu",
-      "is_essential": true,
-      "order": 4,
-      "created_at": "2025-08-11T10:34:16.891Z"
-    }
-  },
-  {
-    "model": "event_creation.theoryphrase",
-    "pk": 45,
-    "fields": {
-      "theory_section": 11,
-      "vietnamese_text": "Bạn khỏe không?",
-      "japanese_translation": "お元気ですか？",
-      "english_translation": "How are you?",
-      "pronunciation_guide": "bạn khỏe không",
-      "usage_note": "Hỏi thăm sức khỏe",
-      "is_essential": true,
-      "order": 5,
-      "created_at": "2025-08-11T10:34:16.895Z"
-    }
-  },
-  {
-    "model": "event_creation.theoryphrase",
-    "pk": 46,
-    "fields": {
-      "theory_section": 11,
-      "vietnamese_text": "Tôi khỏe, cảm ơn bạn",
-      "japanese_translation": "元気です、ありがとうございます",
-      "english_translation": "I am fine, thank you",
-      "pronunciation_guide": "tôi khỏe, cảm ơn bạn",
-      "usage_note": "Trả lời khi ai đó hỏi thăm sức khỏe",
-      "is_essential": true,
-      "order": 6,
-      "created_at": "2025-08-11T10:34:16.898Z"
-    }
-  },
-  {
-    "model": "event_creation.theoryphrase",
-    "pk": 47,
-    "fields": {
-      "theory_section": 11,
-      "vietnamese_text": "Tạm biệt",
-      "japanese_translation": "さようなら",
-      "english_translation": "Goodbye",
-      "pronunciation_guide": "tạm biệt",
-      "usage_note": "Dùng để chào tạm biệt",
-      "is_essential": true,
-      "order": 7,
-      "created_at": "2025-08-11T10:34:16.902Z"
-    }
-  },
-  {
-    "model": "event_creation.theoryphrase",
-    "pk": 48,
-    "fields": {
-      "theory_section": 11,
-      "vietnamese_text": "Hẹn gặp lại",
-      "japanese_translation": "また会いましょう",
-      "english_translation": "See you again",
-      "pronunciation_guide": "hẹn gặp lại",
-      "usage_note": "Cách chào tạm biệt thân thiện",
-      "is_essential": false,
-      "order": 8,
-      "created_at": "2025-08-11T10:34:16.906Z"
-    }
-  },
-  {
-    "model": "event_creation.theoryphrase",
-    "pk": 49,
-    "fields": {
-      "theory_section": 12,
-      "vietnamese_text": "Tôi đến từ Nhật Bản",
-      "japanese_translation": "私は日本から来ました",
-      "english_translation": "I come from Japan",
-      "pronunciation_guide": "tôi đến từ nhật bản",
-      "usage_note": "Dùng để giới thiệu quê quán",
-      "is_essential": true,
-      "order": 1,
-      "created_at": "2025-08-11T10:34:16.942Z"
-    }
-  },
-  {
-    "model": "event_creation.theoryphrase",
-    "pk": 50,
-    "fields": {
-      "theory_section": 12,
-      "vietnamese_text": "Tôi là sinh viên",
-      "japanese_translation": "私は学生です",
-      "english_translation": "I am a student",
-      "pronunciation_guide": "tôi là sinh viên",
-      "usage_note": "Dùng để giới thiệu nghề nghiệp",
-      "is_essential": true,
-      "order": 2,
-      "created_at": "2025-08-11T10:34:16.945Z"
-    }
-  },
-  {
-    "model": "event_creation.theoryphrase",
-    "pk": 51,
-    "fields": {
-      "theory_section": 12,
-      "vietnamese_text": "Tôi thích học tiếng Việt",
-      "japanese_translation": "私はベトナム語を勉強するのが好きです",
-      "english_translation": "I like learning Vietnamese",
-      "pronunciation_guide": "tôi thích học tiếng việt",
-      "usage_note": "Dùng để nói về sở thích",
-      "is_essential": false,
-      "order": 3,
-      "created_at": "2025-08-11T10:34:16.950Z"
-    }
-  },
-  {
-    "model": "event_creation.theoryphrase",
-    "pk": 52,
-    "fields": {
-      "theory_section": 12,
-      "vietnamese_text": "Bạn có thể nói tiếng Nhật không?",
-      "japanese_translation": "日本語を話せますか？",
-      "english_translation": "Can you speak Japanese?",
-      "pronunciation_guide": "bạn có thể nói tiếng nhật không",
-      "usage_note": "Hỏi về khả năng ngoại ngữ",
-      "is_essential": false,
-      "order": 4,
-      "created_at": "2025-08-11T10:34:16.954Z"
-    }
-  },
-  {
-    "model": "event_creation.conversationexample",
-    "pk": 1,
-    "fields": {
-      "theory_section": 11,
-      "title": "Hội thoại giới thiệu bản thân",
-      "description": "Cuộc trò chuyện giữa hai người lần đầu gặp nhau",
-      "order": 1,
-      "created_at": "2025-08-11T10:34:16.910Z"
-    }
-  },
-  {
-    "model": "event_creation.conversationline",
-    "pk": 1,
-    "fields": {
-      "conversation": 1,
-      "speaker": "person_a",
-      "vietnamese_text": "Xin chào! Tôi tên là Mai. Rất vui được gặp bạn.",
-      "japanese_translation": "こんにちは！私の名前はマイです。お会いできて嬉しいです。",
-      "english_translation": "Hello! My name is Mai. Nice to meet you.",
-      "order": 1,
-      "created_at": "2025-08-11T10:34:16.913Z"
-    }
-  },
-  {
-    "model": "event_creation.conversationline",
-    "pk": 2,
-    "fields": {
-      "conversation": 1,
-      "speaker": "person_b",
-      "vietnamese_text": "Xin chào Mai! Tôi tên là Tanaka. Rất vui được gặp bạn.",
-      "japanese_translation": "こんにちは、マイさん！私の名前は田中です。お会いできて嬉しいです。",
-      "english_translation": "Hello Mai! My name is Tanaka. Nice to meet you.",
-      "order": 2,
-      "created_at": "2025-08-11T10:34:16.918Z"
-    }
-  },
-  {
-    "model": "event_creation.conversationline",
-    "pk": 3,
-    "fields": {
-      "conversation": 1,
-      "speaker": "person_a",
-      "vietnamese_text": "Bạn khỏe không?",
-      "japanese_translation": "お元気ですか？",
-      "english_translation": "How are you?",
-      "order": 3,
-      "created_at": "2025-08-11T10:34:16.922Z"
-    }
-  },
-  {
-    "model": "event_creation.conversationline",
-    "pk": 4,
-    "fields": {
-      "conversation": 1,
-      "speaker": "person_b",
-      "vietnamese_text": "Tôi khỏe, cảm ơn bạn. Còn bạn thì sao?",
-      "japanese_translation": "元気です、ありがとうございます。あなたはどうですか？",
-      "english_translation": "I am fine, thank you. How about you?",
-      "order": 4,
-      "created_at": "2025-08-11T10:34:16.926Z"
-    }
-  },
-  {
-    "model": "event_creation.conversationline",
-    "pk": 5,
-    "fields": {
-      "conversation": 1,
-      "speaker": "person_a",
-      "vietnamese_text": "Tôi cũng khỏe. Hẹn gặp lại bạn nhé!",
-      "japanese_translation": "私も元気です。また会いましょう！",
-      "english_translation": "I am also fine. See you again!",
-      "order": 5,
-      "created_at": "2025-08-11T10:34:16.929Z"
-    }
-  },
-  {
-    "model": "event_creation.conversationline",
-    "pk": 6,
-    "fields": {
-      "conversation": 1,
-      "speaker": "person_b",
-      "vietnamese_text": "Hẹn gặp lại! Tạm biệt!",
-      "japanese_translation": "また会いましょう！さようなら！",
-      "english_translation": "See you again! Goodbye!",
-      "order": 6,
-      "created_at": "2025-08-11T10:34:16.933Z"
+      "category": "tourism",
+      "difficulty": "beginner",
+      "vietnamese_text": "Đây là địa điểm du lịch nổi tiếng.",
+      "japanese_translation": "ここは有名な観光地です。",
+      "english_translation": "This is a famous tourist destination.",
+      "audio_file": "",
+      "created_at": "2025-08-11T10:34:16.550Z"
     }
   },
   {
     "model": "auth.permission",
+    "pk": 1,
     "fields": {
       "name": "Can add log entry",
-      "content_type": [
-        "admin",
-        "logentry"
-      ],
+      "content_type": 1,
       "codename": "add_logentry"
     }
   },
   {
     "model": "auth.permission",
+    "pk": 2,
     "fields": {
       "name": "Can change log entry",
-      "content_type": [
-        "admin",
-        "logentry"
-      ],
+      "content_type": 1,
       "codename": "change_logentry"
     }
   },
   {
     "model": "auth.permission",
+    "pk": 3,
     "fields": {
       "name": "Can delete log entry",
-      "content_type": [
-        "admin",
-        "logentry"
-      ],
+      "content_type": 1,
       "codename": "delete_logentry"
     }
   },
   {
     "model": "auth.permission",
+    "pk": 4,
     "fields": {
       "name": "Can view log entry",
-      "content_type": [
-        "admin",
-        "logentry"
-      ],
+      "content_type": 1,
       "codename": "view_logentry"
     }
   },
   {
     "model": "auth.permission",
+    "pk": 5,
     "fields": {
       "name": "Can add permission",
-      "content_type": [
-        "auth",
-        "permission"
-      ],
+      "content_type": 2,
       "codename": "add_permission"
     }
   },
   {
     "model": "auth.permission",
+    "pk": 6,
     "fields": {
       "name": "Can change permission",
-      "content_type": [
-        "auth",
-        "permission"
-      ],
+      "content_type": 2,
       "codename": "change_permission"
     }
   },
   {
     "model": "auth.permission",
+    "pk": 7,
     "fields": {
       "name": "Can delete permission",
-      "content_type": [
-        "auth",
-        "permission"
-      ],
+      "content_type": 2,
       "codename": "delete_permission"
     }
   },
   {
     "model": "auth.permission",
+    "pk": 8,
     "fields": {
       "name": "Can view permission",
-      "content_type": [
-        "auth",
-        "permission"
-      ],
+      "content_type": 2,
       "codename": "view_permission"
     }
   },
   {
     "model": "auth.permission",
+    "pk": 9,
     "fields": {
       "name": "Can add group",
-      "content_type": [
-        "auth",
-        "group"
-      ],
+      "content_type": 3,
       "codename": "add_group"
     }
   },
   {
     "model": "auth.permission",
+    "pk": 10,
     "fields": {
       "name": "Can change group",
-      "content_type": [
-        "auth",
-        "group"
-      ],
+      "content_type": 3,
       "codename": "change_group"
     }
   },
   {
     "model": "auth.permission",
-    "fields": {
-      "name": "Can delete group",
-      "content_type": [
-        "auth",
-        "group"
-      ],
-      "codename": "delete_group"
-    }
-  },
+    "pk": 11,
+      "fields": {
+        "name": "Can delete group",
+        "content_type": 3,
+        "codename": "delete_group"
+      }
+    },
   {
     "model": "auth.permission",
+    "pk": 12,
     "fields": {
       "name": "Can view group",
-      "content_type": [
-        "auth",
-        "group"
-      ],
+      "content_type": 3,
       "codename": "view_group"
     }
   },
   {
     "model": "auth.permission",
+    "pk": 13,
     "fields": {
       "name": "Can add content type",
-      "content_type": [
-        "contenttypes",
-        "contenttype"
-      ],
+      "content_type": 4,
       "codename": "add_contenttype"
     }
   },
   {
     "model": "auth.permission",
+    "pk": 14,
     "fields": {
       "name": "Can change content type",
-      "content_type": [
-        "contenttypes",
-        "contenttype"
-      ],
+      "content_type": 4,
       "codename": "change_contenttype"
     }
   },
   {
     "model": "auth.permission",
+    "pk": 15,
     "fields": {
       "name": "Can delete content type",
-      "content_type": [
-        "contenttypes",
-        "contenttype"
-      ],
+      "content_type": 4,
       "codename": "delete_contenttype"
     }
   },
   {
     "model": "auth.permission",
+    "pk": 16,
     "fields": {
       "name": "Can view content type",
-      "content_type": [
-        "contenttypes",
-        "contenttype"
-      ],
+      "content_type": 4,
       "codename": "view_contenttype"
     }
   },
   {
     "model": "auth.permission",
+    "pk": 17,
     "fields": {
       "name": "Can add session",
-      "content_type": [
-        "sessions",
-        "session"
-      ],
+      "content_type": 5,
       "codename": "add_session"
     }
   },
   {
     "model": "auth.permission",
+    "pk": 18,
     "fields": {
       "name": "Can change session",
-      "content_type": [
-        "sessions",
-        "session"
-      ],
+      "content_type": 5,
       "codename": "change_session"
     }
   },
   {
     "model": "auth.permission",
+    "pk": 19,
     "fields": {
       "name": "Can delete session",
-      "content_type": [
-        "sessions",
-        "session"
-      ],
+      "content_type": 5,
       "codename": "delete_session"
     }
   },
   {
     "model": "auth.permission",
+    "pk": 20,
     "fields": {
       "name": "Can view session",
-      "content_type": [
-        "sessions",
-        "session"
-      ],
+      "content_type": 5,
       "codename": "view_session"
     }
   },
   {
     "model": "auth.permission",
+    "pk": 21,
     "fields": {
-      "name": "Can add User",
-      "content_type": [
-        "user_profile",
-        "customuser"
-      ],
+      "name": "Can add custom user",
+      "content_type": 6,
       "codename": "add_customuser"
     }
   },
   {
     "model": "auth.permission",
+    "pk": 22,
     "fields": {
-      "name": "Can change User",
-      "content_type": [
-        "user_profile",
-        "customuser"
-      ],
+      "name": "Can change custom user",
+      "content_type": 6,
       "codename": "change_customuser"
     }
   },
   {
     "model": "auth.permission",
+    "pk": 23,
     "fields": {
-      "name": "Can delete User",
-      "content_type": [
-        "user_profile",
-        "customuser"
-      ],
+      "name": "Can delete custom user",
+      "content_type": 6,
       "codename": "delete_customuser"
     }
   },
   {
     "model": "auth.permission",
+    "pk": 24,
     "fields": {
-      "name": "Can view User",
-      "content_type": [
-        "user_profile",
-        "customuser"
-      ],
+      "name": "Can view custom user",
+      "content_type": 6,
       "codename": "view_customuser"
     }
   },
   {
     "model": "auth.permission",
+    "pk": 25,
     "fields": {
-      "name": "Can add chat room",
-      "content_type": [
-        "chat_system",
-        "chatroom"
-      ],
+      "name": "Can add chatroom",
+      "content_type": 7,
       "codename": "add_chatroom"
     }
   },
   {
     "model": "auth.permission",
+    "pk": 26,
     "fields": {
-      "name": "Can change chat room",
-      "content_type": [
-        "chat_system",
-        "chatroom"
-      ],
+      "name": "Can change chatroom",
+      "content_type": 7,
       "codename": "change_chatroom"
     }
   },
   {
     "model": "auth.permission",
+    "pk": 27,
     "fields": {
-      "name": "Can delete chat room",
-      "content_type": [
-        "chat_system",
-        "chatroom"
-      ],
+      "name": "Can delete chatroom",
+      "content_type": 7,
       "codename": "delete_chatroom"
     }
   },
   {
     "model": "auth.permission",
+    "pk": 28,
     "fields": {
-      "name": "Can view chat room",
-      "content_type": [
-        "chat_system",
-        "chatroom"
-      ],
+      "name": "Can view chatroom",
+      "content_type": 7,
       "codename": "view_chatroom"
     }
   },
   {
     "model": "auth.permission",
+    "pk": 29,
     "fields": {
       "name": "Can add message",
-      "content_type": [
-        "chat_system",
-        "message"
-      ],
+      "content_type": 8,
       "codename": "add_message"
     }
   },
   {
     "model": "auth.permission",
+    "pk": 30,
     "fields": {
       "name": "Can change message",
-      "content_type": [
-        "chat_system",
-        "message"
-      ],
+      "content_type": 8,
       "codename": "change_message"
     }
   },
   {
     "model": "auth.permission",
+    "pk": 31,
     "fields": {
       "name": "Can delete message",
-      "content_type": [
-        "chat_system",
-        "message"
-      ],
+      "content_type": 8,
       "codename": "delete_message"
     }
   },
   {
     "model": "auth.permission",
+    "pk": 32,
     "fields": {
       "name": "Can view message",
-      "content_type": [
-        "chat_system",
-        "message"
-      ],
+      "content_type": 8,
       "codename": "view_message"
     }
   },
   {
     "model": "auth.permission",
+    "pk": 33,
     "fields": {
       "name": "Can add cafe location",
-      "content_type": [
-        "event_creation",
-        "cafelocation"
-      ],
+      "content_type": 9,
       "codename": "add_cafelocation"
     }
   },
   {
     "model": "auth.permission",
+    "pk": 34,
     "fields": {
       "name": "Can change cafe location",
-      "content_type": [
-        "event_creation",
-        "cafelocation"
-      ],
+      "content_type": 9,
       "codename": "change_cafelocation"
     }
   },
   {
     "model": "auth.permission",
+    "pk": 35,
     "fields": {
       "name": "Can delete cafe location",
-      "content_type": [
-        "event_creation",
-        "cafelocation"
-      ],
+      "content_type": 9,
       "codename": "delete_cafelocation"
     }
   },
   {
     "model": "auth.permission",
+    "pk": 36,
     "fields": {
       "name": "Can view cafe location",
-      "content_type": [
-        "event_creation",
-        "cafelocation"
-      ],
+      "content_type": 9,
       "codename": "view_cafelocation"
     }
   },
   {
     "model": "auth.permission",
+    "pk": 37,
     "fields": {
       "name": "Can add language exchange post",
-      "content_type": [
-        "event_creation",
-        "languageexchangepost"
-      ],
+      "content_type": 10,
       "codename": "add_languageexchangepost"
     }
   },
   {
     "model": "auth.permission",
+    "pk": 38,
     "fields": {
       "name": "Can change language exchange post",
-      "content_type": [
-        "event_creation",
-        "languageexchangepost"
-      ],
+      "content_type": 10,
       "codename": "change_languageexchangepost"
     }
   },
   {
     "model": "auth.permission",
+    "pk": 39,
     "fields": {
       "name": "Can delete language exchange post",
-      "content_type": [
-        "event_creation",
-        "languageexchangepost"
-      ],
+      "content_type": 10,
       "codename": "delete_languageexchangepost"
     }
   },
   {
     "model": "auth.permission",
+    "pk": 40,
     "fields": {
       "name": "Can view language exchange post",
-      "content_type": [
-        "event_creation",
-        "languageexchangepost"
-      ],
+      "content_type": 10,
       "codename": "view_languageexchangepost"
     }
   },
   {
     "model": "auth.permission",
+    "pk": 41,
     "fields": {
       "name": "Can add lesson",
-      "content_type": [
-        "event_creation",
-        "lesson"
-      ],
+      "content_type": 11,
       "codename": "add_lesson"
     }
   },
   {
     "model": "auth.permission",
+    "pk": 42,
     "fields": {
       "name": "Can change lesson",
-      "content_type": [
-        "event_creation",
-        "lesson"
-      ],
+      "content_type": 11,
       "codename": "change_lesson"
     }
   },
   {
     "model": "auth.permission",
+    "pk": 43,
     "fields": {
       "name": "Can delete lesson",
-      "content_type": [
-        "event_creation",
-        "lesson"
-      ],
+      "content_type": 11,
       "codename": "delete_lesson"
     }
   },
   {
     "model": "auth.permission",
+    "pk": 44,
     "fields": {
       "name": "Can view lesson",
-      "content_type": [
-        "event_creation",
-        "lesson"
-      ],
+      "content_type": 11,
       "codename": "view_lesson"
     }
   },
   {
     "model": "auth.permission",
+    "pk": 45,
     "fields": {
       "name": "Can add lesson phrase",
-      "content_type": [
-        "event_creation",
-        "lessonphrase"
-      ],
+      "content_type": 12,
       "codename": "add_lessonphrase"
     }
   },
   {
     "model": "auth.permission",
+    "pk": 46,
     "fields": {
       "name": "Can change lesson phrase",
-      "content_type": [
-        "event_creation",
-        "lessonphrase"
-      ],
+      "content_type": 12,
       "codename": "change_lessonphrase"
     }
   },
   {
     "model": "auth.permission",
+    "pk": 47,
     "fields": {
       "name": "Can delete lesson phrase",
-      "content_type": [
-        "event_creation",
-        "lessonphrase"
-      ],
+      "content_type": 12,
       "codename": "delete_lessonphrase"
     }
   },
   {
     "model": "auth.permission",
+    "pk": 48,
     "fields": {
       "name": "Can view lesson phrase",
-      "content_type": [
-        "event_creation",
-        "lessonphrase"
-      ],
+      "content_type": 12,
       "codename": "view_lessonphrase"
     }
   },
   {
     "model": "auth.permission",
+    "pk": 49,
     "fields": {
       "name": "Can add partner request",
-      "content_type": [
-        "event_creation",
-        "partnerrequest"
-      ],
+      "content_type": 13,
       "codename": "add_partnerrequest"
     }
   },
   {
     "model": "auth.permission",
+    "pk": 50,
     "fields": {
       "name": "Can change partner request",
-      "content_type": [
-        "event_creation",
-        "partnerrequest"
-      ],
+      "content_type": 13,
       "codename": "change_partnerrequest"
     }
   },
   {
     "model": "auth.permission",
+    "pk": 51,
     "fields": {
       "name": "Can delete partner request",
-      "content_type": [
-        "event_creation",
-        "partnerrequest"
-      ],
+      "content_type": 13,
       "codename": "delete_partnerrequest"
     }
   },
   {
     "model": "auth.permission",
+    "pk": 52,
     "fields": {
       "name": "Can view partner request",
-      "content_type": [
-        "event_creation",
-        "partnerrequest"
-      ],
+      "content_type": 13,
       "codename": "view_partnerrequest"
     }
   },
   {
     "model": "auth.permission",
+    "pk": 53,
     "fields": {
       "name": "Can add vietnamese phrase",
-      "content_type": [
-        "event_creation",
-        "vietnamesephrase"
-      ],
+      "content_type": 14,
       "codename": "add_vietnamesephrase"
     }
   },
   {
     "model": "auth.permission",
+    "pk": 54,
     "fields": {
       "name": "Can change vietnamese phrase",
-      "content_type": [
-        "event_creation",
-        "vietnamesephrase"
-      ],
+      "content_type": 14,
       "codename": "change_vietnamesephrase"
     }
   },
   {
     "model": "auth.permission",
+    "pk": 55,
     "fields": {
       "name": "Can delete vietnamese phrase",
-      "content_type": [
-        "event_creation",
-        "vietnamesephrase"
-      ],
+      "content_type": 14,
       "codename": "delete_vietnamesephrase"
     }
   },
   {
     "model": "auth.permission",
+    "pk": 56,
     "fields": {
       "name": "Can view vietnamese phrase",
-      "content_type": [
-        "event_creation",
-        "vietnamesephrase"
-      ],
+      "content_type": 14,
       "codename": "view_vietnamesephrase"
     }
   },
   {
     "model": "auth.permission",
+    "pk": 57,
     "fields": {
-      "name": "Can add quiz question",
-      "content_type": [
-        "event_creation",
-        "quizquestion"
-      ],
-      "codename": "add_quizquestion"
+      "name": "Can add cultural location",
+      "content_type": 15,
+      "codename": "add_culturallocation"
     }
   },
   {
     "model": "auth.permission",
+    "pk": 58,
     "fields": {
-      "name": "Can change quiz question",
-      "content_type": [
-        "event_creation",
-        "quizquestion"
-      ],
-      "codename": "change_quizquestion"
+      "name": "Can change cultural location",
+      "content_type": 15,
+      "codename": "change_culturallocation"
     }
   },
   {
     "model": "auth.permission",
+    "pk": 59,
     "fields": {
-      "name": "Can delete quiz question",
-      "content_type": [
-        "event_creation",
-        "quizquestion"
-      ],
-      "codename": "delete_quizquestion"
+      "name": "Can delete cultural location",
+      "content_type": 15,
+      "codename": "delete_culturallocation"
     }
   },
   {
     "model": "auth.permission",
+    "pk": 60,
     "fields": {
-      "name": "Can view quiz question",
-      "content_type": [
-        "event_creation",
-        "quizquestion"
-      ],
-      "codename": "view_quizquestion"
+      "name": "Can view cultural location",
+      "content_type": 15,
+      "codename": "view_culturallocation"
     }
   },
   {
     "model": "auth.permission",
+    "pk": 61,
+    "fields": {
+      "name": "Can add cultural lesson",
+      "content_type": 16,
+      "codename": "add_culturallesson"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 62,
+    "fields": {
+      "name": "Can change cultural lesson",
+      "content_type": 16,
+      "codename": "change_culturallesson"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 63,
+    "fields": {
+      "name": "Can delete cultural lesson",
+      "content_type": 16,
+      "codename": "delete_culturallesson"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 64,
+    "fields": {
+      "name": "Can view cultural lesson",
+      "content_type": 16,
+      "codename": "view_culturallesson"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 65,
+    "fields": {
+      "name": "Can add cultural challenge",
+      "content_type": 17,
+      "codename": "add_culturalchallenge"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 66,
+    "fields": {
+      "name": "Can change cultural challenge",
+      "content_type": 17,
+      "codename": "change_culturalchallenge"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 67,
+    "fields": {
+      "name": "Can delete cultural challenge",
+      "content_type": 17,
+      "codename": "delete_culturalchallenge"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 68,
+    "fields": {
+      "name": "Can view cultural challenge",
+      "content_type": 17,
+      "codename": "view_culturalchallenge"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 69,
     "fields": {
       "name": "Can add conversation example",
-      "content_type": [
-        "event_creation",
-        "conversationexample"
-      ],
+      "content_type": 18,
       "codename": "add_conversationexample"
     }
   },
   {
     "model": "auth.permission",
+    "pk": 70,
     "fields": {
       "name": "Can change conversation example",
-      "content_type": [
-        "event_creation",
-        "conversationexample"
-      ],
+      "content_type": 18,
       "codename": "change_conversationexample"
     }
   },
   {
     "model": "auth.permission",
+    "pk": 71,
     "fields": {
       "name": "Can delete conversation example",
-      "content_type": [
-        "event_creation",
-        "conversationexample"
-      ],
+      "content_type": 18,
       "codename": "delete_conversationexample"
     }
   },
   {
     "model": "auth.permission",
+    "pk": 72,
     "fields": {
       "name": "Can view conversation example",
-      "content_type": [
-        "event_creation",
-        "conversationexample"
-      ],
+      "content_type": 18,
       "codename": "view_conversationexample"
     }
   },
   {
     "model": "auth.permission",
+    "pk": 73,
     "fields": {
-      "name": "Can add theory section",
-      "content_type": [
-        "event_creation",
-        "theorysection"
-      ],
-      "codename": "add_theorysection"
+      "name": "Can add evaluation",
+      "content_type": 19,
+      "codename": "add_evaluation"
     }
   },
   {
     "model": "auth.permission",
+    "pk": 74,
     "fields": {
-      "name": "Can change theory section",
-      "content_type": [
-        "event_creation",
-        "theorysection"
-      ],
-      "codename": "change_theorysection"
+      "name": "Can change evaluation",
+      "content_type": 19,
+      "codename": "change_evaluation"
     }
   },
   {
     "model": "auth.permission",
+    "pk": 75,
     "fields": {
-      "name": "Can delete theory section",
-      "content_type": [
-        "event_creation",
-        "theorysection"
-      ],
-      "codename": "delete_theorysection"
+      "name": "Can delete evaluation",
+      "content_type": 19,
+      "codename": "delete_evaluation"
     }
   },
   {
     "model": "auth.permission",
+    "pk": 76,
     "fields": {
-      "name": "Can view theory section",
-      "content_type": [
-        "event_creation",
-        "theorysection"
-      ],
-      "codename": "view_theorysection"
+      "name": "Can view evaluation",
+      "content_type": 19,
+      "codename": "view_evaluation"
     }
   },
   {
     "model": "auth.permission",
+    "pk": 77,
     "fields": {
-      "name": "Can add theory phrase",
-      "content_type": [
-        "event_creation",
-        "theoryphrase"
-      ],
-      "codename": "add_theoryphrase"
+      "name": "Can add evaluation session",
+      "content_type": 20,
+      "codename": "add_evaluationsession"
     }
   },
   {
     "model": "auth.permission",
+    "pk": 78,
     "fields": {
-      "name": "Can change theory phrase",
-      "content_type": [
-        "event_creation",
-        "theoryphrase"
-      ],
-      "codename": "change_theoryphrase"
+      "name": "Can change evaluation session",
+      "content_type": 20,
+      "codename": "change_evaluationsession"
     }
   },
   {
     "model": "auth.permission",
+    "pk": 79,
     "fields": {
-      "name": "Can delete theory phrase",
-      "content_type": [
-        "event_creation",
-        "theoryphrase"
-      ],
-      "codename": "delete_theoryphrase"
+      "name": "Can delete evaluation session",
+      "content_type": 20,
+      "codename": "delete_evaluationsession"
     }
   },
   {
     "model": "auth.permission",
+    "pk": 80,
     "fields": {
-      "name": "Can view theory phrase",
-      "content_type": [
-        "event_creation",
-        "theoryphrase"
-      ],
-      "codename": "view_theoryphrase"
-    }
-  },
-  {
-    "model": "auth.permission",
-    "fields": {
-      "name": "Can add conversation line",
-      "content_type": [
-        "event_creation",
-        "conversationline"
-      ],
-      "codename": "add_conversationline"
-    }
-  },
-  {
-    "model": "auth.permission",
-    "fields": {
-      "name": "Can change conversation line",
-      "content_type": [
-        "event_creation",
-        "conversationline"
-      ],
-      "codename": "change_conversationline"
-    }
-  },
-  {
-    "model": "auth.permission",
-    "fields": {
-      "name": "Can delete conversation line",
-      "content_type": [
-        "event_creation",
-        "conversationline"
-      ],
-      "codename": "delete_conversationline"
-    }
-  },
-  {
-    "model": "auth.permission",
-    "fields": {
-      "name": "Can view conversation line",
-      "content_type": [
-        "event_creation",
-        "conversationline"
-      ],
-      "codename": "view_conversationline"
-    }
-  },
-  {
-    "model": "user_profile.customuser",
-    "fields": {
-      "password": "pbkdf2_sha256$600000$jqLW95nfF3Qpgi6DvZLvHR$hPfi54sKIPgufENBq5hJHuuqh7GO7/v69PEDViN3iYM=",
-      "last_login": "2025-08-11T10:32:31.655Z",
-      "is_superuser": false,
-      "username": "3",
-      "first_name": "",
-      "last_name": "",
-      "email": "thanh113isme@gmail.com",
-      "is_staff": false,
-      "is_active": true,
-      "date_joined": "2025-08-11T10:32:31.353Z",
-      "full_name": "Minh",
-      "date_of_birth": "2001-06-04",
-      "gender": "male",
-      "nationality": "vietnamese",
-      "city": "hanoi",
-      "profile_picture": "",
-      "bio": "",
-      "interests": "",
-      "preferred_language": "en",
-      "created_at": "2025-08-11T10:32:31.645Z",
-      "updated_at": "2025-08-11T10:32:31.645Z",
-      "groups": [],
-      "user_permissions": []
-    }
-  },
-  {
-    "model": "user_profile.customuser",
-    "fields": {
-      "password": "pbkdf2_sha256$600000$RzdETUzKNyfKRcZiA01mEl$4GtbYtaGpsrvs+cuMexvPDGb6JVJw7bS0u3rQzqmTFQ=",
-      "last_login": "2025-08-11T10:54:49.998Z",
-      "is_superuser": false,
-      "username": "4",
-      "first_name": "",
-      "last_name": "",
-      "email": "1@gmail.com",
-      "is_staff": false,
-      "is_active": true,
-      "date_joined": "2025-08-11T10:32:46.209Z",
-      "full_name": "thanhhung",
-      "date_of_birth": "2004-06-08",
-      "gender": "male",
-      "nationality": "japanese",
-      "city": "hanoi",
-      "profile_picture": "",
-      "bio": "",
-      "interests": "",
-      "preferred_language": "ja",
-      "created_at": "2025-08-11T10:32:46.453Z",
-      "updated_at": "2025-08-11T10:54:50.012Z",
-      "groups": [],
-      "user_permissions": []
-    }
-  },
-  {
-    "model": "user_profile.customuser",
-    "fields": {
-      "password": "pbkdf2_sha256$600000$8X3cvnSbZa0H8kUiZSYqfE$FK7sIylsLhTNzJQ4GVS+nqD4d6g3NZnFxP4r4fUAz9U=",
-      "last_login": "2025-08-11T14:50:22.255Z",
-      "is_superuser": false,
-      "username": "11",
-      "first_name": "",
-      "last_name": "",
-      "email": "thanh113isme@gmail.com",
-      "is_staff": false,
-      "is_active": true,
-      "date_joined": "2025-08-11T14:35:04.615Z",
-      "full_name": "Minh",
-      "date_of_birth": "2004-06-08",
-      "gender": "male",
-      "nationality": "japanese",
-      "city": "hanoi",
-      "profile_picture": "",
-      "bio": "",
-      "interests": "",
-      "preferred_language": "ja",
-      "created_at": "2025-08-11T14:35:05.557Z",
-      "updated_at": "2025-08-11T15:22:04.439Z",
-      "groups": [],
-      "user_permissions": []
-    }
-  },
-  {
-    "model": "chat_system.message",
-    "pk": 1,
-    "fields": {
-      "chat_room": 1,
-      "sender": [
-        "3"
-      ],
-      "content": "Xin chào! Tôi đã chấp nhận bài đăng của bạn. Hãy cùng trò chuyện và học tiếng Việt nhé!",
-      "timestamp": "2025-08-11T10:35:07.447Z",
-      "is_read": true
-    }
-  },
-  {
-    "model": "chat_system.message",
-    "pk": 2,
-    "fields": {
-      "chat_room": 1,
-      "sender": [
-        "3"
-      ],
-      "content": "cut",
-      "timestamp": "2025-08-11T10:35:12.691Z",
-      "is_read": true
-    }
-  },
-  {
-    "model": "event_creation.languageexchangepost",
-    "pk": 1,
-    "fields": {
-      "japanese_user": [
-        "4"
-      ],
-      "vietnamese_user": [
-        "3"
-      ],
-      "phrase": 1,
-      "cafe_location": 2,
-      "meeting_date": "2025-08-13T17:34:00Z",
-      "status": "matched",
-      "notes": "jkjn",
-      "created_at": "2025-08-11T10:34:41.495Z",
-      "updated_at": "2025-08-11T10:35:07.438Z"
+      "name": "Can view evaluation session",
+      "content_type": 20,
+      "codename": "view_evaluationsession"
     }
   }
-  ]
+]

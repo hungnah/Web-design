@@ -1,7 +1,7 @@
 {% extends 'base_timer.html' %}
 {% load static %}
 
-{% block title %}Lesson1: Greetings - 挨拶{% endblock %}
+{% block title %}Lesson3: Shopping - 買い物{% endblock %}
 
 {% block body_class %}enable-timer{% endblock %}
 
@@ -86,7 +86,7 @@
 {% block content %}
 <div class="chat-container">
   <!-- System message -->
-  <div class="system-message">Lesson1: Greetings<br>挨拶</div>
+  <div class="system-message">Lesson3: Shopping<br>買い物</div>
 
   <!-- Teacher message -->
   <div class="message-row">
@@ -96,8 +96,8 @@
     <div class="message-content">
       <div class="name">先生/giáo viên</div>
       <div class="bubble">
-        Xin chào! Hôm nay chúng ta sẽ học cách chào hỏi cơ bản.<br>
-        (こんにちは！今日は基本的な挨拶を学びましょう。)
+        Hôm nay chúng ta sẽ học cách mua sắm ở Việt Nam.<br>
+        (今日はベトナムでの買い物の仕方を学びましょう。)
       </div>
     </div>
   </div>
@@ -110,10 +110,8 @@
     <div class="message-content">
       <div class="name">生徒/học sinh</div>
       <div class="bubble">
-        Xin chào!<br>
-        (こんにちは！)<br>
-        What does "Xin chào" mean?<br>
-        (「Xin chào」はどういう意味ですか？)
+        I want to buy this souvenir. How do I ask the price?<br>
+        (このお土産を買いたいです。値段をどう聞けばいいですか？)
       </div>
     </div>
   </div>
@@ -126,8 +124,10 @@
     <div class="message-content">
       <div class="name">先生/giáo viên</div>
       <div class="bubble">
-        "Xin chào" means "Hello" in Vietnamese.<br>
-        (「Xin chào」はベトナム語で「こんにちは」という意味です。)
+        Bạn có thể hỏi: "Cái này bao nhiêu tiền?"<br>
+        (「カイ ナイ バオ ニウ ティエン？」と聞けます。)<br>
+        This means "How much is this?" in Vietnamese.<br>
+        (これはベトナム語で「これはいくらですか？」という意味です。)
       </div>
     </div>
   </div>
@@ -140,40 +140,8 @@
     <div class="message-content">
       <div class="name">生徒/học sinh</div>
       <div class="bubble">
-        Xin chào!<br>
-        (こんにちは！)<br>
-        How do you pronounce it?<br>
-        (どう発音しますか？)
-      </div>
-    </div>
-  </div>
-
-  <!-- Teacher message -->
-  <div class="message-row">
-    <div class="icon">
-      <img src="{% static 'images/session/teacher.png' %}" alt="Teacher icon">
-    </div>
-    <div class="message-content">
-      <div class="name">先生/giáo viên</div>
-      <div class="bubble">
-        Xin chào! (Sin chow!)<br>
-        (Xin chào! (シン チャオ！))<br>
-        Try saying it with me!<br>
-        (一緒に言ってみましょう！)
-      </div>
-    </div>
-  </div>
-
-  <!-- Student message -->
-  <div class="message-row right">
-    <div class="icon">
-      <img src="{% static 'images/session/student.png' %}" alt="Student icon">
-    </div>
-    <div class="message-content">
-      <div class="name">生徒/học sinh</div>
-      <div class="bubble">
-        Xin chào!<br>
-        (シン チャオ！)<br>
+        Cái này bao nhiêu tiền?<br>
+        (カイ ナイ バオ ニウ ティエン？)<br>
         Did I say it correctly?<br>
         (正しく言えましたか？)
       </div>
@@ -190,8 +158,40 @@
       <div class="bubble">
         Rất tốt! Bạn đã nói rất đúng!<br>
         (とても良いです！正しく言えました！)<br>
-        Now you can greet people in Vietnamese!<br>
-        (これでベトナム語で挨拶できますね！)
+        Now you can ask prices when shopping!<br>
+        (これで買い物の時に値段を聞けますね！)
+      </div>
+    </div>
+  </div>
+
+  <!-- Student message -->
+  <div class="message-row right">
+    <div class="icon">
+      <img src="{% static 'images/session/student.png' %}" alt="Student icon">
+    </div>
+    <div class="message-content">
+      <div class="name">生徒/học sinh</div>
+      <div class="bubble">
+        What if I want to buy multiple items?<br>
+        (複数の商品を買いたい場合はどうしますか？)<br>
+        Can I say "Cái này và cái kia"?<br>
+        (「カイ ナイ ヴァ カイ キア」と言えますか？)
+      </div>
+    </div>
+  </div>
+
+  <!-- Teacher message -->
+  <div class="message-row">
+    <div class="icon">
+      <img src="{% static 'images/session/teacher.png' %}" alt="Teacher icon">
+    </div>
+    <div class="message-content">
+      <div class="name">先生/giáo viên</div>
+      <div class="bubble">
+        Tuyệt vời! "Cái này và cái kia" means "This and that".<br>
+        (素晴らしい！「カイ ナイ ヴァ カイ キア」は「これとあれ」という意味です。)<br>
+        You're learning Vietnamese shopping phrases quickly!<br>
+        (ベトナム語の買い物フレーズを素早く覚えていますね！)
       </div>
     </div>
   </div>

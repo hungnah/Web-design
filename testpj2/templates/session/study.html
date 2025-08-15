@@ -79,6 +79,11 @@
 {% endblock %}
 
 {% block content %}
+{% if lesson_title %}
+<div class="lesson-header" style="text-align: center; margin-bottom: 20px; padding: 15px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 8px; color: white;">
+  <h2 style="margin: 0; font-size: 1.8rem;">{{ lesson_title|linebreaksbr }}</h2>
+</div>
+{% endif %}
 {% if poster_gender %}
 <div class="poster-info" style="text-align: center; margin-bottom: 20px; padding: 10px; background-color: #f8f9fa; border-radius: 8px;">
   <small style="color: #6c757d;">

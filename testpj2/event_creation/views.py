@@ -475,3 +475,56 @@ def cultural_challenges(request):
     }
     
     return render(request, 'event_creation/cultural_challenges.html', context)
+
+@login_required
+def start_working_session(request, post_id):
+    """Start a working session for a matched language exchange post"""
+    post = get_object_or_404(LanguageExchangePost, id=post_id)
+    
+    # Check if user is part of this post
+    if request.user not in [post.japanese_user, post.vietnamese_user]:
+        messages.error(request, 'Bạn không có quyền truy cập phiên làm việc này.')
+        return redirect('my_accepted_posts')
+    
+    # Check if post is matched
+    if post.status != 'matched':
+        messages.error(request, 'Chỉ có thể bắt đầu phiên làm việc với bài đăng đã được kết nối.')
+        return redirect('my_accepted_posts')
+    
+    # Get the accepted phrase for this session
+    accepted_phrase = post.accepted_phrase
+    
+    if not accepted_phrase:
+        messages.error(request, 'Chưa có cụm từ nào được chọn cho phiên làm việc này.')
+        return redirect('my_accepted_posts')
+    
+    # Map phrase category to lesson template number (1-10)
+    # This maps the phrase category to a specific lesson template
+    category_to_lesson = {
+        'greetings': 1,
+        'food': 2, 
+        'shopping': 3,
+        'transport': 4,
+        'emergency': 5,
+        'daily': 6,
+        'business': 7,
+        'travel': 8,
+        'culture': 9,
+        'tourism': 10,
+    }
+    
+    # Default to lesson 1 if category not found
+    lesson_number = category_to_lesson.get(accepted_phrase.category, 1)
+    
+    # Determine partner_id (the other user in the post)
+    if request.user == post.japanese_user:
+        partner_id = post.vietnamese_user.id if post.vietnamese_user else None
+    else:
+        partner_id = post.japanese_user.id if post.japanese_user else None
+    
+    if not partner_id:
+        messages.error(request, 'Không thể xác định đối tác cho phiên làm việc này.')
+        return redirect('my_accepted_posts')
+    
+    # Redirect to study session with lesson template number
+    return redirect('study', partner_id=partner_id, post_id=post_id, phrase_id=lesson_number)

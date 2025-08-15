@@ -5,6 +5,193 @@
     {% if user.nationality == 'japanese' %}ベトナム語フレーズ{% else %}Bài học tiếng Việt{% endif %} - Vietnam-Japan Connect
 {% endblock %}
 
+{% block extra_css %}
+<style>
+    /* Custom Modal Styles */
+    .modal-content {
+        border: none;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+    
+    .modal-header {
+        background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+        color: white;
+        border-radius: 15px 15px 0 0;
+        border-bottom: none;
+    }
+    
+    .modal-header .btn-close {
+        filter: invert(1);
+        opacity: 0.8;
+    }
+    
+    .modal-header .btn-close:hover {
+        opacity: 1;
+    }
+    
+    .modal-title {
+        font-weight: 600;
+    }
+    
+    .modal-body {
+        padding: 2rem;
+    }
+    
+    .modal-footer {
+        border-top: none;
+        padding: 1.5rem 2rem;
+        background-color: #f8f9fa;
+        border-radius: 0 0 15px 15px;
+    }
+    
+    /* Phrase Card Styles */
+    .phrase-card {
+        transition: all 0.3s ease;
+        border: none;
+        border-radius: 15px;
+        overflow: hidden;
+    }
+    
+    .phrase-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(255, 107, 53, 0.15);
+    }
+    
+    .phrase-card .card-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 1rem;
+    }
+    
+    .phrase-card .card-body {
+        padding: 1.5rem;
+    }
+    
+    .phrase-card .card-footer {
+        background: none;
+        border: none;
+        padding: 1rem 1.5rem 1.5rem;
+    }
+    
+    /* Modal Content Styles */
+    .modal-phrase-text {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #ff6b35;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    .translation-card {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        border-radius: 15px;
+        border: none;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+    
+    .translation-card .card-body {
+        padding: 1.5rem;
+    }
+    
+    .learning-tips-card {
+        background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+        border: 2px solid #ffc107;
+        border-radius: 15px;
+    }
+    
+    .learning-tips-card .card-header {
+        background: rgba(255, 193, 7, 0.2);
+        border-bottom: 1px solid rgba(255, 193, 7, 0.3);
+        border-radius: 15px 15px 0 0;
+    }
+    
+    .tip-item {
+        transition: all 0.3s ease;
+        border-radius: 10px;
+        padding: 1rem;
+    }
+    
+    .tip-item:hover {
+        background-color: rgba(255, 255, 255, 0.5);
+        transform: scale(1.05);
+    }
+    
+    .tip-icon {
+        color: #ff6b35;
+        margin-bottom: 0.5rem;
+    }
+    
+    /* Button Styles */
+    .btn-primary {
+        background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+        border: none;
+        border-radius: 25px;
+        padding: 0.75rem 2rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-primary:hover {
+        background: linear-gradient(135deg, #e55a2b 0%, #e0851a 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(255, 107, 53, 0.4);
+    }
+    
+    .btn-secondary {
+        background: #6c757d;
+        border: none;
+        border-radius: 25px;
+        padding: 0.75rem 2rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-secondary:hover {
+        background: #5a6268;
+        transform: translateY(-2px);
+    }
+    
+    /* Animation Classes */
+    .fade-in {
+        animation: fadeIn 0.5s ease-in;
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .scale-in {
+        animation: scaleIn 0.3s ease-out;
+    }
+    
+    @keyframes scaleIn {
+        from { transform: scale(0.9); opacity: 0; }
+        to { transform: scale(1); opacity: 1; }
+    }
+    
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .modal-body {
+            padding: 1rem;
+        }
+        
+        .modal-footer {
+            padding: 1rem;
+        }
+        
+        .modal-phrase-text {
+            font-size: 1.5rem;
+        }
+        
+        .tip-item {
+            margin-bottom: 1rem;
+        }
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 <div class="container my-5">
     <!-- Header -->
@@ -145,7 +332,7 @@
     <div class="row">
         {% for phrase in phrases %}
             <div class="col-md-6 col-lg-4 mb-4">
-                <div class="card h-100">
+                <div class="card h-100 phrase-card">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <span class="badge bg-primary">{{ phrase.get_category_display }}</span>
                         <span class="badge bg-{% if phrase.difficulty == 'beginner' %}success{% elif phrase.difficulty == 'intermediate' %}warning{% else %}danger{% endif %}">
@@ -183,8 +370,13 @@
                         {% endif %}
                     </div>
                     <div class="card-footer text-center">
-                        <a href="{% url 'study_phrase' phrase.id %}" class="btn btn-primary">
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#phraseModal{{ phrase.id }}">
                             {% if user.nationality == 'japanese' %}テキストを見る{% else %}Xem văn bản{% endif %}
+                        </button>
+                        <!-- Start Learning Button -->
+                        <a href="{% url 'study_phrase' phrase.id %}" class="btn btn-success mt-2 w-100">
+                            <i class="fas fa-graduation-cap"></i>
+                            {% if user.nationality == 'japanese' %}学習を開始{% else %}Bắt đầu học{% endif %}
                         </a>
                     </div>
                     {% if post_id %}
@@ -266,4 +458,238 @@
         </div>
     </div>
 </div>
+
+<!-- Phrase Detail Modals -->
+{% for phrase in phrases %}
+<div class="modal fade" id="phraseModal{{ phrase.id }}" tabindex="-1" aria-labelledby="phraseModalLabel{{ phrase.id }}" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="phraseModalLabel{{ phrase.id }}">
+                    <i class="fas fa-language text-primary"></i>
+                    {% if user.nationality == 'japanese' %}ベトナム語フレーズ詳細{% else %}Chi tiết câu nói tiếng Việt{% endif %}
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card border-0 translation-card">
+                            <div class="card-body text-center">
+                                <h4 class="modal-phrase-text mb-3">{{ phrase.vietnamese_text }}</h4>
+                                <div class="mb-3">
+                                    <span class="badge bg-primary fs-6">{{ phrase.get_category_display }}</span>
+                                    <span class="badge bg-{% if phrase.difficulty == 'beginner' %}success{% elif phrase.difficulty == 'intermediate' %}warning{% else %}danger{% endif %} fs-6 ms-2">
+                                        {{ phrase.get_difficulty_display }}
+                                    </span>
+                                </div>
+                                {% if phrase.audio_file %}
+                                    <div class="mb-3">
+                                        <audio controls class="w-100">
+                                            <source src="{{ phrase.audio_file.url }}" type="audio/mpeg">
+                                            {% if user.nationality == 'japanese' %}
+                                                お使いのブラウザは音声再生をサポートしていません。
+                                            {% else %}
+                                                Trình duyệt của bạn không hỗ trợ phát âm thanh.
+                                            {% endif %}
+                                        </audio>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card border-0 translation-card">
+                            <div class="card-body">
+                                <h6 class="text-success mb-2">
+                                    <i class="fas fa-flag text-success"></i>
+                                    {% if user.nationality == 'japanese' %}日本語訳{% else %}Bản dịch tiếng Nhật{% endif %}
+                                </h6>
+                                <p class="mb-3 fs-5">{{ phrase.japanese_translation }}</p>
+                                
+                                <h6 class="text-info mb-2">
+                                    <i class="fas fa-flag text-info"></i>
+                                    {% if user.nationality == 'japanese' %}英語訳{% else %}Bản dịch tiếng Anh{% endif %}
+                                </h6>
+                                <p class="mb-3 fs-5">{{ phrase.english_translation }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Learning Tips -->
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <div class="card learning-tips-card">
+                            <div class="card-header">
+                                <h6 class="mb-0">
+                                    <i class="fas fa-lightbulb text-warning"></i>
+                                    {% if user.nationality == 'japanese' %}学習のヒント{% else %}Mẹo học tập{% endif %}
+                                </h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-4 text-center mb-3">
+                                        <div class="p-3 tip-item">
+                                            <i class="fas fa-volume-up fa-2x tip-icon"></i>
+                                            <h6>{% if user.nationality == 'japanese' %}発音練習{% else %}Luyện phát âm{% endif %}</h6>
+                                            <small class="text-muted">
+                                                {% if user.nationality == 'japanese' %}
+                                                    音声を聞いて繰り返し練習しましょう
+                                                {% else %}
+                                                    Nghe âm thanh và luyện tập lặp lại
+                                                {% endif %}
+                                            </small>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 text-center mb-3">
+                                        <div class="p-3 tip-item">
+                                            <i class="fas fa-comments fa-2x tip-icon"></i>
+                                            <h6>{% if user.nationality == 'japanese' %}会話練習{% else %}Luyện hội thoại{% endif %}</h6>
+                                            <small class="text-muted">
+                                                {% if user.nationality == 'japanese' %}
+                                                    実際の会話で使ってみましょう
+                                                {% else %}
+                                                    Hãy thử sử dụng trong hội thoại thực tế
+                                                {% endif %}
+                                            </small>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 text-center mb-3">
+                                        <div class="p-3 tip-item">
+                                            <i class="fas fa-book fa-2x tip-icon"></i>
+                                            <h6>{% if user.nationality == 'japanese' %}文化理解{% else %}Hiểu văn hóa{% endif %}</h6>
+                                            <small class="text-muted">
+                                                {% if user.nationality == 'japanese' %}
+                                                    ベトナムの文化背景も学びましょう
+                                                {% else %}
+                                                    Hãy học cả bối cảnh văn hóa Việt Nam
+                                                {% endif %}
+                                            </small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    {% if user.nationality == 'japanese' %}閉じる{% else %}Đóng{% endif %}
+                </button>
+                <a href="{% url 'study_phrase' phrase.id %}" class="btn btn-primary">
+                    <i class="fas fa-graduation-cap"></i>
+                    {% if user.nationality == 'japanese' %}学習を開始{% else %}Bắt đầu học{% endif %}
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Add smooth animation to modal opening
+    const modals = document.querySelectorAll('.modal');
+    modals.forEach(modal => {
+        modal.addEventListener('show.bs.modal', function() {
+            this.querySelector('.modal-dialog').style.transform = 'scale(0.8)';
+            this.querySelector('.modal-dialog').style.transition = 'transform 0.3s ease-out';
+        });
+        
+        modal.addEventListener('shown.bs.modal', function() {
+            this.querySelector('.modal-dialog').style.transform = 'scale(1)';
+            
+            // Add fade-in animation to modal content
+            const modalBody = this.querySelector('.modal-body');
+            const modalFooter = this.querySelector('.modal-footer');
+            
+            if (modalBody) {
+                modalBody.classList.add('fade-in');
+                setTimeout(() => modalBody.classList.remove('fade-in'), 500);
+            }
+            
+            if (modalFooter) {
+                modalFooter.classList.add('fade-in');
+                setTimeout(() => modalFooter.classList.remove('fade-in'), 700);
+            }
+        });
+    });
+    
+    // Add keyboard navigation support
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            const openModal = document.querySelector('.modal.show');
+            if (openModal) {
+                const closeBtn = openModal.querySelector('.btn-close');
+                if (closeBtn) closeBtn.click();
+            }
+        }
+    });
+    
+    // Add click outside to close functionality
+    modals.forEach(modal => {
+        modal.addEventListener('click', function(e) {
+            if (e.target === this) {
+                const closeBtn = this.querySelector('.btn-close');
+                if (closeBtn) closeBtn.click();
+            }
+        });
+    });
+    
+    // Add hover effects to phrase cards
+    const phraseCards = document.querySelectorAll('.phrase-card');
+    phraseCards.forEach(card => {
+        card.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-5px)';
+        });
+        
+        card.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0)';
+        });
+    });
+    
+    // Add smooth scrolling for better UX
+    const smoothScroll = (target, duration) => {
+        const targetPosition = target.getBoundingClientRect().top;
+        const startPosition = window.pageYOffset;
+        const distance = targetPosition - startPosition;
+        let startTime = null;
+        
+        function animation(currentTime) {
+            if (startTime === null) startTime = currentTime;
+            const timeElapsed = currentTime - startTime;
+            const run = ease(timeElapsed, startPosition, distance, duration);
+            window.scrollTo(0, run);
+            if (timeElapsed < duration) requestAnimationFrame(animation);
+        }
+        
+        function ease(t, b, c, d) {
+            t /= d / 2;
+            if (t < 1) return c / 2 * t * t + b;
+            t--;
+            return -c / 2 * (t * (t - 2) - 1) + b;
+        }
+        
+        requestAnimationFrame(animation);
+    };
+    
+    // Add click event for smooth scrolling to modals
+    const phraseButtons = document.querySelectorAll('[data-bs-toggle="modal"]');
+    phraseButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const targetModal = this.getAttribute('data-bs-target');
+            const modal = document.querySelector(targetModal);
+            if (modal) {
+                setTimeout(() => {
+                    smoothScroll(modal, 800);
+                }, 100);
+            }
+        });
+    });
+});
+</script>
 {% endblock %}

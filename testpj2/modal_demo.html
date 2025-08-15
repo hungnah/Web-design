@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modal Dialog Demo - Phrase List</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        /* Custom Modal Styles */
+        .modal-content {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .modal-header {
+            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+            color: white;
+            border-radius: 15px 15px 0 0;
+            border-bottom: none;
+        }
+        
+        .modal-header .btn-close {
+            filter: invert(1);
+            opacity: 0.8;
+        }
+        
+        .modal-header .btn-close:hover {
+            opacity: 1;
+        }
+        
+        .modal-title {
+            font-weight: 600;
+        }
+        
+        .modal-body {
+            padding: 2rem;
+        }
+        
+        .modal-footer {
+            border-top: none;
+            padding: 1.5rem 2rem;
+            background-color: #f8f9fa;
+            border-radius: 0 0 15px 15px;
+        }
+        
+        /* Phrase Card Styles */
+        .phrase-card {
+            transition: all 0.3s ease;
+            border: none;
+            border-radius: 15px;
+            overflow: hidden;
+        }
+        
+        .phrase-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(255, 107, 53, 0.15);
+        }
+        
+        .phrase-card .card-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 1rem;
+        }
+        
+        .phrase-card .card-body {
+            padding: 1.5rem;
+        }
+        
+        .phrase-card .card-footer {
+            background: none;
+            border: none;
+            padding: 1rem 1.5rem 1.5rem;
+        }
+        
+        /* Modal Content Styles */
+        .modal-phrase-text {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #ff6b35;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .translation-card {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 15px;
+            border: none;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .translation-card .card-body {
+            padding: 1.5rem;
+        }
+        
+        .learning-tips-card {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+            border: 2px solid #ffc107;
+            border-radius: 15px;
+        }
+        
+        .learning-tips-card .card-header {
+            background: rgba(255, 193, 7, 0.2);
+            border-bottom: 1px solid rgba(255, 193, 7, 0.3);
+            border-radius: 15px 15px 0 0;
+        }
+        
+        .tip-item {
+            transition: all 0.3s ease;
+            border-radius: 10px;
+            padding: 1rem;
+        }
+        
+        .tip-item:hover {
+            background-color: rgba(255, 255, 255, 0.5);
+            transform: scale(1.05);
+        }
+        
+        .tip-icon {
+            color: #ff6b35;
+            margin-bottom: 0.5rem;
+        }
+        
+        /* Button Styles */
+        .btn-primary {
+            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+            border: none;
+            border-radius: 25px;
+            padding: 0.75rem 2rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #e55a2b 0%, #e0851a 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 107, 53, 0.4);
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            border: none;
+            border-radius: 25px;
+            padding: 0.75rem 2rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-secondary:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+        }
+        
+        /* Animation Classes */
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .scale-in {
+            animation: scaleIn 0.3s ease-out;
+        }
+        
+        @keyframes scaleIn {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .modal-body {
+                padding: 1rem;
+            }
+            
+            .modal-footer {
+                padding: 1rem;
+            }
+            
+            .modal-phrase-text {
+                font-size: 1.5rem;
+            }
+            
+            .tip-item {
+                margin-bottom: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container my-5">
+        <h1 class="text-center mb-5">
+            <i class="fas fa-language"></i> Modal Dialog Demo
+        </h1>
+        
+        <!-- Demo Phrase Cards -->
+        <div class="row">
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card h-100 phrase-card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <span class="badge bg-primary">Greetings</span>
+                        <span class="badge bg-success">Beginner</span>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title text-center mb-3">Xin chào!</h5>
+                        
+                        <div class="mb-3">
+                            <small class="text-muted">日本語訳:</small>
+                            <p class="mb-1">こんにちは!</p>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <small class="text-muted">英語訳:</small>
+                            <p class="mb-1">Hello!</p>
+                        </div>
+                    </div>
+                    <div class="card-footer text-center">
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#phraseModal1">
+                            テキストを見る
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card h-100 phrase-card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <span class="badge bg-primary">Food & Dining</span>
+                        <span class="badge bg-success">Beginner</span>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title text-center mb-3">Tôi muốn ăn cơm.</h5>
+                        
+                        <div class="mb-3">
+                            <small class="text-muted">日本語訳:</small>
+                            <p class="mb-1">ご飯を食べたいです。</p>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <small class="text-muted">英語訳:</small>
+                            <p class="mb-1">I want to eat rice.</p>
+                        </div>
+                    </div>
+                    <div class="card-footer text-center">
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#phraseModal2">
+                            テキストを見る
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card h-100 phrase-card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <span class="badge bg-primary">Shopping</span>
+                        <span class="badge bg-success">Beginner</span>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title text-center mb-3">Cái này bao nhiêu tiền?</h5>
+                        
+                        <div class="mb-3">
+                            <small class="text-muted">日本語訳:</small>
+                            <p class="mb-1">これはいくらですか?</p>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <small class="text-muted">英語訳:</small>
+                            <p class="mb-1">How much is this?</p>
+                        </div>
+                    </div>
+                    <div class="card-footer text-center">
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#phraseModal3">
+                            テキストを見る
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Phrase Detail Modals -->
+    <!-- Modal 1: Greetings -->
+    <div class="modal fade" id="phraseModal1" tabindex="-1" aria-labelledby="phraseModalLabel1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="phraseModalLabel1">
+                        <i class="fas fa-language text-primary"></i>
+                        ベトナム語フレーズ詳細
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card border-0 translation-card">
+                                <div class="card-body text-center">
+                                    <h4 class="modal-phrase-text mb-3">Xin chào!</h4>
+                                    <div class="mb-3">
+                                        <span class="badge bg-primary fs-6">Greetings</span>
+                                        <span class="badge bg-success fs-6 ms-2">Beginner</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card border-0 translation-card">
+                                <div class="card-body">
+                                    <h6 class="text-success mb-2">
+                                        <i class="fas fa-flag text-success"></i>
+                                        日本語訳
+                                    </h6>
+                                    <p class="mb-3 fs-5">こんにちは!</p>
+                                    
+                                    <h6 class="text-info mb-2">
+                                        <i class="fas fa-flag text-info"></i>
+                                        英語訳
+                                    </h6>
+                                    <p class="mb-3 fs-5">Hello!</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Learning Tips -->
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <div class="card learning-tips-card">
+                                <div class="card-header">
+                                    <h6 class="mb-0">
+                                        <i class="fas fa-lightbulb text-warning"></i>
+                                        学習のヒント
+                                    </h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-4 text-center mb-3">
+                                            <div class="p-3 tip-item">
+                                                <i class="fas fa-volume-up fa-2x tip-icon"></i>
+                                                <h6>発音練習</h6>
+                                                <small class="text-muted">
+                                                    音声を聞いて繰り返し練習しましょう
+                                                </small>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 text-center mb-3">
+                                            <div class="p-3 tip-item">
+                                                <i class="fas fa-comments fa-2x tip-icon"></i>
+                                                <h6>会話練習</h6>
+                                                <small class="text-muted">
+                                                    実際の会話で使ってみましょう
+                                                </small>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 text-center mb-3">
+                                            <div class="p-3 tip-item">
+                                                <i class="fas fa-book fa-2x tip-icon"></i>
+                                                <h6>文化理解</h6>
+                                                <small class="text-muted">
+                                                    ベトナムの文化背景も学びましょう
+                                                </small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        閉じる
+                    </button>
+                    <a href="#" class="btn btn-primary">
+                        <i class="fas fa-graduation-cap"></i>
+                        学習を開始
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 2: Food & Dining -->
+    <div class="modal fade" id="phraseModal2" tabindex="-1" aria-labelledby="phraseModalLabel2" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="phraseModalLabel2">
+                        <i class="fas fa-language text-primary"></i>
+                        ベトナム語フレーズ詳細
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card border-0 translation-card">
+                                <div class="card-body text-center">
+                                    <h4 class="modal-phrase-text mb-3">Tôi muốn ăn cơm.</h4>
+                                    <div class="mb-3">
+                                        <span class="badge bg-primary fs-6">Food & Dining</span>
+                                        <span class="badge bg-success fs-6 ms-2">Beginner</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card border-0 translation-card">
+                                <div class="card-body">
+                                    <h6 class="text-success mb-2">
+                                        <i class="fas fa-flag text-success"></i>
+                                        日本語訳
+                                    </h6>
+                                    <p class="mb-3 fs-5">ご飯を食べたいです。</p>
+                                    
+                                    <h6 class="text-info mb-2">
+                                        <i class="fas fa-flag text-info"></i>
+                                        英語訳
+                                    </h6>
+                                    <p class="mb-3 fs-5">I want to eat rice.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Learning Tips -->
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <div class="card learning-tips-card">
+                                <div class="card-header">
+                                    <h6 class="mb-0">
+                                        <i class="fas fa-lightbulb text-warning"></i>
+                                        学習のヒント
+                                    </h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-4 text-center mb-3">
+                                            <div class="p-3 tip-item">
+                                                <i class="fas fa-volume-up fa-2x tip-icon"></i>
+                                                <h6>発音練習</h6>
+                                                <small class="text-muted">
+                                                    音声を聞いて繰り返し練習しましょう
+                                                </small>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 text-center mb-3">
+                                            <div class="p-3 tip-item">
+                                                <i class="fas fa-comments fa-2x tip-icon"></i>
+                                                <h6>会話練習</h6>
+                                                <small class="text-muted">
+                                                    実際の会話で使ってみましょう
+                                                </small>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 text-center mb-3">
+                                            <div class="p-3 tip-item">
+                                                <i class="fas fa-book fa-2x tip-icon"></i>
+                                                <h6>文化理解</h6>
+                                                <small class="text-muted">
+                                                    ベトナムの文化背景も学びましょう
+                                                </small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        閉じる
+                    </button>
+                    <a href="#" class="btn btn-primary">
+                        <i class="fas fa-graduation-cap"></i>
+                        学習を開始
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 3: Shopping -->
+    <div class="modal fade" id="phraseModal3" tabindex="-1" aria-labelledby="phraseModalLabel3" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="phraseModalLabel3">
+                        <i class="fas fa-language text-primary"></i>
+                        ベトナム語フレーズ詳細
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card border-0 translation-card">
+                                <div class="card-body text-center">
+                                    <h4 class="modal-phrase-text mb-3">Cái này bao nhiêu tiền?</h4>
+                                    <div class="mb-3">
+                                        <span class="badge bg-primary fs-6">Shopping</span>
+                                        <span class="badge bg-success fs-6 ms-2">Beginner</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card border-0 translation-card">
+                                <div class="card-body">
+                                    <h6 class="text-success mb-2">
+                                        <i class="fas fa-flag text-success"></i>
+                                        日本語訳
+                                    </h6>
+                                    <p class="mb-3 fs-5">これはいくらですか?</p>
+                                    
+                                    <h6 class="text-info mb-2">
+                                        <i class="fas fa-flag text-info"></i>
+                                        英語訳
+                                    </h6>
+                                    <p class="mb-3 fs-5">How much is this?</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Learning Tips -->
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <div class="card learning-tips-card">
+                                <div class="card-header">
+                                    <h6 class="mb-0">
+                                        <i class="fas fa-lightbulb text-warning"></i>
+                                        学習のヒント
+                                    </h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-4 text-center mb-3">
+                                            <div class="p-3 tip-item">
+                                                <i class="fas fa-volume-up fa-2x tip-icon"></i>
+                                                <h6>発音練習</h6>
+                                                <small class="text-muted">
+                                                    音声を聞いて繰り返し練習しましょう
+                                                </small>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 text-center mb-3">
+                                            <div class="p-3 tip-item">
+                                                <i class="fas fa-comments fa-2x tip-icon"></i>
+                                                <h6>会話練習</h6>
+                                                <small class="text-muted">
+                                                    実際の会話で使ってみましょう
+                                                </small>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 text-center mb-3">
+                                            <div class="p-3 tip-item">
+                                                <i class="fas fa-book fa-2x tip-icon"></i>
+                                                <h6>文化理解</h6>
+                                                <small class="text-muted">
+                                                    ベトナムの文化背景も学びましょう
+                                                </small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        閉じる
+                    </button>
+                    <a href="#" class="btn btn-primary">
+                        <i class="fas fa-graduation-cap"></i>
+                        学習を開始
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add smooth animation to modal opening
+        const modals = document.querySelectorAll('.modal');
+        modals.forEach(modal => {
+            modal.addEventListener('show.bs.modal', function() {
+                this.querySelector('.modal-dialog').style.transform = 'scale(0.8)';
+                this.querySelector('.modal-dialog').style.transition = 'transform 0.3s ease-out';
+            });
+            
+            modal.addEventListener('shown.bs.modal', function() {
+                this.querySelector('.modal-dialog').style.transform = 'scale(1)';
+                
+                // Add fade-in animation to modal content
+                const modalBody = this.querySelector('.modal-body');
+                const modalFooter = this.querySelector('.modal-footer');
+                
+                if (modalBody) {
+                    modalBody.classList.add('fade-in');
+                    setTimeout(() => modalBody.classList.remove('fade-in'), 500);
+                }
+                
+                if (modalFooter) {
+                    modalFooter.classList.add('fade-in');
+                    setTimeout(() => modalFooter.classList.remove('fade-in'), 700);
+                }
+            });
+        });
+        
+        // Add keyboard navigation support
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                const openModal = document.querySelector('.modal.show');
+                if (openModal) {
+                    const closeBtn = openModal.querySelector('.btn-close');
+                    if (closeBtn) closeBtn.click();
+                }
+            }
+        });
+        
+        // Add click outside to close functionality
+        modals.forEach(modal => {
+            modal.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    const closeBtn = this.querySelector('.btn-close');
+                    if (closeBtn) closeBtn.click();
+                }
+            });
+        });
+        
+        // Add hover effects to phrase cards
+        const phraseCards = document.querySelectorAll('.phrase-card');
+        phraseCards.forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-5px)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+            });
+        });
+    });
+    </script>
+</body>
+</html>

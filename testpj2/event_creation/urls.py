@@ -17,6 +17,9 @@ urlpatterns = [
     path('accept-post/<int:post_id>/<int:phrase_id>/', views.accept_post, name='accept_post'),
     path('cancel-accept-post/<int:post_id>/', views.cancel_accept_post, name='cancel_accept_post'),
     
+    # Working session URL
+    path('start-working-session/<int:post_id>/', views.start_working_session, name='start_working_session'),
+    
     # Partner request URLs
     path('create-partner-request/', views.create_partner_request, name='create_partner_request'),
     path('my-partner-requests/', views.my_partner_requests, name='my_partner_requests'),
