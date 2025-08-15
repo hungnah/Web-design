@@ -11,64 +11,451 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <!-- Custom CSS -->
     <style>
+        :root {
+            --primary-color: #ff6b35;
+            --secondary-color: #f7931e;
+            --accent-color: #28a745;
+            --text-dark: #2c3e50;
+            --text-light: #6c757d;
+            --bg-light: #f8f9fa;
+            --shadow-light: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-medium: 0 10px 30px rgba(0, 0, 0, 0.15);
+            --shadow-heavy: 0 20px 60px rgba(0, 0, 0, 0.2);
+            --border-radius: 20px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+
+        /* Enhanced Navigation */
+        .navbar {
+            background: rgba(255, 255, 255, 0.95) !important;
+            backdrop-filter: blur(10px);
+            box-shadow: var(--shadow-light);
+            transition: var(--transition);
+            padding: 1rem 0;
+        }
+
         .navbar-brand {
-            font-weight: bold;
-            color: #ff6b35 !important;
+            font-weight: 800;
+            color: var(--primary-color) !important;
+            font-size: 1.5rem;
+            transition: var(--transition);
         }
+
+        .navbar-brand:hover {
+            color: var(--secondary-color) !important;
+            transform: scale(1.05);
+        }
+
+        .navbar-brand i {
+            margin-right: 0.5rem;
+            animation: pulse 2s infinite;
+        }
+
+        .nav-link {
+            font-weight: 500;
+            color: var(--text-dark) !important;
+            margin: 0 0.5rem;
+            padding: 0.5rem 1rem !important;
+            border-radius: 25px;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .nav-link:hover {
+            color: var(--primary-color) !important;
+            background: rgba(255, 107, 53, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .nav-link.active {
+            background: var(--primary-color);
+            color: white !important;
+        }
+
+        .dropdown-menu {
+            border: none;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-medium);
+            padding: 1rem 0;
+            margin-top: 0.5rem;
+        }
+
+        .dropdown-item {
+            padding: 0.75rem 1.5rem;
+            transition: var(--transition);
+            border-radius: 10px;
+            margin: 0 0.5rem;
+        }
+
+        .dropdown-item:hover {
+            background: rgba(255, 107, 53, 0.1);
+            color: var(--primary-color);
+            transform: translateX(5px);
+        }
+
+        /* Enhanced Hero Section */
         .hero-section {
-            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
             color: white;
-            padding: 100px 0;
+            padding: 120px 0;
+            position: relative;
+            overflow: hidden;
         }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="hero" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="1" fill="white" opacity="0.1"/><circle cx="5" cy="5" r="0.5" fill="white" opacity="0.1"/><circle cx="15" cy="15" r="0.5" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23hero)"/></svg>');
+            opacity: 0.3;
+        }
+
+        /* Enhanced Cards */
         .card {
             border: none;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-light);
+            transition: var(--transition);
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-heavy);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color), var(--accent-color));
+            transform: scaleX(0);
             transition: transform 0.3s ease;
         }
-        .card:hover {
-            transform: translateY(-5px);
+
+        .card:hover::before {
+            transform: scaleX(1);
         }
+
+        /* Enhanced Buttons */
+        .btn {
+            border-radius: 25px;
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            border: none;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-medium);
+        }
+
         .btn-primary {
-            background-color: #ff6b35;
-            border-color: #ff6b35;
-        }
-        .btn-primary:hover {
-            background-color: #e55a2b;
-            border-color: #e55a2b;
-        }
-        .footer {
-            background-color: #2c3e50;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             color: white;
-            padding: 40px 0;
-            margin-top: 50px;
         }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
+            color: white;
+        }
+
+        .btn-outline-primary {
+            background: transparent;
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+        }
+
+        .btn-outline-primary:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        /* Enhanced Language Badge */
         .language-badge {
             font-size: 0.8em;
-            padding: 2px 8px;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: var(--shadow-light);
         }
+
+        /* Enhanced Chat Messages */
         .chat-message {
-            margin-bottom: 15px;
-            padding: 10px 15px;
-            border-radius: 15px;
+            margin-bottom: 1rem;
+            padding: 1rem 1.5rem;
+            border-radius: 20px;
             max-width: 70%;
+            position: relative;
+            animation: slideIn 0.3s ease-out;
         }
+
         .chat-message.sent {
-            background-color: #ff6b35;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             color: white;
             margin-left: auto;
+            border-bottom-right-radius: 5px;
         }
+
         .chat-message.received {
-            background-color: #f8f9fa;
-            border: 1px solid #dee2e6;
+            background: white;
+            border: 2px solid #e9ecef;
+            border-bottom-left-radius: 5px;
+            box-shadow: var(--shadow-light);
+        }
+
+        /* Enhanced Footer */
+        .footer {
+            background: linear-gradient(135deg, var(--text-dark) 0%, #34495e 100%);
+            color: white;
+            padding: 4rem 0 2rem;
+            margin-top: 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color), var(--accent-color));
+        }
+
+        .footer h5 {
+            color: var(--primary-color);
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: var(--transition);
+            display: block;
+            padding: 0.5rem 0;
+        }
+
+        .footer a:hover {
+            color: var(--primary-color);
+            transform: translateX(5px);
+        }
+
+        /* Enhanced Messages */
+        .alert {
+            border: none;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-light);
+            animation: slideInDown 0.5s ease-out;
+        }
+
+        .alert-success {
+            background: linear-gradient(135deg, #d4edda, #c3e6cb);
+            color: #155724;
+            border-left: 4px solid var(--accent-color);
+        }
+
+        .alert-info {
+            background: linear-gradient(135deg, #d1ecf1, #bee5eb);
+            color: #0c5460;
+            border-left: 4px solid #17a2b8;
+        }
+
+        .alert-warning {
+            background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+            color: #856404;
+            border-left: 4px solid #ffc107;
+        }
+
+        .alert-danger {
+            background: linear-gradient(135deg, #f8d7da, #f5c6cb);
+            color: #721c24;
+            border-left: 4px solid #dc3545;
+        }
+
+        /* Animations */
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Scroll Animations */
+        .fade-in-up {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .fade-in-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .navbar-brand {
+                font-size: 1.2rem;
+            }
+            
+            .hero-section {
+                padding: 80px 0;
+            }
+            
+            .card {
+                margin-bottom: 1rem;
+            }
+            
+            .btn {
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
+            }
+        }
+
+        /* Loading States */
+        .loading {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        .loading::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            margin: -10px 0 0 -10px;
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Smooth Scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Focus States */
+        .btn:focus,
+        .form-control:focus,
+        .form-select:focus {
+            box-shadow: 0 0 0 0.2rem rgba(255, 107, 53, 0.25);
+            border-color: var(--primary-color);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-color);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--secondary-color);
         }
     </style>
     {% block extra_css %}{% endblock %}
 </head>
 <body>
-    <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <!-- Enhanced Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top">
         <div class="container">
             <a class="navbar-brand" href="{% url 'home' %}">
                 <i class="fas fa-globe-asia"></i> Vietnam-Japan Connect
@@ -83,12 +470,22 @@
                     {% if user.is_authenticated %}
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'dashboard' %}">
-                                <i class="fas fa-home"></i> {% trans "Dashboard" %}
+                                <i class="fas fa-home"></i> 
+                                {% if is_japanese %}
+                                    ダッシュボード
+                                {% else %}
+                                    Dashboard
+                                {% endif %}
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link position-relative" href="/chat/my-chats/">
-                                <i class="fas fa-comments"></i> {% trans "Chat" %}
+                                <i class="fas fa-comments"></i> 
+                                {% if is_japanese %}
+                                    チャット
+                                {% else %}
+                                    Chat
+                                {% endif %}
                                 {% if unread_messages_count > 0 %}
                                     <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                                         {{ unread_messages_count }}
@@ -96,51 +493,38 @@
                                 {% endif %}
                             </a>
                         </li>
-                        {% if user.nationality == 'japanese' %}
+                        {% if is_japanese %}
                             <li class="nav-item">
                                 <a class="nav-link" href="/create/phrases/">
-                                    <i class="fas fa-language"></i> {% trans "Vietnamese Learning" %}
+                                    <i class="fas fa-language"></i> ベトナム語学習
                                 </a>
                             </li>
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="japanesePostsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="fas fa-list"></i> {% trans "My Posts" %}
+                                    <i class="fas fa-list"></i> 私の投稿
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="japanesePostsDropdown">
                                     <li><a class="dropdown-item" href="/create/my-posts/">
-                                        <i class="fas fa-list"></i> {% trans "Posts I Created" %}
+                                        <i class="fas fa-list"></i> 作成した投稿
                                     </a></li>
                                 </ul>
                             </li>
                         {% else %}
                             <li class="nav-item">
                                 <a class="nav-link" href="/create/phrases/">
-                                    <i class="fas fa-language"></i> {% trans "Japanese Learning" %}
+                                    <i class="fas fa-language"></i> Học tiếng Nhật
                                 </a>
                             </li>
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="postsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="fas fa-list"></i> {% trans "My Posts" %}
+                                    <i class="fas fa-list"></i> Bài đăng của tôi
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="postsDropdown">
                                     <li><a class="dropdown-item" href="/create/my-posts/">
-                                        <i class="fas fa-list"></i> {% trans "Posts I Created" %}
+                                        <i class="fas fa-list"></i> Bài đăng tôi tạo
                                     </a></li>
                                     <li><a class="dropdown-item" href="/create/my-accepted-posts/">
-                                        <i class="fas fa-handshake"></i> {% trans "Posts I Accepted" %}
-                                    </a></li>
-                                </ul>
-                            </li>
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="fas fa-search"></i> {% trans "Search Posts" %}
-                                </a>
-                                <ul class="dropdown-menu" aria-labelledby="searchDropdown">
-                                    <li><a class="dropdown-item" href="/search/available-posts/">
-                                        <i class="fas fa-map-marker-alt"></i> {% trans "Search by City" %}
-                                    </a></li>
-                                    <li><a class="dropdown-item" href="/search/all-posts/">
-                                        <i class="fas fa-globe"></i> {% trans "All Cities" %}
+                                        <i class="fas fa-handshake"></i> Bài đăng tôi chấp nhận
                                     </a></li>
                                 </ul>
                             </li>
@@ -153,15 +537,25 @@
                     {% if user.is_authenticated %}
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="fas fa-user"></i> {{ user.username }}
+                                <i class="fas fa-user-circle"></i> {{ user.username }}
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <li><a class="dropdown-item" href="{% url 'profile' %}">
-                                    <i class="fas fa-user-edit"></i> {% trans "Profile" %}
+                                    <i class="fas fa-user-edit"></i> 
+                                    {% if is_japanese %}
+                                        プロフィール
+                                    {% else %}
+                                        Hồ sơ
+                                    {% endif %}
                                 </a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" href="{% url 'logout' %}">
-                                    <i class="fas fa-sign-out-alt"></i> {% trans "Logout" %}
+                                    <i class="fas fa-sign-out-alt"></i> 
+                                    {% if is_japanese %}
+                                        ログアウト
+                                    {% else %}
+                                        Đăng xuất
+                                    {% endif %}
                                 </a></li>
                             </ul>
                         </li>
@@ -171,11 +565,15 @@
         </div>
     </nav>
 
-    <!-- Messages -->
+    <!-- Spacer for fixed navbar -->
+    <div style="height: 80px;"></div>
+
+    <!-- Enhanced Messages -->
     {% if messages %}
         <div class="container mt-3">
             {% for message in messages %}
                 <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    <i class="fas fa-{% if message.tags == 'success' %}check-circle{% elif message.tags == 'info' %}info-circle{% elif message.tags == 'warning' %}exclamation-triangle{% elif message.tags == 'danger' %}times-circle{% endif %} me-2"></i>
                     {{ message }}
                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
@@ -188,29 +586,142 @@
         {% block content %}{% endblock %}
     </main>
 
-    <!-- Footer -->
+    <!-- Enhanced Footer -->
     <footer class="footer">
         <div class="container">
             <div class="row">
-                <div class="col-md-6">
-                    <h5>Vietnam-Japan Connect</h5>
-                    <p>{% trans "Connecting Vietnamese and Japanese people for language exchange and cultural understanding." %}</p>
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <h5>
+                        <i class="fas fa-globe-asia me-2"></i>Vietnam-Japan Connect
+                    </h5>
+                    <p class="mb-3">
+                        {% if is_japanese %}
+                            ベトナム人と日本人を繋ぎ、言語交換と文化理解を促進します。
+                        {% else %}
+                            Kết nối người Việt Nam và Nhật Bản để trao đổi ngôn ngữ và hiểu biết văn hóa.
+                        {% endif %}
+                    </p>
+                    <div class="social-links">
+                        <a href="#" class="me-3"><i class="fab fa-facebook fa-lg"></i></a>
+                        <a href="#" class="me-3"><i class="fab fa-twitter fa-lg"></i></a>
+                        <a href="#" class="me-3"><i class="fab fa-instagram fa-lg"></i></a>
+                        <a href="#" class="me-3"><i class="fab fa-linkedin fa-lg"></i></a>
+                    </div>
                 </div>
-                <div class="col-md-6 text-md-end">
-                    <h5>{% trans "Quick Links" %}</h5>
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h5>
+                        {% if is_japanese %}
+                            クイックリンク
+                        {% else %}
+                            Liên kết nhanh
+                        {% endif %}
+                    </h5>
                     <ul class="list-unstyled">
-                        <li><a href="{% url 'home' %}" class="text-light">{% trans "Home" %}</a></li>
-                        <li><a href="{% url 'guide' %}" class="text-light">{% trans "Guide" %}</a></li>
+                        <li><a href="{% url 'home' %}">
+                            {% if is_japanese %}
+                                ホーム
+                            {% else %}
+                                Trang chủ
+                            {% endif %}
+                        </a></li>
+                        <li><a href="{% url 'guide' %}">
+                            {% if is_japanese %}
+                                ガイド
+                            {% else %}
+                                Hướng dẫn
+                            {% endif %}
+                        </a></li>
                         {% if user.is_authenticated %}
-                            <li><a href="{% url 'dashboard' %}" class="text-light">{% trans "Dashboard" %}</a></li>
-                            <li><a href="{% url 'profile' %}" class="text-light">{% trans "Profile" %}</a></li>
+                            <li><a href="{% url 'dashboard' %}">
+                                {% if is_japanese %}
+                                    ダッシュボード
+                                {% else %}
+                                    Dashboard
+                                {% endif %}
+                            </a></li>
                         {% endif %}
                     </ul>
                 </div>
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <h5>
+                        {% if is_japanese %}
+                            学習
+                        {% else %}
+                            Học tập
+                        {% endif %}
+                    </h5>
+                    <ul class="list-unstyled">
+                        <li><a href="/create/phrases/">
+                            {% if is_japanese %}
+                                言語学習
+                            {% else %}
+                                Học ngôn ngữ
+                            {% endif %}
+                        </a></li>
+                        <li><a href="/create/lessons/">
+                            {% if is_japanese %}
+                                文化レッスン
+                            {% else %}
+                                Bài học văn hóa
+                            {% endif %}
+                        </a></li>
+                        <li><a href="/create/challenges/">
+                            {% if is_japanese %}
+                                文化チャレンジ
+                            {% else %}
+                                Thử thách văn hóa
+                            {% endif %}
+                        </a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <h5>
+                        {% if is_japanese %}
+                            サポート
+                        {% else %}
+                            Hỗ trợ
+                        {% endif %}
+                    </h5>
+                    <ul class="list-unstyled">
+                        <li><a href="/help/">
+                            {% if is_japanese %}
+                                ヘルプセンター
+                            {% else %}
+                                Trung tâm trợ giúp
+                            {% endif %}
+                        </a></li>
+                        <li><a href="/contact/">
+                            {% if is_japanese %}
+                                お問い合わせ
+                            {% else %}
+                                Liên hệ
+                            {% endif %}
+                        </a></li>
+                        <li><a href="/privacy/">
+                            {% if is_japanese %}
+                                プライバシーポリシー
+                            {% else %}
+                                Chính sách bảo mật
+                            {% endif %}
+                        </a></li>
+                    </ul>
+                </div>
             </div>
-            <hr class="my-4">
-            <div class="text-center">
-                <p>&copy; 2024 Vietnam-Japan Connect. All rights reserved.</p>
+            <hr class="my-4" style="border-color: rgba(255,255,255,0.2);">
+            <div class="row align-items-center">
+                <div class="col-md-6 text-center text-md-start">
+                    <p class="mb-0">&copy; 2024 Vietnam-Japan Connect. All rights reserved.</p>
+                </div>
+                <div class="col-md-6 text-center text-md-end">
+                    <p class="mb-0">
+                        <i class="fas fa-heart text-danger me-1"></i>
+                        {% if is_japanese %}
+                            文化交流のために愛を込めて作成
+                        {% else %}
+                            Được tạo ra với tình yêu dành cho trao đổi văn hóa
+                        {% endif %}
+                    </p>
+                </div>
             </div>
         </div>
     </footer>
@@ -226,6 +737,155 @@
         window.isAuthenticated = {% if user.is_authenticated %}true{% else %}false{% endif %};
     </script>
     <script src="{% static 'js/session-security.js' %}"></script>
+    
+    <!-- Enhanced Base JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add scroll animations
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, observerOptions);
+
+            // Observe all fade-in-up elements
+            document.querySelectorAll('.fade-in-up').forEach(el => {
+                observer.observe(el);
+            });
+
+            // Enhanced navbar behavior
+            const navbar = document.querySelector('.navbar');
+            let lastScrollTop = 0;
+
+            window.addEventListener('scroll', function() {
+                const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                
+                if (scrollTop > 100) {
+                    navbar.style.background = 'rgba(255, 255, 255, 0.98)';
+                    navbar.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.1)';
+                } else {
+                    navbar.style.background = 'rgba(255, 255, 255, 0.95)';
+                    navbar.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.1)';
+                }
+
+                if (scrollTop > lastScrollTop && scrollTop > 200) {
+                    navbar.style.transform = 'translateY(-100%)';
+                } else {
+                    navbar.style.transform = 'translateY(0)';
+                }
+                
+                lastScrollTop = scrollTop;
+            });
+
+            // Enhanced dropdown interactions
+            document.querySelectorAll('.dropdown-toggle').forEach(toggle => {
+                toggle.addEventListener('mouseenter', function() {
+                    const dropdown = this.nextElementSibling;
+                    if (dropdown && dropdown.classList.contains('dropdown-menu')) {
+                        dropdown.style.display = 'block';
+                        dropdown.style.opacity = '0';
+                        setTimeout(() => {
+                            dropdown.style.opacity = '1';
+                        }, 10);
+                    }
+                });
+            });
+
+            document.querySelectorAll('.dropdown').forEach(dropdown => {
+                dropdown.addEventListener('mouseleave', function() {
+                    const menu = this.querySelector('.dropdown-menu');
+                    if (menu) {
+                        menu.style.opacity = '0';
+                        setTimeout(() => {
+                            menu.style.display = 'none';
+                        }, 300);
+                    }
+                });
+            });
+
+            // Enhanced button interactions
+            document.querySelectorAll('.btn').forEach(btn => {
+                btn.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-2px)';
+                });
+                
+                btn.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                });
+            });
+
+            // Smooth scroll for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+
+            // Enhanced form interactions
+            document.querySelectorAll('.form-control, .form-select').forEach(input => {
+                input.addEventListener('focus', function() {
+                    this.parentElement.style.transform = 'scale(1.02)';
+                });
+                
+                input.addEventListener('blur', function() {
+                    this.parentElement.style.transform = 'scale(1)';
+                });
+            });
+        });
+
+        // Global utility functions
+        window.showLoading = function(element) {
+            element.classList.add('loading');
+        };
+
+        window.hideLoading = function(element) {
+            element.classList.remove('loading');
+        };
+
+        window.scrollToTop = function() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        };
+
+        // Enhanced alert system
+        window.showAlert = function(message, type = 'info', duration = 5000) {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type} alert-dismissible fade show`;
+            alertDiv.innerHTML = `
+                <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'info' ? 'info-circle' : type === 'warning' ? 'exclamation-triangle' : 'times-circle'} me-2"></i>
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            
+            const container = document.querySelector('.container');
+            if (container) {
+                container.insertBefore(alertDiv, container.firstChild);
+                
+                // Auto dismiss
+                setTimeout(() => {
+                    if (alertDiv.parentNode) {
+                        alertDiv.remove();
+                    }
+                }, duration);
+            }
+        };
+    </script>
     
     {% block extra_js %}{% endblock %}
 </body>

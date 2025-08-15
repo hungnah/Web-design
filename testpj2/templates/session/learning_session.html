@@ -1,318 +1,438 @@
-{% extends 'base_timer.html' %}
+{% extends 'base.html' %}
 {% load static %}
 
-{% block title %}
-    {% if phrase %}
-        {{ phrase.vietnamese_text }} - {{ phrase.japanese_translation }}
-    {% else %}
-        Học tập - Vietnam-Japan Connect
-    {% endif %}
-{% endblock %}
+{% block title %}Phiên học tập - Vietnam-Japan Connect{% endblock %}
 
-{% block body_class %}enable-timer{% endblock %}
-
-{% block style %}
+{% block extra_css %}
 <style>
-    body {
-        font-family: Arial, sans-serif;
-        background-color: #e5ddd5;
-        margin: 0;
-        padding: 20px;
-    }
-
-    .chat-container {
-        max-width: 800px;
-        margin: 0 auto;
-        display: flex;
-        flex-direction: column;
-        gap: 15px;
-    }
-
-    .message-row {
-        display: flex;
-        align-items: flex-start;
-    }
-
-    .message-row.right {
-        flex-direction: row-reverse;
-    }
-
-    .icon {
-        width: 80px;
-        height: 80px;
-        border-radius: 50%;
-        background-color: #ccc;
-        overflow: hidden;
-        margin: 0 10px;
-        flex-shrink: 0;
-    }
-
-    .icon img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-
-    .message-content {
-        max-width: 70%;
-    }
-
-    .name {
-        font-size: 18px;
-        margin-bottom: 5px;
-        color: #555;
-        font-weight: bold;
-    }
-
-    .bubble {
-        background-color: #d0ebff;
-        font-size: 18px;
-        padding: 15px;
+    .learning-container {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
         border-radius: 15px;
-        position: relative;
-        text-align: left !important;
-        line-height: 1.5;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    }
-
-    .message-row.right .bubble {
-        background-color: #ffd59e;
-    }
-
-    .message-row.right .message-content {
-        text-align: right;
-    }
-
-    .system-message {
-        text-align: center;
-        font-weight: bold;
-        margin: 30px 0;
-        color: #cd1f1f;
-        font-size: 24px;
-        background-color: #fff3cd;
-        padding: 15px;
-        border-radius: 10px;
-        border: 2px solid #ffc107;
-    }
-
-    .session-header {
-        background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
-        color: white;
-        padding: 20px;
-        border-radius: 15px;
-        margin-bottom: 30px;
-        text-align: center;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-    }
-
-    .session-header h1 {
-        margin: 0;
-        font-size: 28px;
-        font-weight: 600;
-    }
-
-    .session-header p {
-        margin: 10px 0 0 0;
-        opacity: 0.9;
-        font-size: 16px;
-    }
-
-    .partner-info {
-        background: rgba(255, 255, 255, 0.1);
-        padding: 15px;
-        border-radius: 10px;
-        margin-top: 15px;
-        display: inline-block;
-    }
-
-    .partner-info small {
-        display: block;
-        margin-bottom: 5px;
-        opacity: 0.8;
-    }
-
-    .action-buttons {
-        text-align: center;
-        margin-top: 30px;
-        padding: 20px;
-        background: white;
-        border-radius: 15px;
+        padding: 2rem;
+        margin-bottom: 2rem;
         box-shadow: 0 4px 15px rgba(0,0,0,0.1);
     }
-
-    .btn {
-        display: inline-block;
-        padding: 12px 24px;
-        margin: 0 10px;
-        border-radius: 25px;
-        text-decoration: none;
-        font-weight: 600;
-        transition: all 0.3s ease;
-        border: none;
-        cursor: pointer;
-        font-size: 16px;
+    
+    .learning-header {
+        text-align: center;
+        margin-bottom: 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 2px solid #007bff;
     }
-
-    .btn-primary {
+    
+    .learning-title {
+        color: #2c3e50;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+    
+    .learning-subtitle {
+        color: #6c757d;
+        font-size: 1.1rem;
+    }
+    
+    .conversation-container {
+        background: white;
+        padding: 2rem;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        margin-bottom: 2rem;
+    }
+    
+    .conversation-message {
+        margin-bottom: 1.5rem;
+        padding: 1rem;
+        border-radius: 10px;
+        position: relative;
+    }
+    
+    .message-system {
+        background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+        color: white;
+        text-align: center;
+        font-weight: 600;
+        margin: 1rem 0;
+    }
+    
+    .message-left {
         background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
         color: white;
+        margin-right: 20%;
+        border-bottom-left-radius: 5px;
     }
-
-    .btn-primary:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(0,123,255,0.4);
-        color: white;
-    }
-
-    .btn-success {
+    
+    .message-right {
         background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
         color: white;
+        margin-left: 20%;
+        border-bottom-right-radius: 5px;
+        text-align: right;
     }
-
-    .btn-success:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(40,167,69,0.4);
+    
+    .message-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        margin-right: 10px;
+        display: inline-block;
+        vertical-align: middle;
+    }
+    
+    .message-content {
+        display: inline-block;
+        vertical-align: middle;
+        max-width: calc(100% - 60px);
+    }
+    
+    .message-text {
+        margin: 0;
+        line-height: 1.6;
+        font-size: 1.1rem;
+    }
+    
+    .message-name {
+        font-size: 0.9rem;
+        opacity: 0.8;
+        margin-bottom: 0.5rem;
+    }
+    
+    .phrase-display {
+        background: linear-gradient(135deg, #ffc107 0%, #fd7e14 100%);
         color: white;
-    }
-
-    .btn-outline-secondary {
-        background: transparent;
-        color: #6c757d;
-        border: 2px solid #6c757d;
-    }
-
-    .btn-outline-secondary:hover {
-        background: #6c757d;
-        color: white;
-        transform: translateY(-2px);
-    }
-
-    .timer-info {
-        background: rgba(0, 123, 255, 0.1);
-        padding: 10px;
-        border-radius: 8px;
-        margin-bottom: 20px;
+        padding: 2rem;
+        border-radius: 15px;
         text-align: center;
-        border: 1px solid rgba(0, 123, 255, 0.3);
+        margin-bottom: 2rem;
+        box-shadow: 0 4px 15px rgba(255, 193, 7, 0.3);
     }
-
-    .timer-info small {
-        color: #007bff;
+    
+    .phrase-vietnamese {
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    }
+    
+    .phrase-japanese {
+        font-size: 1.5rem;
+        font-weight: 600;
+        opacity: 0.9;
+        margin-bottom: 1rem;
+    }
+    
+    .phrase-category {
+        background: rgba(255,255,255,0.2);
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+    
+    .partner-info {
+        background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        color: white;
+        padding: 1.5rem;
+        border-radius: 10px;
+        margin-bottom: 2rem;
+        text-align: center;
+    }
+    
+    .partner-avatar {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        margin: 0 auto 1rem;
+        display: block;
+        border: 3px solid rgba(255,255,255,0.3);
+    }
+    
+    .action-buttons {
+        text-align: center;
+        margin-top: 2rem;
+    }
+    
+    .btn-action {
+        background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+        border: none;
+        color: white;
+        padding: 1rem 2rem;
+        font-size: 1.1rem;
+        border-radius: 25px;
+        transition: all 0.3s ease;
+        margin: 0 0.5rem;
+        text-decoration: none;
+        display: inline-block;
+    }
+    
+    .btn-action:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(0,123,255,0.4);
+        color: white;
+        text-decoration: none;
+    }
+    
+    .btn-back {
+        background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+        border: none;
+        color: white;
+        padding: 1rem 2rem;
+        font-size: 1.1rem;
+        border-radius: 25px;
+        transition: all 0.3s ease;
+        margin: 0 0.5rem;
+        text-decoration: none;
+        display: inline-block;
+    }
+    
+    .btn-back:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(108,117,125,0.4);
+        color: white;
+        text-decoration: none;
+    }
+    
+    .timer-container {
+        background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+        color: white;
+        padding: 1rem;
+        border-radius: 10px;
+        text-align: center;
+        margin-bottom: 2rem;
+        font-size: 1.2rem;
         font-weight: 600;
     }
-
+    
+    .timer-display {
+        font-size: 2rem;
+        font-weight: 700;
+        margin: 0;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+    
     @media (max-width: 768px) {
-        .chat-container {
-            max-width: 100%;
-            padding: 10px;
+        .learning-container {
+            padding: 1rem;
         }
         
-        .bubble {
-            font-size: 16px;
-            padding: 12px;
+        .conversation-container {
+            padding: 1rem;
         }
         
-        .icon {
-            width: 60px;
-            height: 60px;
+        .message-left, .message-right {
+            margin: 0 0 1rem 0;
         }
         
-        .session-header h1 {
-            font-size: 24px;
+        .phrase-vietnamese {
+            font-size: 1.5rem;
+        }
+        
+        .phrase-japanese {
+            font-size: 1.2rem;
+        }
+        
+        .btn-action, .btn-back {
+            display: block;
+            margin: 0.5rem auto;
+            width: 100%;
+            max-width: 300px;
         }
     }
 </style>
 {% endblock %}
 
 {% block content %}
-<div class="chat-container">
-    <!-- Session Header -->
-    <div class="session-header">
-        <h1>
-            {% if phrase %}
-                {{ phrase.vietnamese_text }}
-            {% else %}
-                Học tập
-            {% endif %}
-        </h1>
-        <p>
-            {% if phrase %}
-                「{{ phrase.japanese_translation }}」を学ぼう
-            {% else %}
-                「学習セッション」を始めましょう
-            {% endif %}
-        </p>
-        
-        {% if poster %}
-        <div class="partner-info">
-            <small>
-                {% if poster.gender == 'male' %}
-                    👨 男性
-                {% elif poster.gender == 'female' %}
-                    👩 女性
+<div class="container my-5">
+    <div class="learning-container">
+        <!-- Header -->
+        <div class="learning-header">
+            <h1 class="learning-title">
+                <i class="fas fa-graduation-cap text-primary me-2"></i>
+                {% if user.nationality == 'japanese' %}
+                    ベトナム語学習セッション
                 {% else %}
-                    👤 その他
+                    Phiên học tiếng Nhật
                 {% endif %}
-                
-                {% if poster.get_age %}
-                    🎂 {{ poster.get_age }}{% if poster.nationality == 'japanese' %}歳{% else %} tuổi{% endif %}
+            </h1>
+            <p class="learning-subtitle">
+                {% if user.nationality == 'japanese' %}
+                    ベトナム人のパートナーと一緒に学習しましょう
+                {% else %}
+                    Học tập cùng người Nhật
                 {% endif %}
-                
-                {% if poster_city %}
-                    📍 {{ poster_city }}
-                {% endif %}
-            </small>
+            </p>
+        </div>
+
+        <!-- Timer -->
+        {% if timer_flag %}
+        <div class="timer-container">
+            <p class="timer-display" id="timer">00:00</p>
+            <small>Thời gian học tập</small>
         </div>
         {% endif %}
-    </div>
 
-    <!-- Timer Info -->
-    <div class="timer-info">
-        <small>⏰ Phiên học có timer 60 phút - Hãy tập trung học tập!</small>
-    </div>
-
-    <!-- Conversation Messages -->
-    {% for message in messages %}
-        {% if message.side == 'system' %}
-            <div class="system-message">
-                {{ message.text|linebreaksbr }}
-            </div>
-        {% else %}
-            <div class="message-row {% if message.side == 'right' %}right{% endif %}">
-                <div class="icon">
-                    {% if message.side == 'left' %}
-                        <img src="{% static left_icon %}" alt="{{ left_name }}">
-                    {% else %}
-                        <img src="{% static right_icon %}" alt="{{ right_name }}">
-                    {% endif %}
-                </div>
-                <div class="message-content">
-                    <div class="name">
-                        {% if message.side == 'left' %}
-                            {{ left_name }}
-                        {% else %}
-                            {{ right_name }}
-                        {% endif %}
-                    </div>
-                    <div class="bubble">
-                        {{ message.text|linebreaksbr }}
-                    </div>
-                </div>
-            </div>
+        <!-- Phrase Display -->
+        {% if phrase and phrase.vietnamese_text %}
+        <div class="phrase-display">
+            <div class="phrase-vietnamese">{{ phrase.vietnamese_text }}</div>
+            <div class="phrase-japanese">{{ phrase.japanese_translation }}</div>
+            <div class="phrase-category">{{ phrase.category|title }} - {{ phrase.difficulty|title }}</div>
+        </div>
         {% endif %}
-    {% endfor %}
 
-    <!-- Action Buttons -->
-    <div class="action-buttons">
-        <a href="{% url 'evaluate' partner_id post_id phrase_id %}" class="btn btn-success">
-            <i class="fas fa-star"></i> Đánh giá phiên học
-        </a>
-        <a href="{% url 'start_chat_session' post_id %}" class="btn btn-primary">
-            <i class="fas fa-comments"></i> Quay lại chat
-        </a>
-        <a href="/auth/dashboard/" class="btn btn-outline-secondary">
-            <i class="fas fa-home"></i> Về Dashboard
-        </a>
+        <!-- Partner Info -->
+        {% if poster %}
+        <div class="partner-info">
+            <img src="{% static 'images/session/teacher.png' %}" alt="Partner" class="partner-avatar">
+            <h4>{{ poster.full_name|default:poster.username }}</h4>
+            <p>
+                <i class="fas fa-map-marker-alt me-2"></i>{{ poster.city|default:"Unknown" }}
+                {% if poster.gender %}
+                <span class="ms-3">
+                    <i class="fas {% if poster.gender == 'male' %}fa-mars{% elif poster.gender == 'female' %}fa-venus{% else %}fa-user{% endif %} me-2"></i>
+                    {% if poster.gender == 'male' %}Nam{% elif poster.gender == 'female' %}Nữ{% else %}Khác{% endif %}
+                </span>
+                {% endif %}
+            </p>
+        </div>
+        {% endif %}
+
+        <!-- Conversation -->
+        {% if messages %}
+        <div class="conversation-container">
+            <h4 class="text-center mb-4">
+                <i class="fas fa-comments text-primary me-2"></i>
+                {% if user.nationality == 'japanese' %}
+                    会話練習
+                {% else %}
+                    Luyện tập hội thoại
+                {% endif %}
+            </h4>
+            
+            {% for message in messages %}
+            <div class="conversation-message message-{{ message.side }}">
+                {% if message.side == 'left' %}
+                    <img src="{% static left_icon %}" alt="Teacher" class="message-avatar">
+                    <div class="message-content">
+                        <div class="message-name">{{ left_name }}</div>
+                        <div class="message-text">{{ message.text }}</div>
+                    </div>
+                {% elif message.side == 'right' %}
+                    <img src="{% static right_icon %}" alt="Student" class="message-avatar">
+                    <div class="message-content">
+                        <div class="message-name">{{ right_name }}</div>
+                        <div class="message-text">{{ message.text }}</div>
+                    </div>
+                {% else %}
+                    <div class="message-text">{{ message.text }}</div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="conversation-container">
+            <div class="text-center">
+                <i class="fas fa-info-circle text-info fa-3x mb-3"></i>
+                <h5>
+                    {% if user.nationality == 'japanese' %}
+                        会話内容が準備中です
+                    {% else %}
+                        Nội dung hội thoại đang được chuẩn bị
+                    {% endif %}
+                </h5>
+                <p class="text-muted">
+                    {% if user.nationality == 'japanese' %}
+                        しばらくお待ちください
+                    {% else %}
+                        Vui lòng chờ một chút
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            {% if post and post.chatroom %}
+            <a href="{% url 'chat_room' post.chatroom.id %}" class="btn-action">
+                <i class="fas fa-comments me-2"></i>
+                {% if user.nationality == 'japanese' %}
+                    チャットに参加
+                {% else %}
+                    Vào chat
+                {% endif %}
+            </a>
+            {% endif %}
+            
+            <a href="{% url 'evaluate' partner_id post_id phrase_id %}" class="btn-action">
+                <i class="fas fa-star me-2"></i>
+                {% if user.nationality == 'japanese' %}
+                    評価する
+                {% else %}
+                    Đánh giá
+                {% endif %}
+            </a>
+            
+            <a href="{% url 'my_posts' %}" class="btn-back">
+                <i class="fas fa-arrow-left me-2"></i>
+                {% if user.nationality == 'japanese' %}
+                    戻る
+                {% else %}
+                    Quay lại
+                {% endif %}
+            </a>
+        </div>
     </div>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Timer functionality
+    {% if timer_flag %}
+    let startTime = Date.now();
+    let timerInterval = setInterval(updateTimer, 1000);
+    
+    function updateTimer() {
+        let elapsed = Date.now() - startTime;
+        let minutes = Math.floor(elapsed / 60000);
+        let seconds = Math.floor((elapsed % 60000) / 1000);
+        
+        document.getElementById('timer').textContent = 
+            (minutes < 10 ? '0' : '') + minutes + ':' + 
+            (seconds < 10 ? '0' : '') + seconds;
+    }
+    
+    // Clean up timer when page is unloaded
+    window.addEventListener('beforeunload', function() {
+        clearInterval(timerInterval);
+    });
+    {% endif %}
+    
+    // Add smooth scrolling for better UX
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            document.querySelector(this.getAttribute('href')).scrollIntoView({
+                behavior: 'smooth'
+            });
+        });
+    });
+    
+    // Add animation for conversation messages
+    const messages = document.querySelectorAll('.conversation-message');
+    messages.forEach((message, index) => {
+        message.style.opacity = '0';
+        message.style.transform = 'translateY(20px)';
+        
+        setTimeout(() => {
+            message.style.transition = 'all 0.5s ease';
+            message.style.opacity = '1';
+            message.style.transform = 'translateY(0)';
+        }, index * 200);
+    });
+});
+</script>
 {% endblock %}

@@ -623,6 +623,7 @@ def start_learning_session(request, partner_id, post_id, phrase_id):
         'poster_nationality': poster.nationality if poster else None,
         'poster_city': poster.city if poster else None,
         'poster': poster,
+        'post': post,  # Add post to context
         'phrase': phrase,
         'messages': messages,
         'left_icon': 'images/session/teacher.png',
@@ -632,6 +633,32 @@ def start_learning_session(request, partner_id, post_id, phrase_id):
     }
     
     return render(request, 'session/learning_session.html', context)
+
+@login_required
+def start_session_from_dashboard(request):
+    """
+    Start a new session from dashboard
+    This view handles the "Bắt đầu phiên làm việc" button from dashboard
+    """
+    try:
+        # Check if user has any existing posts
+        user_posts = LanguageExchangePost.objects.filter(
+            japanese_user=request.user
+        ) | LanguageExchangePost.objects.filter(
+            vietnamese_user=request.user
+        )
+        
+        # If user has posts, redirect to my_posts
+        if user_posts.exists():
+            return redirect('my_posts')
+        
+        # If no posts, redirect to create post
+        return redirect('create_post')
+        
+    except Exception as e:
+        print(f"DEBUG: Error in start_session_from_dashboard: {e}")
+        # Fallback to create post
+        return redirect('create_post')
 
 @login_required
 def start_working_session(request, post_id):

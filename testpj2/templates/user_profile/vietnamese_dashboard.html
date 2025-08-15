@@ -1,165 +1,376 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}Dashboard - Vietnam-Japan Connect{% endblock %}
 
+{% block extra_css %}
+<style>
+    /* Hero Section với hình ảnh Việt Nam */
+    .hero-section {
+        background: linear-gradient(135deg, rgba(220, 53, 69, 0.9) 0%, rgba(255, 193, 7, 0.9) 100%),
+                    url('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80');
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        color: white;
+        padding: 80px 0;
+        margin-bottom: 40px;
+        border-radius: 0 0 30px 30px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .hero-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+        opacity: 0.3;
+    }
+
+    .hero-content {
+        position: relative;
+        z-index: 2;
+    }
+
+    .hero-title {
+        font-size: 3rem;
+        font-weight: 700;
+        margin-bottom: 20px;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        animation: fadeInUp 1s ease-out;
+    }
+
+    .hero-subtitle {
+        font-size: 1.2rem;
+        margin-bottom: 30px;
+        opacity: 0.9;
+        animation: fadeInUp 1s ease-out 0.2s both;
+    }
+
+    .hero-buttons {
+        animation: fadeInUp 1s ease-out 0.4s both;
+    }
+
+    /* Card animations và effects */
+    .dashboard-card {
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        border: none;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        overflow: hidden;
+        position: relative;
+    }
+
+    .dashboard-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, #dc3545, #ffc107, #28a745, #fd7e14);
+        transform: scaleX(0);
+        transition: transform 0.3s ease;
+    }
+
+    .dashboard-card:hover::before {
+        transform: scaleX(1);
+    }
+
+    .dashboard-card:hover {
+        transform: translateY(-10px) scale(1.02);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+    }
+
+    .profile-card {
+        background: linear-gradient(135deg, #dc3545 0%, #fd7e14 100%);
+        color: white;
+        border-radius: 25px;
+        overflow: hidden;
+        position: relative;
+    }
+
+    .profile-card .card-body {
+        padding: 2rem !important;
+    }
+
+    .profile-card .card-body > * {
+        margin-bottom: 1.5rem;
+    }
+
+    .profile-card .card-body > *:last-child {
+        margin-bottom: 0;
+    }
+
+    .profile-card::after {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -50%;
+        width: 200%;
+        height: 200%;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="white" opacity="0.1"/><circle cx="80" cy="40" r="1" fill="white" opacity="0.1"/><circle cx="40" cy="80" r="1.5" fill="white" opacity="0.1"/></svg>');
+        animation: float 6s ease-in-out infinite;
+    }
+
+    .profile-picture {
+        width: 120px;
+        height: 120px;
+        border: 4px solid rgba(255,255,255,0.3);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        transition: all 0.3s ease;
+    }
+
+    .profile-picture:hover {
+        transform: scale(1.1);
+        border-color: rgba(255,255,255,0.6);
+    }
+
+    .stats-card {
+        background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        color: white;
+        border-radius: 20px;
+        overflow: hidden;
+    }
+
+    .stats-card .card-body {
+        padding: 2rem !important;
+    }
+
+    .stats-card .stats-number {
+        margin-bottom: 1rem !important;
+    }
+
+    .stats-number {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 5px;
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+    }
+
+    .stats-label {
+        font-size: 0.9rem;
+        opacity: 0.9;
+    }
+
+    .feature-card {
+        background: white;
+        border-radius: 15px;
+        padding: 25px;
+        margin-bottom: 20px;
+        border-left: 5px solid #dc3545;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .feature-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(45deg, transparent 30%, rgba(220,53,69,0.05) 50%, transparent 70%);
+        transform: translateX(-100%);
+        transition: transform 0.6s ease;
+    }
+
+    .feature-card:hover::before {
+        transform: translateX(100%);
+    }
+
+    .feature-card:hover {
+        transform: translateX(10px);
+        box-shadow: 0 10px 25px rgba(220,53,69,0.15);
+    }
+
+    .feature-icon {
+        font-size: 2.5rem;
+        margin-bottom: 15px;
+        background: linear-gradient(135deg, #dc3545, #ffc107);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    /* Button styles */
+    .btn-modern {
+        border-radius: 25px;
+        padding: 12px 25px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        border: none;
+    }
+
+    .btn-modern::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+        transition: left 0.5s ease;
+    }
+
+    .btn-modern:hover::before {
+        left: 100%;
+    }
+
+    .btn-modern:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    }
+
+    /* Lesson plan cards */
+    .lesson-card {
+        background: white;
+        border-radius: 15px;
+        padding: 20px;
+        margin-bottom: 20px;
+        border: 2px solid transparent;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .lesson-card::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, rgba(0,123,255,0.1) 0%, rgba(40,167,69,0.1) 100%);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .lesson-card:hover::after {
+        opacity: 1;
+    }
+
+    .lesson-card:hover {
+        transform: translateY(-5px);
+        border-color: #007bff;
+        box-shadow: 0 15px 30px rgba(0,123,255,0.2);
+    }
+
+    /* Animations */
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes float {
+        0%, 100% { transform: translateY(0px) rotate(0deg); }
+        50% { transform: translateY(-20px) rotate(180deg); }
+    }
+
+    @keyframes pulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+    }
+
+    .pulse-animation {
+        animation: pulse 2s infinite;
+    }
+
+    /* Responsive design */
+    @media (max-width: 768px) {
+        .hero-title {
+            font-size: 2rem;
+        }
+        
+        .hero-subtitle {
+            font-size: 1rem;
+        }
+        
+        .dashboard-card {
+            margin-bottom: 20px;
+        }
+    }
+
+    /* Vietnamese cultural elements */
+    .vietnamese-pattern {
+        background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="vietnamese" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="1" fill="%23dc3545" opacity="0.3"/><circle cx="5" cy="5" r="0.5" fill="%23ffc107" opacity="0.3"/><circle cx="15" cy="15" r="0.5" fill="%2328a745" opacity="0.3"/></pattern></defs><rect width="100" height="100" fill="url(%23vietnamese)"/></svg>');
+        opacity: 0.1;
+    }
+
+    .cultural-badge {
+        background: linear-gradient(135deg, #dc3545, #ffc107);
+        color: white;
+        border-radius: 20px;
+        padding: 12px 20px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        box-shadow: 0 4px 15px rgba(220, 53, 69, 0.3);
+        display: inline-block;
+        margin: 8px 0;
+    }
+
+    /* Lotus flower effect */
+    .lotus-flower {
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        background: rgba(220, 53, 69, 0.6);
+        border-radius: 50%;
+        animation: float-lotus 8s linear infinite;
+    }
+
+    @keyframes float-lotus {
+        0% {
+            transform: translateY(-100vh) rotate(0deg);
+            opacity: 1;
+        }
+        100% {
+            transform: translateY(100vh) rotate(360deg);
+            opacity: 0;
+        }
+    }
+</style>
+{% endblock %}
+
 {% block content %}
-<div class="container my-5">
-    <div class="row">
-        <div class="col-md-4">
-            <!-- User Profile Card -->
-            <div class="card mb-4">
-                <div class="card-body text-center">
-                    {% if user.profile_picture %}
-                        <img src="{{ user.profile_picture.url }}" alt="Profile Picture" class="rounded-circle mb-3" style="width: 100px; height: 100px; object-fit: cover;">
-                    {% else %}
-                        <div class="bg-secondary rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 100px; height: 100px;">
-                            <i class="fas fa-user fa-3x text-white"></i>
-                        </div>
-                    {% endif %}
-                    <h4>{{ user.full_name|default:user.username }}</h4>
-                    <p class="text-muted">{{ user.city }}</p>
-                    {% if user.get_age %}
-                    <p class="mt-2">
-                        <i class="fas fa-birthday-cake text-warning"></i> {{ user.get_age }} tuổi
+<!-- Hero Section -->
+<div class="hero-section">
+    <div class="container">
+        <div class="row justify-content-center text-center">
+            <div class="col-lg-8">
+                <div class="hero-content">
+                    <h1 class="hero-title">
+                        <i class="fas fa-flag text-warning me-3"></i>
+                        Chào mừng bạn đến với Việt Nam!
+                    </h1>
+                    <p class="hero-subtitle">
+                        Học tiếng Nhật, kết nối văn hóa và xây dựng tình bạn bền vững
                     </p>
-                    {% endif %}
-                    <span class="badge bg-success language-badge">Người Việt</span>
-                    {% if user.gender %}
-                    <p class="mt-2">
-                        <i class="fas {% if user.gender == 'male' %}fa-mars text-primary{% elif user.gender == 'female' %}fa-venus text-danger{% else %}fa-user text-secondary{% endif %}"></i>
-                        {% if user.gender == 'male' %}Nam{% elif user.gender == 'female' %}Nữ{% else %}Khác{% endif %}
-                    </p>
-                    {% endif %}
-                    <div class="mt-3">
-                        <a href="{% url 'profile' %}" class="btn btn-outline-primary btn-sm">
-                            <i class="fas fa-edit"></i> Chỉnh sửa hồ sơ
+                    <div class="hero-buttons">
+                        <a href="{% url 'create_post' %}" class="btn btn-modern btn-light me-3 mb-2">
+                            <i class="fas fa-plus-circle me-2"></i>Tạo bài đăng mới
                         </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Quick Stats -->
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="mb-0"><i class="fas fa-chart-bar"></i> Thống kê</h5>
-                </div>
-                <div class="card-body">
-                    <div class="row text-center">
-                        <div class="col-6">
-                            <h4 class="text-primary">{{ user.get_average_rating }}/10</h4>
-                            <small class="text-muted">Điểm Đánh Giá Trung Bình</small>
-                        </div>
-                        <div class="col-6">
-                            <h4 class="text-success">{{ user.vietnamese_posts.all|length }}</h4>
-                            <small class="text-muted">Kết Nối</small>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-8">
-            <!-- Welcome Section -->
-            <div class="card mb-4">
-                <div class="card-body text-center">
-                    <h2 class="card-title">Chào mừng, {{ user.full_name|default:user.username }}!</h2>
-                    <p class="card-text">Hãy học tiếng Nhật và kết nối với người Nhật.</p>
-                    <div class="d-flex justify-content-center gap-3 flex-wrap">
-                        <a href="{% url 'create_post' %}" class="btn btn-success">
-                            <i class="fas fa-plus"></i> Tạo bài đăng mới
+                        <a href="/search/available-posts/" class="btn btn-modern btn-outline-light me-3 mb-2">
+                            <i class="fas fa-search me-2"></i>Tìm kiếm đối tác
                         </a>
-                        <a href="/search/available-posts/" class="btn btn-primary">
-                            <i class="fas fa-search"></i> Xem bài đăng
-                        </a>
-                        <a href="/search/all-posts/" class="btn btn-info">
-                            <i class="fas fa-globe"></i> Tất cả thành phố
-                        </a>
-                        <a href="/chat/my-chats/" class="btn btn-primary">
-                            <i class="fas fa-comments"></i> Xem chat
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Lesson Plan Section -->
-            <div class="card mb-4">
-                <div class="card-header">
-                    <h5 class="mb-0"><i class="fas fa-chalkboard-teacher"></i> Danh sách Lesson Plan</h5>
-                </div>
-                <div class="card-body">
-                    <p class="card-text mb-4">
-                        Mình sẽ giới thiệu các văn bản được sử dụng trong từng buổi học: mỗi buổi học bao gồm mục tiêu, từ vựng, ngữ pháp, câu ví dụ và hoạt động.
-                        Cung cấp ví dụ hội thoại song ngữ Việt-Nhật để người dạy dựa vào.
-                    </p>
-                    
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <div class="card border-primary">
-                                <div class="card-body">
-                                    <h6 class="card-title text-primary">
-                                        <i class="fas fa-target"></i> Mục tiêu học tập
-                                    </h6>
-                                    <ul class="list-unstyled">
-                                        <li><i class="fas fa-check text-success me-2"></i>Đặt mục tiêu rõ ràng cho từng buổi học</li>
-                                        <li><i class="fas fa-check text-success me-2"></i>Nội dung phù hợp với nhu cầu của người học</li>
-                                        <li><i class="fas fa-check text-success me-2"></i>Đánh giá kết quả vào cuối buổi học</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="col-md-6 mb-3">
-                            <div class="card border-success">
-                                <div class="card-body">
-                                    <h6 class="card-title text-success">
-                                        <i class="fas fa-book"></i> Từ vựng & Ngữ pháp
-                                    </h6>
-                                    <ul class="list-unstyled">
-                                        <li><i class="fas fa-check text-success me-2"></i>Danh sách từ vựng theo chủ đề</li>
-                                        <li><i class="fas fa-check text-success me-2"></i>Giải thích ngữ pháp đơn giản</li>
-                                        <li><i class="fas fa-check text-success me-2"></i>Ví dụ minh họa thực tế</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="col-md-6 mb-3">
-                            <div class="card border-warning">
-                                <div class="card-body">
-                                    <h6 class="card-title text-warning">
-                                        <i class="fas fa-comments"></i> Mẫu câu & Hội thoại
-                                    </h6>
-                                    <ul class="list-unstyled">
-                                        <li><i class="fas fa-check text-success me-2"></i>Hội thoại song ngữ Việt-Nhật</li>
-                                        <li><i class="fas fa-check text-success me-2"></i>Mẫu câu thực dụng</li>
-                                        <li><i class="fas fa-check text-success me-2"></i>Phát âm và ngữ điệu</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="col-md-6 mb-3">
-                            <div class="card border-info">
-                                <div class="card-body">
-                                    <h6 class="card-title text-info">
-                                        <i class="fas fa-gamepad"></i> Hoạt động & Thực hành
-                                    </h6>
-                                    <ul class="list-unstyled">
-                                        <li><i class="fas fa-check text-success me-2"></i>Bài tập tương tác</li>
-                                        <li><i class="fas fa-check text-success me-2"></i>Hội thoại với người bản ngữ</li>
-                                        <li><i class="fas fa-check text-success me-2"></i>Thực hành giao tiếp</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="text-center mt-3">
-                        <div class="d-flex justify-content-center gap-3 flex-wrap">
-                            <a href="/create/accept-post/0/phrases/" class="btn btn-primary">
-                                <i class="fas fa-language"></i> Xem văn bản
-                            </a>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -167,67 +378,297 @@
     </div>
 </div>
 
-<style>
-.hover-shadow:hover {
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    transform: translateY(-2px);
-    transition: all 0.3s ease;
-}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-lg-4 mb-4">
+            <!-- Profile Card -->
+            <div class="dashboard-card profile-card">
+                <div class="card-body text-center p-4">
+                    {% if user.profile_picture %}
+                        <img src="{{ user.profile_picture.url }}" alt="Profile Picture" class="rounded-circle profile-picture mb-3">
+                    {% else %}
+                        <div class="bg-white rounded-circle d-inline-flex align-items-center justify-content-center profile-picture mb-3">
+                            <i class="fas fa-user fa-3x text-danger"></i>
+                        </div>
+                    {% endif %}
+                    
+                    <h4 class="mb-3">{{ user.full_name|default:user.username }}</h4>
+                    <p class="mb-4 opacity-75">
+                        <i class="fas fa-map-marker-alt me-2"></i>{{ user.city }}
+                    </p>
+                    
+                    {% if user.get_age %}
+                    <p class="mb-4">
+                        <i class="fas fa-birthday-cake text-warning me-2"></i> {{ user.get_age }} tuổi
+                    </p>
+                    {% endif %}
+                    
+                    <div class="mb-4">
+                        <span class="cultural-badge">
+                            <i class="fas fa-flag me-2"></i>Người Việt
+                        </span>
+                    </div>
+                    
+                    {% if user.gender %}
+                    <p class="mb-4">
+                        <i class="fas {% if user.gender == 'male' %}fa-mars text-info{% elif user.gender == 'female' %}fa-venus text-pink{% else %}fa-user text-secondary{% endif %} me-2"></i>
+                        {% if user.gender == 'male' %}Nam{% elif user.gender == 'female' %}Nữ{% else %}Khác{% endif %}
+                    </p>
+                    {% endif %}
+                    
+                    <div class="mt-5">
+                        <a href="{% url 'profile' %}" class="btn btn-modern btn-outline-light btn-sm">
+                            <i class="fas fa-edit me-2"></i>Chỉnh sửa hồ sơ
+                        </a>
+                    </div>
+                </div>
+            </div>
 
-.border.rounded {
-    border-color: #e9ecef !important;
-}
+            <!-- Stats Card -->
+            <div class="dashboard-card stats-card mt-4">
+                <div class="card-body text-center p-4">
+                    <h5 class="mb-4">
+                        <i class="fas fa-chart-line me-2"></i>Thống kê cá nhân
+                    </h5>
+                    <div class="row text-center">
+                        <div class="col-6 mb-4">
+                            <div class="stats-number">{{ user.get_average_rating|default:"0" }}/10</div>
+                            <div class="stats-label">Điểm đánh giá</div>
+                        </div>
+                        <div class="col-6 mb-4">
+                            <div class="stats-number">{{ user.vietnamese_posts.all|length|default:"0" }}</div>
+                            <div class="stats-label">Kết nối</div>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <div class="progress" style="height: 8px;">
+                            <div class="progress-bar bg-warning" style="width: {{ user.get_average_rating|default:0|floatformat:0 }}%"></div>
+                        </div>
+                        <small class="text-white-50">Tiến độ học tập</small>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-.text-primary {
-    color: #0d6efd !important;
-}
+        <div class="col-lg-8">
+            <!-- Quick Actions -->
+            <div class="dashboard-card mb-4">
+                <div class="card-body p-4">
+                    <h4 class="card-title mb-4 text-center">
+                        <i class="fas fa-rocket text-danger me-2"></i>Hành động nhanh
+                    </h4>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <a href="/search/available-posts/" class="btn btn-modern btn-danger w-100">
+                                <i class="fas fa-search me-2"></i>Tìm đối tác học tập
+                            </a>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <a href="/chat/my-chats/" class="btn btn-modern btn-success w-100">
+                                <i class="fas fa-comments me-2"></i>Xem tin nhắn
+                            </a>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <a href="{% url 'phrase_list' %}" class="btn btn-modern btn-warning w-100">
+                                <i class="fas fa-language me-2"></i>Học từ vựng
+                            </a>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <a href="{% url 'start_session_from_dashboard' %}" class="btn btn-modern btn-primary w-100">
+                                <i class="fas fa-play me-2"></i>Bắt đầu phiên làm việc
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-.badge.bg-primary {
-    background-color: #0d6efd !important;
-}
+            <!-- Lesson Plan Section -->
+            <div class="dashboard-card">
+                <div class="card-body p-4">
+                    <h4 class="card-title mb-4 text-center">
+                        <i class="fas fa-graduation-cap text-success me-2"></i>Kế hoạch học tập
+                    </h4>
+                    <p class="card-text mb-4 text-center text-muted">
+                        Hệ thống bài học được thiết kế đặc biệt cho người Việt học tiếng Nhật
+                    </p>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <div class="feature-card lesson-card">
+                                <div class="text-center">
+                                    <i class="fas fa-target feature-icon"></i>
+                                    <h6 class="text-danger">Mục tiêu học tập</h6>
+                                </div>
+                                <ul class="list-unstyled mt-3">
+                                    <li><i class="fas fa-check text-success me-2"></i>Mục tiêu rõ ràng cho từng buổi học</li>
+                                    <li><i class="fas fa-check text-success me-2"></i>Nội dung phù hợp với nhu cầu</li>
+                                    <li><i class="fas fa-check text-success me-2"></i>Đánh giá kết quả cuối buổi</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <div class="feature-card lesson-card">
+                                <div class="text-center">
+                                    <i class="fas fa-book feature-icon"></i>
+                                    <h6 class="text-success">Từ vựng & Ngữ pháp</h6>
+                                </div>
+                                <ul class="list-unstyled mt-3">
+                                    <li><i class="fas fa-check text-success me-2"></i>Danh sách từ vựng theo chủ đề</li>
+                                    <li><i class="fas fa-check text-success me-2"></i>Giải thích ngữ pháp đơn giản</li>
+                                    <li><i class="fas fa-check text-success me-2"></i>Ví dụ minh họa thực tế</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <div class="feature-card lesson-card">
+                                <div class="text-center">
+                                    <i class="fas fa-comments feature-icon"></i>
+                                    <h6 class="text-warning">Mẫu câu & Hội thoại</h6>
+                                </div>
+                                <ul class="list-unstyled mt-3">
+                                    <li><i class="fas fa-check text-success me-2"></i>Hội thoại song ngữ Việt-Nhật</li>
+                                    <li><i class="fas fa-check text-success me-2"></i>Mẫu câu thực dụng</li>
+                                    <li><i class="fas fa-check text-success me-2"></i>Phát âm và ngữ điệu</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <div class="feature-card lesson-card">
+                                <div class="text-center">
+                                    <i class="fas fa-gamepad feature-icon"></i>
+                                    <h6 class="text-info">Hoạt động & Thực hành</h6>
+                                </div>
+                                <ul class="list-unstyled mt-3">
+                                    <li><i class="fas fa-check text-success me-2"></i>Bài tập tương tác</li>
+                                    <li><i class="fas fa-check text-success me-2"></i>Hội thoại với người bản ngữ</li>
+                                    <li><i class="fas fa-check text-success me-2"></i>Thực hành giao tiếp</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center mt-4">
+                        <a href="{% url 'start_session_from_dashboard' %}" class="btn btn-modern btn-danger btn-lg pulse-animation">
+                            <i class="fas fa-rocket me-2"></i>Bắt đầu phiên làm việc
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-.badge.bg-success {
-    background-color: #198754 !important;
-}
+<!-- Vietnamese Cultural Elements -->
+<div class="container-fluid vietnamese-pattern py-5 mt-5">
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-12">
+                <h3 class="text-danger mb-4">
+                    <i class="fas fa-heart text-warning me-2"></i>
+                    Văn hóa Việt Nam - Nền tảng học tập
+                </h3>
+                <p class="lead text-muted">
+                    Khám phá vẻ đẹp văn hóa Việt Nam thông qua việc học tiếng Nhật
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
 
-.badge.bg-light {
-    background-color: #f8f9fa !important;
-    color: #6c757d !important;
-    border: 1px solid #dee2e6;
-}
+<!-- Lotus Flower Effect -->
+<div id="lotus-flowers"></div>
+{% endblock %}
 
-.btn-primary {
-    background-color: #0d6efd;
-    border-color: #0d6efd;
-}
-
-.btn-primary:hover {
-    background-color: #0b5ed7;
-    border-color: #0a58ca;
-}
-
-.btn-outline-info {
-    color: #0dcaf0;
-    border-color: #0dcaf0;
-}
-
-.btn-outline-info:hover {
-    background-color: #0dcaf0;
-    border-color: #0dcaf0;
-    color: #000;
-}
-</style>
-
+{% block extra_js %}
 <script>
+// Add smooth scrolling and enhanced interactions
+document.addEventListener('DOMContentLoaded', function() {
+    // Add scroll animations
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, observerOptions);
+
+    // Observe all cards for animation
+    document.querySelectorAll('.dashboard-card, .feature-card').forEach(card => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(30px)';
+        card.style.transition = 'all 0.6s ease';
+        observer.observe(card);
+    });
+
+    // Enhanced button interactions
+    document.querySelectorAll('.btn-modern').forEach(btn => {
+        btn.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-3px) scale(1.02)';
+        });
+        
+        btn.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0) scale(1)';
+        });
+    });
+
+    // Profile picture hover effect
+    const profilePic = document.querySelector('.profile-picture');
+    if (profilePic) {
+        profilePic.addEventListener('mouseenter', function() {
+            this.style.transform = 'scale(1.1) rotate(5deg)';
+        });
+        
+        profilePic.addEventListener('mouseleave', function() {
+            this.style.transform = 'scale(1) rotate(0deg)';
+        });
+    }
+
+    // Lotus flower effect
+    createLotusFlowers();
+});
+
+// Create lotus flower effect
+function createLotusFlowers() {
+    const container = document.getElementById('lotus-flowers');
+    const numFlowers = 15;
+    
+    for (let i = 0; i < numFlowers; i++) {
+        setTimeout(() => {
+            const flower = document.createElement('div');
+            flower.className = 'lotus-flower';
+            flower.style.left = Math.random() * 100 + 'vw';
+            flower.style.animationDelay = Math.random() * 8 + 's';
+            flower.style.animationDuration = (Math.random() * 8 + 8) + 's';
+            container.appendChild(flower);
+            
+            // Remove flower after animation
+            setTimeout(() => {
+                if (flower.parentNode) {
+                    flower.parentNode.removeChild(flower);
+                }
+            }, 16000);
+        }, i * 600);
+    }
+}
+
+// Enhanced accept post function
 function acceptPost(postId, phraseText) {
     console.log('Accept button clicked for post:', postId, 'phrase:', phraseText);
     
-    // Show confirmation dialog
-    const confirmed = confirm('Bạn có chắc muốn chấp nhận bài đăng này? Bạn sẽ được chuyển đến chat room để trò chuyện với người Nhật.');
+    // Show enhanced confirmation dialog
+    const confirmed = confirm('🎯 Bạn có chắc muốn chấp nhận bài đăng này?\n\nBạn sẽ được chuyển đến chat room để trò chuyện với người Nhật và bắt đầu hành trình học tập!');
     
     if (confirmed) {
         console.log('User confirmed, redirecting to accept post...');
-        // The link will handle the redirect
         return true;
     } else {
         console.log('User cancelled');
@@ -235,6 +676,7 @@ function acceptPost(postId, phraseText) {
     }
 }
 
+// Enhanced filter function
 function filterPosts() {
     const cityFilter = document.getElementById('city').value;
     const categoryFilter = document.getElementById('category').value;
@@ -249,24 +691,14 @@ function filterPosts() {
         
         if (cityMatch && categoryMatch) {
             item.style.display = 'block';
+            item.style.animation = 'fadeInUp 0.5s ease';
         } else {
             item.style.display = 'none';
         }
     });
 }
 
-// Add click event listener for debugging
-document.addEventListener('DOMContentLoaded', function() {
-    const acceptButtons = document.querySelectorAll('a[href*="accept-post"]');
-    console.log('Found', acceptButtons.length, 'accept buttons in dashboard');
-    
-    acceptButtons.forEach(function(button, index) {
-        console.log('Accept button', index, ':', button.href);
-        
-        button.addEventListener('click', function(e) {
-            console.log('Accept button clicked via event listener:', this.href);
-        });
-    });
-});
+// Recreate lotus flowers periodically
+setInterval(createLotusFlowers, 25000);
 </script>
 {% endblock %}
