@@ -30,8 +30,7 @@ To try the app, please use the following demo accounts:
 
 ## 🛠 Tech Stack / 使用技術
 - Frontend: React, Tailwind CSS  
-- Backend: Node.js / Express  
-- Database: SQL Server (or your DB here)  
+- Backend: Python 
 - Deployment: Render  
 
 ---
