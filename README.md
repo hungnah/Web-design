@@ -1,106 +1,123 @@
 ---
 
+(English version)
+
 # Vietnam-Japan Connect
 
-## 📌 Project Overview / プロジェクト概要
+## 📌 Project Overview
 
 Vietnam-Japan Connect is a web platform designed to connect students from Vietnam and Japan for **language exchange** and **cultural communication**.
 The platform allows users to practice with native speakers, access interactive learning materials, and build meaningful friendships across cultures.
 
-ベトナムと日本の学生を対象にした言語交流・文化交流のためのプラットフォームです。
-ネイティブとの会話練習、学習教材、コミュニティ機能を通して、自然な言語力を身につけ、有意義なつながりを築くことができます。
-
 ---
 
-## 🚀 Demo Link / デモリンク
+## 🚀 Demo Link
 
-The project has been deployed at the following URL:
-👉 [https://web-design-8.onrender.com/](https://web-design-8.onrender.com/)
-
-本プロジェクトは以下のURLで公開されています：
 👉 [https://web-design-8.onrender.com/](https://web-design-8.onrender.com/)
 
 ---
 
-## 🔑 Demo Accounts / デモ用アカウント
+## 🔑 Demo Accounts
 
-To try the app, please use the following demo accounts:
+– Japanese user
+– Username: `japan_go`
+– Password: `qqqqqqqqq`
 
-アプリを体験するには、以下のデモアカウントをご利用ください：
-
-* **For Japanese user (日本人ユーザー):**
-
-  * Username: `japan_go`
-  * Password: `qqqqqqqqq`
-
-* **For Vietnamese user (ベトナム人ユーザー):**
-
-  * Username: `vietnam_go`
-  * Password: `qqqqqqqqq`
+– Vietnamese user
+– Username: `vietnam_go`
+– Password: `qqqqqqqqq`
 
 ---
 
-## 🛠 Tech Stack / 使用技術
+## 🛠 Tech Stack
 
-* Frontend: React, Tailwind CSS
-
-* Backend: Python
-
-* Deployment: Render
-  
-
-* フロントエンド：React、Tailwind CSS
-
-* バックエンド：Python
-
-* デプロイ：Render
+– Frontend: React, Tailwind CSS
+– Backend: Python
+– Deployment: Render
 
 ---
 
-## 👥 Team Roles / チーム役割
+## 👥 Team Roles
 
-* Frontend Developer: 1
-
-* Backend Developer: 3
-  
-
-* フロントエンド開発者：1名
-
-* バックエンド開発者：3名
+– Frontend Developer: 1
+– Backend Developer: 3
 
 ---
 
-## 📖 Usage / 使い方
+## 📖 Usage
 
-1. Go to the demo link: [https://web-design-8.onrender.com/](https://web-design-8.onrender.com/)
-
-2. Login with one of the demo accounts above.
-
+1. Go to: [https://web-design-8.onrender.com/](https://web-design-8.onrender.com/)
+2. Login with a demo account
 3. Explore the platform:
+   – Practice conversation with native speakers
+   – Check learning resources
+   – Connect with other users
 
-   * Practice conversation with native speakers
-   * Check available learning resources
-   * Connect with other users
+---
 
-1. デモリンクにアクセスします：
-   [https://web-design-8.onrender.com/](https://web-design-8.onrender.com/)
+## 📌 Note
 
-2. 上記のデモアカウントでログインします。
+This project is for demonstration and academic purposes. Please use demo accounts for testing.
 
+---
+
+(日本語版)
+
+# Vietnam-Japan Connect
+
+## 📌 プロジェクト概要
+
+Vietnam-Japan Connectは、ベトナムと日本の学生をつなぐ言語交流・文化交流プラットフォームです。
+ネイティブスピーカーとの会話練習や学習教材、コミュニティ機能を通して、自然な言語力を身につけ、有意義なつながりを築くことができます。
+
+---
+
+## 🚀 デモリンク
+
+👉 [https://web-design-8.onrender.com/](https://web-design-8.onrender.com/)
+
+---
+
+## 🔑 デモ用アカウント
+
+– 日本人ユーザー
+– ユーザー名：`japan_go`
+– パスワード：`qqqqqqqqq`
+
+– ベトナム人ユーザー
+– ユーザー名：`vietnam_go`
+– パスワード：`qqqqqqqqq`
+
+---
+
+## 🛠 使用技術
+
+– フロントエンド：React、Tailwind CSS
+– バックエンド：Python
+– デプロイ：Render
+
+---
+
+## 👥 チーム役割
+
+– フロントエンド開発者：1名
+– バックエンド開発者：3名
+
+---
+
+## 📖 使い方
+
+1. [https://web-design-8.onrender.com/](https://web-design-8.onrender.com/) にアクセスします。
+2. デモアカウントでログインします。
 3. プラットフォームを体験します：
-
-   * ネイティブスピーカーとの会話練習
-   * 利用可能な学習教材の確認
-   * 他のユーザーとの交流
-
----
-
-## 📌 Note / 注意事項
-
-This project is for demonstration and academic purposes. Please use the demo accounts for testing.
-
-本プロジェクトはデモおよび学習目的で作成されています。テストには必ずデモアカウントをご利用ください。
+   – ネイティブスピーカーとの会話練習
+   – 学習教材の確認
+   – 他のユーザーとの交流
 
 ---
 
+## 📌 注意事項
 
+本プロジェクトはデモおよび学習目的で作成されています。テストにはデモアカウントをご利用ください。
+
+---
