@@ -47,6 +47,7 @@ To try the app, please use the following demo accounts:
 * Backend: Python
 
 * Deployment: Render
+  
 
 * フロントエンド：React、Tailwind CSS
 
@@ -61,6 +62,7 @@ To try the app, please use the following demo accounts:
 * Frontend Developer: 1
 
 * Backend Developer: 3
+  
 
 * フロントエンド開発者：1名
 
@@ -80,12 +82,12 @@ To try the app, please use the following demo accounts:
    * Check available learning resources
    * Connect with other users
 
-4. デモリンクにアクセスします：
+1. デモリンクにアクセスします：
    [https://web-design-8.onrender.com/](https://web-design-8.onrender.com/)
 
-5. 上記のデモアカウントでログインします。
+2. 上記のデモアカウントでログインします。
 
-6. プラットフォームを体験します：
+3. プラットフォームを体験します：
 
    * ネイティブスピーカーとの会話練習
    * 利用可能な学習教材の確認
